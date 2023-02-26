@@ -2,20 +2,19 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Loader from "./utils/Loader";
-
-import NavBar from "./layout/NavBar";
-import Footer from "./layout/Footer";
-
-const Home = lazy(() => import("./components/Home"));
 const NotFound = lazy(() => import("./layout/NotFound"));
-const Login = lazy(() => import("./components/Login"));
-const ForgotPassword = lazy(() => import("./components/Login/Forgot_Password"));
-const ResetPassword = lazy(() => import("./components/Login/Reset_password"));
+
+const Home = lazy(() => import("./pages/Home/Shared/Layout"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Products = lazy(() => import("./pages/Products"));
+// Login
+const Login = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
+const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
 
 function App() {
     return (
         <div>
-            <NavBar />
             <BrowserRouter>
                 <Routes>
                     <Route
@@ -25,7 +24,10 @@ function App() {
                                 <Home />
                             </Suspense>
                         }
-                    />
+                    >
+                        <Route index element={<Dashboard />} />
+                        <Route path="products" element={<Products />} />
+                    </Route>
                     <Route
                         path="/*"
                         element={
@@ -34,8 +36,7 @@ function App() {
                             </Suspense>
                         }
                     />
-
-                
+                    // Login
                     <Route
                         path="/login"
                         element={
@@ -61,9 +62,7 @@ function App() {
                         }
                     />
                 </Routes>
-                
             </BrowserRouter>
-            <Footer />
         </div>
     );
 }
