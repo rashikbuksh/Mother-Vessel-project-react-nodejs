@@ -10,7 +10,7 @@ const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "",
-    database: "think_and_get",
+    database: "port_project",
 });
 
 app.use(cors());
@@ -33,7 +33,7 @@ app.get("/user/verify_login/", (req, res) => {
     const password = req.query.password;
     console.log("data  "+email+" "+password)
     //console.log(email, password)
-    const get_user = "select id,password from customers where email = ?";
+    const get_user = "select id,password from users where email = ?";
     db.query(get_user, [email], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
