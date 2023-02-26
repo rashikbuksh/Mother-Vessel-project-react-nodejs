@@ -3,17 +3,46 @@
 import Axios from 'axios';
 import { sha256, sha224 } from 'js-sha256';
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import React from 'react';
+import React, {useEffect} from 'react';
 export default function Login(){
     const navigate = useNavigate();
   const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = React.useState(false);
+  const [verify_code, setVerify_code] = React.useState('');
+  const [generatedcode, setGeneratedcode] = React.useState('');
   const [user, setUser] = React.useState({
     email: '',
     password: '',
   });
 
   const [show, setShow] = React.useState('password');
+
+  useEffect(() => {
+    setGeneratedcode(makeid(5));
+  },[]);
+
+  const makeid=(length) =>{
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
+const verifyEmail = () => {
+  //setGeneratedcode(makeid(5));
+  //console.log(generatedcode)
+  Axios.post(
+      'http://localhost:3001/user/verifyemail/',
+      {
+        code: generatedcode,
+        email: user.email,
+      });
+  }
 
   const handleInput = e => {
     const { name, value } = e.target;
@@ -41,7 +70,13 @@ export default function Login(){
   const onSubmit = e => {
     if (isInvalidEmail || isInvalidPassword) {
       e.preventDefault();
-    }else{
+    }
+    else if(generatedcode != verify_code){
+      // console.log(generatedcode)
+      // console.log(verify_code)
+      alert('Wrong verification code')
+  }
+  else{
       //console.log(user.email);
       Axios.get("http://localhost:3001/user/verify_login/", {
         params: {
@@ -93,6 +128,11 @@ export default function Login(){
                         onChange={handleInput}
                   />
               </div>
+              <div class="mb-6">
+                    <input id="outlined-basic" label="Verification code" type="text" name="productName" onChange={(e)=>{
+        setVerify_code(e.target.value)
+      }}/>   <button type="button" onClick = {()=>{verifyEmail()}}>Send verification code</button><br></br>
+                        </div>
               <div class="text-center lg:text-left">
                   <button 
                   
