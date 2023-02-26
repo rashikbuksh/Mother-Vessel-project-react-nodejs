@@ -8,52 +8,52 @@ export default function Login(){
     const navigate = useNavigate();
   const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = React.useState(false);
-  const [verify_code, setVerify_code] = React.useState('');
-  const [generatedcode, setGeneratedcode] = React.useState('');
+  // const [verify_code, setVerify_code] = React.useState('');
+  // const [generatedcode, setGeneratedcode] = React.useState('');
   const [user, setUser] = React.useState({
-    email: '',
+    username: '',
     password: '',
   });
 
   const [show, setShow] = React.useState('password');
 
-  useEffect(() => {
-    setGeneratedcode(makeid(5));
-  },[]);
+//   useEffect(() => {
+//     setGeneratedcode(makeid(5));
+//   },[]);
 
-  const makeid=(length) =>{
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-}
+//   const makeid=(length) =>{
+//     let result = '';
+//     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//     const charactersLength = characters.length;
+//     let counter = 0;
+//     while (counter < length) {
+//       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//       counter += 1;
+//     }
+//     return result;
+// }
 
-const verifyEmail = () => {
-  //setGeneratedcode(makeid(5));
-  //console.log(generatedcode)
-  Axios.post(
-      'http://localhost:3001/user/verifyemail/',
-      {
-        code: generatedcode,
-        email: user.email,
-      });
-  }
+// const verifyEmail = () => {
+//   //setGeneratedcode(makeid(5));
+//   //console.log(generatedcode)
+//   Axios.post(
+//       'http://localhost:3001/user/verifyemail/',
+//       {
+//         code: generatedcode,
+//         email: user.email,
+//       });
+//   }
 
   const handleInput = e => {
     const { name, value } = e.target;
 
-    if (name === 'email') {
-      if (!value.includes('@')) {
-        setIsInvalidEmail(true);
-      } else {
-        setIsInvalidEmail(false);
-      }
-    }
+    // if (name === 'email') {
+    //   if (!value.includes('@')) {
+    //     setIsInvalidEmail(true);
+    //   } else {
+    //     setIsInvalidEmail(false);
+    //   }
+    // }
     if (name === 'password') {
       if (value.length < 6) {
         setIsInvalidPassword(true);
@@ -71,16 +71,16 @@ const verifyEmail = () => {
     if (isInvalidEmail || isInvalidPassword) {
       e.preventDefault();
     }
-    else if(generatedcode != verify_code){
-      // console.log(generatedcode)
-      // console.log(verify_code)
-      alert('Wrong verification code')
-  }
+  //   else if(generatedcode != verify_code){
+  //     // console.log(generatedcode)
+  //     // console.log(verify_code)
+  //     alert('Wrong verification code')
+  // }
   else{
       //console.log(user.email);
       Axios.get("http://localhost:3001/user/verify_login/", {
         params: {
-            email: user.email,
+            username: user.username,
             password: sha256(user.password),
         }
     }).then((response) => {
@@ -111,9 +111,8 @@ const verifyEmail = () => {
                       type="text"
                       class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                       id="emailAddress"
-                      placeholder="Email address"
-                      name="email"
-                      isInvalid={isInvalidEmail}
+                      placeholder="Username"
+                      name="username"
                     onChange={handleInput}
                   />
               </div>
@@ -128,11 +127,12 @@ const verifyEmail = () => {
                         onChange={handleInput}
                   />
               </div>
-              <div class="mb-6">
+              {/*<div class="mb-6">
                     <input id="outlined-basic" label="Verification code" type="text" name="productName" onChange={(e)=>{
         setVerify_code(e.target.value)
       }}/>   <button type="button" onClick = {()=>{verifyEmail()}}>Send verification code</button><br></br>
                         </div>
+    */}
               <div class="text-center lg:text-left">
                   <button 
                   
