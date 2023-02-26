@@ -76,11 +76,11 @@ async function main() {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Think and Get" <rashikbuksh71@gmail.com', // sender address
+    from: '"Port Project" <rashikbuksh71@gmail.com', // sender address
     to: email, // list of receivers
     subject: "Verification Code ✔", // Subject line
-    text: "Welcome to Think and get. Your verification code is: "+code+ " ;Enjoy", // plain text body
-    html: "<b>Welcome to Think and get. Your verification code is: "+code+ " ;Enjoy</b>", // html body
+    text: "Welcome to Port Project. Your verification code is: "+code+ " ;Enjoy", // plain text body
+    html: "<b>Welcome to Port Project. Your verification code is: "+code+ " ;Enjoy</b>", // html body
   });
 
   console.log("Message sent: %s", info.messageId);
