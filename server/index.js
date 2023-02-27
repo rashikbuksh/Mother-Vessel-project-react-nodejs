@@ -70,6 +70,19 @@ app.post('/admin/disableuser', (req,res)=>{
     });
 });
 
+app.post('/admin/resetpassword', (req,res)=>{
+    const id = req.body.user_id;
+    const password = req.body.new_password;
+    console.log(id+" "+password)
+    const sqlUpdate = "UPDATE users SET password=? where id= ?";
+    db.query(sqlUpdate, [password, id], (err, result)=>{
+        if(err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
+
 app.listen(3001, ()=>{
     console.log('Running on port 3001');
 })

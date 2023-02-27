@@ -28,30 +28,6 @@ if (isLoading) {
   return <div className="App">Loading...</div>;
 }
 
-
-//   const makeid=(length) =>{
-//     let result = '';
-//     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//     const charactersLength = characters.length;
-//     let counter = 0;
-//     while (counter < length) {
-//       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//       counter += 1;
-//     }
-//     return result;
-// }
-
-// const verifyEmail = () => {
-//   //setGeneratedcode(makeid(5));
-//   //console.log(generatedcode)
-//   Axios.post(
-//       'http://localhost:3001/user/verifyemail/',
-//       {
-//         code: generatedcode,
-//         email: user.email,
-//       });
-//   }
-
   const handleInput = e => {
     const { name, value } = e.target;
 

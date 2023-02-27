@@ -2,11 +2,17 @@ import React, {useEffect, useState} from "react";
 import { format } from "date-fns";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import Axios from 'axios';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { sha256, sha224 } from 'js-sha256';
 
 
 export default function AdminPanel(){
     const navigate = useNavigate();
-    const [userList, setUserList] = useState([])
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [userList, setUserList] = useState([]);
+    
 
     useEffect(() => {
         fetch("http://localhost:3001/admin/getusers")
@@ -35,11 +41,25 @@ export default function AdminPanel(){
               user_id: userid,
             });
     };
-    const changePassword = () => {
-        alert("Password has been changed");
+    const changeInfo= () => {
+        // return <div className="App">Loading...</div>;
     };
-    const resetPassword = () => {
-        alert("Password has been reset");
+    const resetPassword = (userid) => {
+        console.log(userid);
+        console.log(newPassword);
+        console.log(confirmPassword);
+        if(newPassword == confirmPassword){
+            Axios.post(
+                'http://localhost:3001/admin/resetpassword/',
+                {
+                    user_id: userid,
+                    new_password: sha256(newPassword),
+                });
+                alert("Password has been reset");
+        }
+        else{
+            alert("Passwords do not match");
+        }
     };
     return (
         <div>
@@ -88,9 +108,16 @@ export default function AdminPanel(){
                                         "dd MMM yyyy"
                                     )}
                                 </td>
-                                
-                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changePassword}>Change</button></td>
-                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetPassword}>Reset Password</button></td>
+                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changeInfo}>ChangeInfo</button></td>
+                                <td>
+                                <Popup trigger={<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Reset Password</button>} position="right center">
+                                    <div>
+                                        <input type="password" placeholder="New Password" onChange={(e)=>{setNewPassword(e.target.value)}}/>
+                                        <input type="password" placeholder="Confirm Password" onChange={(e)=>{setConfirmPassword(e.target.value)}}/>
+                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{resetPassword(user.id)}}>Reset Password</button>
+                                    </div>
+                                </Popup>
+                                </td>
                                 {user.enabled === 1 ? 
                                 <td><button class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{disable_user(user.id)}}>Disable</button></td>
                                 : <td><button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{enable_user(user.id)}}>Enable</button></td>
