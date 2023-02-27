@@ -82,6 +82,21 @@ app.post('/admin/resetpassword', (req,res)=>{
     });
 });
 
+app.post("/user/register", (req, res) => {
+    console.log("submit in backend");
+    const name = req.body.name;
+    const username = req.body.username;
+    const password = req.body.password;
+    const position = req.body.position;
+    const department = req.body.department;
+    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+    const create_user = "INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
+    db.query(create_user, [name, username, password, position, department], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
 
 app.listen(3001, ()=>{
     console.log('Running on port 3001');
