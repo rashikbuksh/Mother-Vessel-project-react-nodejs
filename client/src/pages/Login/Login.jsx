@@ -3,11 +3,12 @@
 import Axios from 'axios';
 import { sha256, sha224 } from 'js-sha256';
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 export default function Login(){
     const navigate = useNavigate();
   const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
   const [isInvalidPassword, setIsInvalidPassword] = React.useState(false);
+  const [isLoading, setLoading] = useState(false);
   // const [verify_code, setVerify_code] = React.useState('');
   // const [generatedcode, setGeneratedcode] = React.useState('');
   const [user, setUser] = React.useState({
@@ -20,6 +21,14 @@ export default function Login(){
 //   useEffect(() => {
 //     setGeneratedcode(makeid(5));
 //   },[]);
+
+const loading = e => {
+  setLoading(true);
+}
+if (isLoading) {
+  return <div className="App">Loading...</div>;
+}
+
 
 //   const makeid=(length) =>{
 //     let result = '';
@@ -68,6 +77,7 @@ export default function Login(){
   };
 
   const onSubmit = e => {
+     loading();
     if (isInvalidEmail || isInvalidPassword) {
       e.preventDefault();
     }
@@ -84,6 +94,7 @@ export default function Login(){
             password: sha256(user.password),
         }
     }).then((response) => {
+      setLoading(false);
       //console.log("Data"+response.data)
       if(response.data === "No user found"){
       alert("No user found");
