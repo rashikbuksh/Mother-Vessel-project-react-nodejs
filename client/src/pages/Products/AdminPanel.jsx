@@ -25,6 +25,9 @@ export default function AdminPanel(){
     const changePassword = () => {
         alert("Password has been changed");
     };
+    const resetPassword = () => {
+        alert("Password has been reset");
+    };
     return (
         <div>
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={redirectToAddUser}>Add User</button>
@@ -42,6 +45,7 @@ export default function AdminPanel(){
                             <th>Department</th>
                             <th>Created On</th>
                             <th>Change Password</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -77,6 +81,7 @@ export default function AdminPanel(){
                                     )}
                                 </td>
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changePassword}>Change</button></td>
+                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetPassword}>Reset Password</button></td>
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>enable/disable</button></td>
                             </tr>
                         ))}
