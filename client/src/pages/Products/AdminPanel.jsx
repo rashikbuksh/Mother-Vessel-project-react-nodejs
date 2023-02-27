@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { format } from "date-fns";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import Axios from 'axios';
 
 
 export default function AdminPanel(){
@@ -13,15 +14,26 @@ export default function AdminPanel(){
         .then((data) => {
             setUserList(data);
         });
-    }, []);
-
-
+    }, [userList]);
 
     const redirectToAddUser = () => {
         navigate("/adduser");
     };
-    const enable_disable_user = () => {
-        alert("User has been enabled/disabled");
+    const enable_user = (userid) => {
+        
+        Axios.post(
+            'http://localhost:3001/admin/enableuser/',
+            {
+              user_id: userid,
+            });
+    };
+    const disable_user = (userid) => {
+        
+        Axios.post(
+            'http://localhost:3001/admin/disableuser/',
+            {
+              user_id: userid,
+            });
     };
     const changePassword = () => {
         alert("Password has been changed");
@@ -80,8 +92,8 @@ export default function AdminPanel(){
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changePassword}>Change</button></td>
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetPassword}>Reset Password</button></td>
                                 {user.enabled === 1 ? 
-                                <td><button class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>Disable</button></td>
-                                : <td><button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>Enable</button></td>
+                                <td><button class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{disable_user(user.id)}}>Disable</button></td>
+                                : <td><button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{enable_user(user.id)}}>Enable</button></td>
                                 }
                                 
                             </tr>

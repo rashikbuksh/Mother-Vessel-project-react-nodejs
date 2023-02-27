@@ -50,6 +50,26 @@ app.get('/admin/getusers', (req,res)=>{
     });
 });
 
+app.post('/admin/enableuser', (req,res)=>{
+    const id = req.body.user_id;
+    const sqlUpdate = "UPDATE users SET enabled=1 where id= ?";
+    db.query(sqlUpdate, [id], (err, result)=>{
+        if(err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
+app.post('/admin/disableuser', (req,res)=>{
+    const id = req.body.user_id;
+    const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
+    db.query(sqlUpdate, [id], (err, result)=>{
+        if(err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
 app.listen(3001, ()=>{
     console.log('Running on port 3001');
 })
