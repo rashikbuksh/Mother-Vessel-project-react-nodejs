@@ -11,6 +11,9 @@ const Products = lazy(() => import("./pages/Products"));
 const Login = lazy(() => import("./pages/Login"));
 const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
 const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
+//product
+const AdminPanel = lazy(() => import("./pages/Products/AdminPanel"));
+const AddUser = lazy(() => import("./pages/Products/AddUser"));
 
 function App() {
     return (
@@ -58,6 +61,22 @@ function App() {
                         element={
                             <Suspense fallback={<Loader />}>
                                 <ResetPassword />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/adminpanel"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <AdminPanel />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/adduser"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <AddUser />
                             </Suspense>
                         }
                     />
