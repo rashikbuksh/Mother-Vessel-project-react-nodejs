@@ -110,12 +110,26 @@ export default function AdminPanel(){
                                 </td>
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changeInfo}>ChangeInfo</button></td>
                                 <td>
-                                <Popup trigger={<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Reset Password</button>} position="right center">
-                                    <div>
-                                        <input type="password" placeholder="New Password" onChange={(e)=>{setNewPassword(e.target.value)}}/>
-                                        <input type="password" placeholder="Confirm Password" onChange={(e)=>{setConfirmPassword(e.target.value)}}/>
-                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{resetPassword(user.id)}}>Reset Password</button>
+                                
+                                <Popup
+                                    trigger={<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> Reset Password</button>}
+                                    modal
+                                    nested
+                                >
+                                    {close => (
+                                    <div className="modal">
+                                        <button className="close" onClick={close}>
+                                        &times;
+                                        </button>
+                                        <div className="content">
+                                        <div>
+                                            <input type="password" placeholder="New Password" onChange={(e)=>{setNewPassword(e.target.value)}}/>
+                                            <input type="password" placeholder="Confirm Password" onChange={(e)=>{setConfirmPassword(e.target.value)}}/>
+                                            <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{resetPassword(user.id) ; close()}}>Reset</button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    )}
                                 </Popup>
                                 </td>
                                 {user.enabled === 1 ? 
