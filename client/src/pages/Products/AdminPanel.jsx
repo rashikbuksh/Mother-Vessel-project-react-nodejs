@@ -1,21 +1,22 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { format } from "date-fns";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
-const UserInformation = [
-    {
-        id: "1",
-        name: "fahim",
-        username: "fahim123",
-        password: "safa",
-        position: "staff",
-        department: "sales",
-        created_on: "2022-05-17T03:24:00",
-    },
-];
 
 export default function AdminPanel(){
     const navigate = useNavigate();
+    const [userList, setUserList] = useState([])
+
+    useEffect(() => {
+        fetch("http://localhost:3001/admin/getusers")
+        .then((res) => res.json())
+        .then((data) => {
+            setUserList(data);
+        });
+    }, []);
+
+
+
     const redirectToAddUser = () => {
         navigate("/adduser");
     };
@@ -40,17 +41,16 @@ export default function AdminPanel(){
                             <th>ID</th>
                             <th>Name</th>
                             <th>Username</th>
-                            <th>Password</th>
                             <th>Position</th>
                             <th>Department</th>
                             <th>Created On</th>
+                            <th>Update Info</th>
                             <th>Change Password</th>
-                            <th></th>
-                            <th></th>
+                            <th>Enable/Disable</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {UserInformation.map((user) => (
+                        {userList.map((user) => (
                             <tr key={user.id}>
                                 <td>
                                     <Link to={`${user.id}`}>
@@ -67,22 +67,23 @@ export default function AdminPanel(){
                                         {user.username}
                                     </Link>
                                 </td>
-                                <td>
-                                    <Link to={`${user.password}`}>
-                                        {user.password}
-                                    </Link>
-                                </td>
+                               
                                 <td>{user.position}</td>
                                 <td>{user.department}</td>
                                 <td>
                                     {format(
-                                        new Date(user.created_on),
+                                        new Date(user.user_created_time),
                                         "dd MMM yyyy"
                                     )}
                                 </td>
+                                
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changePassword}>Change</button></td>
                                 <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={resetPassword}>Reset Password</button></td>
-                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>enable/disable</button></td>
+                                {user.enabled === 1 ? 
+                                <td><button class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>Disable</button></td>
+                                : <td><button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enable_disable_user}>Enable</button></td>
+                                }
+                                
                             </tr>
                         ))}
                     </tbody>
