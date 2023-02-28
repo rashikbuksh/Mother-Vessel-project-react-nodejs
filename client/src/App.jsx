@@ -6,14 +6,15 @@ const NotFound = lazy(() => import("./layout/NotFound"));
 
 const Home = lazy(() => import("./pages/Home/Shared/Layout"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Products = lazy(() => import("./pages/Products"));
+const Admin = lazy(() => import("./pages/Admin"));
 // Login
 const Login = lazy(() => import("./pages/Login"));
 const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
 const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
 //product
-const AdminPanel = lazy(() => import("./pages/Products/AdminPanel"));
-const AddUser = lazy(() => import("./pages/Products/AddUser"));
+const AdminPanel = lazy(() => import("./pages/Admin/AdminPanel"));
+const AddUser = lazy(() => import("./pages/Admin/AddUser"));
+const UpdateUser = lazy(() => import("./pages/Admin/Update/Info"));
 
 function App() {
     return (
@@ -29,7 +30,7 @@ function App() {
                         }
                     >
                         <Route index element={<Dashboard />} />
-                        <Route path="products" element={<Products />} />
+                        <Route path="admin" element={<Admin />} />
                     </Route>
                     <Route
                         path="/*"
@@ -66,6 +67,14 @@ function App() {
                     />
                     <Route
                         path="/adminpanel"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <AdminPanel />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/adminpanel/update-info/:userId"
                         element={
                             <Suspense fallback={<Loader />}>
                                 <AdminPanel />
