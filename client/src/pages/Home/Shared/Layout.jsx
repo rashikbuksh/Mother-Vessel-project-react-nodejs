@@ -1,20 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Layout() {
-    useEffect(() => {
-        if(localStorage.getItem('user_type') == 'admin'){
-            window.location.href = "/adminpanel";
-        }
-        else if(localStorage.getItem('user_type') == 'Manager'){
-            
-        }
-        else{
-            window.location.href = "/login";
-        }
-    }, []);
+    if (localStorage.getItem("user_type") == "admin") {
+        window.location.href = "/adminpanel";
+    } else if (localStorage.getItem("user_type") == "Manager") {
+    } else {
+        window.location.href = "/login";
+    }
     return (
         <div className="flex h-screen w-screen flex-row overflow-hidden bg-neutral-100">
             <Sidebar />
