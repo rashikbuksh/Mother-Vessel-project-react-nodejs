@@ -34,6 +34,13 @@ export default function AdminPanel(){
         });
     }, [userList]);
 
+    const logout = () => {
+        localStorage.setItem('loggedin', 'false');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_type');
+        window.location.href = "/login";
+    };
+
 
     const redirectToAddUser = () => {
         navigate("/adduser");
@@ -77,6 +84,8 @@ export default function AdminPanel(){
     return (
         <div>
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={redirectToAddUser}>Add User</button>
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={logout}>Logout</button>
+            
             <div className="flex-1 rounded-sm border border-gray-200 bg-white px-4 pt-3 pb-4">
             <strong className="font-medium text-gray-700">Users</strong>
             <div className="mt-3 rounded-sm border-x border-gray-200">
