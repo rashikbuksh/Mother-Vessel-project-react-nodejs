@@ -96,6 +96,23 @@ app.post("/user/register", (req, res) => {
     });
 });
 
+app.post("/admin/updateinfo", (req, res) => {
+    console.log("update info in backend");
+    const id = req.body.user_id;
+    const name = req.body.new_name;
+    const username = req.body.new_username;
+    const position = req.body.new_position;
+    const department = req.body.new_department;
+    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+    const sqlUpdate = "UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
+    db.query(sqlUpdate, [name, username, position, department, id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
+
 app.listen(3001, ()=>{
     console.log('Running on port 3001');
 })

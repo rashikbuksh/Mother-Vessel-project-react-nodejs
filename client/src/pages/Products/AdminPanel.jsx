@@ -12,6 +12,11 @@ export default function AdminPanel(){
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [userList, setUserList] = useState([]);
+
+    const [newName, setNewName] = useState('');
+    const [newUsername, setNewUsername] = useState('');
+    const [newPosition, setNewPosition] = useState('');
+    const [newDepartment, setNewDepartment] = useState('');
     
 
     useEffect(() => {
@@ -41,6 +46,43 @@ export default function AdminPanel(){
         window.location.href = "/login";
     };
 
+    const updateInfo = (name, userid, username, position, department) => {
+        console.log(userid);
+        console.log(newName);
+        console.log(newUsername);
+        console.log(newPosition);
+        console.log(newDepartment);
+
+        console.log(name);
+        console.log(username);
+        console.log(position);
+        console.log(department);
+
+        if(newName == ''){
+            setNewName(name);
+        }
+        if(newUsername == ''){
+            setNewUsername(username);
+        }
+        if(newPosition == ''){
+            setNewPosition(position);
+        }
+        if(newDepartment == ''){
+            setNewDepartment(department);
+        }
+
+        Axios.post(
+            'http://localhost:3001/admin/updateinfo/',
+            {
+                user_id: userid,
+                new_name: newName,
+                new_username: newUsername,
+                new_position: newPosition,
+                new_department: newDepartment,
+            });
+            alert("Info has been updated");
+    };
+
 
     const redirectToAddUser = () => {
         navigate("/adduser");
@@ -60,9 +102,6 @@ export default function AdminPanel(){
             {
               user_id: userid,
             });
-    };
-    const changeInfo= () => {
-        // return <div className="App">Loading...</div>;
     };
     const resetPassword = (userid) => {
         console.log(userid);
@@ -130,7 +169,33 @@ export default function AdminPanel(){
                                         "dd MMM yyyy"
                                     )}
                                 </td>
-                                <td><button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={changeInfo}>ChangeInfo</button></td>
+                                <td>
+                                <Popup
+                                    trigger={<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">ChangeInfo</button>}
+                                    modal
+                                    nested
+                                >
+                                    
+                                    {close => (
+                                    <div className="modal">
+                                        <button className="close" onClick={close}>
+                                        &times;
+                                        </button>
+                                        <div className="content">
+                                        <div>
+                                        
+                                            <input type="text" placeholder="New Name" onChange={(e)=>{setNewName(e.target.value)}} defaultValue={user.name}/>
+                                            <input type="text" placeholder="New Username" onChange={(e)=>{setNewUsername(e.target.value)}} defaultValue={user.username}/>
+                                            <input type="text" placeholder="New Position" onChange={(e)=>{setNewPosition(e.target.value)}} defaultValue={user.position}/>
+                                            <input type="text" placeholder="New Department" onChange={(e)=>{setNewDepartment(e.target.value)}} defaultValue={user.department}/>
+                                            
+                                            <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{updateInfo(user.name, user.id, user.username, user.position, user.department) ; close()}}>update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    )}
+                                </Popup>
+                                </td>
                                 <td>
                                 
                                 <Popup
