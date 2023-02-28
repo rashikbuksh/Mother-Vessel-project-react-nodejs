@@ -15,12 +15,25 @@ export default function AdminPanel(){
     
 
     useEffect(() => {
+        if(localStorage.getItem('user_type') == 'admin'){
+            
+        }
+        else if(localStorage.getItem('user_type') == 'Manager'){
+            window.location.href = "/";
+        }
+        else{
+            window.location.href = "/login";
+        }
+    }, []);
+
+    useEffect(() => {
         fetch("http://localhost:3001/admin/getusers")
         .then((res) => res.json())
         .then((data) => {
             setUserList(data);
         });
     }, [userList]);
+
 
     const redirectToAddUser = () => {
         navigate("/adduser");

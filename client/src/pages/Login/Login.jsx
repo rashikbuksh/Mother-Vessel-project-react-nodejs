@@ -78,9 +78,11 @@ if (isLoading) {
     }else{
       console.log("Logged in");
       localStorage.setItem('loggedin', 'true');
-      localStorage.setItem('user_type', 'user');
-      localStorage.setItem('user', response.data);
-      console.log("Data: "+response.data);
+      const user = response.data.split(":");
+      console.log(user[0]);
+      console.log(user[1]);
+      localStorage.setItem('user_id', user[0]);
+      localStorage.setItem('user_type', user[1]);
       window.location.href = "/..";
     }
   });

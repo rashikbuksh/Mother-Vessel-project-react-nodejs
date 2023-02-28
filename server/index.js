@@ -22,17 +22,15 @@ app.get("/user/verify_login/", (req, res) => {
     //console.log("verify login")
     const username = req.query.username;
     const password = req.query.password;
-    console.log("data  "+username+" "+password)
     //console.log(email, password)
-    const get_user = "select id,password from users where username = ?";
+    const get_user = "select id,password,position from users where username = ?";
     db.query(get_user, [username], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
         } else if (password === result[0].password) {
-            console.log("login successful "+result[0].id.toString());
-            res.send(result[0].id.toString());
+            res.send(result[0].id.toString()+":"+result[0].position);
         } else {
             console.log("wrong password");
             res.send("wrong password");
