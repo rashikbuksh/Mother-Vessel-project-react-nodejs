@@ -22,17 +22,15 @@ app.get("/user/verify_login/", (req, res) => {
     //console.log("verify login")
     const username = req.query.username;
     const password = req.query.password;
-    console.log("data  "+username+" "+password)
     //console.log(email, password)
-    const get_user = "select id,password from users where username = ?";
+    const get_user = "select id,password,position from users where username = ?";
     db.query(get_user, [username], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
         } else if (password === result[0].password) {
-            console.log("login successful "+result[0].id.toString());
-            res.send(result[0].id.toString());
+            res.send(result[0].id.toString()+":"+result[0].position);
         } else {
             console.log("wrong password");
             res.send("wrong password");
@@ -77,6 +75,38 @@ app.post('/admin/resetpassword', (req,res)=>{
     const sqlUpdate = "UPDATE users SET password=? where id= ?";
     db.query(sqlUpdate, [password, id], (err, result)=>{
         if(err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
+app.post("/user/register", (req, res) => {
+    console.log("submit in backend");
+    const name = req.body.name;
+    const username = req.body.username;
+    const password = req.body.password;
+    const position = req.body.position;
+    const department = req.body.department;
+    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+    const create_user = "INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
+    db.query(create_user, [name, username, password, position, department], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        res.send(result);
+    });
+});
+
+app.post("/admin/updateinfo", (req, res) => {
+    console.log("update info in backend");
+    const id = req.body.user_id;
+    const name = req.body.new_name;
+    const username = req.body.new_username;
+    const position = req.body.new_position;
+    const department = req.body.new_department;
+    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+    const sqlUpdate = "UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
+    db.query(sqlUpdate, [name, username, position, department, id], (err, result) => {
+        if (err) console.log(err);
         //console.log(result)
         res.send(result);
     });
