@@ -94,7 +94,7 @@ app.post("/user/register", (req, res) => {
         [name, username, password, position, department],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+            console.log(result)
             res.send(result);
         }
     );

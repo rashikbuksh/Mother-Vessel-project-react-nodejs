@@ -18,7 +18,7 @@ const EditTableRow = ({
                     name="name"
                     value={editFormData.name}
                     onChange={handleEditFormChange}
-                ></input>
+                />
             </td>
             <td>
                 <input
@@ -29,7 +29,7 @@ const EditTableRow = ({
                     name="username"
                     value={editFormData.username}
                     onChange={handleEditFormChange}
-                ></input>
+                />
             </td>
             <td>
                 {/* <input
@@ -40,7 +40,7 @@ const EditTableRow = ({
                     name="position"
                     value={editFormData.position}
                     onChange={handleEditFormChange}
-                ></input> */}
+                /> */}
                 <select
                     className="w-full rounded-md text-sm"
                     name="position"
@@ -64,7 +64,7 @@ const EditTableRow = ({
                     name="department"
                     value={editFormData.department}
                     onChange={handleEditFormChange}
-                ></input>
+                />
             </td>
             <td />
             <td />

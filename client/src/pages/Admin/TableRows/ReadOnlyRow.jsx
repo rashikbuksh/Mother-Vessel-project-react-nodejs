@@ -52,22 +52,22 @@ const ReadOnlyRow = ({
                 {user.enabled === 1 ? (
                     <button
                         type="button"
-                        className="rounded-md bg-red-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"
+                        className="rounded-md bg-green-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                         onClick={() => {
                             disable_user(user.id);
                         }}
                     >
-                        <ImCancelCircle className="h-5 w-5 text-black" />
+                        <AiOutlineCheck className="h-5 w-5 text-black" />
                     </button>
                 ) : (
                     <button
                         type="button"
-                        className="rounded-md bg-green-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
+                        className="rounded-md bg-red-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"
                         onClick={() => {
                             enable_user(user.id);
                         }}
                     >
-                        <AiOutlineCheck className="h-5 w-5 text-black" />
+                        <ImCancelCircle className="h-5 w-5 text-black" />
                     </button>
                 )}
             </td>
