@@ -1,18 +1,27 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
 import { sha256 } from "js-sha256";
 import Axios from "axios";
+import Loader from "../../utils/Loader";
 
 const App = () => {
     const [userList, setUserList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const loading = (e) => {
+        setIsLoading(true);
+        return <Loader />;
+    };
 
     useEffect(() => {
+        loading();
         fetch("http://localhost:3001/admin/getusers")
             .then((res) => res.json())
             .then((data) => {
                 setUserList(data);
+                setIsLoading(false);
             });
     }, []);
 
@@ -370,67 +379,72 @@ const App = () => {
             </form>
 
             {/* add item modal */}
-            <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={closeModal}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
+            <Suspense fallback={<Loader />}>
+                <Transition appear show={isOpen} as={Fragment}>
+                    <Dialog
+                        as="div"
+                        className="relative z-10"
+                        onClose={closeModal}
                     >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
-                    </Transition.Child>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0 bg-black bg-opacity-25" />
+                        </Transition.Child>
 
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                    >
-                                        Add User
-                                    </Dialog.Title>
-                                    <form
-                                        onSubmit={handleAddFormSubmit}
-                                        className="flex flex-col gap-4"
-                                    >
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="text"
-                                            name="name"
-                                            required
-                                            placeholder="Enter name..."
-                                            onChange={handleAddFormChange}
-                                        />
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="text"
-                                            name="username"
-                                            required
-                                            placeholder="Enter an username..."
-                                            onChange={handleAddFormChange}
-                                        />
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="password"
-                                            name="password"
-                                            required
-                                            placeholder="Enter a password..."
-                                            onChange={handleAddFormChange}
-                                        />
-                                        {/* <input
+                        <div className="fixed inset-0 overflow-y-auto">
+                            <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                        <Dialog.Title
+                                            as="h3"
+                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
+                                        >
+                                            Add User
+                                        </Dialog.Title>
+                                        <form
+                                            onSubmit={handleAddFormSubmit}
+                                            className="flex flex-col gap-4"
+                                        >
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="text"
+                                                name="name"
+                                                required
+                                                placeholder="Enter name..."
+                                                onChange={handleAddFormChange}
+                                            />
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="text"
+                                                name="username"
+                                                required
+                                                placeholder="Enter an username..."
+                                                onChange={handleAddFormChange}
+                                            />
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="password"
+                                                name="password"
+                                                required
+                                                placeholder="Enter a password..."
+                                                onChange={handleAddFormChange}
+                                            />
+                                            {/* <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
                                             name="position"
@@ -438,117 +452,126 @@ const App = () => {
                                             placeholder="Enter a phone position..."
                                             onChange={handleAddFormChange}
                                         /> */}
-                                        <select
-                                            className="w-full rounded-md text-sm"
-                                            name="position"
-                                            required
-                                            placeholder="Enter a phone position..."
-                                            onChange={handleAddFormChange}
-                                        >
-                                            <option value="admin">Admin</option>
-                                            <option value="operations">
-                                                Operations
-                                            </option>
-                                            <option value="accounts-manager">
-                                                Accounts manager
-                                            </option>
-                                            <option value="accounts">
-                                                Accounts
-                                            </option>
-                                        </select>
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="text"
-                                            name="department"
-                                            required
-                                            placeholder="Enter a department..."
-                                            onChange={handleAddFormChange}
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                        >
-                                            Add
-                                        </button>
-                                    </form>
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                            <select
+                                                className="w-full rounded-md text-sm"
+                                                name="position"
+                                                required
+                                                placeholder="Enter a phone position..."
+                                                onChange={handleAddFormChange}
+                                            >
+                                                <option value="admin">
+                                                    Admin
+                                                </option>
+                                                <option value="operations">
+                                                    Operations
+                                                </option>
+                                                <option value="accounts-manager">
+                                                    Accounts manager
+                                                </option>
+                                                <option value="accounts">
+                                                    Accounts
+                                                </option>
+                                            </select>
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="text"
+                                                name="department"
+                                                required
+                                                placeholder="Enter a department..."
+                                                onChange={handleAddFormChange}
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                                            >
+                                                Add
+                                            </button>
+                                        </form>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
                         </div>
-                    </div>
-                </Dialog>
-            </Transition>
+                    </Dialog>
+                </Transition>
+            </Suspense>
 
             {/* Reset Pass modal */}
-            <Transition appear show={isResPassOpen} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="relative z-10"
-                    onClose={closeResPassModal}
-                >
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
+            <Suspense fallback={<Loader />}>
+                <Transition appear show={isResPassOpen} as={Fragment}>
+                    <Dialog
+                        as="div"
+                        className="relative z-10"
+                        onClose={closeResPassModal}
                     >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
-                    </Transition.Child>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0 bg-black bg-opacity-25" />
+                        </Transition.Child>
 
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Reset Password
-                                    </Dialog.Title>
-                                    <form
-                                        onSubmit={handleResetPassFormSubmit}
-                                        className="flex flex-col gap-4"
-                                    >
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="password"
-                                            name="password"
-                                            required
-                                            placeholder="Enter an password..."
-                                            onChange={handleResetPassFormChange}
-                                        />
-                                        <input
-                                            className="w-full rounded-md text-sm"
-                                            type="password"
-                                            name="reset_password"
-                                            required
-                                            placeholder="Enter an reset_password..."
-                                            onChange={handleResetPassFormChange}
-                                        />
-
-                                        <button
-                                            type="submit"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        <div className="fixed inset-0 overflow-y-auto">
+                            <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                        <Dialog.Title
+                                            as="h3"
+                                            className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
                                         >
-                                            Reset
-                                        </button>
-                                    </form>
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                            Reset Password
+                                        </Dialog.Title>
+                                        <form
+                                            onSubmit={handleResetPassFormSubmit}
+                                            className="flex flex-col gap-4"
+                                        >
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="password"
+                                                name="password"
+                                                required
+                                                placeholder="Enter an password..."
+                                                onChange={
+                                                    handleResetPassFormChange
+                                                }
+                                            />
+                                            <input
+                                                className="w-full rounded-md text-sm"
+                                                type="password"
+                                                name="reset_password"
+                                                required
+                                                placeholder="Enter an reset_password..."
+                                                onChange={
+                                                    handleResetPassFormChange
+                                                }
+                                            />
+
+                                            <button
+                                                type="submit"
+                                                className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                            >
+                                                Reset
+                                            </button>
+                                        </form>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
                         </div>
-                    </div>
-                </Dialog>
-            </Transition>
+                    </Dialog>
+                </Transition>
+            </Suspense>
         </div>
     );
 };
