@@ -32,7 +32,7 @@ const EditTableRow = ({
                 ></input>
             </td>
             <td>
-                <input
+                {/* <input
                     className="w-full rounded-md text-sm"
                     type="text"
                     required="required"
@@ -40,19 +40,34 @@ const EditTableRow = ({
                     name="position"
                     value={editFormData.position}
                     onChange={handleEditFormChange}
-                ></input>
+                ></input> */}
+                <select
+                    className="w-full rounded-md text-sm"
+                    name="position"
+                    required
+                    placeholder="Enter a position..."
+                    value={editFormData.position}
+                    onChange={handleEditFormChange}
+                >
+                    <option value="admin">Admin</option>
+                    <option value="operations">Operations</option>
+                    <option value="accounts-manager">Accounts manager</option>
+                    <option value="accounts">Accounts</option>
+                </select>
             </td>
             <td>
                 <input
                     className="w-full rounded-md text-sm"
                     type="text"
                     required="required"
-                    placeholder="Enter an department..."
+                    placeholder="Enter a department..."
                     name="department"
                     value={editFormData.department}
                     onChange={handleEditFormChange}
                 ></input>
             </td>
+            <td />
+            <td />
             <td className="whitespace-nowrap p-3 text-sm text-gray-700">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
