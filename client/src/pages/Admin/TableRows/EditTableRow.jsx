@@ -15,8 +15,8 @@ const EditTableRow = ({
                     type="text"
                     required="required"
                     placeholder="Enter a name..."
-                    name="fullName"
-                    value={editFormData.fullName}
+                    name="name"
+                    value={editFormData.name}
                     onChange={handleEditFormChange}
                 ></input>
             </td>
@@ -25,9 +25,9 @@ const EditTableRow = ({
                     className="w-full rounded-md text-sm"
                     type="text"
                     required="required"
-                    placeholder="Enter an address..."
-                    name="address"
-                    value={editFormData.address}
+                    placeholder="Enter an username..."
+                    name="username"
+                    value={editFormData.username}
                     onChange={handleEditFormChange}
                 ></input>
             </td>
@@ -36,20 +36,20 @@ const EditTableRow = ({
                     className="w-full rounded-md text-sm"
                     type="text"
                     required="required"
-                    placeholder="Enter a phone number..."
-                    name="phoneNumber"
-                    value={editFormData.phoneNumber}
+                    placeholder="Enter a position..."
+                    name="position"
+                    value={editFormData.position}
                     onChange={handleEditFormChange}
                 ></input>
             </td>
             <td>
                 <input
                     className="w-full rounded-md text-sm"
-                    type="email"
+                    type="text"
                     required="required"
-                    placeholder="Enter an email..."
-                    name="email"
-                    value={editFormData.email}
+                    placeholder="Enter an department..."
+                    name="department"
+                    value={editFormData.department}
                     onChange={handleEditFormChange}
                 ></input>
             </td>

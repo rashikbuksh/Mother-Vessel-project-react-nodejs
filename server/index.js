@@ -116,9 +116,27 @@ app.post("/admin/updateinfo", (req, res) => {
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
-            res.send(result).json({
-                success: true,
-            });
+            // res.send(result).json({
+            //     success: true,
+            // });
+        }
+    );
+});
+
+app.post("/admin/deleteuser", (req, res) => {
+    console.log("Delete info in backend");
+    const id = req.body.user_id;
+    const sqlDelete =
+        "DELETE from users where id= ?";
+    db.query(
+        sqlDelete,
+        [id],(err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            if(!err){
+                res.send("success");
+            }
+            
         }
     );
 });

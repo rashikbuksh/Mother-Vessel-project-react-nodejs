@@ -1,27 +1,37 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { data } from "./TableRows/mock-data";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
+import { sha256 } from "js-sha256";
+import Axios from "axios";
 
 const App = () => {
-    const [contacts, setContacts] = useState(data);
+    const [userList, setUserList] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost:3001/admin/getusers")
+            .then((res) => res.json())
+            .then((data) => {
+                setUserList(data);
+            });
+    }, [userList]);
 
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
+        name: "",
+        username: "",
+        password: "",
+        position: "",
+        department: "",
     });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
+        name: "",
+        username: "",
+        position: "",
+        department: "",
     });
 
     //modified id status
@@ -30,7 +40,7 @@ const App = () => {
     //changeHandler
     //Update state with input data
     const handleAddFormChange = (event) => {
-        event.preventDefault(); // ???
+        event.preventDefault(); 
 
         //fullname, address, phoneNumber, email
         const fieldName = event.target.getAttribute("name");
@@ -66,16 +76,28 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newContact = {
-            id: Math.floor(Math.random() * 100),
-            fullName: addFormData.fullName, //handleAddFormChange로 받은 새 데이터
-            address: addFormData.address,
-            phoneNumber: addFormData.phoneNumber,
-            email: addFormData.email,
+            name: addFormData.name, //handleAddFormChange로 받은 새 데이터
+            username: addFormData.username,
+            password: addFormData.password,
+            position: addFormData.position,
+            department: addFormData.department,
         };
 
-        //contacts의 초기값은 data.json 데이터
-        const newContacts = [...contacts, newContact];
-        setContacts(newContacts);
+        // api
+
+
+        Axios.post('http://localhost:3001/user/register',
+        {
+            name: newContact.name,
+            username: newContact.username,
+            password: sha256(newContact.password),
+            position: newContact.position,
+            department: newContact.department,
+        })
+
+        //userList의 초기값은 data.json 데이터
+        const newuserList = [...userList, newContact];
+        setUserList(newuserList);
 
         // close modal
         closeModal();
@@ -87,32 +109,40 @@ const App = () => {
 
         const editedContact = {
             id: editContactId, //initial value null
-            fullName: editFormData.fullName,
-            address: editFormData.address,
-            phoneNumber: editFormData.phoneNumber,
-            email: editFormData.email,
+            name: editFormData.name,
+            username: editFormData.username,
+            position: editFormData.position,
+            department: editFormData.department,
         };
 
-        const newContacts = [...contacts]; //json.data + data added with setContacts above by receiving new input
-        const index = contacts.findIndex(
-            (contact) => contact.id === editContactId
-        );
-        newContacts[index] = editedContact; // Assign the modified data object to the object of the index row of the contacts array, which is the entire data
+        Axios.post("http://localhost:3001/admin/updateinfo/", {
+            user_id: editedContact.id,
+            new_name: editedContact.name,
+            new_username: editedContact.username,
+            new_position: editedContact.position,
+            new_department: editedContact.department,
+        });
 
-        setContacts(newContacts);
+        const newuserList = [...userList]; //json.data + data added with setUserList above by receiving new input
+        const index = userList.findIndex(
+            (user) => user.id === editContactId
+        );
+        newuserList[index] = editedContact; // Assign the modified data object to the object of the index row of the userList array, which is the entire data
+
+        setUserList(newuserList);
         setEditContactId(null);
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
-    const handleEditClick = (event, contact) => {
+    const handleEditClick = (event, user) => {
         event.preventDefault(); // ???
 
-        setEditContactId(contact.id);
+        setEditContactId(user.id);
         const formValues = {
-            fullName: contact.fullName,
-            address: contact.address,
-            phoneNumber: contact.phoneNumber,
-            email: contact.email,
+            name: user.name,
+            username: user.username,
+            position: user.position,
+            department: user.department,
         };
         setEditFormData(formValues);
     };
@@ -123,31 +153,39 @@ const App = () => {
     };
 
     // delete
-    const handleDeleteClick = (contactId) => {
-        const newContacts = [...contacts];
-        const index = contacts.findIndex((contact) => contact.id === contactId);
-        newContacts.splice(index, 1);
-        setContacts(newContacts);
+    const handleDeleteClick = (userId) => {
+        const newuserList = [...userList];
+        const index = userList.findIndex((contact) => contact.id === userId);
+        Axios.post("http://localhost:3001/admin/deleteuser/", {
+            user_id: userId,
+        }).then((response) => {
+            if(response.data == "success"){
+                alert("User deleted successfully");
+            }
+        });
+        
+        newuserList.splice(index, 1);
+        setUserList(newuserList);
     };
 
     // search filter
     const handleSearch = (searchValue) => {
         if (searchValue === "") {
-            setContacts(data);
+            setUserList([]);
             return;
         }
 
         let value = searchValue.toLowerCase();
 
-        const newFilterData = contacts.filter((contact) => {
-            const fullName = contact.fullName.toLowerCase();
+        const newFilterData = userList.filter((contact) => {
+            const fullName = contact.name.toLowerCase();
             return fullName.includes(value);
         });
 
-        setContacts(newFilterData);
+        setUserList(newFilterData);
     };
 
-    // modal
+    // modal for add user
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -157,6 +195,30 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
+
+    // modal for reset password
+    let [isResPassOpen, setIsResPassOpen] = useState(false);
+
+    function closeResPassModal() {
+        setIsResPassOpen(false);
+    }
+
+    function openResPassModal() {
+        setIsResPassOpen(true);
+    }
+
+
+    // enable user
+    const enable_user = (userid) => {
+        Axios.post("http://localhost:3001/admin/enableuser/", {
+            user_id: userid,
+        });
+    };
+    const disable_user = (userid) => {
+        Axios.post("http://localhost:3001/admin/disableuser/", {
+            user_id: userid,
+        });
+    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -194,13 +256,16 @@ const App = () => {
                                 Name
                             </th>
                             <th className="p-3 text-left text-sm font-semibold tracking-wide">
-                                Address
+                                Username
                             </th>
                             <th className="w-36 p-3 text-left text-sm font-semibold tracking-wide">
-                                Phone Number
+                                Position
                             </th>
                             <th className="w-24 p-3 text-left text-sm font-semibold tracking-wide">
-                                Email
+                                Department
+                            </th>
+                            <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
+                                Status
                             </th>
                             <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
                                 Actions
@@ -208,13 +273,13 @@ const App = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {contacts.map((contact, idx) => (
+                        {userList.map((user, idx) => (
                             <tr
                                 className={`bg-white ${
                                     idx % 2 === 1 ? "bg-gray-200" : ""
                                 }`}
                             >
-                                {editContactId === contact.id ? (
+                                {editContactId === user.id ? (
                                     <EditableRow
                                         editFormData={editFormData}
                                         handleEditFormChange={
@@ -224,9 +289,11 @@ const App = () => {
                                     />
                                 ) : (
                                     <ReadOnlyRow
-                                        contact={contact}
+                                        user={user}
                                         handleEditClick={handleEditClick}
                                         handleDeleteClick={handleDeleteClick}
+                                        enable_user={enable_user}
+                                        disable_user={disable_user}
                                     />
                                 )}
                             </tr>
@@ -275,7 +342,7 @@ const App = () => {
                                         <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
-                                            name="fullName"
+                                            name="name"
                                             required
                                             placeholder="Enter a name..."
                                             onChange={handleAddFormChange}
@@ -283,27 +350,96 @@ const App = () => {
                                         <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
-                                            name="address"
+                                            name="username"
                                             required
-                                            placeholder="Enter an addres..."
+                                            placeholder="Enter an username..."
+                                            onChange={handleAddFormChange}
+                                        />
+                                        <input
+                                            className="w-full rounded-md text-sm"
+                                            type="password"
+                                            name="password"
+                                            required
+                                            placeholder="Enter an password..."
                                             onChange={handleAddFormChange}
                                         />
                                         <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
-                                            name="phoneNumber"
+                                            name="position"
                                             required
-                                            placeholder="Enter a phone number..."
+                                            placeholder="Enter a phone position..."
                                             onChange={handleAddFormChange}
                                         />
                                         <input
                                             className="w-full rounded-md text-sm"
-                                            type="email"
-                                            name="email"
+                                            type="text"
+                                            name="department"
                                             required
-                                            placeholder="Enter an email..."
+                                            placeholder="Enter an department..."
                                             onChange={handleAddFormChange}
                                         />
+                                        <button
+                                            type="submit"
+                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                        >
+                                            Add
+                                        </button>
+                                    </form>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
+
+            {/* Reset Pass modal */}
+            <Transition appear show={isOpen} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 overflow-y-auto">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                    <Dialog.Title
+                                        as="h3"
+                                        className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
+                                    >
+                                        Add data
+                                    </Dialog.Title>
+                                    <form
+                                        onSubmit={handleAddFormSubmit}
+                                        className="flex flex-col gap-4"
+                                    >
+
+                                        <input
+                                            className="w-full rounded-md text-sm"
+                                            type="password"
+                                            name="password"
+                                            required
+                                            placeholder="Enter an password..."
+                                            onChange={handleAddFormChange}
+                                        />
+                                        
                                         <button
                                             type="submit"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
