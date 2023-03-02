@@ -6,24 +6,33 @@ import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
+import { IoMdPersonAdd } from "react-icons/io";
+
+//toast
+import { success, warning } from "../../components/Toast";
+import { ToastContainer } from "react-toastify";
+
+const TableHeader = [
+    { id: 1, name: "Id", width: "w-8" },
+    { id: 2, name: "Name" },
+    { id: 3, name: "Username" },
+    { id: 4, name: "Position", width: "w-36" },
+    { id: 5, name: "Department", width: "w-24" },
+    { id: 6, name: "Status", width: "w-16" },
+    { id: 7, name: "Reset Password", width: "w-16" },
+    { id: 8, name: "Actions", width: "w-16" },
+];
+
 const App = () => {
     const [userList, setUserList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const loading = (e) => {
-        setIsLoading(true);
-        return <Loader />;
-    };
 
     useEffect(() => {
-        loading();
         fetch("http://localhost:3001/admin/getusers")
             .then((res) => res.json())
             .then((data) => {
                 setUserList(data);
-                setIsLoading(false);
             });
-    }, []);
+    }, [userList]);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -31,7 +40,7 @@ const App = () => {
         name: "",
         username: "",
         password: "",
-        position: "",
+        position: "admin",
         department: "",
     });
 
@@ -126,11 +135,14 @@ const App = () => {
         });
 
         //userList의 초기값은 data.json 데이터
-        const newuserList = [...userList, newContact];
-        setUserList(newuserList);
+        const newUserList = [...userList, newContact];
+        setUserList(newUserList);
 
         // close modal
         closeModal();
+
+        // toast
+        success("User added successfully");
     };
 
     //submit handler
@@ -154,13 +166,11 @@ const App = () => {
                 user_id: resetPassUserId,
                 new_password: sha256(newPass.password),
             });
-            alert("Password has been reset");
+            closeResPassModal();
+            success("Password reset successfully");
         } else {
-            alert("Passwords do not match");
+            warning("Password does not match");
         }
-
-        // close modal
-        closeResPassModal();
     };
 
     //save modified data (App component)
@@ -183,12 +193,13 @@ const App = () => {
             new_department: editedContact.department,
         });
 
-        const newuserList = [...userList]; //json.data + data added with setUserList above by receiving new input
+        const newUserList = [...userList]; //json.data + data added with setUserList above by receiving new input
         const index = userList.findIndex((user) => user.id === editContactId);
-        newuserList[index] = editedContact; // Assign the modified data object to the object of the index row of the userList array, which is the entire data
+        newUserList[index] = editedContact; // Assign the modified data object to the object of the index row of the userList array, which is the entire data
 
-        setUserList(newuserList);
+        setUserList(newUserList);
         setEditContactId(null);
+        success("User updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -212,37 +223,32 @@ const App = () => {
 
     // delete
     const handleDeleteClick = (userId) => {
-        const newuserList = [...userList];
+        const newUserList = [...userList];
         const index = userList.findIndex((user) => user.id === userId);
         Axios.post("http://localhost:3001/admin/deleteuser/", {
             user_id: userId,
         }).then((response) => {
             if (response.data == "success") {
-                alert("User deleted successfully");
+                success("User deleted successfully");
             }
         });
 
-        newuserList.splice(index, 1);
-        setUserList(newuserList);
+        newUserList.splice(index, 1);
+        setUserList(newUserList);
     };
 
     // search filter
-    const handleSearch = (searchValue) => {
-        if (searchValue === "") {
-            // if search value is empty, return all users
+    const [query, setQuery] = useState("");
 
-            return;
-        }
-
-        let value = searchValue.toLowerCase();
-
-        const newFilterData = userList.filter((user) => {
-            const fullName = user.name.toLowerCase();
-            return fullName.includes(value);
-        });
-
-        setUserList(newFilterData);
-    };
+    const filteredPeople =
+        query === ""
+            ? userList
+            : userList.filter((user) =>
+                  user.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "")
+                      .includes(query.toLowerCase().replace(/\s+/g, ""))
+              );
 
     // modal for add user
     let [isOpen, setIsOpen] = useState(false);
@@ -267,15 +273,17 @@ const App = () => {
     }
 
     // enable user
-    const enable_user = (userid) => {
+    const enable_user = (userId) => {
         Axios.post("http://localhost:3001/admin/enableuser/", {
-            user_id: userid,
+            user_id: userId,
         });
+        success("User enabled");
     };
-    const disable_user = (userid) => {
+    const disable_user = (userId) => {
         Axios.post("http://localhost:3001/admin/disableuser/", {
-            user_id: userid,
+            user_id: userId,
         });
+        warning("User disabled");
     };
 
     // logout
@@ -297,20 +305,20 @@ const App = () => {
         <div className="m-2 mt-4">
             <div className="flex flex-row justify-center">
                 <button
-                    className="rounded-sm bg-green-300 p-3 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
+                    className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add a Item
+                    Add User <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
-                    className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-400 focus:border-green-500 focus:ring-0 sm:text-sm"
+                    className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for name..."
                     type="search"
                     name="search"
-                    onChange={(e) => handleSearch(e.target.value.trim())}
+                    onChange={(event) => setQuery(event.target.value)}
                 />
                 <button
-                    className="rounded-sm bg-red-500 p-3 text-sm font-semibold text-gray-900"
+                    className="rounded-md bg-red-500 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-red-700"
                     onClick={logout}
                 >
                     Logout
@@ -321,59 +329,54 @@ const App = () => {
                 <table className="w-full rounded-md">
                     <thead className="rounded-md border-b-2 border-gray-400 bg-orange-200">
                         <tr>
-                            <th className="w-8 p-3 text-left text-sm font-semibold tracking-wide">
-                                ID
-                            </th>
-                            <th className="p-3 text-left text-sm font-semibold tracking-wide">
-                                Name
-                            </th>
-                            <th className="p-3 text-left text-sm font-semibold tracking-wide">
-                                Username
-                            </th>
-                            <th className="w-36 p-3 text-left text-sm font-semibold tracking-wide">
-                                Position
-                            </th>
-                            <th className="w-24 p-3 text-left text-sm font-semibold tracking-wide">
-                                Department
-                            </th>
-                            <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
-                                Status
-                            </th>
-                            <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
-                                Reset Password
-                            </th>
-                            <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
-                                Actions
-                            </th>
+                            {TableHeader.map((header) => (
+                                <th
+                                    key={header.id}
+                                    className={`p-3 text-left text-sm font-semibold tracking-wide ${header.width}`}
+                                >
+                                    {header.name}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {userList.map((user, idx) => (
-                            <tr
-                                className={`bg-white ${
-                                    idx % 2 === 1 ? "bg-gray-200" : ""
-                                }`}
-                            >
-                                {editContactId === user.id ? (
-                                    <EditableRow
-                                        editFormData={editFormData}
-                                        handleEditFormChange={
-                                            handleEditFormChange
-                                        }
-                                        handleCancelClick={handleCancelClick}
-                                    />
-                                ) : (
-                                    <ReadOnlyRow
-                                        user={user}
-                                        handleEditClick={handleEditClick}
-                                        handleDeleteClick={handleDeleteClick}
-                                        enable_user={enable_user}
-                                        disable_user={disable_user}
-                                        reset_pass={reset_pass}
-                                    />
-                                )}
-                            </tr>
-                        ))}
+                        {filteredPeople.length === 0 && query !== "" ? (
+                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                                Nothing found.
+                            </div>
+                        ) : (
+                            filteredPeople.map((user, idx) => (
+                                <tr
+                                    key={user.id}
+                                    className={`bg-white ${
+                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                    }`}
+                                >
+                                    {editContactId === user.id ? (
+                                        <EditableRow
+                                            editFormData={editFormData}
+                                            handleEditFormChange={
+                                                handleEditFormChange
+                                            }
+                                            handleCancelClick={
+                                                handleCancelClick
+                                            }
+                                        />
+                                    ) : (
+                                        <ReadOnlyRow
+                                            user={user}
+                                            handleEditClick={handleEditClick}
+                                            handleDeleteClick={
+                                                handleDeleteClick
+                                            }
+                                            enable_user={enable_user}
+                                            disable_user={disable_user}
+                                            reset_pass={reset_pass}
+                                        />
+                                    )}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </form>
@@ -529,7 +532,7 @@ const App = () => {
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                         <Dialog.Title
                                             as="h3"
-                                            className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
+                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
                                         >
                                             Reset Password
                                         </Dialog.Title>
@@ -572,6 +575,9 @@ const App = () => {
                     </Dialog>
                 </Transition>
             </Suspense>
+
+            {/* toast  */}
+            <ToastContainer closeOnClick />
         </div>
     );
 };
