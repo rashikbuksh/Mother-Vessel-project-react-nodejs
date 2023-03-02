@@ -332,7 +332,7 @@ const App = () => {
                             {TableHeader.map((header) => (
                                 <th
                                     key={header.id}
-                                    className={`p-3 text-left text-sm font-semibold tracking-wide ${header.width}`}
+                                    className={`border-r-2 px-2 text-left text-sm font-semibold tracking-wide ${header.width}`}
                                 >
                                     {header.name}
                                 </th>
@@ -415,7 +415,7 @@ const App = () => {
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                         <Dialog.Title
                                             as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
+                                            className="mb-4 text-center text-3xl font-medium text-gray-900"
                                         >
                                             Add User
                                         </Dialog.Title>
@@ -423,66 +423,91 @@ const App = () => {
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
                                         >
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="text"
-                                                name="name"
-                                                required
-                                                placeholder="Enter name..."
-                                                onChange={handleAddFormChange}
-                                            />
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="text"
-                                                name="username"
-                                                required
-                                                placeholder="Enter an username..."
-                                                onChange={handleAddFormChange}
-                                            />
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="password"
-                                                name="password"
-                                                required
-                                                placeholder="Enter a password..."
-                                                onChange={handleAddFormChange}
-                                            />
-                                            {/* <input
-                                            className="w-full rounded-md text-sm"
-                                            type="text"
-                                            name="position"
-                                            required
-                                            placeholder="Enter a phone position..."
-                                            onChange={handleAddFormChange}
-                                        /> */}
-                                            <select
-                                                className="w-full rounded-md text-sm"
-                                                name="position"
-                                                required
-                                                placeholder="Enter a phone position..."
-                                                onChange={handleAddFormChange}
-                                            >
-                                                <option value="admin">
-                                                    Admin
-                                                </option>
-                                                <option value="operations">
-                                                    Operations
-                                                </option>
-                                                <option value="accounts-manager">
-                                                    Accounts manager
-                                                </option>
-                                                <option value="accounts">
-                                                    Accounts
-                                                </option>
-                                            </select>
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="text"
-                                                name="department"
-                                                required
-                                                placeholder="Enter a department..."
-                                                onChange={handleAddFormChange}
-                                            />
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Username
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="username"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Password
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    name="password"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Position
+                                                </label>
+                                                <select
+                                                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                    name="position"
+                                                    required
+                                                    placeholder="Enter a phone position..."
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                >
+                                                    <option value="admin">
+                                                        Admin
+                                                    </option>
+                                                    <option value="operations">
+                                                        Operations
+                                                    </option>
+                                                    <option value="accounts-manager">
+                                                        Accounts manager
+                                                    </option>
+                                                    <option value="accounts">
+                                                        Accounts
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Department
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="department"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
                                             <button
                                                 type="submit"
                                                 className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"

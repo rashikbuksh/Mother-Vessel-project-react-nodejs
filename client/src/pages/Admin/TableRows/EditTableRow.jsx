@@ -11,10 +11,10 @@ const EditTableRow = ({
             <td></td>
             <td>
                 <input
-                    className="w-full rounded-md text-sm"
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter a name..."
+                    placeholder="Enter Name..."
                     name="name"
                     value={editFormData.name}
                     onChange={handleEditFormChange}
@@ -22,30 +22,21 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="w-full rounded-md text-sm"
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter an username..."
+                    placeholder="Enter Username..."
                     name="username"
                     value={editFormData.username}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-                {/* <input
-                    className="w-full rounded-md text-sm"
-                    type="text"
-                    required="required"
-                    placeholder="Enter a position..."
-                    name="position"
-                    value={editFormData.position}
-                    onChange={handleEditFormChange}
-                /> */}
                 <select
-                    className="w-full rounded-md text-sm"
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     name="position"
                     required
-                    placeholder="Enter a position..."
+                    placeholder="Enter Position..."
                     value={editFormData.position}
                     onChange={handleEditFormChange}
                 >
@@ -57,10 +48,10 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="w-full rounded-md text-sm"
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter a department..."
+                    placeholder="Enter Department..."
                     name="department"
                     value={editFormData.department}
                     onChange={handleEditFormChange}
@@ -68,7 +59,7 @@ const EditTableRow = ({
             </td>
             <td />
             <td />
-            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
+            <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"
