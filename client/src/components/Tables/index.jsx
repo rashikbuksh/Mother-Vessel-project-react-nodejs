@@ -43,6 +43,7 @@ const App = () => {
         //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
+
     };
 
     //Update status with correction data
