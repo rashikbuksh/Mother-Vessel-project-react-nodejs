@@ -12,9 +12,9 @@ const Login = lazy(() => import("./pages/Login"));
 const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
 const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
 //admin panel
-const AdminPanel = lazy(() => import("./pages/Admin/AdminPanel"));
-const AddUser = lazy(() => import("./pages/Admin/AddUser"));
-const UpdateUser = lazy(() => import("./pages/Admin/Update/Info"));
+const AdminPanel = lazy(() => import("./pages/Test/AdminPanel"));
+const AddUser = lazy(() => import("./pages/Test/AddUser"));
+const UpdateUser = lazy(() => import("./pages/Test/Update/Info"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
