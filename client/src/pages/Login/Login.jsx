@@ -54,26 +54,26 @@ export default function Login() {
                     username: user.username,
                     password: sha256(user.password),
                 },
-    }).then((response) => {
-      setLoading(false);
-      //console.log("Data"+response.data)
-      if(response.data === "No user found"){
-      alert("No user found");
-    }else if(response.data=="wrong password"){
-      alert("Wrong password");
-    }else{
-      console.log("Logged in");
-      localStorage.setItem('loggedin', 'true');
-      const user = response.data.split(":");
-      console.log(user[0]);
-      console.log(user[1]);
-      localStorage.setItem('user_id', user[0]);
-      localStorage.setItem('user_type', user[1]);
-      window.location.href = "/..";
-    }
-  });
-    }
-  };
+            }).then((response) => {
+                setLoading(false);
+                //console.log("Data"+response.data)
+                if (response.data === "No user found") {
+                    alert("No user found");
+                } else if (response.data == "wrong password") {
+                    alert("Wrong password");
+                } else {
+                    console.log("Logged in");
+                    localStorage.setItem("loggedin", "true");
+                    const user = response.data.split(":");
+                    console.log(user[0]);
+                    console.log(user[1]);
+                    localStorage.setItem("user_id", user[0]);
+                    localStorage.setItem("user_type", user[1]);
+                    window.location.href = "/..";
+                }
+            });
+        }
+    };
 
     return (
         <div className="flex min-h-screen min-w-max flex-col justify-center bg-gray-100 py-6 sm:py-12">

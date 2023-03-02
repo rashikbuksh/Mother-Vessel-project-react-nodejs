@@ -14,7 +14,7 @@ const App = () => {
             .then((data) => {
                 setUserList(data);
             });
-    }, [userList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -34,13 +34,20 @@ const App = () => {
         department: "",
     });
 
+    //edit status
+    const [resetPassFormData, setResetPassFormData] = useState({
+        password: "",
+        reset_password: "",
+    });
+
     //modified id status
     const [editContactId, setEditContactId] = useState(null);
+    const [resetPassUserId, setResetPassUserId] = useState(null);
 
     //changeHandler
     //Update state with input data
     const handleAddFormChange = (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
 
         //fullname, address, phoneNumber, email
         const fieldName = event.target.getAttribute("name");
@@ -53,7 +60,24 @@ const App = () => {
         //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
+    };
 
+    //changeHandler
+    //Update state with input data
+    const handleResetPassFormChange = (event) => {
+        event.preventDefault();
+
+        //pass, reset pass
+        const fieldName = event.target.getAttribute("name");
+        //각 input 입력값
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...resetPassFormData };
+        newFormData[fieldName] = fieldValue;
+        //addFormData > event.target(input)
+        //fullName:"" > name="fullName", value=fullName input 입력값
+
+        setResetPassFormData(newFormData);
     };
 
     //Update status with correction data
@@ -83,17 +107,14 @@ const App = () => {
             department: addFormData.department,
         };
 
-        // api
-
-
-        Axios.post('http://localhost:3001/user/register',
-        {
+        // api call
+        Axios.post("http://localhost:3001/user/register", {
             name: newContact.name,
             username: newContact.username,
             password: sha256(newContact.password),
             position: newContact.position,
             department: newContact.department,
-        })
+        });
 
         //userList의 초기값은 data.json 데이터
         const newuserList = [...userList, newContact];
@@ -101,6 +122,36 @@ const App = () => {
 
         // close modal
         closeModal();
+    };
+
+    //submit handler
+    // modal open for reset password
+    const reset_pass = (userId) => {
+        setResetPassUserId(userId);
+        openResPassModal();
+    };
+    //Clicking the Add button adds a new data row to the existing row
+    const handleResetPassFormSubmit = (event) => {
+        event.preventDefault();
+
+        const newPass = {
+            password: resetPassFormData.password,
+            reset_password: resetPassFormData.reset_password,
+        };
+
+        // api call
+        if (newPass.password === newPass.reset_password) {
+            Axios.post("http://localhost:3001/admin/resetpassword/", {
+                user_id: resetPassUserId,
+                new_password: sha256(newPass.password),
+            });
+            alert("Password has been reset");
+        } else {
+            alert("Passwords do not match");
+        }
+
+        // close modal
+        closeResPassModal();
     };
 
     //save modified data (App component)
@@ -124,9 +175,7 @@ const App = () => {
         });
 
         const newuserList = [...userList]; //json.data + data added with setUserList above by receiving new input
-        const index = userList.findIndex(
-            (user) => user.id === editContactId
-        );
+        const index = userList.findIndex((user) => user.id === editContactId);
         newuserList[index] = editedContact; // Assign the modified data object to the object of the index row of the userList array, which is the entire data
 
         setUserList(newuserList);
@@ -155,15 +204,15 @@ const App = () => {
     // delete
     const handleDeleteClick = (userId) => {
         const newuserList = [...userList];
-        const index = userList.findIndex((contact) => contact.id === userId);
+        const index = userList.findIndex((user) => user.id === userId);
         Axios.post("http://localhost:3001/admin/deleteuser/", {
             user_id: userId,
         }).then((response) => {
-            if(response.data == "success"){
+            if (response.data == "success") {
                 alert("User deleted successfully");
             }
         });
-        
+
         newuserList.splice(index, 1);
         setUserList(newuserList);
     };
@@ -171,14 +220,15 @@ const App = () => {
     // search filter
     const handleSearch = (searchValue) => {
         if (searchValue === "") {
-            setUserList([]);
+            // if search value is empty, return all users
+
             return;
         }
 
         let value = searchValue.toLowerCase();
 
-        const newFilterData = userList.filter((contact) => {
-            const fullName = contact.name.toLowerCase();
+        const newFilterData = userList.filter((user) => {
+            const fullName = user.name.toLowerCase();
             return fullName.includes(value);
         });
 
@@ -207,7 +257,6 @@ const App = () => {
         setIsResPassOpen(true);
     }
 
-
     // enable user
     const enable_user = (userid) => {
         Axios.post("http://localhost:3001/admin/enableuser/", {
@@ -218,6 +267,20 @@ const App = () => {
         Axios.post("http://localhost:3001/admin/disableuser/", {
             user_id: userid,
         });
+    };
+
+    // logout
+    if (localStorage.getItem("user_type") == "admin") {
+    } else if (localStorage.getItem("user_type") == "Manager") {
+        window.location.href = "/";
+    } else {
+        window.location.href = "/login";
+    }
+    const logout = () => {
+        localStorage.setItem("loggedin", "false");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_type");
+        window.location.href = "/login";
     };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
@@ -238,10 +301,10 @@ const App = () => {
                     onChange={(e) => handleSearch(e.target.value.trim())}
                 />
                 <button
-                    className="rounded-sm bg-green-500 p-3 text-sm font-semibold text-gray-900"
-                    // onClick={openModal}
+                    className="rounded-sm bg-red-500 p-3 text-sm font-semibold text-gray-900"
+                    onClick={logout}
                 >
-                    Export
+                    Logout
                 </button>
             </div>
             <br />
@@ -266,6 +329,9 @@ const App = () => {
                             </th>
                             <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
                                 Status
+                            </th>
+                            <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
+                                Reset Password
                             </th>
                             <th className="w-16 p-3 text-left text-sm font-semibold tracking-wide">
                                 Actions
@@ -294,6 +360,7 @@ const App = () => {
                                         handleDeleteClick={handleDeleteClick}
                                         enable_user={enable_user}
                                         disable_user={disable_user}
+                                        reset_pass={reset_pass}
                                     />
                                 )}
                             </tr>
@@ -331,9 +398,9 @@ const App = () => {
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
-                                        className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
+                                        className="mb-4 text-left text-3xl font-medium text-gray-900"
                                     >
-                                        Add data
+                                        Add User
                                     </Dialog.Title>
                                     <form
                                         onSubmit={handleAddFormSubmit}
@@ -344,7 +411,7 @@ const App = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            placeholder="Enter a name..."
+                                            placeholder="Enter name..."
                                             onChange={handleAddFormChange}
                                         />
                                         <input
@@ -360,28 +427,46 @@ const App = () => {
                                             type="password"
                                             name="password"
                                             required
-                                            placeholder="Enter an password..."
+                                            placeholder="Enter a password..."
                                             onChange={handleAddFormChange}
                                         />
-                                        <input
+                                        {/* <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
                                             name="position"
                                             required
                                             placeholder="Enter a phone position..."
                                             onChange={handleAddFormChange}
-                                        />
+                                        /> */}
+                                        <select
+                                            className="w-full rounded-md text-sm"
+                                            name="position"
+                                            required
+                                            placeholder="Enter a phone position..."
+                                            onChange={handleAddFormChange}
+                                        >
+                                            <option value="admin">Admin</option>
+                                            <option value="operations">
+                                                Operations
+                                            </option>
+                                            <option value="accounts-manager">
+                                                Accounts manager
+                                            </option>
+                                            <option value="accounts">
+                                                Accounts
+                                            </option>
+                                        </select>
                                         <input
                                             className="w-full rounded-md text-sm"
                                             type="text"
                                             name="department"
                                             required
-                                            placeholder="Enter an department..."
+                                            placeholder="Enter a department..."
                                             onChange={handleAddFormChange}
                                         />
                                         <button
                                             type="submit"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                            className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                                         >
                                             Add
                                         </button>
@@ -394,8 +479,12 @@ const App = () => {
             </Transition>
 
             {/* Reset Pass modal */}
-            <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={closeModal}>
+            <Transition appear show={isResPassOpen} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-10"
+                    onClose={closeResPassModal}
+                >
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -424,27 +513,34 @@ const App = () => {
                                         as="h3"
                                         className="mb-4 text-center text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Add data
+                                        Reset Password
                                     </Dialog.Title>
                                     <form
-                                        onSubmit={handleAddFormSubmit}
+                                        onSubmit={handleResetPassFormSubmit}
                                         className="flex flex-col gap-4"
                                     >
-
                                         <input
                                             className="w-full rounded-md text-sm"
                                             type="password"
                                             name="password"
                                             required
                                             placeholder="Enter an password..."
-                                            onChange={handleAddFormChange}
+                                            onChange={handleResetPassFormChange}
                                         />
-                                        
+                                        <input
+                                            className="w-full rounded-md text-sm"
+                                            type="password"
+                                            name="reset_password"
+                                            required
+                                            placeholder="Enter an reset_password..."
+                                            onChange={handleResetPassFormChange}
+                                        />
+
                                         <button
                                             type="submit"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                         >
-                                            Add
+                                            Reset
                                         </button>
                                     </form>
                                 </Dialog.Panel>
