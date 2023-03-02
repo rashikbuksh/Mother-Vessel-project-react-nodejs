@@ -17,20 +17,20 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extender: true }));
 
-
 app.get("/user/verify_login/", (req, res) => {
     //console.log("verify login")
     const username = req.query.username;
     const password = req.query.password;
     //console.log(email, password)
-    const get_user = "select id,password,position from users where username = ?";
+    const get_user =
+        "select id,password,position from users where username = ?";
     db.query(get_user, [username], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
         } else if (password === result[0].password) {
-            res.send(result[0].id.toString()+":"+result[0].position);
+            res.send(result[0].id.toString() + ":" + result[0].position);
         } else {
             console.log("wrong password");
             res.send("wrong password");
@@ -39,42 +39,41 @@ app.get("/user/verify_login/", (req, res) => {
     });
 });
 
-
-app.get('/admin/getusers', (req,res)=>{
+app.get("/admin/getusers", (req, res) => {
     const sqlSelect = "SELECT * from users";
-    db.query(sqlSelect, (err, result)=>{
+    db.query(sqlSelect, (err, result) => {
         //console.log(result)
         res.send(result);
     });
 });
 
-app.post('/admin/enableuser', (req,res)=>{
+app.post("/admin/enableuser", (req, res) => {
     const id = req.body.user_id;
     const sqlUpdate = "UPDATE users SET enabled=1 where id= ?";
-    db.query(sqlUpdate, [id], (err, result)=>{
-        if(err) console.log(err);
+    db.query(sqlUpdate, [id], (err, result) => {
+        if (err) console.log(err);
         //console.log(result)
         res.send(result);
     });
 });
 
-app.post('/admin/disableuser', (req,res)=>{
+app.post("/admin/disableuser", (req, res) => {
     const id = req.body.user_id;
     const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
-    db.query(sqlUpdate, [id], (err, result)=>{
-        if(err) console.log(err);
+    db.query(sqlUpdate, [id], (err, result) => {
+        if (err) console.log(err);
         //console.log(result)
         res.send(result);
     });
 });
 
-app.post('/admin/resetpassword', (req,res)=>{
+app.post("/admin/resetpassword", (req, res) => {
     const id = req.body.user_id;
     const password = req.body.new_password;
-    console.log(id+" "+password)
+    console.log(id + " " + password);
     const sqlUpdate = "UPDATE users SET password=? where id= ?";
-    db.query(sqlUpdate, [password, id], (err, result)=>{
-        if(err) console.log(err);
+    db.query(sqlUpdate, [password, id], (err, result) => {
+        if (err) console.log(err);
         //console.log(result)
         res.send(result);
     });
@@ -88,12 +87,17 @@ app.post("/user/register", (req, res) => {
     const position = req.body.position;
     const department = req.body.department;
     //console.log(name+" "+username+" "+password+" "+position+" "+department);
-    const create_user = "INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
-    db.query(create_user, [name, username, password, position, department], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        res.send(result);
-    });
+    const create_user =
+        "INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
+    db.query(
+        create_user,
+        [name, username, password, position, department],
+        (err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            res.send(result);
+        }
+    );
 });
 
 app.post("/admin/updateinfo", (req, res) => {
@@ -104,15 +108,21 @@ app.post("/admin/updateinfo", (req, res) => {
     const position = req.body.new_position;
     const department = req.body.new_department;
     //console.log(name+" "+username+" "+password+" "+position+" "+department);
-    const sqlUpdate = "UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
-    db.query(sqlUpdate, [name, username, position, department, id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        res.send(result);
-    });
+    const sqlUpdate =
+        "UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
+    db.query(
+        sqlUpdate,
+        [name, username, position, department, id],
+        (err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            res.send(result).json({
+                success: true,
+            });
+        }
+    );
 });
 
-
-app.listen(3001, ()=>{
-    console.log('Running on port 3001');
-})
+app.listen(3001, () => {
+    console.log("Running on port 3001");
+});

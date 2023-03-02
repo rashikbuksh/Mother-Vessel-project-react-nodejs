@@ -11,10 +11,13 @@ const Admin = lazy(() => import("./pages/Admin"));
 const Login = lazy(() => import("./pages/Login"));
 const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
 const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
-//product
+//admin panel
 const AdminPanel = lazy(() => import("./pages/Admin/AdminPanel"));
 const AddUser = lazy(() => import("./pages/Admin/AddUser"));
 const UpdateUser = lazy(() => import("./pages/Admin/Update/Info"));
+
+// table
+const Table = lazy(() => import("./components/Tables"));
 
 function App() {
     return (
@@ -86,6 +89,15 @@ function App() {
                         element={
                             <Suspense fallback={<Loader />}>
                                 <AddUser />
+                            </Suspense>
+                        }
+                    />
+                    // test
+                    <Route
+                        path="/test"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <Table />
                             </Suspense>
                         }
                     />
