@@ -141,6 +141,84 @@ app.post("/admin/deleteuser", (req, res) => {
         }
     );
 });
+//////////////////////MANAGEMENT/////////////////////////
+//Insert Job Entry
+app.post("/management/jobentry", (req, res) => {
+    console.log("submit in backend");
+    const order_number = req.body.order_number;
+    const importer_name = req.body.importer_name;
+    const mother_vessel_name = req.body.mother_vessel_name;
+    const eta = req.body.eta;
+    const commodity = req.body.commodity;
+    const mv_location = req.body.mv_location;
+    const bl_quantity = req.body.bl_quantity;
+    const stevedore_name = req.body.stevedore_name;
+    const stevedore_contact_number = req.body.stevedore_contact_number;
+    const create_job =
+        "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number) VALUES (?,?,?,?,?,?,?,?,?)";
+    db.query(
+        create_job,
+        [order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result)
+            res.send(result);
+        }
+    );
+});
+//Get Job Entry
+app.get("/management/getjobentry", (req, res) => {
+    const sqlSelect = "SELECT * from job_entry";
+    db.query(sqlSelect, (err, result) => {
+        //console.log(result)
+        res.send(result);
+    });
+});
+//Update Job Entry
+app.post("/management/updatejobentry", (req, res) => {
+    console.log("update job info in backend");
+    const id = req.body.user_id;
+    const order_number = req.body.new_order_number;
+    const importer_name = req.body.new_importer_name;
+    const mother_vessel_name = req.body.new_mother_vessel_name;
+    const eta = req.body.new_eta;
+    const commodity = req.body.new_commodity;
+    const mv_location = req.body.new_mv_location;
+    const bl_quantity = req.body.new_bl_quantity;
+    const stevedore_name = req.body.new_stevedore_name;
+    const stevedore_contact_number = req.body.new_stevedore_contact_number;
+    const sqlUpdate =
+        "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=? where id= ?";
+    db.query(
+        sqlUpdate,
+        [order_number, importer_name, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, id],
+        (err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            // res.send(result).json({
+            //     success: true,
+            // });
+        }
+    );
+});
+//Delete Job Entry
+app.post("/management/deletejob", (req, res) => {
+    console.log("Delete job in backend");
+    const id = req.body.job_id;
+    const sqlDelete =
+        "DELETE from job_entry where id= ?";
+    db.query(
+        sqlDelete,
+        [id],(err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            if(!err){
+                res.send("success");
+            }
+            
+        }
+    );
+});
 
 app.listen(3001, () => {
     console.log("Running on port 3001");
