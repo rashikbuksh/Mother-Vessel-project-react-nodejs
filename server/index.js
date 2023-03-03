@@ -123,6 +123,7 @@ app.post("/admin/updateinfo", (req, res) => {
     );
 });
 
+
 app.post("/admin/deleteuser", (req, res) => {
     console.log("Delete info in backend");
     const id = req.body.user_id;

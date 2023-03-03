@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 export default function Layout() {
     if (localStorage.getItem("user_type") == "admin") {
         window.location.href = "/adminpanel";
-    } else if (localStorage.getItem("user_type") == "Manager") {
+    } else if (localStorage.getItem("user_type") == "operations") {
     } else {
         window.location.href = "/login";
     }

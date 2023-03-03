@@ -288,7 +288,7 @@ const App = () => {
 
     // logout
     if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "Manager") {
+    } else if (localStorage.getItem("user_type") == "operations") {
         window.location.href = "/";
     } else {
         window.location.href = "/login";
