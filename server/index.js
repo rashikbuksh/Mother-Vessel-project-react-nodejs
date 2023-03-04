@@ -170,14 +170,13 @@ app.post("/management/jobentry", (req, res) => {
 app.get("/management/getjobentry", (req, res) => {
     const sqlSelect = "SELECT * from job_entry";
     db.query(sqlSelect, (err, result) => {
-        //console.log(result)
         res.send(result);
     });
 });
 //Update Job Entry
 app.post("/management/updatejobentry", (req, res) => {
     console.log("update job info in backend");
-    const id = req.body.user_id;
+    const id = req.body.id;
     const order_number = req.body.new_order_number;
     const importer_name = req.body.new_importer_name;
     const mother_vessel_name = req.body.new_mother_vessel_name;
@@ -187,11 +186,12 @@ app.post("/management/updatejobentry", (req, res) => {
     const bl_quantity = req.body.new_bl_quantity;
     const stevedore_name = req.body.new_stevedore_name;
     const stevedore_contact_number = req.body.new_stevedore_contact_number;
+    //console.log(id);
     const sqlUpdate =
         "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=? where id= ?";
     db.query(
         sqlUpdate,
-        [order_number, importer_name, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, id],
+        [order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, id],
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
