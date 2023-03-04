@@ -18,6 +18,7 @@ const EditTableRow = ({
                     name="order_number"
                     value={editFormData.order_number}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
             <td>

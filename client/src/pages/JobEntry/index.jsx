@@ -14,8 +14,8 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number" },
-    { id: 3, name: "Importer Name" },
+    { id: 2, name: "Order Number", width: "w-16" },
+    { id: 3, name: "Importer Name", width: "w-16" },
     { id: 4, name: "Mother Vessel Name", width: "w-16" },
     { id: 5, name: "ETA", width: "w-16" },
     { id: 6, name: "Commodity", width: "w-16" },
@@ -117,9 +117,13 @@ const App = () => {
             stevedore_contact_number: addFormData.stevedore_contact_number,
         };
 
+        const current = new Date();
+        const order_number_auto = newJob.importer_name+'-'+current.getDate().toLocaleString()+'-'+newJob.mother_vessel_name+'-'+newJob.mv_location
+        console.log(order_number_auto)
+
         // api call
         Axios.post("http://localhost:3001/management/jobentry", {
-            order_number: newJob.order_number, //handleAddFormChange로 받은 새 데이터
+            order_number: order_number_auto, //handleAddFormChange로 받은 새 데이터
             importer_name: newJob.importer_name,
             mother_vessel_name: newJob.mother_vessel_name,
             eta: newJob.eta,
@@ -389,7 +393,8 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    required
+                                                    disabled
+                                                    placeholder="Will be Auto Generated"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
