@@ -40,37 +40,27 @@ const App = () => {
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        order_number: "",
-        job_number: "",
+        LV_name: "",
         date_from_charpotro: "",
-        cp_number_from_charpotro: "",
-        LA_number: "",
-        LV_number: "",
+        commodity: "",
+        LA: "",
         dest_from: "",
         dest_to: "",
-        commodity: "",
-        capacity: "",
-        rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
+        current_location: "",
+        remark: "",
         
     });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        order_number: "",
-        job_number: "",
+        LV_name: "",
         date_from_charpotro: "",
-        cp_number_from_charpotro: "",
-        LA_number: "",
-        LV_number: "",
+        commodity: "",
+        LA: "",
         dest_from: "",
         dest_to: "",
-        commodity: "",
-        capacity: "",
-        rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
+        current_location: "",
+        remark: "",
     });
 
     //modified id status
@@ -114,19 +104,14 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newStatus = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: addFormData.job_number,
+            LV_name: addFormData.LV_name, //handleAddFormChange로 받은 새 데이터
             date_from_charpotro: addFormData.date_from_charpotro,
-            cp_number_from_charpotro: addFormData.cp_number_from_charpotro,
-            LA_number: addFormData.LA_number,
-            LV_number: addFormData.LV_number,
+            commodity: addFormData.commodity,
+            LA: addFormData.LA,
             dest_from: addFormData.dest_from,
             dest_to: addFormData.dest_to,
-            commodity: addFormData.commodity,
-            capacity: addFormData.capacity,
-            rate: addFormData.rate,
-            LV_master_name: addFormData.LV_master_name,
-            LV_master_contact_number: addFormData.LV_master_contact_number,
+            current_location: addFormData.current_location,
+            remark: addFormData.remark,
         };
 
         // const current = new Date();
@@ -134,20 +119,15 @@ const App = () => {
         // console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/Statusentry", {
-            order_number: "order_number_forign_key", //handleAddFormChange로 받은 새 데이터
-            job_number: "job_number_auto",
+        Axios.post("http://localhost:3001/management/currentstatus", {
+            LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
             date_from_charpotro: newStatus.date_from_charpotro,
-            cp_number_from_charpotro: newStatus.cp_number_from_charpotro,
-            LA_number: newStatus.LA_number,
-            LV_number: newStatus.LV_number,
+            commodity: newStatus.commodity,
+            LA: newStatus.LA,
             dest_from: newStatus.dest_from,
             dest_to: newStatus.dest_to,
-            commodity: newStatus.commodity,
-            capacity: newStatus.capacity,
-            rate: newStatus.rate,
-            LV_master_name: newStatus.LV_master_name,
-            LV_master_contact_number: newStatus.LV_master_contact_number,
+            current_location: newStatus.current_location,
+            remark: newStatus.remark,
         });
 
         //CurrentStatus의 초기값은 data.json 데이터
@@ -413,32 +393,16 @@ const App = () => {
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Number
+                                                    LV Name
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="order_number"
+                                                    name="LV_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    disabled
-                                                    placeholder="Foriegn Key"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Job Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="job_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Auto Generated"
+                                                    
+                                                    placeholder="LV Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -461,45 +425,30 @@ const App = () => {
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    CP Number From Charpotro
+                                                    Commodity
                                                 </label>
                                                 <input
-                                                    type="number"
-                                                    name="cp_number_from_charpotro"
+                                                    type="text"
+                                                    name="commodity"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="CP Number From Charpotro"
+                                                    placeholder="Commodity"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA Number
+                                                    LA
                                                 </label>
                                                 <input
-                                                    type="number"
-                                                    name="LA_number"
+                                                    type="text"
+                                                    name="LA"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LA Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Number
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="LV_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Number"
+                                                    placeholder="LA"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -534,82 +483,36 @@ const App = () => {
                                                 />
                                             </div>
 
+
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
+                                                    Current Location
+                                                </label>
+                                                <input
+                                                    type="text"           
+                                                    name="current_location"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Current Location"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Remark
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="commodity"
+                                                    name="remark"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Commodity"
+                                                    placeholder="Remark"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Capacity
-                                                </label>
-                                                <input
-                                                    type="number"           
-                                                    name="capacity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Capacity"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Rate
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="rate"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Rate"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_master_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Master Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_master_contact_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Master Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
 
                                             <button
                                                 type="submit"
