@@ -14,6 +14,7 @@ const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
 //admin panel
 const AdminPanel = lazy(() => import("./pages/Admin"));
 const JobEntry = lazy(() => import("./pages/JobEntry"));
+const RecordEntry = lazy(() => import("./pages/RecordEntry"));
 // const AddUser = lazy(() => import("./pages/Test/AddUser"));
 // const UpdateUser = lazy(() => import("./pages/Test/Update/Info"));
 
@@ -82,6 +83,14 @@ function App() {
                         element={
                             <Suspense fallback={<Loader />}>
                                 <JobEntry />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/recordentry"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <RecordEntry />
                             </Suspense>
                         }
                     />
