@@ -147,36 +147,26 @@ const App = () => {
 
         const editedStatus = {
             id: editStatusId, //initial value null
-            order_number: editFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editFormData.job_number,
+            LV_name: editFormData.LV_name, 
             date_from_charpotro: editFormData.date_from_charpotro,
-            cp_number_from_charpotro: editFormData.cp_number_from_charpotro,
-            LA_number: editFormData.LA_number,
-            LV_number: editFormData.LV_number,
+            commodity: editFormData.commodity,
+            LA: editFormData.LA,
             dest_from: editFormData.dest_from,
             dest_to: editFormData.dest_to,
-            commodity: editFormData.commodity,
-            capacity: editFormData.capacity,
-            rate: editFormData.rate,
-            LV_master_name: editFormData.LV_master_name,
-            LV_master_contact_number: editFormData.LV_master_contact_number,
+            current_location: editFormData.current_location,
+            remark: editFormData.remark,
         };
 
-        Axios.post("http://localhost:3001/management/updateStatusentry", {
+        Axios.post("http://localhost:3001/management/updatecurrentstatus", {
             id: editedStatus.id,
-            order_number: editedStatus.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editedStatus.job_number,
+            LV_name: editedStatus.LV_name, 
             date_from_charpotro: editedStatus.date_from_charpotro,
-            cp_number_from_charpotro: editedStatus.cp_number_from_charpotro,
-            LA_number: editedStatus.LA_number,
-            LV_number: editedStatus.LV_number,
+            commodity: editedStatus.commodity,
+            LA: editedStatus.LA,
             dest_from: editedStatus.dest_from,
             dest_to: editedStatus.dest_to,
-            commodity: editedStatus.commodity,
-            capacity: editedStatus.capacity,
-            rate: editedStatus.rate,
-            LV_master_name: editedStatus.LV_master_name,
-            LV_master_contact_number: editedStatus.LV_master_contact_number,
+            current_location: editedStatus.current_location,
+            remark: editedStatus.remark,
         });
 
         const newCurrentStatus = [...CurrentStatus]; //json.data + data added with setCurrentStatus above by receiving new input
@@ -194,19 +184,14 @@ const App = () => {
 
         setEditStatusId(Status.id);
         const formValues = {
-            order_number: Status.order_number, 
-            job_number: Status.job_number,
+            LV_name: Status.LV_name, 
             date_from_charpotro: Status.date_from_charpotro,
-            cp_number_from_charpotro: Status.cp_number_from_charpotro,
-            LA_number: Status.LA_number,
-            LV_number: Status.LV_number,
+            commodity: Status.commodity,
+            LA: Status.LA,
             dest_from: Status.dest_from,
             dest_to: Status.dest_to,
-            commodity: Status.commodity,
-            capacity: Status.capacity,
-            rate: Status.rate,
-            LV_master_name: Status.LV_master_name,
-            LV_master_contact_number: Status.LV_master_contact_number,
+            current_location: Status.current_location,
+            remark: Status.remark,
         };
         setEditFormData(formValues);
     };
