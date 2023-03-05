@@ -265,7 +265,7 @@ const App = () => {
         query === ""
             ? RecordList
             : RecordList.filter((Record) =>
-                  Record.name
+                  Record.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))

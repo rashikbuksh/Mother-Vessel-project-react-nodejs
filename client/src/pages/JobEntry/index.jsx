@@ -232,7 +232,7 @@ const App = () => {
         query === ""
             ? JobList
             : JobList.filter((job) =>
-                  job.name
+                  job.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
