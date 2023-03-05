@@ -369,7 +369,7 @@ app.post("/management/updatecurrentstatus", (req, res) => {
 //Delete Record Entry
 app.post("/management/deletecurrentstatus", (req, res) => {
     console.log("Delete status in backend");
-    const id = req.body.record_id;
+    const id = req.body.status_id;
     const sqlDelete =
         "DELETE from current_status where id= ?";
     db.query(

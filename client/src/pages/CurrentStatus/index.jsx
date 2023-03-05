@@ -221,8 +221,8 @@ const App = () => {
         const newCurrentStatus = [...CurrentStatus];
         const index = CurrentStatus.findIndex((Status) => Status.id === StatusId);
         //console.log("Deleting Status with id: " + StatusId);
-        Axios.post("http://localhost:3001/management/deleteStatus", {
-            Status_id: StatusId,
+        Axios.post("http://localhost:3001/management/deletecurrentstatus", {
+            status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
                 success("Status deleted successfully");
