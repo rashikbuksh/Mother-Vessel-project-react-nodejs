@@ -14,33 +14,28 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number", width: "w-16" },
-    { id: 3, name: "Job Number", width: "w-16" },
+    { id: 2, name: "LV Name", width: "w-16" },
     { id: 4, name: "Date From Charpotro", width: "w-16" },
-    { id: 5, name: "CP Number From Charpotro", width: "w-16" },
-    { id: 6, name: "LA Number", width: "w-16" },
-    { id: 7, name: "LV Number", width: "w-16" },
+    { id: 10, name: "Commodity", width: "w-16" },
+    { id: 5, name: "LA", width: "w-16" },
     { id: 8, name: "Destination From", width: "w-16" },
     { id: 9, name: "Destination To", width: "w-16" },
-    { id: 10, name: "Commodity", width: "w-16" },
-    { id: 11, name: "Capacity", width: "w-16" },
-    { id: 12, name: "Rate", width: "w-16" },
-    { id: 13, name: "LV Master Name", width: "w-16" },
-    { id: 14, name: "LV Master Contact Number", width: "w-16" },
+    { id: 11, name: "Current Location", width: "w-16" },
+    { id: 12, name: "Remark", width: "w-16" },
     { id: 15, name: "Created Date", width: "w-16" },
     { id: 16, name: "Actions", width: "w-16" },
 ];
 
 const App = () => {
-    const [RecordList, setRecordList] = useState([]);
+    const [CurrentStatus, setCurrentStatus] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getrecordentry")
+        fetch("http://localhost:3001/management/getcurrentstatus")
             .then((res) => res.json())
             .then((data) => {
-                setRecordList(data);
+                setCurrentStatus(data);
             });
-    }, [RecordList]);
+    }, [CurrentStatus]);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -79,7 +74,7 @@ const App = () => {
     });
 
     //modified id status
-    const [editRecordId, setEditRecordId] = useState(null);
+    const [editStatusId, setEditStatusId] = useState(null);
 
     //changeHandler
     //Update state with input data
@@ -118,7 +113,7 @@ const App = () => {
         event.preventDefault(); // ???
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newRecord = {
+        const newStatus = {
             order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: addFormData.job_number,
             date_from_charpotro: addFormData.date_from_charpotro,
@@ -135,43 +130,43 @@ const App = () => {
         };
 
         // const current = new Date();
-        // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
+        // const order_number_auto = newStatus.importer_name+'-'+current.getDate().toLocaleString()+'-'+newStatus.mother_vessel_name+'-'+newStatus.mv_location
         // console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/recordentry", {
+        Axios.post("http://localhost:3001/management/Statusentry", {
             order_number: "order_number_forign_key", //handleAddFormChange로 받은 새 데이터
             job_number: "job_number_auto",
-            date_from_charpotro: newRecord.date_from_charpotro,
-            cp_number_from_charpotro: newRecord.cp_number_from_charpotro,
-            LA_number: newRecord.LA_number,
-            LV_number: newRecord.LV_number,
-            dest_from: newRecord.dest_from,
-            dest_to: newRecord.dest_to,
-            commodity: newRecord.commodity,
-            capacity: newRecord.capacity,
-            rate: newRecord.rate,
-            LV_master_name: newRecord.LV_master_name,
-            LV_master_contact_number: newRecord.LV_master_contact_number,
+            date_from_charpotro: newStatus.date_from_charpotro,
+            cp_number_from_charpotro: newStatus.cp_number_from_charpotro,
+            LA_number: newStatus.LA_number,
+            LV_number: newStatus.LV_number,
+            dest_from: newStatus.dest_from,
+            dest_to: newStatus.dest_to,
+            commodity: newStatus.commodity,
+            capacity: newStatus.capacity,
+            rate: newStatus.rate,
+            LV_master_name: newStatus.LV_master_name,
+            LV_master_contact_number: newStatus.LV_master_contact_number,
         });
 
-        //RecordList의 초기값은 data.json 데이터
-        const newRecordList = [...RecordList, newRecord];
-        setRecordList(newRecordList);
+        //CurrentStatus의 초기값은 data.json 데이터
+        const newCurrentStatus = [...CurrentStatus, newStatus];
+        setCurrentStatus(newCurrentStatus);
 
         // close modal
         closeModal();
 
         // toast
-        success("Record added successfully");
+        success("Status added successfully");
     };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
 
-        const editedRecord = {
-            id: editRecordId, //initial value null
+        const editedStatus = {
+            id: editStatusId, //initial value null
             order_number: editFormData.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: editFormData.job_number,
             date_from_charpotro: editFormData.date_from_charpotro,
@@ -187,91 +182,91 @@ const App = () => {
             LV_master_contact_number: editFormData.LV_master_contact_number,
         };
 
-        Axios.post("http://localhost:3001/management/updaterecordentry", {
-            id: editedRecord.id,
-            order_number: editedRecord.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editedRecord.job_number,
-            date_from_charpotro: editedRecord.date_from_charpotro,
-            cp_number_from_charpotro: editedRecord.cp_number_from_charpotro,
-            LA_number: editedRecord.LA_number,
-            LV_number: editedRecord.LV_number,
-            dest_from: editedRecord.dest_from,
-            dest_to: editedRecord.dest_to,
-            commodity: editedRecord.commodity,
-            capacity: editedRecord.capacity,
-            rate: editedRecord.rate,
-            LV_master_name: editedRecord.LV_master_name,
-            LV_master_contact_number: editedRecord.LV_master_contact_number,
+        Axios.post("http://localhost:3001/management/updateStatusentry", {
+            id: editedStatus.id,
+            order_number: editedStatus.order_number, //handleAddFormChange로 받은 새 데이터
+            job_number: editedStatus.job_number,
+            date_from_charpotro: editedStatus.date_from_charpotro,
+            cp_number_from_charpotro: editedStatus.cp_number_from_charpotro,
+            LA_number: editedStatus.LA_number,
+            LV_number: editedStatus.LV_number,
+            dest_from: editedStatus.dest_from,
+            dest_to: editedStatus.dest_to,
+            commodity: editedStatus.commodity,
+            capacity: editedStatus.capacity,
+            rate: editedStatus.rate,
+            LV_master_name: editedStatus.LV_master_name,
+            LV_master_contact_number: editedStatus.LV_master_contact_number,
         });
 
-        const newRecordList = [...RecordList]; //json.data + data added with setRecordList above by receiving new input
-        const index = RecordList.findIndex((Record) => Record.id === editRecordId);
-        newRecordList[index] = editedRecord; // Assign the modified data object to the object of the index row of the RecordList array, which is the entire data
+        const newCurrentStatus = [...CurrentStatus]; //json.data + data added with setCurrentStatus above by receiving new input
+        const index = CurrentStatus.findIndex((Status) => Status.id === editStatusId);
+        newCurrentStatus[index] = editedStatus; // Assign the modified data object to the object of the index row of the CurrentStatus array, which is the entire data
 
-        setRecordList(newRecordList);
-        setEditRecordId(null);
-        success("Record updated successfully");
+        setCurrentStatus(newCurrentStatus);
+        setEditStatusId(null);
+        success("Status updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
-    const handleEditClick = (event, Record) => {
+    const handleEditClick = (event, Status) => {
         event.preventDefault(); // ???
 
-        setEditRecordId(Record.id);
+        setEditStatusId(Status.id);
         const formValues = {
-            order_number: Record.order_number, 
-            job_number: Record.job_number,
-            date_from_charpotro: Record.date_from_charpotro,
-            cp_number_from_charpotro: Record.cp_number_from_charpotro,
-            LA_number: Record.LA_number,
-            LV_number: Record.LV_number,
-            dest_from: Record.dest_from,
-            dest_to: Record.dest_to,
-            commodity: Record.commodity,
-            capacity: Record.capacity,
-            rate: Record.rate,
-            LV_master_name: Record.LV_master_name,
-            LV_master_contact_number: Record.LV_master_contact_number,
+            order_number: Status.order_number, 
+            job_number: Status.job_number,
+            date_from_charpotro: Status.date_from_charpotro,
+            cp_number_from_charpotro: Status.cp_number_from_charpotro,
+            LA_number: Status.LA_number,
+            LV_number: Status.LV_number,
+            dest_from: Status.dest_from,
+            dest_to: Status.dest_to,
+            commodity: Status.commodity,
+            capacity: Status.capacity,
+            rate: Status.rate,
+            LV_master_name: Status.LV_master_name,
+            LV_master_contact_number: Status.LV_master_contact_number,
         };
         setEditFormData(formValues);
     };
 
     //Cancel button when clicked on edit
     const handleCancelClick = () => {
-        setEditRecordId(null);
+        setEditStatusId(null);
     };
 
     // delete
-    const handleDeleteClick = (RecordId) => {
-        const newRecordList = [...RecordList];
-        const index = RecordList.findIndex((Record) => Record.id === RecordId);
-        //console.log("Deleting Record with id: " + RecordId);
-        Axios.post("http://localhost:3001/management/deleterecord", {
-            record_id: RecordId,
+    const handleDeleteClick = (StatusId) => {
+        const newCurrentStatus = [...CurrentStatus];
+        const index = CurrentStatus.findIndex((Status) => Status.id === StatusId);
+        //console.log("Deleting Status with id: " + StatusId);
+        Axios.post("http://localhost:3001/management/deleteStatus", {
+            Status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
-                success("Record deleted successfully");
+                success("Status deleted successfully");
             }
         });
 
-        newRecordList.splice(index, 1);
-        setRecordList(newRecordList);
+        newCurrentStatus.splice(index, 1);
+        setCurrentStatus(newCurrentStatus);
     };
 
     // search filter
     const [query, setQuery] = useState("");
 
-    const filteredRecord =
+    const filteredStatus =
         query === ""
-            ? RecordList
-            : RecordList.filter((Record) =>
-                  Record.order_number
+            ? CurrentStatus
+            : CurrentStatus.filter((Status) =>
+                  Status.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
               );
 
-    // modal for add Record
+    // modal for add Status
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -304,7 +299,7 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Record <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Status <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -336,19 +331,19 @@ const App = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredRecord.length === 0 && query !== "" ? (
+                        {filteredStatus.length === 0 && query !== "" ? (
                             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                 Nothing found.
                             </div>
                         ) : (
-                            filteredRecord.map((record, idx) => (
+                            filteredStatus.map((status, idx) => (
                                 <tr
-                                    key={record.id}
+                                    key={status.id}
                                     className={`bg-white ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editRecordId === record.id ? (
+                                    {editStatusId === status.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -360,7 +355,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                        record={record}
+                                        status={status}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -410,7 +405,7 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-center text-3xl font-medium text-gray-900"
                                         >
-                                            Add Record
+                                            Add Status
                                         </Dialog.Title>
                                         <form
                                             onSubmit={handleAddFormSubmit}
