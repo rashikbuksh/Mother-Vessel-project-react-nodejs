@@ -1,8 +1,14 @@
 import Axios from "axios";
 import { sha256, sha224 } from "js-sha256";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import Loader from "../../utils/Loader";
+
+export function getUser() {
+    const userStr = localStorage.getItem("user");
+    if (userStr) return JSON.parse(userStr);
+    else return null;
+}
 export default function Login() {
     const navigate = useNavigate();
     const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
@@ -63,14 +69,10 @@ export default function Login() {
                 } else if (response.data == "wrong password") {
                     alert("Wrong password");
                 } else {
-                    console.log("Logged in");
+                    // console.log(response.data);
                     localStorage.setItem("loggedin", "true");
-                    const user = response.data.split(":");
-                    console.log(user[0]);
-                    console.log(user[1]);
-                    localStorage.setItem("user_id", user[0]);
-                    localStorage.setItem("user_type", user[1]);
-                    window.location.href = "/..";
+                    localStorage.setItem("user", JSON.stringify(response.data));
+                    navigate("/adminpanel");
                 }
             });
         }
@@ -87,10 +89,7 @@ export default function Login() {
                                 Welcome back
                             </h1>
                         </div>
-                        <form
-                            onSubmit={onSubmit}
-                            className="divide-y divide-gray-200"
-                        >
+                        <form className="divide-y divide-gray-200">
                             <div className="space-y-4 py-8 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7">
                                 <div className="relative mb-4 flex items-center rounded-2xl border-2 py-2 px-3">
                                     <svg
@@ -141,7 +140,8 @@ export default function Login() {
                                     />
                                 </div>
                                 <button
-                                    type="submit"
+                                    type="button"
+                                    onClick={onSubmit}
                                     className="mt-4 mb-2 block w-full rounded-2xl bg-indigo-600 py-2 font-semibold text-white"
                                 >
                                     Login

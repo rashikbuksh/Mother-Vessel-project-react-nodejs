@@ -1,6 +1,9 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { useAuthContext } from "./layout/Routing/useAuthContext";
+import ProtectedRoute from "./layout/Routing";
+
 import Loader from "./utils/Loader";
 const NotFound = lazy(() => import("./layout/NotFound"));
 
@@ -23,31 +26,99 @@ const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 // table
 const Table = lazy(() => import("./components/Tables"));
 
+const RoutePages = [
+    {
+        link: "/",
+        component: Home,
+    },
+    {
+        link: "/admin",
+        component: Admin,
+    },
+    {
+        link: "/login",
+        component: Login,
+    },
+    {
+        link: "/forgot_password",
+        component: ForgotPassword,
+    },
+    {
+        link: "/reset_password",
+        component: ResetPassword,
+    },
+    {
+        link: "/adminpanel",
+        component: AdminPanel,
+    },
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+    {
+        link: "/test",
+        component: Table,
+    },
+    {
+        link: "/*",
+        component: NotFound,
+    },
+];
+
 function App() {
+    const { user } = useAuthContext();
+
+    console.log(user?.position);
+
     return (
         <div>
             <BrowserRouter>
                 <Routes>
-                    <Route
-                        path="/"
+                    {/* <Route element={<ProtectedRoute isAllowed={!!user} />}>
+                        <Route
+                            path="/"
+                            element={
+                                <Suspense fallback={<Loader />}>
+                                    <Home />
+                                </Suspense>
+                            }
+                        >
+                            <Route index element={<Dashboard />} />
+                            <Route path="adminpanel" element={<AdminPanel />} />
+                        </Route>
+                    </Route> */}
+                    {/* <Route
                         element={
-                            <Suspense fallback={<Loader />}>
-                                <Home />
-                            </Suspense>
+                            <ProtectedRoute
+                                redirectPath="/login"
+                                isAllowed={user && user?.position === "admin"}
+                            />
                         }
                     >
-                        <Route index element={<Dashboard />} />
-                        <Route path="admin" element={<Admin />} />
-                    </Route>
+                        <Route path="/adminpanel" element={<AdminPanel />} />
+                    </Route> */}
+
                     <Route
-                        path="/*"
+                        path="/adminpanel"
                         element={
-                            <Suspense fallback={<Loader />}>
-                                <NotFound />
-                            </Suspense>
+                            <ProtectedRoute role={user?.position}>
+                                <AdminPanel />
+                            </ProtectedRoute>
                         }
                     />
-                    // Login
+
                     <Route
                         path="/login"
                         element={
@@ -56,87 +127,17 @@ function App() {
                             </Suspense>
                         }
                     />
-                    <Route
-                        path="/forgot_password"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <ForgotPassword />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/reset_password"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <ResetPassword />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/adminpanel"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AdminPanel />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/jobentry"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <JobEntry />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/recordentry"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <RecordEntry />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/currentstatus"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <CurrentStatus />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/damaragecalculation"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <DamarageCalculation />
-                            </Suspense>
-                        }
-                    />
-                    {/* <Route
-                        path="/adminpanel/update-info/:userId"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AdminPanel />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/adduser"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AddUser />
-                            </Suspense>
-                        }
-                    /> */}
-                    // test
-                    <Route
-                        path="/test"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <Table />
-                            </Suspense>
-                        }
-                    />
+                    {/* {RoutePages.map((route, index) => (
+                        <Route
+                            key={index}
+                            path={route.link}
+                            element={
+                                <Suspense fallback={<Loader />}>
+                                    <route.component />
+                                </Suspense>
+                            }
+                        />
+                    ))} */}
                 </Routes>
             </BrowserRouter>
         </div>
