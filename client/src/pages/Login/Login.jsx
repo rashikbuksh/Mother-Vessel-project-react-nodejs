@@ -24,7 +24,7 @@ export default function Login() {
     const handleInput = (e) => {
         const { name, value } = e.target;
         if (name === "password") {
-            if (value.length < 6) {
+            if (value.length < 2) {
                 setIsInvalidPassword(true);
             } else {
                 setIsInvalidPassword(false);
@@ -41,6 +41,7 @@ export default function Login() {
         loading();
         if (isInvalidEmail || isInvalidPassword) {
             e.preventDefault();
+            alert("Please enter valid credentials");
         }
         //   else if(generatedcode != verify_code){
         //     // console.log(generatedcode)

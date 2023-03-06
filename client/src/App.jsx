@@ -13,6 +13,10 @@ const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
 const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
 //admin panel
 const AdminPanel = lazy(() => import("./pages/Admin"));
+const JobEntry = lazy(() => import("./pages/JobEntry"));
+const RecordEntry = lazy(() => import("./pages/RecordEntry"));
+const CurrentStatus = lazy(() => import("./pages/CurrentStatus"));
+const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 // const AddUser = lazy(() => import("./pages/Test/AddUser"));
 // const UpdateUser = lazy(() => import("./pages/Test/Update/Info"));
 
@@ -73,6 +77,38 @@ function App() {
                         element={
                             <Suspense fallback={<Loader />}>
                                 <AdminPanel />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/jobentry"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <JobEntry />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/recordentry"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <RecordEntry />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/currentstatus"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <CurrentStatus />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/damaragecalculation"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <DamarageCalculation />
                             </Suspense>
                         }
                     />

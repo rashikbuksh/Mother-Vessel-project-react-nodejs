@@ -14,53 +14,57 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Name" },
-    { id: 3, name: "Username" },
-    { id: 4, name: "Position", width: "w-36" },
-    { id: 5, name: "Department", width: "w-24" },
-    { id: 6, name: "Status", width: "w-16" },
-    { id: 7, name: "Reset Password", width: "w-16" },
-    { id: 8, name: "Actions", width: "w-16" },
+    { id: 2, name: "LV Name", width: "w-16" },
+    { id: 4, name: "Date From Charpotro", width: "w-16" },
+    { id: 10, name: "Commodity", width: "w-16" },
+    { id: 5, name: "LA", width: "w-16" },
+    { id: 8, name: "Destination From", width: "w-16" },
+    { id: 9, name: "Destination To", width: "w-16" },
+    { id: 11, name: "Current Location", width: "w-16" },
+    { id: 12, name: "Remark", width: "w-16" },
+    { id: 15, name: "Created Date", width: "w-16" },
+    { id: 16, name: "Actions", width: "w-16" },
 ];
 
 const App = () => {
-    const [userList, setUserList] = useState([]);
+    const [CurrentStatus, setCurrentStatus] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/admin/getusers")
+        fetch("http://localhost:3001/management/getcurrentstatus")
             .then((res) => res.json())
             .then((data) => {
-                setUserList(data);
+                setCurrentStatus(data);
             });
-    }, [userList]);
+    }, [CurrentStatus]);
 
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        name: "",
-        username: "",
-        password: "",
-        position: "admin",
-        department: "",
+        LV_name: "",
+        date_from_charpotro: "",
+        commodity: "",
+        LA: "",
+        dest_from: "",
+        dest_to: "",
+        current_location: "",
+        remark: "",
+        
     });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        name: "",
-        username: "",
-        position: "",
-        department: "",
-    });
-
-    //edit status
-    const [resetPassFormData, setResetPassFormData] = useState({
-        password: "",
-        reset_password: "",
+        LV_name: "",
+        date_from_charpotro: "",
+        commodity: "",
+        LA: "",
+        dest_from: "",
+        dest_to: "",
+        current_location: "",
+        remark: "",
     });
 
     //modified id status
-    const [editContactId, setEditContactId] = useState(null);
-    const [resetPassUserId, setResetPassUserId] = useState(null);
+    const [editStatusId, setEditStatusId] = useState(null);
 
     //changeHandler
     //Update state with input data
@@ -78,24 +82,6 @@ const App = () => {
         //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
-    };
-
-    //changeHandler
-    //Update state with input data
-    const handleResetPassFormChange = (event) => {
-        event.preventDefault();
-
-        //pass, reset pass
-        const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
-        const fieldValue = event.target.value;
-
-        const newFormData = { ...resetPassFormData };
-        newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
-
-        setResetPassFormData(newFormData);
     };
 
     //Update status with correction data
@@ -117,140 +103,135 @@ const App = () => {
         event.preventDefault(); // ???
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newContact = {
-            name: addFormData.name, //handleAddFormChange로 받은 새 데이터
-            username: addFormData.username,
-            password: addFormData.password,
-            position: addFormData.position,
-            department: addFormData.department,
+        const newStatus = {
+            LV_name: addFormData.LV_name, //handleAddFormChange로 받은 새 데이터
+            date_from_charpotro: addFormData.date_from_charpotro,
+            commodity: addFormData.commodity,
+            LA: addFormData.LA,
+            dest_from: addFormData.dest_from,
+            dest_to: addFormData.dest_to,
+            current_location: addFormData.current_location,
+            remark: addFormData.remark,
         };
 
+        // const current = new Date();
+        // const order_number_auto = newStatus.importer_name+'-'+current.getDate().toLocaleString()+'-'+newStatus.mother_vessel_name+'-'+newStatus.mv_location
+        // console.log(order_number_auto)
+
         // api call
-        Axios.post("http://localhost:3001/user/register", {
-            name: newContact.name,
-            username: newContact.username,
-            password: sha256(newContact.password),
-            position: newContact.position,
-            department: newContact.department,
+        Axios.post("http://localhost:3001/management/currentstatus", {
+            LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
+            date_from_charpotro: newStatus.date_from_charpotro,
+            commodity: newStatus.commodity,
+            LA: newStatus.LA,
+            dest_from: newStatus.dest_from,
+            dest_to: newStatus.dest_to,
+            current_location: newStatus.current_location,
+            remark: newStatus.remark,
         });
 
-        //userList의 초기값은 data.json 데이터
-        const newUserList = [...userList, newContact];
-        setUserList(newUserList);
+        //CurrentStatus의 초기값은 data.json 데이터
+        const newCurrentStatus = [...CurrentStatus, newStatus];
+        setCurrentStatus(newCurrentStatus);
 
         // close modal
         closeModal();
 
         // toast
-        success("User added successfully");
-    };
-
-    //submit handler
-    // modal open for reset password
-    const reset_pass = (userId) => {
-        setResetPassUserId(userId);
-        openResPassModal();
-    };
-    //Clicking the Add button adds a new data row to the existing row
-    const handleResetPassFormSubmit = (event) => {
-        event.preventDefault();
-
-        const newPass = {
-            password: resetPassFormData.password,
-            reset_password: resetPassFormData.reset_password,
-        };
-
-        // api call
-        if (newPass.password === newPass.reset_password) {
-            Axios.post("http://localhost:3001/admin/resetpassword/", {
-                user_id: resetPassUserId,
-                new_password: sha256(newPass.password),
-            });
-            closeResPassModal();
-            success("Password reset successfully");
-        } else {
-            warning("Password does not match");
-        }
+        success("Status added successfully");
     };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
 
-        const editedContact = {
-            id: editContactId, //initial value null
-            name: editFormData.name,
-            username: editFormData.username,
-            position: editFormData.position,
-            department: editFormData.department,
+        const editedStatus = {
+            id: editStatusId, //initial value null
+            LV_name: editFormData.LV_name, 
+            date_from_charpotro: editFormData.date_from_charpotro,
+            commodity: editFormData.commodity,
+            LA: editFormData.LA,
+            dest_from: editFormData.dest_from,
+            dest_to: editFormData.dest_to,
+            current_location: editFormData.current_location,
+            remark: editFormData.remark,
         };
 
-        Axios.post("http://localhost:3001/admin/updateinfo/", {
-            user_id: editedContact.id,
-            new_name: editedContact.name,
-            new_username: editedContact.username,
-            new_position: editedContact.position,
-            new_department: editedContact.department,
+        Axios.post("http://localhost:3001/management/updatecurrentstatus", {
+            id: editedStatus.id,
+            LV_name: editedStatus.LV_name, 
+            date_from_charpotro: editedStatus.date_from_charpotro,
+            commodity: editedStatus.commodity,
+            LA: editedStatus.LA,
+            dest_from: editedStatus.dest_from,
+            dest_to: editedStatus.dest_to,
+            current_location: editedStatus.current_location,
+            remark: editedStatus.remark,
         });
 
-        const newUserList = [...userList]; //json.data + data added with setUserList above by receiving new input
-        const index = userList.findIndex((user) => user.id === editContactId);
-        newUserList[index] = editedContact; // Assign the modified data object to the object of the index row of the userList array, which is the entire data
+        const newCurrentStatus = [...CurrentStatus]; //json.data + data added with setCurrentStatus above by receiving new input
+        const index = CurrentStatus.findIndex((Status) => Status.id === editStatusId);
+        newCurrentStatus[index] = editedStatus; // Assign the modified data object to the object of the index row of the CurrentStatus array, which is the entire data
 
-        setUserList(newUserList);
-        setEditContactId(null);
-        success("User updated successfully");
+        setCurrentStatus(newCurrentStatus);
+        setEditStatusId(null);
+        success("Status updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
-    const handleEditClick = (event, user) => {
+    const handleEditClick = (event, Status) => {
         event.preventDefault(); // ???
 
-        setEditContactId(user.id);
+        setEditStatusId(Status.id);
         const formValues = {
-            name: user.name,
-            username: user.username,
-            position: user.position,
-            department: user.department,
+            LV_name: Status.LV_name, 
+            date_from_charpotro: Status.date_from_charpotro,
+            commodity: Status.commodity,
+            LA: Status.LA,
+            dest_from: Status.dest_from,
+            dest_to: Status.dest_to,
+            current_location: Status.current_location,
+            remark: Status.remark,
         };
         setEditFormData(formValues);
     };
 
     //Cancel button when clicked on edit
     const handleCancelClick = () => {
-        setEditContactId(null);
+        setEditStatusId(null);
     };
 
     // delete
-    const handleDeleteClick = (userId) => {
-        const newUserList = [...userList];
-        const index = userList.findIndex((user) => user.id === userId);
-        Axios.post("http://localhost:3001/admin/deleteuser/", {
-            user_id: userId,
+    const handleDeleteClick = (StatusId) => {
+        const newCurrentStatus = [...CurrentStatus];
+        const index = CurrentStatus.findIndex((Status) => Status.id === StatusId);
+        //console.log("Deleting Status with id: " + StatusId);
+        Axios.post("http://localhost:3001/management/deletecurrentstatus", {
+            status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
-                success("User deleted successfully");
+                success("Status deleted successfully");
             }
         });
 
-        newUserList.splice(index, 1);
-        setUserList(newUserList);
+        newCurrentStatus.splice(index, 1);
+        setCurrentStatus(newCurrentStatus);
     };
 
     // search filter
     const [query, setQuery] = useState("");
 
-    const filteredPeople =
+    const filteredStatus =
         query === ""
-            ? userList
-            : userList.filter((user) =>
-                  user.name
+            ? CurrentStatus
+            : CurrentStatus.filter((Status) =>
+                  Status.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
               );
 
-    // modal for add user
+    // modal for add Status
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -260,31 +241,6 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
-
-    // modal for reset password
-    let [isResPassOpen, setIsResPassOpen] = useState(false);
-
-    function closeResPassModal() {
-        setIsResPassOpen(false);
-    }
-
-    function openResPassModal() {
-        setIsResPassOpen(true);
-    }
-
-    // enable user
-    const enable_user = (userId) => {
-        Axios.post("http://localhost:3001/admin/enableuser/", {
-            user_id: userId,
-        });
-        success("User enabled");
-    };
-    const disable_user = (userId) => {
-        Axios.post("http://localhost:3001/admin/disableuser/", {
-            user_id: userId,
-        });
-        warning("User disabled");
-    };
 
     // logout
     if (localStorage.getItem("user_type") == "admin") {
@@ -308,7 +264,7 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add User <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Status <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -340,19 +296,19 @@ const App = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredPeople.length === 0 && query !== "" ? (
+                        {filteredStatus.length === 0 && query !== "" ? (
                             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                 Nothing found.
                             </div>
                         ) : (
-                            filteredPeople.map((user, idx) => (
+                            filteredStatus.map((status, idx) => (
                                 <tr
-                                    key={user.id}
+                                    key={status.id}
                                     className={`bg-white ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editContactId === user.id ? (
+                                    {editStatusId === status.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -364,14 +320,11 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            user={user}
+                                        status={status}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
                                             }
-                                            enable_user={enable_user}
-                                            disable_user={disable_user}
-                                            reset_pass={reset_pass}
                                         />
                                     )}
                                 </tr>
@@ -417,7 +370,7 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-center text-3xl font-medium text-gray-900"
                                         >
-                                            Add User
+                                            Add Status
                                         </Dialog.Title>
                                         <form
                                             onSubmit={handleAddFormSubmit}
@@ -425,172 +378,132 @@ const App = () => {
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Name
+                                                    LV Name
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="name"
+                                                    name="LV_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    required
+                                                    
+                                                    placeholder="LV Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Date From Charpotro
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="date_from_charpotro"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Date From Charpotro"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Username
+                                                    Commodity
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="username"
+                                                    name="commodity"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    required
+                                                    placeholder="Commodity"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Password
-                                                </label>
-                                                <input
-                                                    type="password"
-                                                    name="password"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Position
-                                                </label>
-                                                <select
-                                                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                    name="position"
-                                                    required
-                                                    placeholder="Enter a phone position..."
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                >
-                                                    <option value="admin">
-                                                        Admin
-                                                    </option>
-                                                    <option value="operations">
-                                                        Operations
-                                                    </option>
-                                                    <option value="accounts-manager">
-                                                        Accounts manager
-                                                    </option>
-                                                    <option value="accounts">
-                                                        Accounts
-                                                    </option>
-                                                </select>
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Department
+                                                    LA
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="department"
+                                                    name="LA"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    required
+                                                    placeholder="LA"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Destination From
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="dest_from"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Destination From"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Destination To
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="dest_to"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Destination To"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Current Location
+                                                </label>
+                                                <input
+                                                    type="text"           
+                                                    name="current_location"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Current Location"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Remark
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="remark"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Remark"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
                                             <button
                                                 type="submit"
                                                 className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                                             >
                                                 Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
-            </Suspense>
-
-            {/* Reset Pass modal */}
-            <Suspense fallback={<Loader />}>
-                <Transition appear show={isResPassOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="relative z-10"
-                        onClose={closeResPassModal}
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Reset Password
-                                        </Dialog.Title>
-                                        <form
-                                            onSubmit={handleResetPassFormSubmit}
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="password"
-                                                name="password"
-                                                required
-                                                placeholder="Enter an password..."
-                                                onChange={
-                                                    handleResetPassFormChange
-                                                }
-                                            />
-                                            <input
-                                                className="w-full rounded-md text-sm"
-                                                type="password"
-                                                name="reset_password"
-                                                required
-                                                placeholder="Enter an reset_password..."
-                                                onChange={
-                                                    handleResetPassFormChange
-                                                }
-                                            />
-
-                                            <button
-                                                type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-blue-300 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            >
-                                                Reset
                                             </button>
                                         </form>
                                     </Dialog.Panel>
