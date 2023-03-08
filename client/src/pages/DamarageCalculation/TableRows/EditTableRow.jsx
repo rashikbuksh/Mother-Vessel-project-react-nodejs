@@ -35,7 +35,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter date..."
                     name="date"
@@ -56,7 +56,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
@@ -133,7 +133,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter loading start time stamp..."
                     name="loading_start_time_stamp"
@@ -144,7 +144,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter loading completion time stamp..."
                     name="loading_completion_time_stamp"
@@ -155,7 +155,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter sailing time stamp..."
                     name="sailing_time_stamp"
@@ -166,7 +166,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="time"
                     required="required"
                     placeholder="Enter duration of travel time..."
                     name="duration_of_travel_time"
@@ -177,7 +177,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter unloading start time stamp..."
                     name="unloading_start_time_stamp"
@@ -188,7 +188,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="datetime"
                     required="required"
                     placeholder="Enter unloading completion time stamp..."
                     name="unloading_completion_time_stamp"
@@ -210,7 +210,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="time"
                     required="required"
                     placeholder="Enter total elapsed time..."
                     name="total_elapsed_time"
@@ -221,7 +221,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="time"
                     required="required"
                     placeholder="Enter voyage time..."
                     name="voyage_time"
@@ -232,7 +232,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="time"
                     required="required"
                     placeholder="Enter free time..."
                     name="free_time"
