@@ -46,7 +46,7 @@ const App = () => {
     const [JobNumber, setJobNumber] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getDamarage")
+        fetch("http://localhost:3001/management/getdamarage")
             .then((res) => res.json())
             .then((data) => {
                 setDamList(data);
@@ -83,6 +83,7 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
+        id: "",
         order_number: "",
         job_number: "",
         date: "",
@@ -175,7 +176,7 @@ const App = () => {
         };
         console.log("New Dam : "+addFormData.job_number);
         // api call
-        Axios.post("http://localhost:3001/management/insertDamarage", {
+        Axios.post("http://localhost:3001/management/insertdamarage", {
             order_number: newDam.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: newDam.job_number,
             date: newDam.date,
@@ -217,7 +218,7 @@ const App = () => {
         event.preventDefault(); // prevent submit
 
         const editedDam = {
-            id: editFormData.id, //handleAddFormChange로 받은 새 데이터
+            id: editDamId, //handleAddFormChange로 받은 새 데이터
             order_number: editFormData.order_number, 
             job_number: editFormData.job_number,
             date: editFormData.date,
@@ -242,8 +243,9 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
+        //console.log("Edited Dam ID : "+editedDam.id);
 
-        Axios.post("http://localhost:3001/management/updateDamarage", {
+        Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
             order_number: editedDam.order_number,
             job_number: editedDam.job_number,
@@ -322,7 +324,7 @@ const App = () => {
         const newDamList = [...DamList];
         const index = DamList.findIndex((Dam) => Dam.id === DamId);
         //console.log("Deleting Dam with id: " + DamId);
-        Axios.post("http://localhost:3001/management/deleteDamarage", {
+        Axios.post("http://localhost:3001/management/deletedamarage", {
             Dam_id: DamId,
         }).then((response) => {
             if (response.data == "success") {
@@ -537,7 +539,7 @@ const App = () => {
                                                     Date
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="date"
                                                     onChange={
                                                         handleAddFormChange
@@ -565,7 +567,7 @@ const App = () => {
                                                     Date From Charpotro
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="date_from_charpotro"
                                                     onChange={
                                                         handleAddFormChange
@@ -664,7 +666,7 @@ const App = () => {
                                                     Loading Start Time Stamp
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="loading_start_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -678,7 +680,7 @@ const App = () => {
                                                     Loading Completion Time Stamp
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="loading_completion_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -692,7 +694,7 @@ const App = () => {
                                                     Sailing Time Stamp
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="sailing_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -706,7 +708,7 @@ const App = () => {
                                                     Duration of Travel Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="duration_of_travel_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -720,7 +722,7 @@ const App = () => {
                                                     Unloading Start Time Stamp
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="unloading_start_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -734,7 +736,7 @@ const App = () => {
                                                     Unloading Completion Time Stamp
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="datetime"
                                                     name="unloading_completion_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -762,7 +764,7 @@ const App = () => {
                                                     Total Elapsed Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="total_elapsed_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -776,7 +778,7 @@ const App = () => {
                                                     Voyage Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="voyage_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -790,7 +792,7 @@ const App = () => {
                                                     Free Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="free_time"
                                                     onChange={
                                                         handleAddFormChange
