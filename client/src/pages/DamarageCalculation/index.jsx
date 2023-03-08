@@ -173,9 +173,9 @@ const App = () => {
             total_despatch: addFormData.total_despatch,
             daily_despatch: addFormData.daily_despatch,
         };
-
+        console.log("New Dam : "+addFormData.job_number);
         // api call
-        Axios.post("http://localhost:3001/management/Damentry", {
+        Axios.post("http://localhost:3001/management/insertDamarage", {
             order_number: newDam.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: newDam.job_number,
             date: newDam.date,
@@ -359,13 +359,14 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setOrderNumber(data);
+                console.log(data);
             });
             fetch("http://localhost:3001/management/fetch_job_number/")
             .then((res) => res.json())
             .then((data) => {
                 setJobNumber(data);
+                console.log(data);
             });
-            console.log(OrderNumber);
         setIsOpen(true);
     }
 
@@ -507,7 +508,12 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <select name="order_number">
+                                                <select 
+                                                name="order_number"
+                                                onChange={
+                                                    handleAddFormChange
+                                                }
+                                                >
                                                     {OrderNumber.map((item) => (item === OrderNumber ? null : <option value={item.order_number}>{item.order_number}</option>))}
                                                 </select>
                                             </div>
@@ -516,7 +522,12 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Job Number
                                                 </label>
-                                                <select name="job_number">
+                                                <select 
+                                                name="job_number"
+                                                onChange={
+                                                    handleAddFormChange
+                                                }
+                                                >
                                                     {JobNumber.map((item) => (item === JobNumber ? null : <option value={item.job_number}>{item.job_number}</option>))}
                                                 </select>
                                             </div>
