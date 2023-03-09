@@ -229,8 +229,8 @@ app.post("/management/recordentry", (req, res) => {
     const job_number = req.body.job_number;
     const date_from_charpotro = req.body.date_from_charpotro;
     const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
-    const LA_number = req.body.LA_number;
-    const LV_number = req.body.LV_number;
+    const LA_name = req.body.LA_name;
+    const LV_name = req.body.LV_name;
     const dest_from = req.body.dest_from;
     const dest_to = req.body.dest_to;
     const commodity = req.body.commodity;
@@ -239,10 +239,10 @@ app.post("/management/recordentry", (req, res) => {
     const LV_master_name = req.body.LV_master_name;
     const LV_master_contact_number = req.body.LV_master_contact_number;
     const create_record =
-        "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_number, LV_number, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_record,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_number, LV_number, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number],
+        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number],
         (err, result) => {
             if (err) console.log(err);
             console.log(result)
@@ -265,8 +265,8 @@ app.post("/management/updaterecordentry", (req, res) => {
     const job_number = req.body.job_number;
     const date_from_charpotro = req.body.date_from_charpotro;
     const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
-    const LA_number = req.body.LA_number;
-    const LV_number = req.body.LV_number;
+    const LA_name = req.body.LA_name;
+    const LV_name = req.body.LV_name;
     const dest_from = req.body.dest_from;
     const dest_to = req.body.dest_to;
     const commodity = req.body.commodity;
@@ -276,10 +276,10 @@ app.post("/management/updaterecordentry", (req, res) => {
     const LV_master_contact_number = req.body.LV_master_contact_number;
     //console.log(id);
     const sqlUpdate =
-        "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_number=?, LV_number=?, dest_from=?, dest_to=?, commodity=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
+        "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, commodity=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
     db.query(
         sqlUpdate,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_number, LV_number, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number, id],
+        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number, id],
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
@@ -589,6 +589,191 @@ app.post("/management/updatechq", (req, res) => {
         }
     );
 });
+
+//------------------- Chq Approval-----------------------------
+// Get Chq Approval
+app.get("/management/getchqapproval", (req, res) => {
+    const sqlSelect = "SELECT * from chq_approval";
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+});
+
+//Insert Chq
+app.post("/management/insertchq_approval", (req, res) => {
+    console.log("submit in backend");
+    const order_number = req.body.order_number;
+    const job_number = req.body.job_number;
+    const date_from_charpotro = req.body.date_from_charpotro;
+    const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
+    const LA_name = req.body.LA_name;
+    const LV_name = req.body.LV_name;
+    const MV_name = req.body.MV_name;
+    const dest_from = req.body.dest_from;
+    const dest_to = req.body.dest_to;
+    const capacity_ton = req.body.capacity_ton;
+    const rate = req.body.rate;
+    const sixty_percent_payment = req.body.sixty_percent_payment;
+    const forty_percent_payment = req.body.forty_percent_payment;
+    const damarage = req.body.damarage;
+    const second_trip = req.body.second_trip;
+    const third_trip = req.body.third_trip;
+    const direct_trip = req.body.direct_trip;
+    const create_chq = "INSERT INTO chq_approval (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+        create_chq,
+        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result)
+            res.send(result);
+        }
+    );
+});
+// Delete Chq
+app.post("/management/deletechq_approval", (req, res) => {
+    console.log("Delete status in backend");
+    const id = req.body.Chq_id;
+    const sqlDelete =
+        "DELETE from chq_approval where id= ?";
+    db.query(
+        sqlDelete,
+        [id],(err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            if(!err){
+                res.send("success");
+            }
+            
+        }
+    );
+});
+
+// Uopdate Chq
+app.post("/management/updatechq_approval", (req, res) => {
+    console.log("update job info in backend");
+    const id = req.body.id;
+    const order_number = req.body.new_order_number;
+    const job_number = req.body.new_job_number;
+    const date_from_charpotro = req.body.new_date_from_charpotro;
+    const cp_number_from_charpotro = req.body.new_cp_number_from_charpotro;
+    const LA_name = req.body.new_LA_name;
+    const LV_name = req.body.new_LV_name;
+    const MV_name = req.body.new_MV_name;
+    const dest_from = req.body.new_dest_from;
+    const dest_to = req.body.new_dest_to;
+    const capacity_ton = req.body.new_capacity_ton;
+    const rate = req.body.new_rate;
+    const sixty_percent_payment = req.body.new_sixty_percent_payment;
+    const forty_percent_payment = req.body.new_forty_percent_payment;
+    const damarage = req.body.new_damarage;
+    const second_trip = req.body.new_second_trip;
+    const third_trip = req.body.new_third_trip;
+    const direct_trip = req.body.new_direct_trip;
+    const sqlUpdate =
+        "UPDATE chq_approval SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, MV_name=?, dest_from=?, dest_to=?, capacity_ton=?, rate=?, sixty_percent_payment=?, forty_percent_payment=?, damarage=?, second_trip=?, third_trip=?, direct_trip=? WHERE id=?";
+    db.query(
+        sqlUpdate,
+        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip, id],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result);
+
+            res.send(result);
+        }
+    );
+});
+
+//------------------- Payment -----------------------------
+// Get payment
+app.get("/management/getpayment", (req, res) => {
+    const sqlSelect = "SELECT * from payment";
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+});
+
+//Insert Chq
+app.post("/management/insertpayment", (req, res) => {
+    console.log("submit in backend");
+    const job_number = req.body.job_number;
+    const LV_name = req.body.LV_name;
+    const date_from_charpotro = req.body.date_from_charpotro;
+    const MV_name = req.body.MV_name;
+    const commodity = req.body.commodity;
+    const chq_no = req.body.chq_no;
+    const chq_issue_date = req.body.chq_issue_date;
+    const amount = req.body.amount;
+    const part_pay = req.body.part_pay;
+    const payment_approved = req.body.payment_approved;
+    const balance = req.body.balance;
+    const payment_chq_no = req.body.payment_chq_no;
+    const payment_chq_amount = req.body.payment_chq_amount;
+    const payment_chq_date = req.body.payment_chq_date;
+    const added_date = req.body.added_date;
+    const create_chq = "INSERT INTO payment (job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+        create_chq,
+        [job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result)
+            res.send(result);
+        }
+    );
+});
+// Delete Chq
+app.post("/management/deletepayment", (req, res) => {
+    console.log("Delete status in backend");
+    const id = req.body.Pay_id;
+    const sqlDelete =
+        "DELETE from payment where id= ?";
+    db.query(
+        sqlDelete,
+        [id],(err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            if(!err){
+                res.send("success");
+            }
+            
+        }
+    );
+});
+
+// Uopdate Chq
+app.post("/management/updatepayment", (req, res) => {
+    console.log("update job info in backend");
+    const id = req.body.id;
+    const job_number = req.body.new_job_number;
+    const LV_name = req.body.new_LV_name;
+    const date_from_charpotro = req.body.new_date_from_charpotro;
+    const MV_name = req.body.new_MV_name;
+    const commodity = req.body.new_commodity;
+    const chq_no = req.body.new_chq_no;
+    const chq_issue_date = req.body.new_chq_issue_date;
+    const amount = req.body.new_amount;
+    const part_pay = req.body.new_part_pay;
+    const payment_approved = req.body.new_payment_approved;
+    const balance = req.body.new_balance;
+    const payment_chq_no = req.body.new_payment_chq_no;
+    const payment_chq_amount = req.body.new_payment_chq_amount;
+    const payment_chq_date = req.body.new_payment_chq_date;
+    const added_date = req.body.new_added_date;
+    const sqlUpdate =
+        "UPDATE payment SET job_number=?, LV_name=?, date_from_charpotro=?, MV_name=?, commodity=?, chq_no=?, chq_issue_date=?, amount=?, part_pay=?, payment_approved=?, balance=?, payment_chq_no=?, payment_chq_amount=?, payment_chq_date=?, added_date=? WHERE id=?";
+    db.query(
+        sqlUpdate,
+        [job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date, id],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result);
+
+            res.send(result);
+        }
+    );
+});
+
 
 app.listen(3001, () => {
     console.log("Running on port 3001");

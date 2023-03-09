@@ -18,6 +18,8 @@ const RecordEntry = lazy(() => import("./pages/RecordEntry"));
 const CurrentStatus = lazy(() => import("./pages/CurrentStatus"));
 const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
+const ChqApproval = lazy(() => import("./pages/ChqApproval"));
+const Payment = lazy(() => import("./pages/Payment"));
 // const AddUser = lazy(() => import("./pages/Test/AddUser"));
 // const UpdateUser = lazy(() => import("./pages/Test/Update/Info"));
 
@@ -118,6 +120,22 @@ function App() {
                         element={
                             <Suspense fallback={<Loader />}>
                                 <ChqDueList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/chqapproval"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <ChqApproval />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="/payment"
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <Payment />
                             </Suspense>
                         }
                     />

@@ -5,7 +5,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { AiOutlineCheck } from "react-icons/ai";
 
 const ReadOnlyRow = ({
-    record,
+    Pay,
     handleEditClick,
     handleDeleteClick,
 }) => {
@@ -13,65 +13,68 @@ const ReadOnlyRow = ({
         <>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {record.id}
+                    {Pay.id}
                 </a>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.order_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
-                    {record.job_number}
+                    {Pay.job_number}
                 </span>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.date_from_charpotro}
+                {Pay.LV_name}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.cp_number_from_charpotro}
+                {Pay.date_from_charpotro}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LA_name}
+                {Pay.MV_name}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_name}
+                {Pay.commodity}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.dest_from}
+                {Pay.chq_no}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.dest_to}
+                {Pay.chq_issue_date}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.commodity}
+                {Pay.amount}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.capacity}
+                {Pay.part_pay}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.rate}
+                {Pay.payment_approved}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_master_name}
+                {Pay.balance}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_master_contact_number}
+                {Pay.payment_chq_no}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.date_created}
+                {Pay.payment_chq_amount}
+            </td>
+            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+                {Pay.payment_chq_date}
+            </td>
+            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+                {Pay.added_date}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"
-                    onClick={(event) => handleEditClick(event, record)}
+                    onClick={(event) => handleEditClick(event, Pay)}
                 >
                     <BiEdit className="h-5 w-5 text-black" />
                 </button>
                 <button
                     type="button"
                     className="rounded-md bg-red-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"
-                    onClick={() => handleDeleteClick(record.id)}
+                    onClick={() => handleDeleteClick(Pay.id)}
                 >
                     <BiTrash className="h-5 w-5 text-black" />
                 </button>
