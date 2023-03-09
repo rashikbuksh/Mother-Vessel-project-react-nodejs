@@ -20,27 +20,30 @@ const TableHeader = [
     { id: 5, name: "CP Number From Charpotro", width: "w-16" },
     { id: 6, name: "LA Name", width: "w-16" },
     { id: 7, name: "LV Name", width: "w-16" },
-    { id: 8, name: "Destination From", width: "w-16" },
-    { id: 9, name: "Destination To", width: "w-16" },
-    { id: 10, name: "Commodity", width: "w-16" },
-    { id: 11, name: "Capacity", width: "w-16" },
+    { id: 8, name: "MV Name", width: "w-16" },
+    { id: 9, name: "Destination From", width: "w-16" },
+    { id: 10, name: "Destination To", width: "w-16" },
+    { id: 11, name: "Capacity in Tons", width: "w-16" },
     { id: 12, name: "Rate", width: "w-16" },
-    { id: 13, name: "LV Master Name", width: "w-16" },
-    { id: 14, name: "LV Master Contact Number", width: "w-16" },
-    { id: 15, name: "Created Date", width: "w-16" },
-    { id: 16, name: "Actions", width: "w-16" },
+    { id: 13, name: "60 Percent Payment", width: "w-16" },
+    { id: 14, name: "40 Percent Payment", width: "w-16" },
+    { id: 15, name: "Damarage", width: "w-16" },
+    { id: 16, name: "2nd Trip", width: "w-16" },
+    { id: 17, name: "3rd Trip", width: "w-16" },
+    { id: 18, name: "Direct Trip", width: "w-16" },
+    { id: 19, name: "Actions", width: "w-16" },
 ];
 
 const App = () => {
-    const [RecordList, setRecordList] = useState([]);
+    const [ChqList, setChqList] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getrecordentry")
+        fetch("http://localhost:3001/management/getchqapproval")
             .then((res) => res.json())
             .then((data) => {
-                setRecordList(data);
+                setChqList(data);
             });
-    }, [RecordList]);
+    }, [ChqList]);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -51,14 +54,17 @@ const App = () => {
         cp_number_from_charpotro: "",
         LA_name: "",
         LV_name: "",
+        MV_name: "",
         dest_from: "",
         dest_to: "",
-        commodity: "",
-        capacity: "",
+        capacity_ton: "",
         rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
-        
+        sixty_percent_payment: "",
+        forty_percent_payment: "",
+        damarage: "",
+        second_trip: "",
+        third_trip: "",
+        direct_trip: "",
     });
 
     //edit status
@@ -69,17 +75,21 @@ const App = () => {
         cp_number_from_charpotro: "",
         LA_name: "",
         LV_name: "",
+        MV_name: "",
         dest_from: "",
         dest_to: "",
-        commodity: "",
-        capacity: "",
+        capacity_ton: "",
         rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
+        sixty_percent_payment: "",
+        forty_percent_payment: "",
+        damarage: "",
+        second_trip: "",
+        third_trip: "",
+        direct_trip: "",
     });
 
     //modified id status
-    const [editRecordId, setEditRecordId] = useState(null);
+    const [editChqId, setEditChqId] = useState(null);
 
     //changeHandler
     //Update state with input data
@@ -118,160 +128,180 @@ const App = () => {
         event.preventDefault(); // ???
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newRecord = {
+        const newChq = {
             order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: addFormData.job_number,
             date_from_charpotro: addFormData.date_from_charpotro,
             cp_number_from_charpotro: addFormData.cp_number_from_charpotro,
             LA_name: addFormData.LA_name,
             LV_name: addFormData.LV_name,
+            MV_name: addFormData.MV_name,
             dest_from: addFormData.dest_from,
             dest_to: addFormData.dest_to,
-            commodity: addFormData.commodity,
-            capacity: addFormData.capacity,
+            capacity_ton: addFormData.capacity_ton,
             rate: addFormData.rate,
-            LV_master_name: addFormData.LV_master_name,
-            LV_master_contact_number: addFormData.LV_master_contact_number,
+            sixty_percent_payment: addFormData.sixty_percent_payment,
+            forty_percent_payment: addFormData.forty_percent_payment,
+            damarage: addFormData.damarage,
+            second_trip: addFormData.second_trip,
+            third_trip: addFormData.third_trip,
+            direct_trip: addFormData.direct_trip,
         };
 
-        // const current = new Date();
-        // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
-        // console.log(order_number_auto)
+        //const current = new Date();
+        //const order_number_auto = newChq.importer_name+'-'+current.getDate().toLocaleString()+'-'+newChq.mother_vessel_name+'-'+newChq.mv_location
+        //console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/recordentry", {
-            order_number: "order_number_forign_key", //handleAddFormChange로 받은 새 데이터
-            job_number: "job_number_auto",
-            date_from_charpotro: newRecord.date_from_charpotro,
-            cp_number_from_charpotro: newRecord.cp_number_from_charpotro,
-            LA_name: newRecord.LA_name,
-            LV_name: newRecord.LV_name,
-            dest_from: newRecord.dest_from,
-            dest_to: newRecord.dest_to,
-            commodity: newRecord.commodity,
-            capacity: newRecord.capacity,
-            rate: newRecord.rate,
-            LV_master_name: newRecord.LV_master_name,
-            LV_master_contact_number: newRecord.LV_master_contact_number,
+        Axios.post("http://localhost:3001/management/insertchq_approval", {
+            order_number: newChq.order_number, //handleAddFormChange로 받은 새 데이터
+            job_number: newChq.job_number,
+            date_from_charpotro: newChq.date_from_charpotro,
+            cp_number_from_charpotro: newChq.cp_number_from_charpotro,
+            LA_name: newChq.LA_name,
+            LV_name: newChq.LV_name,
+            MV_name: newChq.MV_name,
+            dest_from: newChq.dest_from,
+            dest_to: newChq.dest_to,
+            capacity_ton: newChq.capacity_ton,
+            rate: newChq.rate,
+            sixty_percent_payment: newChq.sixty_percent_payment,
+            forty_percent_payment: newChq.forty_percent_payment,
+            damarage: newChq.damarage,
+            second_trip: newChq.second_trip,
+            third_trip: newChq.third_trip,
+            direct_trip: newChq.direct_trip,
         });
 
-        //RecordList의 초기값은 data.json 데이터
-        const newRecordList = [...RecordList, newRecord];
-        setRecordList(newRecordList);
+        //ChqList의 초기값은 data.json 데이터
+        const newChqList = [...ChqList, newChq];
+        setChqList(newChqList);
 
         // close modal
         closeModal();
 
         // toast
-        success("Record added successfully");
+        success("Chq added successfully");
     };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
 
-        const editedRecord = {
-            id: editRecordId, //initial value null
-            order_number: editFormData.order_number, //handleAddFormChange로 받은 새 데이터
+        const editedChq = {
+            id: editChqId, //initial value null
+            order_number: editFormData.order_number,
             job_number: editFormData.job_number,
             date_from_charpotro: editFormData.date_from_charpotro,
             cp_number_from_charpotro: editFormData.cp_number_from_charpotro,
             LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
+            MV_name: editFormData.MV_name,
             dest_from: editFormData.dest_from,
             dest_to: editFormData.dest_to,
-            commodity: editFormData.commodity,
-            capacity: editFormData.capacity,
+            capacity_ton: editFormData.capacity_ton,
             rate: editFormData.rate,
-            LV_master_name: editFormData.LV_master_name,
-            LV_master_contact_number: editFormData.LV_master_contact_number,
+            sixty_percent_payment: editFormData.sixty_percent_payment,
+            forty_percent_payment: editFormData.forty_percent_payment,
+            damarage: editFormData.damarage,
+            second_trip: editFormData.second_trip,
+            third_trip: editFormData.third_trip,
+            direct_trip: editFormData.direct_trip,
         };
 
-        Axios.post("http://localhost:3001/management/updaterecordentry", {
-            id: editedRecord.id,
-            order_number: editedRecord.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editedRecord.job_number,
-            date_from_charpotro: editedRecord.date_from_charpotro,
-            cp_number_from_charpotro: editedRecord.cp_number_from_charpotro,
-            LA_name: editedRecord.LA_name,
-            LV_name: editedRecord.LV_name,
-            dest_from: editedRecord.dest_from,
-            dest_to: editedRecord.dest_to,
-            commodity: editedRecord.commodity,
-            capacity: editedRecord.capacity,
-            rate: editedRecord.rate,
-            LV_master_name: editedRecord.LV_master_name,
-            LV_master_contact_number: editedRecord.LV_master_contact_number,
+        Axios.post("http://localhost:3001/management/updatechq_approval", {
+            id: editedChq.id,
+            new_order_number: editedChq.order_number,
+            new_job_number: editedChq.job_number,
+            new_date_from_charpotro: editedChq.date_from_charpotro,
+            new_cp_number_from_charpotro: editedChq.cp_number_from_charpotro,
+            new_LA_name: editedChq.LA_name,
+            new_LV_name: editedChq.LV_name,
+            new_MV_name: editedChq.MV_name,
+            new_dest_from: editedChq.dest_from,
+            new_dest_to: editedChq.dest_to,
+            new_capacity_ton: editedChq.capacity_ton,
+            new_rate: editedChq.rate,
+            new_sixty_percent_payment: editedChq.sixty_percent_payment,
+            new_forty_percent_payment: editedChq.forty_percent_payment,
+            new_damarage: editedChq.damarage,
+            new_second_trip: editedChq.second_trip,
+            new_third_trip: editedChq.third_trip,
+            new_direct_trip: editedChq.direct_trip,
         });
 
-        const newRecordList = [...RecordList]; //json.data + data added with setRecordList above by receiving new input
-        const index = RecordList.findIndex((Record) => Record.id === editRecordId);
-        newRecordList[index] = editedRecord; // Assign the modified data object to the object of the index row of the RecordList array, which is the entire data
+        const newChqList = [...ChqList]; //json.data + data added with setChqList above by receiving new input
+        const index = ChqList.findIndex((Chq) => Chq.id === editChqId);
+        newChqList[index] = editedChq; // Assign the modified data object to the object of the index row of the ChqList array, which is the entire data
 
-        setRecordList(newRecordList);
-        setEditRecordId(null);
-        success("Record updated successfully");
+        setChqList(newChqList);
+        setEditChqId(null);
+        success("Chq updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
-    const handleEditClick = (event, Record) => {
+    const handleEditClick = (event, Chq) => {
         event.preventDefault(); // ???
 
-        setEditRecordId(Record.id);
+        setEditChqId(Chq.id);
         const formValues = {
-            order_number: Record.order_number, 
-            job_number: Record.job_number,
-            date_from_charpotro: Record.date_from_charpotro,
-            cp_number_from_charpotro: Record.cp_number_from_charpotro,
-            LA_name: Record.LA_name,
-            LV_name: Record.LV_name,
-            dest_from: Record.dest_from,
-            dest_to: Record.dest_to,
-            commodity: Record.commodity,
-            capacity: Record.capacity,
-            rate: Record.rate,
-            LV_master_name: Record.LV_master_name,
-            LV_master_contact_number: Record.LV_master_contact_number,
+            order_number: Chq.order_number,
+            job_number: Chq.job_number,
+            date_from_charpotro: Chq.date_from_charpotro,
+            cp_number_from_charpotro: Chq.cp_number_from_charpotro,
+            LA_name: Chq.LA_name,
+            LV_name: Chq.LV_name,
+            MV_name: Chq.MV_name,
+            dest_from: Chq.dest_from,
+            dest_to: Chq.dest_to,
+            capacity_ton: Chq.capacity_ton,
+            rate: Chq.rate,
+            sixty_percent_payment: Chq.sixty_percent_payment,
+            forty_percent_payment: Chq.forty_percent_payment,
+            damarage: Chq.damarage,
+            second_trip: Chq.second_trip,
+            third_trip: Chq.third_trip,
+            direct_trip: Chq.direct_trip,
         };
         setEditFormData(formValues);
     };
 
     //Cancel button when clicked on edit
     const handleCancelClick = () => {
-        setEditRecordId(null);
+        setEditChqId(null);
     };
 
     // delete
-    const handleDeleteClick = (RecordId) => {
-        const newRecordList = [...RecordList];
-        const index = RecordList.findIndex((Record) => Record.id === RecordId);
-        //console.log("Deleting Record with id: " + RecordId);
-        Axios.post("http://localhost:3001/management/deleterecord", {
-            record_id: RecordId,
+    const handleDeleteClick = (ChqId) => {
+        const newChqList = [...ChqList];
+        const index = ChqList.findIndex((Chq) => Chq.id === ChqId);
+        //console.log("Deleting Chq with id: " + ChqId);
+        Axios.post("http://localhost:3001/management/deletechq_approval", {
+            Chq_id: ChqId,
         }).then((response) => {
             if (response.data == "success") {
-                success("Record deleted successfully");
+                success("Chq deleted successfully");
             }
         });
 
-        newRecordList.splice(index, 1);
-        setRecordList(newRecordList);
+        newChqList.splice(index, 1);
+        setChqList(newChqList);
     };
 
     // search filter
     const [query, setQuery] = useState("");
 
-    const filteredRecord =
+    const filteredChq =
         query === ""
-            ? RecordList
-            : RecordList.filter((Record) =>
-                  Record.order_number
+            ? ChqList
+            : ChqList.filter((Chq) =>
+                  Chq.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
               );
 
-    // modal for add Record
+    // modal for add Chq
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -304,7 +334,7 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Record <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Chq Approval <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -336,19 +366,19 @@ const App = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredRecord.length === 0 && query !== "" ? (
+                        {filteredChq.length === 0 && query !== "" ? (
                             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                 Nothing found.
                             </div>
                         ) : (
-                            filteredRecord.map((record, idx) => (
+                            filteredChq.map((Chq, idx) => (
                                 <tr
-                                    key={record.id}
+                                    key={Chq.id}
                                     className={`bg-white ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editRecordId === record.id ? (
+                                    {editChqId === Chq.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -360,7 +390,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                        record={record}
+                                            Chq={Chq}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -410,7 +440,7 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-center text-3xl font-medium text-gray-900"
                                         >
-                                            Add Record
+                                            Add Chq
                                         </Dialog.Title>
                                         <form
                                             onSubmit={handleAddFormSubmit}
@@ -427,7 +457,7 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     disabled
-                                                    placeholder="Foriegn Key"
+                                                    placeholder="Will be fetched"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -443,12 +473,10 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     disabled
-                                                    placeholder="Auto Generated"
+                                                    placeholder="Will be fetched"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Date From Charpotro
@@ -459,11 +487,10 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Date From Charpotro"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     CP Number From Charpotro
@@ -474,14 +501,14 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="CP Number From Charpotro"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA Number
+                                                    LA Name
                                                 </label>
                                                 <input
                                                     type="text"
@@ -489,14 +516,13 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LA Number"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Number
+                                                    LV Name
                                                 </label>
                                                 <input
                                                     type="text"
@@ -504,11 +530,24 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Number"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    MV Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="MV_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination From
@@ -519,11 +558,10 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Destination From"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination To
@@ -534,42 +572,24 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Destination To"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
+                                                    Capacity in Ton
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    name="commodity"
+                                                    type="number"
+                                                    name="capacity_ton"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Commodity"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Capacity
-                                                </label>
-                                                <input
-                                                    type="number"           
-                                                    name="capacity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Capacity"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Rate
@@ -580,42 +600,88 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Rate"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Name
+                                                    60 Percent Payment
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="LV_master_name"
+                                                    name="sixty_percent_payment"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Master Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Number
+                                                    40 Percent Payment
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="LV_master_contact_number"
+                                                    name="forty_percent_payment"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Master Number"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
-
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Damarage
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="damarage"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    2nd Trip
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="second_trip"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    3rd Trip
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="third_trip"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Direct Trip
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="direct_trip"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
                                             <button
                                                 type="submit"
                                                 className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
