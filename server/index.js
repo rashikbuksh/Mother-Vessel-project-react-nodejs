@@ -507,6 +507,88 @@ app.get("/management/fetch_job_number", (req, res) => {
         res.send(result);
     });
 });
+//------------------- Chq Due List-----------------------------
+// Get Chq Due List
+app.get("/management/getchqlist", (req, res) => {
+    const sqlSelect = "SELECT * from chq_due_list";
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+});
+//Insert Chq
+app.post("/management/insertchq", (req, res) => {
+    console.log("submit in backend");
+    const order_number = req.body.order_number;
+    const LA = req.body.LA;
+    const LV_name = req.body.LV_name;
+    const commodity = req.body.commodity;
+    const mode = req.body.mode;
+    const chq_amount = req.body.chq_amount;
+    const part_pay = req.body.part_pay;
+    const balance = req.body.balance;
+    const chq_issue_date = req.body.chq_issue_date;
+    const init_amount = req.body.init_amount;
+    const payment = req.body.payment;
+    const final_amount = req.body.final_amount;
+    const create_chq = "INSERT INTO chq_due_list (order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    db.query(
+        create_chq,
+        [order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result)
+            res.send(result);
+        }
+    );
+});
+// Delete Chq
+app.post("/management/deletechq", (req, res) => {
+    console.log("Delete status in backend");
+    const id = req.body.Chq_id;
+    const sqlDelete =
+        "DELETE from chq_due_list where id= ?";
+    db.query(
+        sqlDelete,
+        [id],(err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            if(!err){
+                res.send("success");
+            }
+            
+        }
+    );
+});
+
+// Uopdate Chq
+app.post("/management/updatechq", (req, res) => {
+    console.log("update job info in backend");
+    const id = req.body.id;
+    const order_number = req.body.new_order_number;
+    const LA = req.body.new_LA;
+    const LV_name = req.body.new_LV_name;
+    const commodity = req.body.new_commodity;
+    const mode = req.body.new_mode;
+    const chq_amount = req.body.new_chq_amount;
+    const part_pay = req.body.new_part_pay;
+    const balance = req.body.new_balance;
+    const chq_issue_date = req.body.new_chq_issue_date;
+    const init_amount = req.body.new_init_amount;
+    const payment = req.body.new_payment;
+    const final_amount = req.body.new_final_amount;
+    const sqlUpdate =
+        "UPDATE chq_due_list SET order_number=?, LA=?, LV_name=?, commodity=?, mode=?, chq_amount=?, part_pay=?, balance=?, chq_issue_date=?, init_amount=?, payment=?, final_amount=? WHERE id=?";
+    db.query(
+        sqlUpdate,
+        [order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount, id],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result);
+
+            res.send(result);
+        }
+    );
+});
 
 app.listen(3001, () => {
     console.log("Running on port 3001");
