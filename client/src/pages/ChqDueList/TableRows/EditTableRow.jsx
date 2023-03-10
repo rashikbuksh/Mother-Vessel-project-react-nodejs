@@ -101,7 +101,7 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="datetime"
+                    type="date"
                     required="required"
                     placeholder="Enter chq issue date..."
                     name="chq_issue_date"

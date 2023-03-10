@@ -539,7 +539,7 @@ const App = () => {
                                                     Date
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="date"
                                                     onChange={
                                                         handleAddFormChange
@@ -567,7 +567,7 @@ const App = () => {
                                                     Date From Charpotro
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="date_from_charpotro"
                                                     onChange={
                                                         handleAddFormChange
@@ -666,7 +666,7 @@ const App = () => {
                                                     Loading Start Time Stamp
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="loading_start_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -680,7 +680,7 @@ const App = () => {
                                                     Loading Completion Time Stamp
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="loading_completion_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -694,7 +694,7 @@ const App = () => {
                                                     Sailing Time Stamp
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="sailing_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -722,7 +722,7 @@ const App = () => {
                                                     Unloading Start Time Stamp
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="unloading_start_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
@@ -736,7 +736,7 @@ const App = () => {
                                                     Unloading Completion Time Stamp
                                                 </label>
                                                 <input
-                                                    type="datetime"
+                                                    type="date"
                                                     name="unloading_completion_time_stamp"
                                                     onChange={
                                                         handleAddFormChange
