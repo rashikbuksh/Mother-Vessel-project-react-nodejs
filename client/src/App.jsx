@@ -1,11 +1,16 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import { useAuthContext } from "./layout/Routing/useAuthContext";
-import ProtectedRoute from "./layout/Routing";
+import {
+    AccountsManagerRoutes,
+    AccountsRoutes,
+    AdminRoutes,
+    OperationRoutes,
+} from "./hooks/routes";
 
 import Loader from "./utils/Loader";
 const NotFound = lazy(() => import("./layout/NotFound"));
+const NoAccess = lazy(() => import("./utils/NoAccess"));
 
 const Home = lazy(() => import("./pages/Home/Shared/Layout"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -25,6 +30,7 @@ const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
+// import AdminRoutes from "./hooks/routes/AdminRoutes";
 
 const RoutePages = [
     {
@@ -77,70 +83,133 @@ const RoutePages = [
     },
 ];
 
+const PublicRoutesList = [
+    {
+        link: "/login",
+        component: Login,
+    },
+    {
+        link: "/noaccess",
+        component: NoAccess,
+    },
+];
+
+const OperationRoutesList = [
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+];
+
+const AccountsRoutesList = [
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+];
+
+const AccountsManagerRoutesList = [
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+];
+
+const AdminRoutesList = [
+    {
+        link: "/adminpanel",
+        component: AdminPanel,
+    },
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+];
+
 function App() {
-    const { user } = useAuthContext();
-
-    console.log(user?.position);
-
     return (
-        <div>
-            <BrowserRouter>
-                <Routes>
-                    {/* <Route element={<ProtectedRoute isAllowed={!!user} />}>
-                        <Route
-                            path="/"
-                            element={
-                                <Suspense fallback={<Loader />}>
-                                    <Home />
-                                </Suspense>
-                            }
-                        >
-                            <Route index element={<Dashboard />} />
-                            <Route path="adminpanel" element={<AdminPanel />} />
-                        </Route>
-                    </Route> */}
-                    {/* <Route
-                        element={
-                            <ProtectedRoute
-                                redirectPath="/login"
-                                isAllowed={user && user?.position === "admin"}
-                            />
-                        }
-                    >
-                        <Route path="/adminpanel" element={<AdminPanel />} />
-                    </Route> */}
-
-                    <Route
-                        path="/adminpanel"
-                        element={
-                            <ProtectedRoute role={user?.position}>
-                                <AdminPanel />
-                            </ProtectedRoute>
-                        }
-                    />
-
-                    <Route
-                        path="/login"
-                        element={
+        <Routes>
+            {OperationRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <OperationRoutes>
                             <Suspense fallback={<Loader />}>
-                                <Login />
+                                <route.component />
                             </Suspense>
-                        }
-                    />
-                    {/* {RoutePages.map((route, index) => (
-                        <Route
-                            key={index}
-                            path={route.link}
-                            element={
-                                <Suspense fallback={<Loader />}>
-                                    <route.component />
-                                </Suspense>
-                            }
-                        />
-                    ))} */}
-                </Routes>
-            </BrowserRouter>
-        </div>
+                        </OperationRoutes>
+                    }
+                />
+            ))}
+            {AccountsRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AccountsRoutes>
+                            <Suspense fallback={<Loader />}>
+                                <route.component />
+                            </Suspense>
+                        </AccountsRoutes>
+                    }
+                />
+            ))}
+            {AccountsManagerRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AccountsManagerRoutes>
+                            <Suspense fallback={<Loader />}>
+                                <route.component />
+                            </Suspense>
+                        </AccountsManagerRoutes>
+                    }
+                />
+            ))}
+            {AdminRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AdminRoutes>
+                            <Suspense fallback={<Loader />}>
+                                <route.component />
+                            </Suspense>
+                        </AdminRoutes>
+                    }
+                />
+            ))}
+
+            {PublicRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <Suspense fallback={<Loader />}>
+                            <route.component />
+                        </Suspense>
+                    }
+                />
+            ))}
+        </Routes>
     );
 }
 

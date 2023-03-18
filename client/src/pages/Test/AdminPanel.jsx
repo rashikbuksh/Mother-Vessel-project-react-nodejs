@@ -28,9 +28,7 @@ export default function AdminPanel() {
     }, [userList]);
 
     const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
+        localStorage.removeItem("user");
         window.location.href = "/login";
     };
 

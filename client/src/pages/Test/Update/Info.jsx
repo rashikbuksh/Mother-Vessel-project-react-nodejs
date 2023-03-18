@@ -104,7 +104,7 @@ const UpdateInfo = ({ isOpen, setIsOpen, selectedUser, closeModal }) => {
                                     />
 
                                     <button
-                                        class="rounded bg-purple-500 py-2 px-4 font-bold text-white hover:bg-purple-700"
+                                        className="rounded bg-purple-500 py-2 px-4 font-bold text-white hover:bg-purple-700"
                                         type="submit"
                                     >
                                         Update

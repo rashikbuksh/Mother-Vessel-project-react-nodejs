@@ -5,6 +5,7 @@ import EditableRow from "./TableRows/EditTableRow";
 import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
+import { useAuth } from "../../hooks/auth";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -29,6 +30,7 @@ const TableHeader = [
 
 const App = () => {
     const [JobList, setJobList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getjobentry")
@@ -118,8 +120,15 @@ const App = () => {
         };
 
         const current = new Date();
-        const order_number_auto = newJob.importer_name+'-'+current.getDate().toLocaleString()+'-'+newJob.mother_vessel_name+'-'+newJob.mv_location
-        console.log(order_number_auto)
+        const order_number_auto =
+            newJob.importer_name +
+            "-" +
+            current.getDate().toLocaleString() +
+            "-" +
+            newJob.mother_vessel_name +
+            "-" +
+            newJob.mv_location;
+        console.log(order_number_auto);
 
         // api call
         Axios.post("http://localhost:3001/management/jobentry", {
@@ -151,7 +160,7 @@ const App = () => {
 
         const editedJob = {
             id: editJobId, //initial value null
-            order_number: editFormData.order_number, 
+            order_number: editFormData.order_number,
             importer_name: editFormData.importer_name,
             mother_vessel_name: editFormData.mother_vessel_name,
             eta: editFormData.eta,
@@ -164,7 +173,7 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatejobentry", {
             id: editedJob.id,
-            new_order_number: editedJob.order_number, 
+            new_order_number: editedJob.order_number,
             new_importer_name: editedJob.importer_name,
             new_mother_vessel_name: editedJob.mother_vessel_name,
             new_eta: editedJob.eta,
@@ -190,7 +199,7 @@ const App = () => {
 
         setEditJobId(job.id);
         const formValues = {
-            order_number: job.order_number, 
+            order_number: job.order_number,
             importer_name: job.importer_name,
             mother_vessel_name: job.mother_vessel_name,
             eta: job.eta,
@@ -248,20 +257,6 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
-
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (

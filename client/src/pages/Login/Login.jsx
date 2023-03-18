@@ -1,21 +1,21 @@
 import Axios from "axios";
-import { sha256, sha224 } from "js-sha256";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import React, { createContext, useState } from "react";
+import { sha256 } from "js-sha256";
+import { useCookies } from "react-cookie";
+import React, { useState } from "react";
 import Loader from "../../utils/Loader";
+import { useNavigate } from "react-router-dom";
 
-export function getUser() {
-    const userStr = localStorage.getItem("user");
-    if (userStr) return JSON.parse(userStr);
-    else return null;
-}
+import { warning } from "./../../components/Toast/index";
+import { ToastContainer } from "react-toastify";
+
 export default function Login() {
     const navigate = useNavigate();
-    const [isInvalidEmail, setIsInvalidEmail] = React.useState(false);
-    const [isInvalidPassword, setIsInvalidPassword] = React.useState(false);
+    const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+    const [isInvalidPassword, setIsInvalidPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
+    const [cookies, setCookies, removeCookie] = useCookies();
 
-    const [user, setUser] = React.useState({
+    const [user, setUser] = useState({
         username: "",
         password: "",
     });
@@ -65,14 +65,30 @@ export default function Login() {
                 setLoading(false);
                 //console.log("Data"+response.data)
                 if (response.data === "No user found") {
-                    alert("No user found");
-                } else if (response.data == "wrong password") {
-                    alert("Wrong password");
+                    warning("No user found");
+                } else if (response.data === "User is disabled") {
+                    warning("User is disabled");
+                } else if (response.data === "wrong password") {
+                    warning("Wrong password");
                 } else {
-                    // console.log(response.data);
-                    localStorage.setItem("loggedin", "true");
-                    localStorage.setItem("user", JSON.stringify(response.data));
-                    navigate("/adminpanel");
+                    setCookies("token", response.data.position); // your token
+
+                    switch (response.data.position) {
+                        case "admin":
+                            navigate("/adminpanel");
+                            break;
+                        case "operations":
+                            navigate("/jobentry");
+                            break;
+                        case "accounts":
+                            navigate("/recordentry");
+                            break;
+                        case "accounts-manager":
+                            navigate("/currentstatus");
+                            break;
+                        default:
+                            navigate("/login");
+                    }
                 }
             });
         }
@@ -94,14 +110,14 @@ export default function Login() {
                                 <div className="relative mb-4 flex items-center rounded-2xl border-2 py-2 px-3">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-5 w-5 text-gray-400"
+                                        className="h-5 w-5 text-gray-400"
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                     >
                                         <path
-                                            fill-rule="evenodd"
+                                            fillRule="evenodd"
                                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                            clip-rule="evenodd"
+                                            clipRule="evenodd"
                                         />
                                     </svg>
                                     <input
@@ -121,9 +137,9 @@ export default function Login() {
                                         fill="currentColor"
                                     >
                                         <path
-                                            fill-rule="evenodd"
+                                            fillRule="evenodd"
                                             d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                            clip-rule="evenodd"
+                                            clipRule="evenodd"
                                         />
                                     </svg>
                                     <input
@@ -151,6 +167,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
+            <ToastContainer closeOnClick />
         </div>
     );
 }

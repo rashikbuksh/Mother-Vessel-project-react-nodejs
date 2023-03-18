@@ -13,10 +13,10 @@ const linkClass =
 
 export default function Sidebar() {
     const logout = () => {
-        localStorage.setItem('loggedin', 'false');
-        localStorage.removeItem('user_id');
-        localStorage.removeItem('user_type');
-        window.location.href = "/login";
+        const logout = () => {
+            localStorage.removeItem("user");
+            window.location.href = "/login";
+        };
     };
     return (
         <div className="flex flex-col bg-neutral-900 p-3">

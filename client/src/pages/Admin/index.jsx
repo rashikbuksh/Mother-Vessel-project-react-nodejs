@@ -5,6 +5,7 @@ import EditableRow from "./TableRows/EditTableRow";
 import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
+import { useAuth } from "../../hooks/auth";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -25,6 +26,7 @@ const TableHeader = [
 
 const App = () => {
     const [userList, setUserList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/admin/getusers")
@@ -287,10 +289,6 @@ const App = () => {
     };
 
     // logout
-    const logout = () => {
-        localStorage.removeItem("user");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (

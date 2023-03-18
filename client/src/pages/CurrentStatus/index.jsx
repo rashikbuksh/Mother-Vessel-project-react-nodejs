@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -28,6 +28,7 @@ const TableHeader = [
 
 const App = () => {
     const [CurrentStatus, setCurrentStatus] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getcurrentstatus")
@@ -48,7 +49,6 @@ const App = () => {
         dest_to: "",
         current_location: "",
         remark: "",
-        
     });
 
     //edit status
@@ -147,7 +147,7 @@ const App = () => {
 
         const editedStatus = {
             id: editStatusId, //initial value null
-            LV_name: editFormData.LV_name, 
+            LV_name: editFormData.LV_name,
             date_from_charpotro: editFormData.date_from_charpotro,
             commodity: editFormData.commodity,
             LA: editFormData.LA,
@@ -159,7 +159,7 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatecurrentstatus", {
             id: editedStatus.id,
-            LV_name: editedStatus.LV_name, 
+            LV_name: editedStatus.LV_name,
             date_from_charpotro: editedStatus.date_from_charpotro,
             commodity: editedStatus.commodity,
             LA: editedStatus.LA,
@@ -170,7 +170,9 @@ const App = () => {
         });
 
         const newCurrentStatus = [...CurrentStatus]; //json.data + data added with setCurrentStatus above by receiving new input
-        const index = CurrentStatus.findIndex((Status) => Status.id === editStatusId);
+        const index = CurrentStatus.findIndex(
+            (Status) => Status.id === editStatusId
+        );
         newCurrentStatus[index] = editedStatus; // Assign the modified data object to the object of the index row of the CurrentStatus array, which is the entire data
 
         setCurrentStatus(newCurrentStatus);
@@ -184,7 +186,7 @@ const App = () => {
 
         setEditStatusId(Status.id);
         const formValues = {
-            LV_name: Status.LV_name, 
+            LV_name: Status.LV_name,
             date_from_charpotro: Status.date_from_charpotro,
             commodity: Status.commodity,
             LA: Status.LA,
@@ -204,7 +206,9 @@ const App = () => {
     // delete
     const handleDeleteClick = (StatusId) => {
         const newCurrentStatus = [...CurrentStatus];
-        const index = CurrentStatus.findIndex((Status) => Status.id === StatusId);
+        const index = CurrentStatus.findIndex(
+            (Status) => Status.id === StatusId
+        );
         //console.log("Deleting Status with id: " + StatusId);
         Axios.post("http://localhost:3001/management/deletecurrentstatus", {
             status_id: StatusId,
@@ -241,20 +245,6 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
-
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -320,7 +310,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                        status={status}
+                                            status={status}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -386,12 +376,10 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    
                                                     placeholder="LV Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
@@ -468,13 +456,12 @@ const App = () => {
                                                 />
                                             </div>
 
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Current Location
                                                 </label>
                                                 <input
-                                                    type="text"           
+                                                    type="text"
                                                     name="current_location"
                                                     onChange={
                                                         handleAddFormChange

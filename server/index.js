@@ -24,12 +24,15 @@ app.get("/user/verify_login/", (req, res) => {
     const password = req.query.password;
     //console.log(email, password)
     const get_user =
-        "select id, position, password from users where username = ?";
+        "select id, position, password, enabled from users where username = ?";
     db.query(get_user, [username], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
+        } else if (result[0].enabled === 0) {
+            console.log("User is disabled");
+            res.send("User is disabled");
         } else if (password === result[0].password) {
             res.send({
                 id: result[0].id,
