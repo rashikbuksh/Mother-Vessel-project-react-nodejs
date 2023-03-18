@@ -37,27 +37,6 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="date"
                     required="required"
-                    placeholder="Enter date..."
-                    name="date"
-                    value={editFormData.date}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
-                    required="required"
-                    name="cp_number"
-                    value={editFormData.cp_number}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
-                    required="required"
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
                     value={editFormData.date_from_charpotro}
@@ -67,22 +46,22 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="text"
+                    type="number"
                     required="required"
-                    placeholder="Enter commodity..."
-                    name="commodity"
-                    value={editFormData.commodity}
+                    placeholder="Enter cp number from charpotro..."
+                    name="cp_number_from_charpotro"
+                    value={editFormData.cp_number_from_charpotro}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
+                    type="text"
                     required="required"
-                    placeholder="Enter volume..."
-                    name="volume"
-                    value={editFormData.volume}
+                    placeholder="Enter LA name..."
+                    name="LA_name"
+                    value={editFormData.LA_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -113,9 +92,9 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter loading location..."
-                    name="loading_location"
-                    value={editFormData.loading_location}
+                    placeholder="Enter destination from..."
+                    name="dest_from"
+                    value={editFormData.dest_from}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -124,75 +103,31 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter unloading location..."
-                    name="unloading_location"
-                    value={editFormData.unloading_location}
+                    placeholder="Enter destination to..."
+                    name="dest_to"
+                    value={editFormData.dest_to}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="number"
                     required="required"
-                    placeholder="Enter loading start time stamp..."
-                    name="loading_start_time_stamp"
-                    value={editFormData.loading_start_time_stamp}
+                    placeholder="Enter capacity in ton..."
+                    name="capacity_ton"
+                    value={editFormData.capacity_ton}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
+                    type="number"
                     required="required"
-                    placeholder="Enter loading completion time stamp..."
-                    name="loading_completion_time_stamp"
-                    value={editFormData.loading_completion_time_stamp}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
-                    required="required"
-                    placeholder="Enter sailing time stamp..."
-                    name="sailing_time_stamp"
-                    value={editFormData.sailing_time_stamp}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="time"
-                    required="required"
-                    placeholder="Enter duration of travel time..."
-                    name="duration_of_travel_time"
-                    value={editFormData.duration_of_travel_time}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
-                    required="required"
-                    placeholder="Enter unloading start time stamp..."
-                    name="unloading_start_time_stamp"
-                    value={editFormData.unloading_start_time_stamp}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
-                    required="required"
-                    placeholder="Enter unloading completion time stamp..."
-                    name="unloading_completion_time_stamp"
-                    value={editFormData.unloading_completion_time_stamp}
+                    placeholder="Enter rate..."
+                    name="rate"
+                    value={editFormData.rate}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -201,64 +136,64 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter others..."
-                    name="others"
-                    value={editFormData.others}
+                    placeholder="Enter 60 percent payment..."
+                    name="sixty_percent_payment"
+                    value={editFormData.sixty_percent_payment}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="time"
+                    type="text"
                     required="required"
-                    placeholder="Enter total elapsed time..."
-                    name="total_elapsed_time"
-                    value={editFormData.total_elapsed_time}
+                    placeholder="Enter 40 percent payment..."
+                    name="forty_percent_payment"
+                    value={editFormData.forty_percent_payment}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="time"
+                    type="text"
                     required="required"
-                    placeholder="Enter voyage time..."
-                    name="voyage_time"
-                    value={editFormData.voyage_time}
+                    placeholder="Enter damarage..."
+                    name="damarage"
+                    value={editFormData.damarage}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="time"
+                    type="text"
                     required="required"
-                    placeholder="Enter free time..."
-                    name="free_time"
-                    value={editFormData.free_time}
+                    placeholder="Enter second trip..."
+                    name="second_trip"
+                    value={editFormData.second_trip}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
+                    type="text"
                     required="required"
-                    placeholder="Enter total dispatch..."
-                    name="total_despatch"
-                    value={editFormData.total_despatch}
+                    placeholder="Enter third trip..."
+                    name="third_trip"
+                    value={editFormData.third_trip}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
+                    type="text"
                     required="required"
-                    placeholder="Enter daily dispatch..."
-                    name="daily_despatch"
-                    value={editFormData.daily_despatch}
+                    placeholder="Enter direct trip..."
+                    name="direct_trip"
+                    value={editFormData.direct_trip}
                     onChange={handleEditFormChange}
                 />
             </td>

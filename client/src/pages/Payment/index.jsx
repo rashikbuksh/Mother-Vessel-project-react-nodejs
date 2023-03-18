@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { useAuth } from "../../hooks/auth";
+import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -14,72 +14,76 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number", width: "w-16" },
-    { id: 3, name: "Job Number", width: "w-16" },
+    { id: 2, name: "Job Number", width: "w-16" },
+    { id: 3, name: "LV Name", width: "w-16" },
     { id: 4, name: "Date From Charpotro", width: "w-16" },
-    { id: 5, name: "CP Number From Charpotro", width: "w-16" },
-    { id: 6, name: "LA Name", width: "w-16" },
-    { id: 7, name: "LV Name", width: "w-16" },
-    { id: 8, name: "Destination From", width: "w-16" },
-    { id: 9, name: "Destination To", width: "w-16" },
-    { id: 10, name: "Commodity", width: "w-16" },
-    { id: 11, name: "Capacity", width: "w-16" },
-    { id: 12, name: "Rate", width: "w-16" },
-    { id: 13, name: "LV Master Name", width: "w-16" },
-    { id: 14, name: "LV Master Contact Number", width: "w-16" },
-    { id: 15, name: "Created Date", width: "w-16" },
-    { id: 16, name: "Actions", width: "w-16" },
+    { id: 5, name: "MV Name", width: "w-16" },
+    { id: 6, name: "Commodity", width: "w-16" },
+    { id: 7, name: "Chq No", width: "w-16" },
+    { id: 8, name: "Chq Issue Date", width: "w-16" },
+    { id: 9, name: "Amount", width: "w-16" },
+    { id: 10, name: "Part Pay", width: "w-16" },
+    { id: 11, name: "Payment Approved", width: "w-16" },
+    { id: 12, name: "Balance", width: "w-16" },
+    { id: 13, name: "Payment Chq No", width: "w-16" },
+    { id: 14, name: "Payment Chq Amount", width: "w-16" },
+    { id: 15, name: "Payment Chq Date", width: "w-16" },
+    { id: 16, name: "Added Date", width: "w-16" },
+    { id: 17, name: "Actions", width: "w-16" },
 ];
 
 const App = () => {
-    const [RecordList, setRecordList] = useState([]);
-    const { logout } = useAuth();
+    const [PayList, setPayList] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getrecordentry")
+        fetch("http://localhost:3001/management/getpayment")
             .then((res) => res.json())
             .then((data) => {
-                setRecordList(data);
+                setPayList(data);
             });
-    }, [RecordList]);
+    }, [PayList]);
 
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        order_number: "",
         job_number: "",
-        date_from_charpotro: "",
-        cp_number_from_charpotro: "",
-        LA_name: "",
         LV_name: "",
-        dest_from: "",
-        dest_to: "",
+        date_from_charpotro: "",
+        MV_name: "",
         commodity: "",
-        capacity: "",
-        rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
+        chq_no: "",
+        chq_issue_date: "",
+        amount: "",
+        part_pay: "",
+        payment_approved: "",
+        balance: "",
+        payment_chq_no: "",
+        payment_chq_amount: "",
+        payment_chq_date: "",
+        added_date: "",
     });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        order_number: "",
         job_number: "",
-        date_from_charpotro: "",
-        cp_number_from_charpotro: "",
-        LA_name: "",
         LV_name: "",
-        dest_from: "",
-        dest_to: "",
+        date_from_charpotro: "",
+        MV_name: "",
         commodity: "",
-        capacity: "",
-        rate: "",
-        LV_master_name: "",
-        LV_master_contact_number: "",
+        chq_no: "",
+        chq_issue_date: "",
+        amount: "",
+        part_pay: "",
+        payment_approved: "",
+        balance: "",
+        payment_chq_no: "",
+        payment_chq_amount: "",
+        payment_chq_date: "",
+        added_date: "",
     });
 
     //modified id status
-    const [editRecordId, setEditRecordId] = useState(null);
+    const [editPayId, setEditPayId] = useState(null);
 
     //changeHandler
     //Update state with input data
@@ -118,162 +122,170 @@ const App = () => {
         event.preventDefault(); // ???
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newRecord = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: addFormData.job_number,
-            date_from_charpotro: addFormData.date_from_charpotro,
-            cp_number_from_charpotro: addFormData.cp_number_from_charpotro,
-            LA_name: addFormData.LA_name,
+        const newPay = {
+            job_number: addFormData.job_number,  //handleAddFormChange로 받은 새 데이터
             LV_name: addFormData.LV_name,
-            dest_from: addFormData.dest_from,
-            dest_to: addFormData.dest_to,
+            date_from_charpotro: addFormData.date_from_charpotro,
+            MV_name: addFormData.MV_name,
             commodity: addFormData.commodity,
-            capacity: addFormData.capacity,
-            rate: addFormData.rate,
-            LV_master_name: addFormData.LV_master_name,
-            LV_master_contact_number: addFormData.LV_master_contact_number,
+            chq_no: addFormData.chq_no,
+            chq_issue_date: addFormData.chq_issue_date,
+            amount: addFormData.amount,
+            part_pay: addFormData.part_pay,
+            payment_approved: addFormData.payment_approved,
+            balance: addFormData.balance,
+            payment_chq_no: addFormData.payment_chq_no,
+            payment_chq_amount: addFormData.payment_chq_amount,
+            payment_chq_date: addFormData.payment_chq_date,
+            added_date: addFormData.added_date,
         };
 
-        // const current = new Date();
-        // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
-        // console.log(order_number_auto)
+        //const current = new Date();
+        //const order_number_auto = newPay.importer_name+'-'+current.getDate().toLocaleString()+'-'+newPay.mother_vessel_name+'-'+newPay.mv_location
+        //console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/recordentry", {
-            order_number: "order_number_forign_key", //handleAddFormChange로 받은 새 데이터
-            job_number: "job_number_auto",
-            date_from_charpotro: newRecord.date_from_charpotro,
-            cp_number_from_charpotro: newRecord.cp_number_from_charpotro,
-            LA_name: newRecord.LA_name,
-            LV_name: newRecord.LV_name,
-            dest_from: newRecord.dest_from,
-            dest_to: newRecord.dest_to,
-            commodity: newRecord.commodity,
-            capacity: newRecord.capacity,
-            rate: newRecord.rate,
-            LV_master_name: newRecord.LV_master_name,
-            LV_master_contact_number: newRecord.LV_master_contact_number,
+        Axios.post("http://localhost:3001/management/insertpayment", {
+            job_number: newPay.job_number,  //handleAddFormChange로 받은 새 데이터
+            LV_name: newPay.LV_name,
+            date_from_charpotro: newPay.date_from_charpotro,
+            MV_name: newPay.MV_name,
+            commodity: newPay.commodity,
+            chq_no: newPay.chq_no,
+            chq_issue_date: newPay.chq_issue_date,
+            amount: newPay.amount,
+            part_pay: newPay.part_pay,
+            payment_approved: newPay.payment_approved,
+            balance: newPay.balance,
+            payment_chq_no: newPay.payment_chq_no,
+            payment_chq_amount: newPay.payment_chq_amount,
+            payment_chq_date: newPay.payment_chq_date,
+            added_date: newPay.added_date,
         });
 
-        //RecordList의 초기값은 data.json 데이터
-        const newRecordList = [...RecordList, newRecord];
-        setRecordList(newRecordList);
+        //PayList의 초기값은 data.json 데이터
+        const newPayList = [...PayList, newPay];
+        setPayList(newPayList);
 
         // close modal
         closeModal();
 
         // toast
-        success("Record added successfully");
+        success("Pay added successfully");
     };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
 
-        const editedRecord = {
-            id: editRecordId, //initial value null
-            order_number: editFormData.order_number, //handleAddFormChange로 받은 새 데이터
+        const editedPay = {
+            id: editPayId, //initial value null
             job_number: editFormData.job_number,
-            date_from_charpotro: editFormData.date_from_charpotro,
-            cp_number_from_charpotro: editFormData.cp_number_from_charpotro,
-            LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
-            dest_from: editFormData.dest_from,
-            dest_to: editFormData.dest_to,
+            date_from_charpotro: editFormData.date_from_charpotro,
+            MV_name: editFormData.MV_name,
             commodity: editFormData.commodity,
-            capacity: editFormData.capacity,
-            rate: editFormData.rate,
-            LV_master_name: editFormData.LV_master_name,
-            LV_master_contact_number: editFormData.LV_master_contact_number,
+            chq_no: editFormData.chq_no,
+            chq_issue_date: editFormData.chq_issue_date,
+            amount: editFormData.amount,
+            part_pay: editFormData.part_pay,
+            payment_approved: editFormData.payment_approved,
+            balance: editFormData.balance,
+            payment_chq_no: editFormData.payment_chq_no,
+            payment_chq_amount: editFormData.payment_chq_amount,
+            payment_chq_date: editFormData.payment_chq_date,
+            added_date: editFormData.added_date,
         };
 
-        Axios.post("http://localhost:3001/management/updaterecordentry", {
-            id: editedRecord.id,
-            order_number: editedRecord.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editedRecord.job_number,
-            date_from_charpotro: editedRecord.date_from_charpotro,
-            cp_number_from_charpotro: editedRecord.cp_number_from_charpotro,
-            LA_name: editedRecord.LA_name,
-            LV_name: editedRecord.LV_name,
-            dest_from: editedRecord.dest_from,
-            dest_to: editedRecord.dest_to,
-            commodity: editedRecord.commodity,
-            capacity: editedRecord.capacity,
-            rate: editedRecord.rate,
-            LV_master_name: editedRecord.LV_master_name,
-            LV_master_contact_number: editedRecord.LV_master_contact_number,
+        Axios.post("http://localhost:3001/management/updatepayment", {
+            id: editedPay.id,
+            new_job_number: editedPay.job_number,
+            new_LV_name: editedPay.LV_name,
+            new_date_from_charpotro: editedPay.date_from_charpotro,
+            new_MV_name: editedPay.MV_name,
+            new_commodity: editedPay.commodity,
+            new_chq_no: editedPay.chq_no,
+            new_chq_issue_date: editedPay.chq_issue_date,
+            new_amount: editedPay.amount,
+            new_part_pay: editedPay.part_pay,
+            new_payment_approved: editedPay.payment_approved,
+            new_balance: editedPay.balance,
+            new_payment_chq_no: editedPay.payment_chq_no,
+            new_payment_chq_amount: editedPay.payment_chq_amount,
+            new_payment_chq_date: editedPay.payment_chq_date,
+            new_added_date: editedPay.added_date,
         });
 
-        const newRecordList = [...RecordList]; //json.data + data added with setRecordList above by receiving new input
-        const index = RecordList.findIndex(
-            (Record) => Record.id === editRecordId
-        );
-        newRecordList[index] = editedRecord; // Assign the modified data object to the object of the index row of the RecordList array, which is the entire data
+        const newPayList = [...PayList]; //json.data + data added with setPayList above by receiving new input
+        const index = PayList.findIndex((Pay) => Pay.id === editPayId);
+        newPayList[index] = editedPay; // Assign the modified data object to the object of the index row of the PayList array, which is the entire data
 
-        setRecordList(newRecordList);
-        setEditRecordId(null);
-        success("Record updated successfully");
+        setPayList(newPayList);
+        setEditPayId(null);
+        success("Pay updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
-    const handleEditClick = (event, Record) => {
+    const handleEditClick = (event, Pay) => {
         event.preventDefault(); // ???
 
-        setEditRecordId(Record.id);
+        setEditPayId(Pay.id);
         const formValues = {
-            order_number: Record.order_number,
-            job_number: Record.job_number,
-            date_from_charpotro: Record.date_from_charpotro,
-            cp_number_from_charpotro: Record.cp_number_from_charpotro,
-            LA_name: Record.LA_name,
-            LV_name: Record.LV_name,
-            dest_from: Record.dest_from,
-            dest_to: Record.dest_to,
-            commodity: Record.commodity,
-            capacity: Record.capacity,
-            rate: Record.rate,
-            LV_master_name: Record.LV_master_name,
-            LV_master_contact_number: Record.LV_master_contact_number,
+            job_number: Pay.job_number,
+            LV_name: Pay.LV_name,
+            date_from_charpotro: Pay.date_from_charpotro,
+            MV_name: Pay.MV_name,
+            commodity: Pay.commodity,
+            chq_no: Pay.chq_no,
+            chq_issue_date: Pay.chq_issue_date,
+            amount: Pay.amount,
+            part_pay: Pay.part_pay,
+            payment_approved: Pay.payment_approved,
+            balance: Pay.balance,
+            payment_chq_no: Pay.payment_chq_no,
+            payment_chq_amount: Pay.payment_chq_amount,
+            payment_chq_date: Pay.payment_chq_date,
+            added_date: Pay.added_date,
         };
         setEditFormData(formValues);
     };
 
     //Cancel button when clicked on edit
     const handleCancelClick = () => {
-        setEditRecordId(null);
+        setEditPayId(null);
     };
 
     // delete
-    const handleDeleteClick = (RecordId) => {
-        const newRecordList = [...RecordList];
-        const index = RecordList.findIndex((Record) => Record.id === RecordId);
-        //console.log("Deleting Record with id: " + RecordId);
-        Axios.post("http://localhost:3001/management/deleterecord", {
-            record_id: RecordId,
+    const handleDeleteClick = (PayId) => {
+        const newPayList = [...PayList];
+        const index = PayList.findIndex((Pay) => Pay.id === PayId);
+        //console.log("Deleting Pay with id: " + PayId);
+        Axios.post("http://localhost:3001/management/deletepayment", {
+            Pay_id: PayId,
         }).then((response) => {
             if (response.data == "success") {
-                success("Record deleted successfully");
+                success("Pay deleted successfully");
             }
         });
 
-        newRecordList.splice(index, 1);
-        setRecordList(newRecordList);
+        newPayList.splice(index, 1);
+        setPayList(newPayList);
     };
 
     // search filter
     const [query, setQuery] = useState("");
 
-    const filteredRecord =
+    const filteredPay =
         query === ""
-            ? RecordList
-            : RecordList.filter((Record) =>
-                  Record.order_number
+            ? PayList
+            : PayList.filter((Pay) =>
+                  Pay.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
               );
 
-    // modal for add Record
+    // modal for add Pay
     let [isOpen, setIsOpen] = useState(false);
 
     function closeModal() {
@@ -284,6 +296,20 @@ const App = () => {
         setIsOpen(true);
     }
 
+    // logout
+    if (localStorage.getItem("user_type") == "admin") {
+    } else if (localStorage.getItem("user_type") == "operations") {
+        window.location.href = "/";
+    } else {
+        window.location.href = "/login";
+    }
+    const logout = () => {
+        localStorage.setItem("loggedin", "false");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_type");
+        window.location.href = "/login";
+    };
+
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
@@ -292,7 +318,7 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Record <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Pay Approval <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -324,19 +350,19 @@ const App = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredRecord.length === 0 && query !== "" ? (
+                        {filteredPay.length === 0 && query !== "" ? (
                             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                 Nothing found.
                             </div>
                         ) : (
-                            filteredRecord.map((record, idx) => (
+                            filteredPay.map((Pay, idx) => (
                                 <tr
-                                    key={record.id}
+                                    key={Pay.id}
                                     className={`bg-white ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editRecordId === record.id ? (
+                                    {editPayId === Pay.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -348,7 +374,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            record={record}
+                                            Pay={Pay}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -398,28 +424,12 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-center text-3xl font-medium text-gray-900"
                                         >
-                                            Add Record
+                                            Add Pay
                                         </Dialog.Title>
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
                                         >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="order_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Foriegn Key"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Job Number
@@ -431,11 +441,24 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     disabled
-                                                    placeholder="Auto Generated"
+                                                    placeholder="Will be fetched"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    LV Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="LV_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Date From Charpotro
@@ -446,82 +469,21 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Date From Charpotro"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    CP Number From Charpotro
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="cp_number_from_charpotro"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="CP Number From Charpotro"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA Number
+                                                    MV Name
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="LA_name"
+                                                    name="MV_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LA Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Destination From
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="dest_from"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Destination From"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Destination To
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="dest_to"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Destination To"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -536,71 +498,145 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Commodity"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Capacity
+                                                    Chq No
                                                 </label>
                                                 <input
                                                     type="number"
-                                                    name="capacity"
+                                                    name="chq_no"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Capacity"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Rate
+                                                    Chq Issue Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="chq_issue_date"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    required
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Amount
                                                 </label>
                                                 <input
                                                     type="number"
-                                                    name="rate"
+                                                    name="amount"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Rate"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Name
+                                                    Part Pay
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    name="LV_master_name"
+                                                    type="number"
+                                                    name="part_pay"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Master Name"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Master Number
+                                                    Payment Approved
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    name="LV_master_contact_number"
+                                                    type="number"
+                                                    name="payment_approved"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Master Number"
+                                                    required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Balance
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    name="balance"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Payment Chq No
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    name="payment_chq_no"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Payment Chq Amount
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    name="payment_chq_amount"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Payment Chq Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="payment_chq_date"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Added Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="added_date"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
                                             <button
                                                 type="submit"
                                                 className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"

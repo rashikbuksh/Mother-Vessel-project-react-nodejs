@@ -48,7 +48,7 @@ const App = () => {
     const { logout } = useAuth();
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getDamarage")
+        fetch("http://localhost:3001/management/getdamarage")
             .then((res) => res.json())
             .then((data) => {
                 setDamList(data);
@@ -85,6 +85,7 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
+        id: "",
         order_number: "",
         job_number: "",
         date: "",
@@ -177,9 +178,9 @@ const App = () => {
             total_despatch: addFormData.total_despatch,
             daily_despatch: addFormData.daily_despatch,
         };
-
+        console.log("New Dam : "+addFormData.job_number);
         // api call
-        Axios.post("http://localhost:3001/management/Damentry", {
+        Axios.post("http://localhost:3001/management/insertdamarage", {
             order_number: newDam.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: newDam.job_number,
             date: newDam.date,
@@ -249,8 +250,9 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
+        //console.log("Edited Dam ID : "+editedDam.id);
 
-        Axios.post("http://localhost:3001/management/updateDamarage", {
+        Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
             order_number: editedDam.order_number,
             job_number: editedDam.job_number,
@@ -332,7 +334,7 @@ const App = () => {
         const newDamList = [...DamList];
         const index = DamList.findIndex((Dam) => Dam.id === DamId);
         //console.log("Deleting Dam with id: " + DamId);
-        Axios.post("http://localhost:3001/management/deleteDamarage", {
+        Axios.post("http://localhost:3001/management/deletedamarage", {
             Dam_id: DamId,
         }).then((response) => {
             if (response.data == "success") {
@@ -369,11 +371,13 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setOrderNumber(data);
+                console.log(data);
             });
         fetch("http://localhost:3001/management/fetch_job_number/")
             .then((res) => res.json())
             .then((data) => {
                 setJobNumber(data);
+                console.log(data);
             });
         console.log(OrderNumber);
         setIsOpen(true);
@@ -503,21 +507,13 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <select name="order_number">
-                                                    {OrderNumber.map((item) =>
-                                                        item ===
-                                                        OrderNumber ? null : (
-                                                            <option
-                                                                value={
-                                                                    item.order_number
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.order_number
-                                                                }
-                                                            </option>
-                                                        )
-                                                    )}
+                                                <select 
+                                                name="order_number"
+                                                onChange={
+                                                    handleAddFormChange
+                                                }
+                                                >
+                                                    {OrderNumber.map((item) => (item === OrderNumber ? null : <option value={item.order_number}>{item.order_number}</option>))}
                                                 </select>
                                             </div>
 
@@ -525,21 +521,13 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Job Number
                                                 </label>
-                                                <select name="job_number">
-                                                    {JobNumber.map((item) =>
-                                                        item ===
-                                                        JobNumber ? null : (
-                                                            <option
-                                                                value={
-                                                                    item.job_number
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.job_number
-                                                                }
-                                                            </option>
-                                                        )
-                                                    )}
+                                                <select 
+                                                name="job_number"
+                                                onChange={
+                                                    handleAddFormChange
+                                                }
+                                                >
+                                                    {JobNumber.map((item) => (item === JobNumber ? null : <option value={item.job_number}>{item.job_number}</option>))}
                                                 </select>
                                             </div>
 
@@ -718,7 +706,7 @@ const App = () => {
                                                     Duration of Travel Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="duration_of_travel_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -775,7 +763,7 @@ const App = () => {
                                                     Total Elapsed Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="total_elapsed_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -789,7 +777,7 @@ const App = () => {
                                                     Voyage Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="voyage_time"
                                                     onChange={
                                                         handleAddFormChange
@@ -803,7 +791,7 @@ const App = () => {
                                                     Free Time
                                                 </label>
                                                 <input
-                                                    type="date"
+                                                    type="time"
                                                     name="free_time"
                                                     onChange={
                                                         handleAddFormChange

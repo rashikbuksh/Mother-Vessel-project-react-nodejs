@@ -26,31 +26,9 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Enter Job Number..."
-                    name="job_number"
-                    value={editFormData.job_number}
-                    onChange={handleEditFormChange}
-                    disabled
-                />
-            </td>
-            <td>
-                <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="date"
-                    required="required"
-                    name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
-                    required="required"
-                    placeholder="CP Number From Charpotro..."
-                    name="cp_number_from_charpotro"
-                    value={editFormData.cp_number_from_charpotro}
+                    placeholder="Enter LA..."
+                    name="LA"
+                    value={editFormData.LA}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -59,18 +37,7 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="LA name..."
-                    name="LA_name"
-                    value={editFormData.LA_name}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    required="required"
-                    placeholder="LV name..."
+                    placeholder="Enter LV Name..."
                     name="LV_name"
                     value={editFormData.LV_name}
                     onChange={handleEditFormChange}
@@ -81,29 +48,7 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="Destination From..."
-                    name="dest_from"
-                    value={editFormData.dest_from}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    required="required"
-                    placeholder="Destination To..."
-                    name="dest_to"
-                    value={editFormData.dest_to}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    required="required"
-                    placeholder="Commodity..."
+                    placeholder="Enter commodity..."
                     name="commodity"
                     value={editFormData.commodity}
                     onChange={handleEditFormChange}
@@ -112,22 +57,11 @@ const EditTableRow = ({
             <td>
             <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
+                    type="text"
                     required="required"
-                    placeholder="Capacity..."
-                    name="capacity"
-                    value={editFormData.capacity}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="number"
-                    required="required"
-                    placeholder="Rate..."
-                    name="rate"
-                    value={editFormData.rate}
+                    placeholder="Enter mode..."
+                    name="mode"
+                    value={editFormData.mode}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -136,9 +70,9 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="LV Master Name..."
-                    name="LV_master_name"
-                    value={editFormData.LV_master_name}
+                    placeholder="Enter chq amount..."
+                    name="chq_amount"
+                    value={editFormData.chq_amount}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -147,13 +81,67 @@ const EditTableRow = ({
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
-                    placeholder="LA Master Number..."
-                    name="LV_master_contact_number"
-                    value={editFormData.LV_master_contact_number}
+                    placeholder="Enter part pay..."
+                    name="part_pay"
+                    value={editFormData.part_pay}
                     onChange={handleEditFormChange}
                 />
             </td>
-
+            <td>
+            <input
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    type="number"
+                    required="required"
+                    placeholder="Enter balance..."
+                    name="balance"
+                    value={editFormData.balance}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+            <input
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    type="date"
+                    required="required"
+                    placeholder="Enter chq issue date..."
+                    name="chq_issue_date"
+                    value={editFormData.chq_issue_date}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+            <input
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    type="number"
+                    required="required"
+                    placeholder="Enter initial amount..."
+                    name="init_amount"
+                    value={editFormData.init_amount}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+            <input
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    type="text"
+                    required="required"
+                    placeholder="Enter payment..."
+                    name="payment"
+                    value={editFormData.payment}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+            <input
+                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    type="number"
+                    required="required"
+                    placeholder="Enter final amount..."
+                    name="final_amount"
+                    value={editFormData.final_amount}
+                    onChange={handleEditFormChange}
+                />
+            </td>
             <td />
             <td />
             <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
