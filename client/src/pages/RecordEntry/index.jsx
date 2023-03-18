@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -33,6 +33,7 @@ const TableHeader = [
 
 const App = () => {
     const [RecordList, setRecordList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getrecordentry")
@@ -58,7 +59,6 @@ const App = () => {
         rate: "",
         LV_master_name: "",
         LV_master_contact_number: "",
-        
     });
 
     //edit status
@@ -205,7 +205,9 @@ const App = () => {
         });
 
         const newRecordList = [...RecordList]; //json.data + data added with setRecordList above by receiving new input
-        const index = RecordList.findIndex((Record) => Record.id === editRecordId);
+        const index = RecordList.findIndex(
+            (Record) => Record.id === editRecordId
+        );
         newRecordList[index] = editedRecord; // Assign the modified data object to the object of the index row of the RecordList array, which is the entire data
 
         setRecordList(newRecordList);
@@ -219,7 +221,7 @@ const App = () => {
 
         setEditRecordId(Record.id);
         const formValues = {
-            order_number: Record.order_number, 
+            order_number: Record.order_number,
             job_number: Record.job_number,
             date_from_charpotro: Record.date_from_charpotro,
             cp_number_from_charpotro: Record.cp_number_from_charpotro,
@@ -281,20 +283,6 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
-
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -360,7 +348,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                        record={record}
+                                            record={record}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -447,7 +435,6 @@ const App = () => {
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
@@ -554,13 +541,12 @@ const App = () => {
                                                 />
                                             </div>
 
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Capacity
                                                 </label>
                                                 <input
-                                                    type="number"           
+                                                    type="number"
                                                     name="capacity"
                                                     onChange={
                                                         handleAddFormChange
@@ -614,7 +600,6 @@ const App = () => {
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
-
 
                                             <button
                                                 type="submit"

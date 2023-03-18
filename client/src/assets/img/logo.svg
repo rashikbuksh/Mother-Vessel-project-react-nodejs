@@ -761,7 +761,7 @@ xAoAAAAAAADADvL/BBgAVKd6T7SOfd4AAAAASUVORK5CYII=" transform="matrix(1 0 0 1 1586
                 <stop offset="0" style="stop-color:#506DEA" />
                 <stop offset="0.6645" style="stop-color:#61C4DB" />
             </linearGradient>
-            <path class="st0" d="M2085.35,1235.12h286.55c61.7,75.62,92.56,155.38,92.56,239.28c0,97.57-36.17,179.53-108.48,245.87
+            <path className="st0" d="M2085.35,1235.12h286.55c61.7,75.62,92.56,155.38,92.56,239.28c0,97.57-36.17,179.53-108.48,245.87
 			c-72.32,66.35-161.35,96.26-266.93,99.52c-398.57,12.29-253.73-51.46-349.49-154.4c-95.77-102.93-143.65-228.31-143.65-376.12
 			c0-148.29,48.74-271.72,146.24-370.27c97.48-98.54,219.29-147.82,365.41-147.82c49.85,0,295.76-1.89,356.9,13.16v287.43
 			c-230.57-34.27-282.71-19.97-321.43-15.42c-72.86,8.57-127.41,30.7-172.08,74.12c-44.68,43.43-67.01,99.77-67.01,169.04
@@ -967,7 +967,7 @@ XLwMAAAAAElFTkSuQmCC" transform="matrix(1 0 0 1 605.3184 761.5785)"></image>
                 <stop offset="0.2737" style="stop-color:#61C4DB" />
                 <stop offset="1" style="stop-color:#506DEA" />
             </linearGradient>
-            <path class="st1" d="M1185.62,1071.86v746.29H862.46v-746.29H614.92V771.19h886.1l-68.66,300.67H1185.62z" />
+            <path className="st1" d="M1185.62,1071.86v746.29H862.46v-746.29H614.92V771.19h886.1l-68.66,300.67H1185.62z" />
         </g>
     </g>
     <g>
@@ -3150,7 +3150,7 @@ Nw6mw8V+HoAjw0BJQ74CXDhbzzAAD44BcJOAUNCQrwCy9fSDqQAAhBTIV4BbZOvVBmdhAwgOkK8A
 l8lWA7BjAAgIkK+AbAUAAAAAAAAAAAAAAACAm/k/AQYA/5Ix0FyVUegAAAAASUVORK5CYII=" transform="matrix(1 0 0 1 1067 732)"></image>
             <g>
                 <g>
-                    <path class="st2" d="M1432.36,1576.1v243.57h-325.61v-650.52c0-125.91,36.75-223.71,110.27-293.41
+                    <path className="st2" d="M1432.36,1576.1v243.57h-325.61v-650.52c0-125.91,36.75-223.71,110.27-293.41
 					c73.51-69.7,176.84-104.55,309.97-104.55c128.32,0,223.22,31.61,284.71,94.81c61.48,63.21,92.23,160.76,92.23,292.66v661.01
 					h-325.61v-640.78c0-39.97-5.09-67.7-15.24-83.19c-10.16-15.48-28.35-23.23-54.54-23.23c-50.8,0-76.19,35.48-76.19,106.42v127.41
 					" />
@@ -3158,7 +3158,7 @@ l8lWA7BjAAgIkK+AbAUAAAAAAAAAAAAAAACAm/k/AQYA/5Ix0FyVUegAAAAASUVORK5CYII=" transf
             </g>
         </g>
     </g>
-    <circle class="st3" cx="1289.35" cy="1106.97" r="79.75" />
-    <circle class="st3" cx="1735.06" cy="1106.97" r="79.75" />
-    <rect x="1320.2" y="1390.65" class="st2" width="370.29" height="240.87" />
+    <circle className="st3" cx="1289.35" cy="1106.97" r="79.75" />
+    <circle className="st3" cx="1735.06" cy="1106.97" r="79.75" />
+    <rect x="1320.2" y="1390.65" className="st2" width="370.29" height="240.87" />
 </svg>

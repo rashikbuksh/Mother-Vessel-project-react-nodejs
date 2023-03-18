@@ -1,8 +1,16 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+
+import {
+    AccountsManagerRoutes,
+    AccountsRoutes,
+    AdminRoutes,
+    OperationRoutes,
+} from "./hooks/routes";
 
 import Loader from "./utils/Loader";
 const NotFound = lazy(() => import("./layout/NotFound"));
+const NoAccess = lazy(() => import("./utils/NoAccess"));
 
 const Home = lazy(() => import("./pages/Home/Shared/Layout"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -25,148 +33,186 @@ const Payment = lazy(() => import("./pages/Payment"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
+// import AdminRoutes from "./hooks/routes/AdminRoutes";
+
+const RoutePages = [
+    {
+        link: "/",
+        component: Home,
+    },
+    {
+        link: "/admin",
+        component: Admin,
+    },
+    {
+        link: "/login",
+        component: Login,
+    },
+    {
+        link: "/forgot_password",
+        component: ForgotPassword,
+    },
+    {
+        link: "/reset_password",
+        component: ResetPassword,
+    },
+    {
+        link: "/adminpanel",
+        component: AdminPanel,
+    },
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+    {
+        link: "/test",
+        component: Table,
+    },
+    {
+        link: "/*",
+        component: NotFound,
+    },
+];
+
+const PublicRoutesList = [
+    {
+        link: "/login",
+        component: Login,
+    },
+    {
+        link: "/noaccess",
+        component: NoAccess,
+    },
+];
+
+const OperationRoutesList = [
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+];
+
+const AccountsRoutesList = [
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+];
+
+const AccountsManagerRoutesList = [
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+];
+
+const AdminRoutesList = [
+    {
+        link: "/adminpanel",
+        component: AdminPanel,
+    },
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+    {
+        link: "/recordentry",
+        component: RecordEntry,
+    },
+    {
+        link: "/currentstatus",
+        component: CurrentStatus,
+    },
+    {
+        link: "/damaragecalculation",
+        component: DamarageCalculation,
+    },
+];
 
 function App() {
     return (
-        <div>
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
+         <Routes>
+            {OperationRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <OperationRoutes>
                             <Suspense fallback={<Loader />}>
-                                <Home />
+                                <route.component />
                             </Suspense>
-                        }
-                    >
-                        <Route index element={<Dashboard />} />
-                        <Route path="admin" element={<Admin />} />
-                    </Route>
-                    <Route
-                        path="/*"
-                        element={
+                        </OperationRoutes>
+                    }
+                />
+            ))}
+            {AccountsRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AccountsRoutes>
                             <Suspense fallback={<Loader />}>
-                                <NotFound />
+                                <route.component />
                             </Suspense>
-                        }
-                    />
-                    // Login
-                    <Route
-                        path="/login"
-                        element={
+                        </AccountsRoutes>
+                    }
+                />
+            ))}
+            {AccountsManagerRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AccountsManagerRoutes>
                             <Suspense fallback={<Loader />}>
-                                <Login />
+                                <route.component />
                             </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/forgot_password"
-                        element={
+                        </AccountsManagerRoutes>
+                    }
+                />
+            ))}
+            {AdminRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AdminRoutes>
                             <Suspense fallback={<Loader />}>
-                                <ForgotPassword />
+                                <route.component />
                             </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/reset_password"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <ResetPassword />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/adminpanel"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AdminPanel />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/jobentry"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <JobEntry />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/recordentry"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <RecordEntry />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/currentstatus"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <CurrentStatus />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/damaragecalculation"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <DamarageCalculation />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/chqduelist"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <ChqDueList />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/chqapproval"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <ChqApproval />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/payment"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <Payment />
-                            </Suspense>
-                        }
-                    />
-                    {/* <Route
-                        path="/adminpanel/update-info/:userId"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AdminPanel />
-                            </Suspense>
-                        }
-                    />
-                    <Route
-                        path="/adduser"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <AddUser />
-                            </Suspense>
-                        }
-                    /> */}
-                    // test
-                    <Route
-                        path="/test"
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <Table />
-                            </Suspense>
-                        }
-                    />
-                </Routes>
-            </BrowserRouter>
-        </div>
+                        </AdminRoutes>
+                    }
+                />
+            ))}
+
+            {PublicRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <Suspense fallback={<Loader />}>
+                            <route.component />
+                        </Suspense>
+                    }
+                />
+            ))}
+        </Routes>
     );
 }
 

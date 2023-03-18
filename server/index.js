@@ -24,14 +24,20 @@ app.get("/user/verify_login/", (req, res) => {
     const password = req.query.password;
     //console.log(email, password)
     const get_user =
-        "select id,password,position from users where username = ?";
+        "select id, position, password, enabled from users where username = ?";
     db.query(get_user, [username], (err, result) => {
         //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
+        } else if (result[0].enabled === 0) {
+            console.log("User is disabled");
+            res.send("User is disabled");
         } else if (password === result[0].password) {
-            res.send(result[0].id.toString() + ":" + result[0].position);
+            res.send({
+                id: result[0].id,
+                position: result[0].position,
+            });
         } else {
             console.log("wrong password");
             res.send("wrong password");
@@ -95,7 +101,7 @@ app.post("/user/register", (req, res) => {
         [name, username, password, position, department],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -124,23 +130,17 @@ app.post("/admin/updateinfo", (req, res) => {
     );
 });
 
-
 app.post("/admin/deleteuser", (req, res) => {
     console.log("Delete info in backend");
     const id = req.body.user_id;
-    const sqlDelete =
-        "DELETE from users where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from users where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 //////////////////////MANAGEMENT/////////////////////////
 //Insert Job Entry
@@ -159,10 +159,20 @@ app.post("/management/jobentry", (req, res) => {
         "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number) VALUES (?,?,?,?,?,?,?,?,?)";
     db.query(
         create_job,
-        [order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number],
+        [
+            order_number,
+            importer_name,
+            mother_vessel_name,
+            eta,
+            commodity,
+            mv_location,
+            bl_quantity,
+            stevedore_name,
+            stevedore_contact_number,
+        ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -192,7 +202,18 @@ app.post("/management/updatejobentry", (req, res) => {
         "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=? where id= ?";
     db.query(
         sqlUpdate,
-        [order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, id],
+        [
+            order_number,
+            importer_name,
+            mother_vessel_name,
+            eta,
+            commodity,
+            mv_location,
+            bl_quantity,
+            stevedore_name,
+            stevedore_contact_number,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
@@ -206,21 +227,15 @@ app.post("/management/updatejobentry", (req, res) => {
 app.post("/management/deletejob", (req, res) => {
     console.log("Delete job in backend");
     const id = req.body.job_id;
-    const sqlDelete =
-        "DELETE from job_entry where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from job_entry where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
-
 
 //Insert Record Entry
 app.post("/management/recordentry", (req, res) => {
@@ -245,7 +260,7 @@ app.post("/management/recordentry", (req, res) => {
         [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -293,22 +308,15 @@ app.post("/management/updaterecordentry", (req, res) => {
 app.post("/management/deleterecord", (req, res) => {
     console.log("Delete record in backend");
     const id = req.body.record_id;
-    const sqlDelete =
-        "DELETE from record_entry where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from record_entry where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
-
-
 
 //Insert Current Status
 app.post("/management/currentstatus", (req, res) => {
@@ -325,10 +333,19 @@ app.post("/management/currentstatus", (req, res) => {
         "INSERT INTO current_status (LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark) VALUES (?,?,?,?,?,?,?,?)";
     db.query(
         create_current_status,
-        [LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark],
+        [
+            LV_name,
+            date_from_charpotro,
+            commodity,
+            LA,
+            dest_from,
+            dest_to,
+            current_location,
+            remark,
+        ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -357,7 +374,17 @@ app.post("/management/updatecurrentstatus", (req, res) => {
         "UPDATE current_status SET LV_name=?, date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
     db.query(
         sqlUpdate,
-        [LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark, id],
+        [
+            LV_name,
+            date_from_charpotro,
+            commodity,
+            LA,
+            dest_from,
+            dest_to,
+            current_location,
+            remark,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
@@ -371,19 +398,14 @@ app.post("/management/updatecurrentstatus", (req, res) => {
 app.post("/management/deletecurrentstatus", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.status_id;
-    const sqlDelete =
-        "DELETE from current_status where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from current_status where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 
 
@@ -402,11 +424,13 @@ app.post("/management/insertdamarage", (req, res) => {
     const loading_location = req.body.loading_location;
     const unloading_location = req.body.unloading_location;
     const loading_start_time_stamp = req.body.loading_start_time_stamp;
-    const loading_completion_time_stamp = req.body.loading_completion_time_stamp;
+    const loading_completion_time_stamp =
+        req.body.loading_completion_time_stamp;
     const sailing_time_stamp = req.body.sailing_time_stamp;
     const duration_of_travel_time = req.body.duration_of_travel_time;
     const unloading_start_time_stamp = req.body.unloading_start_time_stamp;
-    const unloading_completion_time_stamp = req.body.unloading_completion_time_stamp;
+    const unloading_completion_time_stamp =
+        req.body.unloading_completion_time_stamp;
     const others = req.body.others;
     const total_elapsed_time = req.body.total_elapsed_time;
     const voyage_time = req.body.voyage_time;
@@ -420,7 +444,7 @@ app.post("/management/insertdamarage", (req, res) => {
         [order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -448,11 +472,13 @@ app.post("/management/updatedamarage", (req, res) => {
     const loading_location = req.body.loading_location;
     const unloading_location = req.body.unloading_location;
     const loading_start_time_stamp = req.body.loading_start_time_stamp;
-    const loading_completion_time_stamp = req.body.loading_completion_time_stamp;
+    const loading_completion_time_stamp =
+        req.body.loading_completion_time_stamp;
     const sailing_time_stamp = req.body.sailing_time_stamp;
     const duration_of_travel_time = req.body.duration_of_travel_time;
     const unloading_start_time_stamp = req.body.unloading_start_time_stamp;
-    const unloading_completion_time_stamp = req.body.unloading_completion_time_stamp;
+    const unloading_completion_time_stamp =
+        req.body.unloading_completion_time_stamp;
     const others = req.body.others;
     const total_elapsed_time = req.body.total_elapsed_time;
     const voyage_time = req.body.voyage_time;
@@ -477,19 +503,14 @@ app.post("/management/updatedamarage", (req, res) => {
 app.post("/management/deletedamarage", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.Dam_id;
-    const sqlDelete =
-        "DELETE from damarage_dispatch where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from damarage_dispatch where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 
 app.get("/management/fetch_order_number", (req, res) => {

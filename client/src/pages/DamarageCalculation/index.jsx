@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -44,6 +44,8 @@ const App = () => {
     const [DamList, setDamList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumber, setJobNumber] = useState([]);
+
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getdamarage")
@@ -152,7 +154,7 @@ const App = () => {
         const newDam = {
             order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
             job_number: addFormData.job_number,
-            date: addFormData.date, 
+            date: addFormData.date,
             cp_number: addFormData.cp_number,
             date_from_charpotro: addFormData.date_from_charpotro,
             commodity: addFormData.commodity,
@@ -162,11 +164,13 @@ const App = () => {
             loading_location: addFormData.loading_location,
             unloading_location: addFormData.unloading_location,
             loading_start_time_stamp: addFormData.loading_start_time_stamp,
-            loading_completion_time_stamp: addFormData.loading_completion_time_stamp,
+            loading_completion_time_stamp:
+                addFormData.loading_completion_time_stamp,
             sailing_time_stamp: addFormData.sailing_time_stamp,
             duration_of_travel_time: addFormData.duration_of_travel_time,
             unloading_start_time_stamp: addFormData.unloading_start_time_stamp,
-            unloading_completion_time_stamp: addFormData.unloading_completion_time_stamp,
+            unloading_completion_time_stamp:
+                addFormData.unloading_completion_time_stamp,
             others: addFormData.others,
             total_elapsed_time: addFormData.total_elapsed_time,
             voyage_time: addFormData.voyage_time,
@@ -193,7 +197,8 @@ const App = () => {
             sailing_time_stamp: newDam.sailing_time_stamp,
             duration_of_travel_time: newDam.duration_of_travel_time,
             unloading_start_time_stamp: newDam.unloading_start_time_stamp,
-            unloading_completion_time_stamp: newDam.unloading_completion_time_stamp,
+            unloading_completion_time_stamp:
+                newDam.unloading_completion_time_stamp,
             others: newDam.others,
             total_elapsed_time: newDam.total_elapsed_time,
             voyage_time: newDam.voyage_time,
@@ -218,8 +223,8 @@ const App = () => {
         event.preventDefault(); // prevent submit
 
         const editedDam = {
-            id: editDamId, //handleAddFormChange로 받은 새 데이터
-            order_number: editFormData.order_number, 
+            id: editFormData.id, //handleAddFormChange로 받은 새 데이터
+            order_number: editFormData.order_number,
             job_number: editFormData.job_number,
             date: editFormData.date,
             cp_number: editFormData.cp_number,
@@ -231,11 +236,13 @@ const App = () => {
             loading_location: editFormData.loading_location,
             unloading_location: editFormData.unloading_location,
             loading_start_time_stamp: editFormData.loading_start_time_stamp,
-            loading_completion_time_stamp: editFormData.loading_completion_time_stamp,
+            loading_completion_time_stamp:
+                editFormData.loading_completion_time_stamp,
             sailing_time_stamp: editFormData.sailing_time_stamp,
             duration_of_travel_time: editFormData.duration_of_travel_time,
             unloading_start_time_stamp: editFormData.unloading_start_time_stamp,
-            unloading_completion_time_stamp: editFormData.unloading_completion_time_stamp,
+            unloading_completion_time_stamp:
+                editFormData.unloading_completion_time_stamp,
             others: editFormData.others,
             total_elapsed_time: editFormData.total_elapsed_time,
             voyage_time: editFormData.voyage_time,
@@ -259,11 +266,13 @@ const App = () => {
             loading_location: editedDam.loading_location,
             unloading_location: editedDam.unloading_location,
             loading_start_time_stamp: editedDam.loading_start_time_stamp,
-            loading_completion_time_stamp: editedDam.loading_completion_time_stamp,
+            loading_completion_time_stamp:
+                editedDam.loading_completion_time_stamp,
             sailing_time_stamp: editedDam.sailing_time_stamp,
             duration_of_travel_time: editedDam.duration_of_travel_time,
             unloading_start_time_stamp: editedDam.unloading_start_time_stamp,
-            unloading_completion_time_stamp: editedDam.unloading_completion_time_stamp,
+            unloading_completion_time_stamp:
+                editedDam.unloading_completion_time_stamp,
             others: editedDam.others,
             total_elapsed_time: editedDam.total_elapsed_time,
             voyage_time: editedDam.voyage_time,
@@ -303,7 +312,8 @@ const App = () => {
             sailing_time_stamp: Dam.sailing_time_stamp,
             duration_of_travel_time: Dam.duration_of_travel_time,
             unloading_start_time_stamp: Dam.unloading_start_time_stamp,
-            unloading_completion_time_stamp: Dam.unloading_completion_time_stamp,
+            unloading_completion_time_stamp:
+                Dam.unloading_completion_time_stamp,
             others: Dam.others,
             total_elapsed_time: Dam.total_elapsed_time,
             voyage_time: Dam.voyage_time,
@@ -363,28 +373,15 @@ const App = () => {
                 setOrderNumber(data);
                 console.log(data);
             });
-            fetch("http://localhost:3001/management/fetch_job_number/")
+        fetch("http://localhost:3001/management/fetch_job_number/")
             .then((res) => res.json())
             .then((data) => {
                 setJobNumber(data);
                 console.log(data);
             });
+        console.log(OrderNumber);
         setIsOpen(true);
     }
-
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -677,7 +674,8 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Loading Completion Time Stamp
+                                                    Loading Completion Time
+                                                    Stamp
                                                 </label>
                                                 <input
                                                     type="date"
@@ -733,7 +731,8 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Unloading Completion Time Stamp
+                                                    Unloading Completion Time
+                                                    Stamp
                                                 </label>
                                                 <input
                                                     type="date"
