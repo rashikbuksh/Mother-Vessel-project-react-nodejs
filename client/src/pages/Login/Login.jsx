@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { sha256 } from "js-sha256";
 import { useCookies } from "react-cookie";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "../../utils/Loader";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,23 @@ export default function Login() {
     const [isInvalidPassword, setIsInvalidPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [cookies, setCookies, removeCookie] = useCookies();
+    const [token, setToken] = React.useState('');
+    
+    const generateToken=(length) =>{
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+    }
+
+    useEffect(() => {
+        setToken(generateToken(20));
+    }, []);
 
     const [user, setUser] = useState({
         username: "",
@@ -71,7 +88,8 @@ export default function Login() {
                 } else if (response.data === "wrong password") {
                     warning("Wrong password");
                 } else {
-                    setCookies("token", response.data.position); // your token
+                    console.log(token);
+                    setCookies("token", token+"-"+response.data.position); // your token
 
                     switch (response.data.position) {
                         case "admin":

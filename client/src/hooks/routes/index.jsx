@@ -3,9 +3,11 @@ import { useAuth } from "../auth";
 
 export function AccountsManagerRoutes({ children }) {
     const { cookies } = useAuth();
-    if (cookies.token === "undefined") return <Navigate to="/login" />;
+    const myArray = cookies.token.split("-");
+    const role = myArray[1];
+    if (role === "undefined") return <Navigate to="/login" />;
 
-    return cookies.token === "accounts-manager" || cookies.token === "admin" ? (
+    return role === "accounts-manager" || role === "admin" ? (
         children
     ) : (
         <Navigate to="/noaccess" />
@@ -14,9 +16,11 @@ export function AccountsManagerRoutes({ children }) {
 
 export function AccountsRoutes({ children }) {
     const { cookies } = useAuth();
-    if (cookies.token === "undefined") return <Navigate to="/login" />;
+    const myArray = cookies.token.split("-");
+    const role = myArray[1];
+    if (role === "undefined") return <Navigate to="/login" />;
 
-    return cookies.token === "accounts" || cookies.token === "admin" ? (
+    return role === "accounts" || role === "admin" ? (
         children
     ) : (
         <Navigate to="/noaccess" />
@@ -25,8 +29,10 @@ export function AccountsRoutes({ children }) {
 
 export function OperationRoutes({ children }) {
     const { cookies } = useAuth();
-    if (cookies.token === "undefined") return <Navigate to="/login" />;
-    return cookies.token === "operations" || cookies.token === "admin" ? (
+    const myArray = cookies.token.split("-");
+    const role = myArray[1];
+    if (role === "undefined") return <Navigate to="/login" />;
+    return role === "operations" || role === "admin" ? (
         children
     ) : (
         <Navigate to="/noaccess" />
@@ -35,6 +41,8 @@ export function OperationRoutes({ children }) {
 
 export function AdminRoutes({ children }) {
     const { cookies } = useAuth();
-    if (cookies.token === "undefined") return <Navigate to="/login" />;
-    return cookies.token === "admin" ? children : <Navigate to="/noaccess" />;
+    const myArray = cookies.token.split("-");
+    const role = myArray[1];
+    if (role === "undefined") return <Navigate to="/login" />;
+    return role === "admin" ? children : <Navigate to="/noaccess" />;
 }
