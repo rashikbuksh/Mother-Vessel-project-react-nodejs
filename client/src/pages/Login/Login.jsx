@@ -90,6 +90,9 @@ export default function Login() {
                 } else {
                     console.log(token);
                     localStorage.setItem('token', token);
+                    for(var i=0;i<response.data.position.length;i++){
+                        console.log(response.data.position.codePointAt(i));
+                    }
                     setCookies("token", token+"-"+response.data.position); // your token
 
                     switch (response.data.position) {
