@@ -15,6 +15,7 @@ export default function Login() {
     const [isLoading, setLoading] = useState(false);
     const [cookies, setCookies, removeCookie] = useCookies();
     const [token, setToken] = React.useState('');
+    const [substitutions, setSubstitutions] = React.useState(0);
     
     const generateToken=(length) =>{
         let result = '';
@@ -30,6 +31,7 @@ export default function Login() {
 
     useEffect(() => {
         setToken(generateToken(20));
+        setSubstitutions(Math.floor(Math.random() * 26));
     }, []);
 
     const [user, setUser] = useState({
@@ -88,12 +90,20 @@ export default function Login() {
                 } else if (response.data === "wrong password") {
                     warning("Wrong password");
                 } else {
-                    console.log(token);
-                    localStorage.setItem('token', token);
+                    //console.log(token);
+                    localStorage.setItem('token', token); //  token in local storage
+
+                    //console.log(substitutions);
+                    const new_ascii = [];
                     for(var i=0;i<response.data.position.length;i++){
-                        console.log(response.data.position.codePointAt(i));
+                        new_ascii.push(response.data.position.codePointAt(i)-substitutions);
+                        //console.log(response.data.position.codePointAt(i));
                     }
-                    setCookies("token", token+"-"+response.data.position); // your token
+                    //console.log(new_ascii);
+                    const new_string = String.fromCharCode(...new_ascii);
+                    //console.log(new_string);
+
+                    setCookies("token", token+"-"+new_string+"-"+substitutions); //  token
 
                     switch (response.data.position) {
                         case "admin":
