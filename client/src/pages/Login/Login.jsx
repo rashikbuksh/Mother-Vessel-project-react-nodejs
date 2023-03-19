@@ -89,6 +89,7 @@ export default function Login() {
                     warning("Wrong password");
                 } else {
                     console.log(token);
+                    localStorage.setItem('token', token);
                     setCookies("token", token+"-"+response.data.position); // your token
 
                     switch (response.data.position) {
