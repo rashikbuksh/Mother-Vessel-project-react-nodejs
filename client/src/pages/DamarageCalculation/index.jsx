@@ -223,7 +223,7 @@ const App = () => {
         event.preventDefault(); // prevent submit
 
         const editedDam = {
-            id: editFormData.id, //handleAddFormChange로 받은 새 데이터
+            id: editDamId, //handleAddFormChange로 받은 새 데이터
             order_number: editFormData.order_number,
             job_number: editFormData.job_number,
             date: editFormData.date,
@@ -250,7 +250,7 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
-        //console.log("Edited Dam ID : "+editedDam.id);
+        console.log("Edited Dam ID : "+editedDam.id);
 
         Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
