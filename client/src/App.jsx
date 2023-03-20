@@ -95,23 +95,21 @@ const PublicRoutesList = [
         link: "/noaccess",
         component: NoAccess,
     },
+    {
+        link: "/*",
+        component: NotFound,
+    },
+    {
+        link: "/test",
+        component: Table,
+    },
 ];
 
 const OperationRoutesList = [
     {
-        link: "/jobentry",
-        component: JobEntry,
-    },
-];
-
-const AccountsRoutesList = [
-    {
         link: "/recordentry",
         component: RecordEntry,
     },
-];
-
-const AccountsManagerRoutesList = [
     {
         link: "/currentstatus",
         component: CurrentStatus,
@@ -119,6 +117,28 @@ const AccountsManagerRoutesList = [
     {
         link: "/damaragecalculation",
         component: DamarageCalculation,
+    },
+];
+
+const AccountsRoutesList = [
+    {
+        link: "/jobentry",
+        component: JobEntry,
+    },
+];
+
+const AccountsManagerRoutesList = [
+    {
+        link: "/chqduelist",
+        component: ChqDueList,
+    },
+    {
+        link: "/chqapproval",
+        component: ChqApproval,
+    },
+    {
+        link: "/payment",
+        component: Payment,
     },
 ];
 
@@ -128,10 +148,6 @@ const AdminRoutesList = [
         component: AdminPanel,
     },
     {
-        link: "/jobentry",
-        component: JobEntry,
-    },
-    {
         link: "/recordentry",
         component: RecordEntry,
     },
@@ -140,14 +156,30 @@ const AdminRoutesList = [
         component: CurrentStatus,
     },
     {
-        link: "/damaragecalculation",
+        link: "/damaragecalculation", // problem is here ( not updating data)
         component: DamarageCalculation,
+    },
+    {
+        link: "/chqduelist",
+        component: ChqDueList,
+    },
+    {
+        link: "/chqapproval",
+        component: ChqApproval,
+    },
+    {
+        link: "/payment",
+        component: Payment,
+    },
+    {
+        link: "/jobentry",
+        component: JobEntry,
     },
 ];
 
 function App() {
     return (
-         <Routes>
+        <Routes>
             {OperationRoutesList.map((route, index) => (
                 <Route
                     key={index}
@@ -174,19 +206,6 @@ function App() {
                     }
                 />
             ))}
-            {AccountsManagerRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <AccountsManagerRoutes>
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        </AccountsManagerRoutes>
-                    }
-                />
-            ))}
             {AdminRoutesList.map((route, index) => (
                 <Route
                     key={index}
@@ -197,6 +216,19 @@ function App() {
                                 <route.component />
                             </Suspense>
                         </AdminRoutes>
+                    }
+                />
+            ))}
+            {AccountsManagerRoutesList.map((route, index) => (
+                <Route
+                    key={index}
+                    path={route.link}
+                    element={
+                        <AccountsManagerRoutes>
+                            <Suspense fallback={<Loader />}>
+                                <route.component />
+                            </Suspense>
+                        </AccountsManagerRoutes>
                     }
                 />
             ))}

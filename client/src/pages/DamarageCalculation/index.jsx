@@ -14,30 +14,30 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number", width: "w-16" },
-    { id: 3, name: "Job Number", width: "w-16" },
-    { id: 4, name: "Date", width: "w-16" },
-    { id: 5, name: "CP Number", width: "w-16" },
-    { id: 6, name: "Date From Charpotro", width: "w-16" },
-    { id: 7, name: "Commodity", width: "w-16" },
-    { id: 8, name: "Volume", width: "w-16" },
-    { id: 9, name: "LV Name", width: "w-16" },
-    { id: 10, name: "MV Name", width: "w-16" },
-    { id: 11, name: "Loading Location", width: "w-16" },
-    { id: 12, name: "Unloading Location", width: "w-16" },
-    { id: 13, name: "Loading Start Time Stamp", width: "w-16" },
-    { id: 14, name: "Loading Completion Time Stamp", width: "w-16" },
-    { id: 15, name: "Sailing Time Stamp", width: "w-16" },
-    { id: 16, name: "Duration Of Travel Time", width: "w-16" },
-    { id: 17, name: "Unloading Start Time Stamp", width: "w-16" },
-    { id: 18, name: "Unloading Completion Time Stamp", width: "w-16" },
-    { id: 19, name: "Others", width: "w-16" },
-    { id: 20, name: "Total Elapsed Time", width: "w-16" },
-    { id: 21, name: "Voyage Time", width: "w-16" },
-    { id: 22, name: "Free Time", width: "w-16" },
-    { id: 23, name: "Total Despatch", width: "w-16" },
-    { id: 24, name: "Daily Despatch", width: "w-16" },
-    { id: 25, name: "Actions", width: "w-16" },
+    { id: 2, name: "Order Number" },
+    { id: 3, name: "Job Number" },
+    { id: 4, name: "Date" },
+    { id: 5, name: "CP Number" },
+    { id: 6, name: "Date From Charpotro" },
+    { id: 7, name: "Commodity" },
+    { id: 8, name: "Volume" },
+    { id: 9, name: "LV Name" },
+    { id: 10, name: "MV Name" },
+    { id: 11, name: "Loading Location" },
+    { id: 12, name: "Unloading Location" },
+    { id: 13, name: "Loading Start Time Stamp" },
+    { id: 14, name: "Loading Completion Time Stamp" },
+    { id: 15, name: "Sailing Time Stamp" },
+    { id: 16, name: "Duration Of Travel Time" },
+    { id: 17, name: "Unloading Start Time Stamp" },
+    { id: 18, name: "Unloading Completion Time Stamp" },
+    { id: 19, name: "Others" },
+    { id: 20, name: "Total Elapsed Time" },
+    { id: 21, name: "Voyage Time" },
+    { id: 22, name: "Free Time" },
+    { id: 23, name: "Total Despatch" },
+    { id: 24, name: "Daily Despatch" },
+    { id: 25, name: "Actions" },
 ];
 
 const App = () => {
@@ -178,7 +178,7 @@ const App = () => {
             total_despatch: addFormData.total_despatch,
             daily_despatch: addFormData.daily_despatch,
         };
-        console.log("New Dam : "+addFormData.job_number);
+        console.log("New Dam : " + addFormData.job_number);
         // api call
         Axios.post("http://localhost:3001/management/insertdamarage", {
             order_number: newDam.order_number, //handleAddFormChange로 받은 새 데이터
@@ -507,13 +507,26 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <select 
-                                                name="order_number"
-                                                onChange={
-                                                    handleAddFormChange
-                                                }
+                                                <select
+                                                    name="order_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
                                                 >
-                                                    {OrderNumber.map((item) => (item === OrderNumber ? null : <option value={item.order_number}>{item.order_number}</option>))}
+                                                    {OrderNumber.map((item) =>
+                                                        item ===
+                                                        OrderNumber ? null : (
+                                                            <option
+                                                                value={
+                                                                    item.order_number
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.order_number
+                                                                }
+                                                            </option>
+                                                        )
+                                                    )}
                                                 </select>
                                             </div>
 
@@ -521,13 +534,26 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Job Number
                                                 </label>
-                                                <select 
-                                                name="job_number"
-                                                onChange={
-                                                    handleAddFormChange
-                                                }
+                                                <select
+                                                    name="job_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
                                                 >
-                                                    {JobNumber.map((item) => (item === JobNumber ? null : <option value={item.job_number}>{item.job_number}</option>))}
+                                                    {JobNumber.map((item) =>
+                                                        item ===
+                                                        JobNumber ? null : (
+                                                            <option
+                                                                value={
+                                                                    item.job_number
+                                                                }
+                                                            >
+                                                                {
+                                                                    item.job_number
+                                                                }
+                                                            </option>
+                                                        )
+                                                    )}
                                                 </select>
                                             </div>
 

@@ -4,11 +4,7 @@ import { RxReset } from "react-icons/rx";
 import { ImCancelCircle } from "react-icons/im";
 import { AiOutlineCheck } from "react-icons/ai";
 
-const ReadOnlyRow = ({
-    record,
-    handleEditClick,
-    handleDeleteClick,
-}) => {
+const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
     return (
         <>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
@@ -25,7 +21,20 @@ const ReadOnlyRow = ({
                 </span>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.date_from_charpotro}
+                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
+                    {new Date(record.date_from_charpotro).toLocaleString(
+                        "en-GB",
+                        {
+                            timeZone: "Asia/Dhaka",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                            day: "numeric",
+                            month: "numeric",
+                            year: "numeric",
+                        }
+                    )}
+                </span>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 {record.cp_number_from_charpotro}
@@ -43,7 +52,9 @@ const ReadOnlyRow = ({
                 {record.dest_to}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.commodity}
+                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
+                    {record.commodity}
+                </span>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 {record.capacity}
@@ -58,7 +69,17 @@ const ReadOnlyRow = ({
                 {record.LV_master_contact_number}
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.date_created}
+                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
+                    {new Date(record.date_created).toLocaleString("en-GB", {
+                        timeZone: "Asia/Dhaka",
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                    })}
+                </span>
             </td>
             <td className="whitespace-nowrap py-3 text-sm text-gray-700">
                 <button

@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -34,6 +34,7 @@ const TableHeader = [
 
 const App = () => {
     const [PayList, setPayList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getpayment")
@@ -123,7 +124,7 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newPay = {
-            job_number: addFormData.job_number,  //handleAddFormChange로 받은 새 데이터
+            job_number: addFormData.job_number, //handleAddFormChange로 받은 새 데이터
             LV_name: addFormData.LV_name,
             date_from_charpotro: addFormData.date_from_charpotro,
             MV_name: addFormData.MV_name,
@@ -146,7 +147,7 @@ const App = () => {
 
         // api call
         Axios.post("http://localhost:3001/management/insertpayment", {
-            job_number: newPay.job_number,  //handleAddFormChange로 받은 새 데이터
+            job_number: newPay.job_number, //handleAddFormChange로 받은 새 데이터
             LV_name: newPay.LV_name,
             date_from_charpotro: newPay.date_from_charpotro,
             MV_name: newPay.MV_name,
@@ -296,20 +297,6 @@ const App = () => {
         setIsOpen(true);
     }
 
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
-
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
@@ -318,7 +305,8 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Pay Approval <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Pay Approval{" "}
+                    <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"

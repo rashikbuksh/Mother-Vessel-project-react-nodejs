@@ -6,12 +6,14 @@ const EditTableRow = ({
     handleEditFormChange,
     handleCancelClick,
 }) => {
+    var clsName =
+        "w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
             <td></td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Enter LV name..."
@@ -23,17 +25,17 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="date"
                     required="required"
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro}
+                    value={editFormData.date_from_charpotro.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Commodity..."
@@ -43,8 +45,8 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="LA"
@@ -54,8 +56,8 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Destination From..."
@@ -65,8 +67,8 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Destination To..."
@@ -75,10 +77,10 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            
+
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Current Location..."
@@ -88,8 +90,8 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                <input
+                    className={clsName}
                     type="text"
                     required="required"
                     placeholder="Remark..."
@@ -98,9 +100,9 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-
-            <td />
-            <td />
+            <td>
+                <span className="text-md text-black">Auto generated</span>
+            </td>
             <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
