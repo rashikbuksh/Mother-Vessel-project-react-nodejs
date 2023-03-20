@@ -15,17 +15,17 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number", width: "w-16" },
-    { id: 3, name: "Importer Name", width: "w-16" },
-    { id: 4, name: "Mother Vessel Name", width: "w-16" },
-    { id: 5, name: "ETA", width: "w-16" },
-    { id: 6, name: "Commodity", width: "w-16" },
-    { id: 7, name: "MV Location", width: "w-16" },
-    { id: 8, name: "BL Quantity", width: "w-16" },
-    { id: 9, name: "Stevedore Name", width: "w-16" },
-    { id: 10, name: "Stevedore Contact Number", width: "w-16" },
-    { id: 11, name: "Entry Time", width: "w-16" },
-    { id: 12, name: "Actions", width: "w-16" },
+    { id: 2, name: "Order Number" },
+    { id: 3, name: "Importer Name" },
+    { id: 4, name: "Mother Vessel Name" },
+    { id: 5, name: "ETA" },
+    { id: 6, name: "Commodity" },
+    { id: 7, name: "MV Location" },
+    { id: 8, name: "BL Quantity" },
+    { id: 9, name: "Stevedore Name" },
+    { id: 10, name: "Stevedore Contact Number" },
+    { id: 11, name: "Entry Time" },
+    { id: 12, name: "Actions" },
 ];
 
 const App = () => {
@@ -284,7 +284,7 @@ const App = () => {
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
-                <table className="w-full rounded-md">
+                <table className="w-full table-auto overflow-x-auto">
                     <thead className="rounded-md border-b-2 border-gray-400 bg-orange-200">
                         <tr>
                             {TableHeader.map((header) => (
@@ -297,13 +297,13 @@ const App = () => {
                             ))}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredJob.length === 0 && query !== "" ? (
-                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                                Nothing found.
-                            </div>
-                        ) : (
-                            filteredJob.map((job, idx) => (
+                    {filteredJob.length === 0 && query !== "" ? (
+                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                            Nothing found.
+                        </div>
+                    ) : (
+                        <tbody className="divide-y divide-gray-100 rounded-md">
+                            {filteredJob.map((job, idx) => (
                                 <tr
                                     key={job.id}
                                     className={`bg-white ${
@@ -330,9 +330,9 @@ const App = () => {
                                         />
                                     )}
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
+                            ))}
+                        </tbody>
+                    )}
                 </table>
             </form>
 

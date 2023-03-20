@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -31,6 +31,7 @@ const TableHeader = [
 
 const App = () => {
     const [ChqList, setChqList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getchqlist")
@@ -271,20 +272,6 @@ const App = () => {
     function openModal() {
         setIsOpen(true);
     }
-
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (

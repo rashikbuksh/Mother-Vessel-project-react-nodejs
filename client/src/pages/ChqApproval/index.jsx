@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
+import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -14,28 +14,29 @@ import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number", width: "w-16" },
-    { id: 3, name: "Job Number", width: "w-16" },
-    { id: 4, name: "Date From Charpotro", width: "w-16" },
-    { id: 5, name: "CP Number From Charpotro", width: "w-16" },
-    { id: 6, name: "LA Name", width: "w-16" },
-    { id: 7, name: "LV Name", width: "w-16" },
-    { id: 8, name: "MV Name", width: "w-16" },
-    { id: 9, name: "Destination From", width: "w-16" },
-    { id: 10, name: "Destination To", width: "w-16" },
-    { id: 11, name: "Capacity in Tons", width: "w-16" },
-    { id: 12, name: "Rate", width: "w-16" },
-    { id: 13, name: "60 Percent Payment", width: "w-16" },
-    { id: 14, name: "40 Percent Payment", width: "w-16" },
-    { id: 15, name: "Damarage", width: "w-16" },
-    { id: 16, name: "2nd Trip", width: "w-16" },
-    { id: 17, name: "3rd Trip", width: "w-16" },
-    { id: 18, name: "Direct Trip", width: "w-16" },
-    { id: 19, name: "Actions", width: "w-16" },
+    { id: 2, name: "Order Number" },
+    { id: 3, name: "Job Number" },
+    { id: 4, name: "Date From Charpotro" },
+    { id: 5, name: "CP Number From Charpotro" },
+    { id: 6, name: "LA Name" },
+    { id: 7, name: "LV Name" },
+    { id: 8, name: "MV Name" },
+    { id: 9, name: "Destination From" },
+    { id: 10, name: "Destination To" },
+    { id: 11, name: "Capacity in Tons" },
+    { id: 12, name: "Rate" },
+    { id: 13, name: "60 Percent Payment" },
+    { id: 14, name: "40 Percent Payment" },
+    { id: 15, name: "Damarage" },
+    { id: 16, name: "2nd Trip" },
+    { id: 17, name: "3rd Trip" },
+    { id: 18, name: "Direct Trip" },
+    { id: 19, name: "Actions" },
 ];
 
 const App = () => {
     const [ChqList, setChqList] = useState([]);
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getchqapproval")
@@ -312,20 +313,6 @@ const App = () => {
         setIsOpen(true);
     }
 
-    // logout
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "operations") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
-    const logout = () => {
-        localStorage.setItem("loggedin", "false");
-        localStorage.removeItem("user_id");
-        localStorage.removeItem("user_type");
-        window.location.href = "/login";
-    };
-
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
@@ -334,7 +321,8 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Chq Approval <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Chq Approval{" "}
+                    <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"

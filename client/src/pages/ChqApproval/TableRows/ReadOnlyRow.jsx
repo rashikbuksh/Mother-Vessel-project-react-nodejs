@@ -1,75 +1,42 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
+import DateTime from "../../../utils/DateTime";
 
-const ReadOnlyRow = ({
-    Chq,
-    handleEditClick,
-    handleDeleteClick,
-}) => {
+const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
+    var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <a href="#" className="font-bold text-blue-500 hover:underline">
                     {Chq.id}
                 </a>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.order_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{Chq.order_number}</td>
+            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {Chq.job_number}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.date_from_charpotro}
+            <td className={clsName}>
+                <DateTime date={Chq.date_from_charpotro} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={`text-center ${clsName}`}>
                 {Chq.cp_number_from_charpotro}
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.LA_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.LV_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.MV_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.dest_from}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.dest_to}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.capacity_ton}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.rate}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.sixty_percent_payment}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.forty_percent_payment}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.damarage}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.second_trip}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.third_trip}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.direct_trip}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{Chq.LA_name}</td>
+            <td className={clsName}>{Chq.LV_name}</td>
+            <td className={clsName}>{Chq.MV_name}</td>
+            <td className={clsName}>{Chq.dest_from}</td>
+            <td className={clsName}>{Chq.dest_to}</td>
+            <td className={`text-center ${clsName}`}>{Chq.capacity_ton}</td>
+            <td className={`text-center ${clsName}`}>{Chq.rate}</td>
+            <td className={clsName}>{Chq.sixty_percent_payment}</td>
+            <td className={clsName}>{Chq.forty_percent_payment}</td>
+            <td className={clsName}>{Chq.damarage}</td>
+            <td className={clsName}>{Chq.second_trip}</td>
+            <td className={clsName}>{Chq.third_trip}</td>
+            <td className={clsName}>{Chq.direct_trip}</td>
+            <td className={clsName}>
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

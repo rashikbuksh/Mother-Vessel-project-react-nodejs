@@ -22,7 +22,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
@@ -33,18 +33,18 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="date"
                     required="required"
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro}
+                    value={editFormData.date_from_charpotro.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
@@ -55,7 +55,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="text"
                     required="required"
@@ -66,7 +66,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -77,18 +77,18 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="date"
                     required="required"
                     placeholder="Enter chq issue date..."
                     name="chq_issue_date"
-                    value={editFormData.chq_issue_date}
+                    value={editFormData.chq_issue_date.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -99,7 +99,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -110,7 +110,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -121,7 +121,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -132,7 +132,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -143,7 +143,7 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="number"
                     required="required"
@@ -154,24 +154,24 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="date"
                     required="required"
                     placeholder="Enter payment chq date..."
                     name="payment_chq_date"
-                    value={editFormData.payment_chq_date}
+                    value={editFormData.payment_chq_date.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-            <input
+                <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                     type="date"
                     required="required"
                     placeholder="Enter added date..."
                     name="added_date"
-                    value={editFormData.added_date}
+                    value={editFormData.added_date.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>

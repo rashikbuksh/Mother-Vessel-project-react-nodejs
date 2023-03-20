@@ -4,51 +4,42 @@ import { RxReset } from "react-icons/rx";
 import { ImCancelCircle } from "react-icons/im";
 import { AiOutlineCheck } from "react-icons/ai";
 
-const ReadOnlyRow = ({
-    job,
-    handleEditClick,
-    handleDeleteClick,
-}) => {
+const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
+    var clsName = "whitespace-nowrap py-4 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                <a href="#" className="font-bold text-blue-500 hover:underline">
+            <td className={clsName}>
+                <span className="font-bold text-blue-500 hover:underline">
                     {job.id}
-                </a>
+                </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.order_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{job.order_number}</td>
+            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {job.importer_name}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.mother_vessel_name}
+            <td className={clsName}>{job.mother_vessel_name}</td>
+            <td className={clsName}>{job.eta}</td>
+            <td className={clsName}>{job.commodity}</td>
+            <td className={clsName}>{job.mv_location}</td>
+            <td className={clsName}>{job.bl_quantity}</td>
+            <td className={clsName}>{job.stevedore_name}</td>
+            <td className={clsName}>{job.stevedore_contact_number}</td>
+            <td className={clsName}>
+                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
+                    {new Date(job.time_stamp).toLocaleString("en-GB", {
+                        timeZone: "Asia/Dhaka",
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                    })}
+                </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.eta}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.commodity}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.mv_location}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.bl_quantity}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.stevedore_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.stevedore_contact_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {job.time_stamp}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td>
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"
