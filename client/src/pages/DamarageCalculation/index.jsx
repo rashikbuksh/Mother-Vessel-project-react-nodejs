@@ -250,7 +250,7 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
-        console.log("Edited Dam ID : "+editedDam.id);
+        console.log("Edited Dam ID : " + editedDam.id);
 
         Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
@@ -395,7 +395,7 @@ const App = () => {
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
-                    placeholder="Search for name..."
+                    placeholder="Search for anything..."
                     type="search"
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}

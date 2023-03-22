@@ -2,7 +2,6 @@ import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
-import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
@@ -234,18 +233,17 @@ const App = () => {
         setJobList(newJobList);
     };
 
-    // search filter
+    // search filter for all fields
     const [query, setQuery] = useState("");
 
-    const filteredJob =
-        query === ""
-            ? JobList
-            : JobList.filter((job) =>
-                  job.order_number
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
+    const data = Object.values(JobList);
+    function search(items) {
+        return items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter].toString().toLowerCase().includes(query)
+            )
+        );
+    }
 
     // modal for add job
     let [isOpen, setIsOpen] = useState(false);
@@ -270,7 +268,7 @@ const App = () => {
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
-                    placeholder="Search for name..."
+                    placeholder="Search for anything..."
                     type="search"
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
@@ -297,13 +295,13 @@ const App = () => {
                             ))}
                         </tr>
                     </thead>
-                    {filteredJob.length === 0 && query !== "" ? (
+                    {search(data).length === 0 && query !== "" ? (
                         <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                             Nothing found.
                         </div>
                     ) : (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {filteredJob.map((job, idx) => (
+                            {search(data).map((job, idx) => (
                                 <tr
                                     key={job.id}
                                     className={`bg-white ${

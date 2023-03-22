@@ -1,60 +1,34 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
-
-const ReadOnlyRow = ({
-    Chq,
-    handleEditClick,
-    handleDeleteClick,
-}) => {
+import DateTime from "../../../utils/DateTime";
+const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
+    var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <a href="#" className="font-bold text-blue-500 hover:underline">
                     {Chq.id}
                 </a>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.order_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{Chq.order_number}</td>
+            <td className={clsName}>{Chq.LA}</td>
+            <td className={clsName}>{Chq.LV_name}</td>
+            <td className={`text-center ${clsName}`}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
-                    {Chq.LA}
+                    {Chq.commodity}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.LV_name}
+            <td className={`text-center ${clsName}`}>{Chq.mode}</td>
+            <td className={`text-center ${clsName}`}>{Chq.chq_amount}</td>
+            <td className={`text-center ${clsName}`}>{Chq.part_pay}</td>
+            <td className={`text-center ${clsName}`}>{Chq.balance}</td>
+            <td className={clsName}>
+                <DateTime date={Chq.chq_issue_date} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.commodity}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.mode}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.Chq_amount}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.part_pay}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.balance}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.Chq_issue_date}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.init_amount}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.payment}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Chq.final_amount}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={`text-center ${clsName}`}>{Chq.init_amount}</td>
+            <td className={`text-center ${clsName}`}>{Chq.payment}</td>
+            <td className={`text-center ${clsName}`}>{Chq.final_amount}</td>
+            <td className={clsName}>
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

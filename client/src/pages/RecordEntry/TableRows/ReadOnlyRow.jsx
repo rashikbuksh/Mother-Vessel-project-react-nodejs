@@ -1,87 +1,45 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
+import DateTime from "../../../utils/DateTime";
 
 const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
+    var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <a href="#" className="font-bold text-blue-500 hover:underline">
                     {record.id}
                 </a>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.order_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{record.order_number}</td>
+            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {record.job_number}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
-                    {new Date(record.date_from_charpotro).toLocaleString(
-                        "en-GB",
-                        {
-                            timeZone: "Asia/Dhaka",
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                            day: "numeric",
-                            month: "numeric",
-                            year: "numeric",
-                        }
-                    )}
-                </span>
+            <td className={clsName}>
+                <DateTime date={record.date_from_charpotro} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={`text-center ${clsName}`}>
                 {record.cp_number_from_charpotro}
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LA_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.dest_from}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.dest_to}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{record.LA_name}</td>
+            <td className={clsName}>{record.LV_name}</td>
+            <td className={clsName}>{record.dest_from}</td>
+            <td className={clsName}>{record.dest_to}</td>
+            <td className={`text-center ${clsName}`}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {record.commodity}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.capacity}
+            <td className={`text-center ${clsName}`}>{record.capacity}</td>
+            <td className={`text-center ${clsName}`}>{record.rate}</td>
+            <td className={clsName}>{record.LV_master_name}</td>
+            <td className={clsName}>{record.LV_master_contact_number}</td>
+            <td className={clsName}>
+                <DateTime date={record.date_created} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.rate}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_master_name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {record.LV_master_contact_number}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
-                    {new Date(record.date_created).toLocaleString("en-GB", {
-                        timeZone: "Asia/Dhaka",
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                        day: "numeric",
-                        month: "numeric",
-                        year: "numeric",
-                    })}
-                </span>
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

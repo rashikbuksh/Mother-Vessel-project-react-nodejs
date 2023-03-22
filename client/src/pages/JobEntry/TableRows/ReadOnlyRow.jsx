@@ -1,8 +1,6 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
+import DateTime from "../../../utils/DateTime";
 
 const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-4 text-sm text-gray-700";
@@ -20,24 +18,27 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
                 </span>
             </td>
             <td className={clsName}>{job.mother_vessel_name}</td>
-            <td className={clsName}>{job.eta}</td>
-            <td className={clsName}>{job.commodity}</td>
+            <td className={clsName}>
+                <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                    {new Date(job.eta).toLocaleString("en-GB", {
+                        timeZone: "Asia/Dhaka",
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                    })}
+                </span>
+            </td>
+            <td className={`text-center ${clsName}`}>
+                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
+                    {job.commodity}
+                </span>
+            </td>
             <td className={clsName}>{job.mv_location}</td>
             <td className={clsName}>{job.bl_quantity}</td>
             <td className={clsName}>{job.stevedore_name}</td>
             <td className={clsName}>{job.stevedore_contact_number}</td>
             <td className={clsName}>
-                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
-                    {new Date(job.time_stamp).toLocaleString("en-GB", {
-                        timeZone: "Asia/Dhaka",
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                        day: "numeric",
-                        month: "numeric",
-                        year: "numeric",
-                    })}
-                </span>
+                <DateTime date={job.time_stamp} />
             </td>
             <td>
                 <button
