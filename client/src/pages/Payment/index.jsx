@@ -42,7 +42,7 @@ const App = () => {
             .then((data) => {
                 setPayList(data);
             });
-    }, [PayList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator

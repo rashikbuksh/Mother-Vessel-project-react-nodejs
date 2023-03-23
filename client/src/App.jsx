@@ -32,7 +32,6 @@ const Payment = lazy(() => import("./pages/Payment"));
 // table
 const Table = lazy(() => import("./components/Tables"));
 
-
 const PublicRoutesList = [
     {
         link: "/login",
@@ -103,7 +102,7 @@ const AdminRoutesList = [
         component: CurrentStatus,
     },
     {
-        link: "/damaragecalculation", // problem is here ( not updating data)
+        link: "/damaragecalculation",
         component: DamarageCalculation,
     },
     {

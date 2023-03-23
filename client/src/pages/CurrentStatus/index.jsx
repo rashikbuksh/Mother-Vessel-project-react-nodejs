@@ -36,7 +36,7 @@ const App = () => {
             .then((data) => {
                 setCurrentStatus(data);
             });
-    }, [CurrentStatus]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator

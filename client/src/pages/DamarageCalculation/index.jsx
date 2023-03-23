@@ -53,7 +53,7 @@ const App = () => {
             .then((data) => {
                 setDamList(data);
             });
-    }, [DamList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator

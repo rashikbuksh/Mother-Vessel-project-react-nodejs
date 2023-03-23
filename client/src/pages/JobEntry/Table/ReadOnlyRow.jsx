@@ -41,7 +41,7 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>
                 <DateTime date={job.time_stamp} />
             </td>
-            <td className="flex items-center justify-center">
+            <td className="flex items-center justify-between">
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 export const useSortableTable = (data, columns) => {
-    // set data to state
     const [tableData, setTableData] = useState([]);
-    const sortedData = [...data].sort((a, b) => {
-        const filterColumn = columns.filter((column) => column.sortbyOrder);
 
-        // Merge all array objects into single object and extract accessor and sortbyOrder keys
-        let { accessor = "id", sortbyOrder = "asc" } = Object.assign(
+    const sortedData = [...data].sort((a, b) => {
+        const filterColumn = columns.filter((column) => column.sortByOrder);
+
+        // Merge all array objects into single object and extract accessor and sortByOrder keys
+        let { accessor = "id", sortByOrder = "asc" } = Object.assign(
             {},
             ...filterColumn
         );
@@ -22,7 +22,7 @@ export const useSortableTable = (data, columns) => {
                 numeric: true,
             });
 
-        return sortbyOrder === "asc" ? ascending : -ascending;
+        return sortByOrder === "asc" ? ascending : -ascending;
     });
 
     if (tableData.length !== sortedData.length) setTableData(sortedData);

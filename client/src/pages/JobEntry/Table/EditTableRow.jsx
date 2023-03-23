@@ -113,7 +113,7 @@ const EditTableRow = ({
             <td>
                 <span className="text-md text-black">Auto generated</span>
             </td>
-            <td className="flex items-center justify-center">
+            <td className="flex items-center justify-between">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

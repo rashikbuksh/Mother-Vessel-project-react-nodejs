@@ -4,20 +4,63 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { sha256, sha224 } from "js-sha256";
+import { sha256 } from "js-sha256";
+
+import { useAuth } from "../../hooks/useAuth";
+
+const TableHeader = [
+    {
+        id: 1,
+        name: "Id",
+        accessor: "id",
+        sortable: true,
+        width: "w-8",
+    },
+    {
+        id: 2,
+        name: "Name",
+        accessor: "name",
+        sortable: true,
+    },
+    {
+        id: 3,
+        name: "Username",
+        accessor: "username",
+        sortable: true,
+    },
+    {
+        id: 4,
+        name: "Position",
+        accessor: "position",
+        sortable: true,
+    },
+    {
+        id: 5,
+        name: "Department",
+        accessor: "department",
+        sortable: true,
+    },
+    {
+        id: 6,
+        name: "Status",
+        accessor: "status",
+        sortable: true,
+    },
+    {
+        id: 7,
+        name: "Reset Password",
+        accessor: "reset_password",
+        sortable: false,
+    },
+    { id: 8, name: "Actions" },
+];
 
 export default function AdminPanel() {
     const navigate = useNavigate();
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [userList, setUserList] = useState([]);
-
-    if (localStorage.getItem("user_type") == "admin") {
-    } else if (localStorage.getItem("user_type") == "Manager") {
-        window.location.href = "/";
-    } else {
-        window.location.href = "/login";
-    }
+    const { logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3001/admin/getusers")
@@ -25,16 +68,8 @@ export default function AdminPanel() {
             .then((data) => {
                 setUserList(data);
             });
-    }, [userList]);
+    }, []);
 
-    const logout = () => {
-        localStorage.removeItem("user");
-        window.location.href = "/login";
-    };
-
-    const redirectToAddUser = () => {
-        navigate("/adduser");
-    };
     const enable_user = (userid) => {
         Axios.post("http://localhost:3001/admin/enableuser/", {
             user_id: userid,

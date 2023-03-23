@@ -6,6 +6,8 @@ import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
+import { useSortableTable } from "../../components/Table/useSortableTable";
+import TableHead from "../../components/Table/TableHead";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -14,19 +16,68 @@ import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
-    { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Name" },
-    { id: 3, name: "Username" },
-    { id: 4, name: "Position", width: "w-36" },
-    { id: 5, name: "Department", width: "w-24" },
-    { id: 6, name: "Status", width: "w-16" },
-    { id: 7, name: "Reset Password", width: "w-16" },
-    { id: 8, name: "Actions", width: "w-16" },
+    {
+        id: 1,
+        name: "Id",
+        accessor: "id",
+        sortable: true,
+        width: "w-8",
+    },
+    {
+        id: 2,
+        name: "Name",
+        accessor: "name",
+        sortable: true,
+    },
+    {
+        id: 3,
+        name: "Username",
+        accessor: "username",
+        sortable: true,
+    },
+    {
+        id: 4,
+        name: "Position",
+        accessor: "position",
+        sortable: true,
+    },
+    {
+        id: 5,
+        name: "Department",
+        accessor: "department",
+        sortable: true,
+    },
+    {
+        id: 6,
+        name: "Status",
+        accessor: "status",
+        sortable: true,
+    },
+    {
+        id: 7,
+        name: "Reset Password",
+        accessor: "reset_password",
+        sortable: false,
+    },
+    { id: 8, name: "Actions" },
 ];
 
 const App = () => {
     const [userList, setUserList] = useState([]);
+    const [tableData, handleSorting] = useSortableTable(userList, TableHeader); // data, columns
     const { logout } = useAuth();
+
+    // search filter for all fields
+    const [query, setQuery] = useState("");
+
+    const data = Object.values(userList);
+    function search(items) {
+        return items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter].toString().toLowerCase().includes(query)
+            )
+        );
+    }
 
     useEffect(() => {
         fetch("http://localhost:3001/admin/getusers")
@@ -170,6 +221,7 @@ const App = () => {
             });
             closeResPassModal();
             success("Password reset successfully");
+            window.location.reload();
         } else {
             warning("Password does not match");
         }
@@ -202,6 +254,7 @@ const App = () => {
         setUserList(newUserList);
         setEditContactId(null);
         success("User updated successfully");
+        window.location.reload();
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -238,19 +291,6 @@ const App = () => {
         newUserList.splice(index, 1);
         setUserList(newUserList);
     };
-
-    // search filter
-    const [query, setQuery] = useState("");
-
-    const filteredPeople =
-        query === ""
-            ? userList
-            : userList.filter((user) =>
-                  user.name
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
 
     // modal for add user
     let [isOpen, setIsOpen] = useState(false);
@@ -316,26 +356,18 @@ const App = () => {
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
-                <table className="w-full rounded-md">
-                    <thead className="rounded-md border-b-2 border-gray-400 bg-orange-200">
-                        <tr>
-                            {TableHeader.map((header) => (
-                                <th
-                                    key={header.id}
-                                    className={`border-r-2 px-2 text-left text-sm font-semibold tracking-wide ${header.width}`}
-                                >
-                                    {header.name}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredPeople.length === 0 && query !== "" ? (
-                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                                Nothing found.
-                            </div>
-                        ) : (
-                            filteredPeople.map((user, idx) => (
+                <table className="table">
+                    <TableHead
+                        columns={TableHeader}
+                        handleSorting={handleSorting}
+                    />
+                    {search(tableData).length === 0 && query !== "" ? (
+                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                            Nothing found.
+                        </div>
+                    ) : (
+                        <tbody className="divide-y divide-gray-100 rounded-md">
+                            {search(tableData).map((user, idx) => (
                                 <tr
                                     key={user.id}
                                     className={`bg-white ${
@@ -365,9 +397,9 @@ const App = () => {
                                         />
                                     )}
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
+                            ))}
+                        </tbody>
+                    )}
                 </table>
             </form>
 

@@ -41,7 +41,7 @@ const App = () => {
             .then((data) => {
                 setRecordList(data);
             });
-    }, [RecordList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator

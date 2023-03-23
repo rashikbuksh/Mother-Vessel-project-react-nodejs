@@ -1,12 +1,13 @@
 import React, { useState, Fragment, useEffect, Suspense } from "react";
+import Axios from "axios";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
-import TableHead from "./Table/TableHead";
-import Axios from "axios";
+import TableHead from "../../components/Table/TableHead";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
-import { useSortableTable } from "../../hooks/useSortableTable.jsx";
+import { useSortableTable } from "../../components/Table/useSortableTable";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -20,7 +21,6 @@ const TableHeader = [
         name: "Id",
         accessor: "id",
         sortable: true,
-        width: "w-8",
     },
     {
         id: 2,
@@ -45,7 +45,7 @@ const TableHeader = [
         name: "ETA",
         accessor: "eta",
         sortable: true,
-        sortbyOrder: "desc",
+        sortByOrder: "desc",
     },
     {
         id: 6,
@@ -88,15 +88,55 @@ const TableHeader = [
 
 const App = () => {
     const [JobList, setJobList] = useState([]);
+    const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns
     const { logout } = useAuth();
 
-    useEffect(() => {
-        fetch("http://localhost:3001/management/getjobentry")
-            .then((res) => res.json())
-            .then((data) => {
-                setJobList(data);
+    // infinity scroll
+    let [isNext, isNextFunc] = useState(false);
+    let [pageCount, setCount] = useState(1);
+    let count = 10 % 60;
+    var s;
+    var keys = [];
+    const fetchData = () => {
+        Axios.get(`http://localhost:3001/management/getjobentry`)
+            .then((response) => {
+                setJobList([...JobList, ...response.data]);
+                s = JobList.keys();
+                for (var k in s) keys.push(k);
+                console.log(JobList);
+                isNextFunc(true);
+            })
+            .catch((error) => {
+                console.log(error);
             });
+    };
+    function fetchMoreData() {
+        setCount(pageCount + 1);
+        fetchData();
+    }
+    useEffect(() => {
+        fetchData();
     }, []);
+
+    // search filter for all fields
+    const [query, setQuery] = useState("");
+
+    const data = Object.values(JobList);
+    function search(items) {
+        return items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter].toString().toLowerCase().includes(query)
+            )
+        );
+    }
+
+    // useEffect(() => {
+    //     fetch("http://localhost:3001/management/getjobentry")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setJobList(data);
+    //         });
+    // }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -292,25 +332,6 @@ const App = () => {
         setJobList(newJobList);
     };
 
-    // search filter for all fields
-    const [query, setQuery] = useState("");
-
-    const data = Object.values(JobList);
-    function search(items) {
-        return items.filter((item) =>
-            Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter].toString().toLowerCase().includes(query)
-            )
-        );
-    }
-
-    const [tableData, handleSorting] = useSortableTable(
-        // JobList?.length > 0 ? JobList : [],
-        JobList,
-        TableHeader
-    ); // data, columns
-
-    console.log(tableData);
     // modal for add job
     let [isOpen, setIsOpen] = useState(false);
 
@@ -348,48 +369,57 @@ const App = () => {
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
-                <table className="table">
-                    <TableHead
-                        columns={TableHeader}
-                        handleSorting={handleSorting}
-                    />
-                    {search(tableData).length === 0 && query !== "" ? (
-                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                            Nothing found.
-                        </div>
-                    ) : (
-                        <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((job, idx) => (
-                                <tr
-                                    key={job.id}
-                                    className={`bg-white ${
-                                        idx % 2 === 1 ? "bg-gray-200" : ""
-                                    }`}
-                                >
-                                    {editJobId === job.id ? (
-                                        <EditableRow
-                                            editFormData={editFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
-                                        />
-                                    ) : (
-                                        <ReadOnlyRow
-                                            job={job}
-                                            handleEditClick={handleEditClick}
-                                            handleDeleteClick={
-                                                handleDeleteClick
-                                            }
-                                        />
-                                    )}
-                                </tr>
-                            ))}
-                        </tbody>
-                    )}
-                </table>
+                <InfiniteScroll
+                    dataLength={tableData.length}
+                    next={fetchMoreData}
+                    hasMore={isNext}
+                    loader={<div>loading....</div>}
+                >
+                    <table className="table">
+                        <TableHead
+                            columns={TableHeader}
+                            handleSorting={handleSorting}
+                        />
+                        {search(tableData).length === 0 && query !== "" ? (
+                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                                Nothing found.
+                            </div>
+                        ) : (
+                            <tbody className="divide-y divide-gray-100 rounded-md">
+                                {search(tableData).map((job, idx) => (
+                                    <tr
+                                        key={job.id}
+                                        className={`bg-white ${
+                                            idx % 2 === 1 ? "bg-gray-200" : ""
+                                        }`}
+                                    >
+                                        {editJobId === job.id ? (
+                                            <EditableRow
+                                                editFormData={editFormData}
+                                                handleEditFormChange={
+                                                    handleEditFormChange
+                                                }
+                                                handleCancelClick={
+                                                    handleCancelClick
+                                                }
+                                            />
+                                        ) : (
+                                            <ReadOnlyRow
+                                                job={job}
+                                                handleEditClick={
+                                                    handleEditClick
+                                                }
+                                                handleDeleteClick={
+                                                    handleDeleteClick
+                                                }
+                                            />
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        )}
+                    </table>
+                </InfiniteScroll>
             </form>
 
             {/* add item modal */}

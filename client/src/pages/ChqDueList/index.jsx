@@ -39,7 +39,7 @@ const App = () => {
             .then((data) => {
                 setChqList(data);
             });
-    }, [ChqList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
