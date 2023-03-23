@@ -1,10 +1,12 @@
 import React, { useState, Fragment, useEffect, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import ReadOnlyRow from "./TableRows/ReadOnlyRow";
-import EditableRow from "./TableRows/EditTableRow";
+import ReadOnlyRow from "./Table/ReadOnlyRow";
+import EditableRow from "./Table/EditTableRow";
+import TableHead from "./Table/TableHead";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
+import { useSortableTable } from "../../hooks/useSortableTable.jsx";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -13,17 +15,74 @@ import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
-    { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number" },
-    { id: 3, name: "Importer Name" },
-    { id: 4, name: "Mother Vessel Name" },
-    { id: 5, name: "ETA" },
-    { id: 6, name: "Commodity" },
-    { id: 7, name: "MV Location" },
-    { id: 8, name: "BL Quantity" },
-    { id: 9, name: "Stevedore Name" },
-    { id: 10, name: "Stevedore Contact Number" },
-    { id: 11, name: "Entry Time" },
+    {
+        id: 1,
+        name: "Id",
+        accessor: "id",
+        sortable: true,
+        width: "w-8",
+    },
+    {
+        id: 2,
+        name: "Order Number",
+        accessor: "order_number",
+    },
+    {
+        id: 3,
+        name: "Importer Name",
+        accessor: "importer_name",
+        sortable: true,
+    },
+    {
+        id: 4,
+        name: "Mother Vessel Name",
+        accessor: "mother_vessel_name",
+        sortable: true,
+    },
+
+    {
+        id: 5,
+        name: "ETA",
+        accessor: "eta",
+        sortable: true,
+        sortbyOrder: "desc",
+    },
+    {
+        id: 6,
+        name: "Commodity",
+        accessor: "commodity",
+        sortable: true,
+    },
+    {
+        id: 7,
+        name: "MV Location",
+        accessor: "mv_location",
+        sortable: true,
+    },
+    {
+        id: 8,
+        name: "BL Quantity",
+        accessor: "bl_quantity",
+        sortable: true,
+    },
+    {
+        id: 9,
+        name: "Stevedore Name",
+        accessor: "stevedore_name",
+        sortable: true,
+    },
+    {
+        id: 10,
+        name: "Stevedore Contact Number",
+        accessor: "stevedore_contact_number",
+        sortable: true,
+    },
+    {
+        id: 11,
+        name: "Entry Time",
+        accessor: "entry_time",
+        sortable: true,
+    },
     { id: 12, name: "Actions" },
 ];
 
@@ -37,7 +96,7 @@ const App = () => {
             .then((data) => {
                 setJobList(data);
             });
-    }, [JobList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -150,7 +209,7 @@ const App = () => {
         closeModal();
 
         // toast
-        success("job added successfully");
+        success("Job added successfully");
     };
 
     //save modified data (App component)
@@ -245,6 +304,13 @@ const App = () => {
         );
     }
 
+    const [tableData, handleSorting] = useSortableTable(
+        // JobList?.length > 0 ? JobList : [],
+        JobList,
+        TableHeader
+    ); // data, columns
+
+    console.log(tableData);
     // modal for add job
     let [isOpen, setIsOpen] = useState(false);
 
@@ -282,26 +348,18 @@ const App = () => {
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
-                <table className="w-full table-auto overflow-x-auto">
-                    <thead className="rounded-md border-b-2 border-gray-400 bg-orange-200">
-                        <tr>
-                            {TableHeader.map((header) => (
-                                <th
-                                    key={header.id}
-                                    className={`border-r-2 px-2 text-left text-sm font-semibold tracking-wide ${header.width}`}
-                                >
-                                    {header.name}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    {search(data).length === 0 && query !== "" ? (
+                <table className="table">
+                    <TableHead
+                        columns={TableHeader}
+                        handleSorting={handleSorting}
+                    />
+                    {search(tableData).length === 0 && query !== "" ? (
                         <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                             Nothing found.
                         </div>
                     ) : (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(data).map((job, idx) => (
+                            {search(tableData).map((job, idx) => (
                                 <tr
                                     key={job.id}
                                     className={`bg-white ${
