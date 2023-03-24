@@ -53,7 +53,7 @@ const App = () => {
             .then((data) => {
                 setDamList(data);
             });
-    }, [DamList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -83,10 +83,11 @@ const App = () => {
         daily_despatch: "",
     });
 
+
     //edit status
     const [editFormData, setEditFormData] = useState({
         id: "",
-        order_number: "",
+        order_number: DamList[0]?.order_number,
         job_number: "",
         date: "",
         cp_number: "",

@@ -32,6 +32,7 @@ const TableHeader = [
 const App = () => {
     const [ChqList, setChqList] = useState([]);
     const { logout } = useAuth();
+    const [OrderNumber, setOrderNumber] = useState([]);
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getchqlist")
@@ -131,7 +132,7 @@ const App = () => {
 
         //const current = new Date();
         //const order_number_auto = newChq.importer_name+'-'+current.getDate().toLocaleString()+'-'+newChq.mother_vessel_name+'-'+newChq.mv_location
-        //console.log(order_number_auto)
+        console.log(newChq.order_number);
 
         // api call
         Axios.post("http://localhost:3001/management/insertchq", {
@@ -270,6 +271,12 @@ const App = () => {
     }
 
     function openModal() {
+        fetch("http://localhost:3001/management/fetch_order_number")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrderNumber(data);
+                console.log(data);
+            });
         setIsOpen(true);
     }
 
@@ -397,16 +404,27 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <input
-                                                    type="text"
+                                                <select
                                                     name="order_number"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    disabled
-                                                    placeholder="Will be Auto Generated"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
+                                                >
+                                                    {OrderNumber.map((item) =>
+                                                        item ===
+                                                        OrderNumber ? null : (
+                                                            <option
+                                                                value={
+                                                                    item.order_number
+                                                                }
+                                                        selected >
+                                                                {
+                                                                    item.order_number
+                                                                }
+                                                            </option>
+                                                        )
+                                                    )}
+                                                </select>
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
