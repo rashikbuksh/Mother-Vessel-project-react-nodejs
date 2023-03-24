@@ -5,7 +5,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { AiOutlineCheck } from "react-icons/ai";
 
 const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
-    var clsName = "whitespace-nowrap py-4 text-sm text-gray-700";
+    var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
     return (
         <>
             <td className={clsName}>

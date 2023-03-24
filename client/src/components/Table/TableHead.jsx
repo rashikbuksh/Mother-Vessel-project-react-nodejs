@@ -17,7 +17,7 @@ const TableHead = ({ columns, handleSorting }) => {
     };
 
     return (
-        <thead className="rounded-md border-b-2 border-gray-400 bg-green-200">
+        <thead className="break-words rounded-md border-b-2 border-gray-400 bg-green-200">
             <tr>
                 {columns.map(({ id, name, accessor, sortable, width }) => {
                     return (

@@ -3,16 +3,17 @@ import Axios from "axios";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
-import TableHead from "../../components/Table/TableHead";
-import InfiniteScroll from "react-infinite-scroll-component";
+import TableHead from "../../components/Table/TableHead"; // new
+import Pagination from "../../components/Table/Pagination"; // new
+import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
-import { useSortableTable } from "../../components/Table/useSortableTable";
 
 import { IoMdPersonAdd } from "react-icons/io";
+import { MdClose } from "react-icons/md";
 
 //toast
-import { success, warning } from "../../components/Toast";
+import { success } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
@@ -21,6 +22,7 @@ const TableHeader = [
         name: "Id",
         accessor: "id",
         sortable: true,
+        sortByOrder: "asc",
     },
     {
         id: 2,
@@ -45,7 +47,6 @@ const TableHeader = [
         name: "ETA",
         accessor: "eta",
         sortable: true,
-        sortByOrder: "desc",
     },
     {
         id: 6,
@@ -87,56 +88,39 @@ const TableHeader = [
 ];
 
 const App = () => {
+    // new start
     const [JobList, setJobList] = useState([]);
-    const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns
-    const { logout } = useAuth();
+    const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns // new
+    const [cursorPos, setCursorPos] = useState(1);
+    const [pageSize, setPageSize] = useState(2);
 
-    // infinity scroll
-    let [isNext, isNextFunc] = useState(false);
-    let [pageCount, setCount] = useState(1);
-    let count = 10 % 60;
-    var s;
-    var keys = [];
-    const fetchData = () => {
-        Axios.get(`http://localhost:3001/management/getjobentry`)
-            .then((response) => {
-                setJobList([...JobList, ...response.data]);
-                s = JobList.keys();
-                for (var k in s) keys.push(k);
-                console.log(JobList);
-                isNextFunc(true);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-    function fetchMoreData() {
-        setCount(pageCount + 1);
-        fetchData();
-    }
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { logout } = useAuth();
 
     // search filter for all fields
     const [query, setQuery] = useState("");
 
-    const data = Object.values(JobList);
+    const data = Object.values(tableData);
     function search(items) {
-        return items.filter((item) =>
+        const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter].toString().toLowerCase().includes(query)
+                item[parameter]?.toString().toLowerCase().includes(query)
             )
+        );
+        return res.slice(
+            (cursorPos - 1) * pageSize,
+            (cursorPos - 1) * pageSize + pageSize
         );
     }
 
-    // useEffect(() => {
-    //     fetch("http://localhost:3001/management/getjobentry")
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setJobList(data);
-    //         });
-    // }, []);
+    useEffect(() => {
+        fetch("http://localhost:3001/management/getjobentry")
+            .then((res) => res.json())
+            .then((data) => {
+                setJobList(data);
+            });
+    }, []);
+
+    // new end
 
     // add state
     //id is randomly generated with nanoid generator
@@ -217,7 +201,7 @@ const App = () => {
             stevedore_contact_number: addFormData.stevedore_contact_number,
         };
 
-        const current = new Date();
+        const current = new Date(newJob.eta);
         const order_number_auto =
             newJob.importer_name +
             "-" +
@@ -227,10 +211,11 @@ const App = () => {
             "-" +
             newJob.mv_location;
         console.log(order_number_auto);
+        newJob.order_number = order_number_auto;
 
         // api call
         Axios.post("http://localhost:3001/management/jobentry", {
-            order_number: order_number_auto, //handleAddFormChange로 받은 새 데이터
+            order_number: newJob.order_number, //handleAddFormChange로 받은 새 데이터
             importer_name: newJob.importer_name,
             mother_vessel_name: newJob.mother_vessel_name,
             eta: newJob.eta,
@@ -242,8 +227,11 @@ const App = () => {
         });
 
         //jobList의 초기값은 data.json 데이터
-        const newJobList = [...JobList, newJob];
-        setJobList(newJobList);
+        // new start
+        const newTableData = [...tableData, newJob];
+        // new end
+
+        setJobList(newTableData);
 
         // close modal
         closeModal();
@@ -281,14 +269,14 @@ const App = () => {
             new_stevedore_name: editedJob.stevedore_name,
             new_stevedore_contact_number: editedJob.stevedore_contact_number,
         });
+        // these 3 lines will be replaced // new start
+        const index = tableData.findIndex((td) => td.id === editJobId);
+        tableData[index] = editedJob;
+        setJobList(tableData);
+        // new end
 
-        const newJobList = [...JobList]; //json.data + data added with setJobList above by receiving new input
-        const index = JobList.findIndex((job) => job.id === editJobId);
-        newJobList[index] = editedJob; // Assign the modified data object to the object of the index row of the jobList array, which is the entire data
-
-        setJobList(newJobList);
         setEditJobId(null);
-        success("job updated successfully");
+        success("Job updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -343,16 +331,24 @@ const App = () => {
         setIsOpen(true);
     }
 
+    // <button
+    //     className="rounded-md bg-red-500 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-red-700"
+    //     onClick={logout}
+    // >
+    //     Logout
+    // </button>
+
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-            <div className="flex flex-row justify-center">
-                <button
-                    className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
-                >
-                    Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+            {/* // new start */}
+            <div className="my-2 mx-auto flex justify-center">
+                <Pagination
+                    pageSize={pageSize}
+                    cursorPos={cursorPos}
+                    setCursorPos={setCursorPos}
+                    rowsCount={data.length}
+                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -361,74 +357,69 @@ const App = () => {
                     onChange={(event) => setQuery(event.target.value)}
                 />
                 <button
-                    className="rounded-md bg-red-500 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-red-700"
-                    onClick={logout}
+                    // new start // job change copy paste the className
+                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
+                    onClick={openModal}
                 >
-                    Logout
+                    Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
             </div>
-            <br />
             <form onSubmit={handleEditFormSubmit}>
-                <InfiniteScroll
-                    dataLength={tableData.length}
-                    next={fetchMoreData}
-                    hasMore={isNext}
-                    loader={<div>loading....</div>}
-                >
-                    <table className="table">
-                        <TableHead
-                            columns={TableHeader}
-                            handleSorting={handleSorting}
-                        />
-                        {search(tableData).length === 0 && query !== "" ? (
-                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                                Nothing found.
-                            </div>
-                        ) : (
-                            <tbody className="divide-y divide-gray-100 rounded-md">
-                                {search(tableData).map((job, idx) => (
-                                    <tr
-                                        key={job.id}
-                                        className={`bg-white ${
-                                            idx % 2 === 1 ? "bg-gray-200" : ""
-                                        }`}
-                                    >
-                                        {editJobId === job.id ? (
-                                            <EditableRow
-                                                editFormData={editFormData}
-                                                handleEditFormChange={
-                                                    handleEditFormChange
-                                                }
-                                                handleCancelClick={
-                                                    handleCancelClick
-                                                }
-                                            />
-                                        ) : (
-                                            <ReadOnlyRow
-                                                job={job}
-                                                handleEditClick={
-                                                    handleEditClick
-                                                }
-                                                handleDeleteClick={
-                                                    handleDeleteClick
-                                                }
-                                            />
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        )}
-                    </table>
-                </InfiniteScroll>
+                <table className="table">
+                    <TableHead
+                        columns={TableHeader}
+                        handleSorting={handleSorting}
+                    />
+                    {search(tableData).length === 0 && query !== "" ? (
+                        <div className="py-2 px-4 text-gray-700">
+                            Nothing found.
+                        </div>
+                    ) : (
+                        <tbody className="divide-y divide-gray-100 rounded-md">
+                            {search(tableData).map((job, idx) => (
+                                <tr
+                                    key={job.id}
+                                    className={`my-auto items-center justify-center ${
+                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                    }`}
+                                >
+                                    {editJobId === job.id ? (
+                                        <EditableRow
+                                            editFormData={editFormData}
+                                            handleEditFormChange={
+                                                handleEditFormChange
+                                            }
+                                            handleCancelClick={
+                                                handleCancelClick
+                                            }
+                                        />
+                                    ) : (
+                                        <ReadOnlyRow
+                                            job={job}
+                                            handleEditClick={handleEditClick}
+                                            handleDeleteClick={
+                                                handleDeleteClick
+                                            }
+                                        />
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    )}
+                </table>
             </form>
+
+            {/* // new end */}
 
             {/* add item modal */}
             <Suspense fallback={<Loader />}>
                 <Transition appear show={isOpen} as={Fragment}>
                     <Dialog
                         as="div"
-                        className="relative z-10"
-                        onClose={closeModal}
+                        className="z-10 overflow-y-auto"
+                        // new start
+                        onClose={() => {}}
+                        // new end
                     >
                         <Transition.Child
                             as={Fragment}
@@ -454,32 +445,25 @@ const App = () => {
                                     leaveTo="opacity-0 scale-95"
                                 >
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                        {/* // new start */}
                                         <Dialog.Title
                                             as="h3"
-                                            className="mb-4 text-center text-3xl font-medium text-gray-900"
+                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
                                         >
                                             Add Job
+                                            <button
+                                                className="float-right"
+                                                onClick={closeModal}
+                                            >
+                                                <MdClose className="inline text-red-600" />
+                                            </button>
                                         </Dialog.Title>
+                                        {/* // new end */}
+
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
                                         >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="order_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Will be Auto Generated"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Importer Name

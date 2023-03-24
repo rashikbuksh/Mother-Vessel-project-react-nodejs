@@ -3,8 +3,8 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 
 const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
-    var clsName = "whitespace-nowrap py-4 text-sm text-gray-700";
-    // console.log("ReadOnlyRow", job);
+    var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
+
     return (
         <>
             <td className={clsName}>
@@ -41,10 +41,10 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>
                 <DateTime date={job.time_stamp} />
             </td>
-            <td className="flex items-center justify-between">
+            <td className="flex flex-row items-center justify-between space-x-2 py-2">
                 <button
                     type="button"
-                    className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"
+                    className="rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"
                     onClick={(event) => handleEditClick(event, job)}
                 >
                     <BiEdit className="h-5 w-5 text-black" />
