@@ -29,63 +29,9 @@ const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
 const ChqApproval = lazy(() => import("./pages/ChqApproval"));
 const Payment = lazy(() => import("./pages/Payment"));
-// const AddUser = lazy(() => import("./pages/Test/AddUser"));
-// const UpdateUser = lazy(() => import("./pages/Test/Update/Info"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
-// import AdminRoutes from "./hooks/routes/AdminRoutes";
-
-const RoutePages = [
-    {
-        link: "/",
-        component: Home,
-    },
-    {
-        link: "/admin",
-        component: Admin,
-    },
-    {
-        link: "/login",
-        component: Login,
-    },
-    {
-        link: "/forgot_password",
-        component: ForgotPassword,
-    },
-    {
-        link: "/reset_password",
-        component: ResetPassword,
-    },
-    {
-        link: "/adminpanel",
-        component: AdminPanel,
-    },
-    {
-        link: "/jobentry",
-        component: JobEntry,
-    },
-    {
-        link: "/recordentry",
-        component: RecordEntry,
-    },
-    {
-        link: "/currentstatus",
-        component: CurrentStatus,
-    },
-    {
-        link: "/damaragecalculation",
-        component: DamarageCalculation,
-    },
-    {
-        link: "/test",
-        component: Table,
-    },
-    {
-        link: "/*",
-        component: NotFound,
-    },
-];
 
 const PublicRoutesList = [
     {
@@ -157,6 +103,7 @@ const AdminRoutesList = [
         component: CurrentStatus,
     },
     {
+
         link: "/predefinedship",
         component: PreDefinedShip,
     },
