@@ -350,14 +350,14 @@ app.post("/management/currentstatus", (req, res) => {
         }
     );
 });
-//Get record Entry
+//Get current status 
 app.get("/management/getcurrentstatus", (req, res) => {
     const sqlSelect = "SELECT * from current_status";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 });
-//Update Job Entry
+//Update current status 
 app.post("/management/updatecurrentstatus", (req, res) => {
     console.log("update job info in backend");
     const id = req.body.id;
@@ -394,7 +394,7 @@ app.post("/management/updatecurrentstatus", (req, res) => {
         }
     );
 });
-//Delete Record Entry
+//Delete current status 
 app.post("/management/deletecurrentstatus", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.status_id;
@@ -762,7 +762,7 @@ app.post("/management/deletepayment", (req, res) => {
     );
 });
 
-// Uopdate Chq
+// Update Chq
 app.post("/management/updatepayment", (req, res) => {
     console.log("update job info in backend");
     const id = req.body.id;
@@ -793,6 +793,89 @@ app.post("/management/updatepayment", (req, res) => {
             res.send(result);
         }
     );
+});
+
+
+//Insert Current Status predefined
+app.post("/management/predefinedship", (req, res) => {
+    console.log("submit in backend");
+    const LV_name = req.body.LV_name;
+    //const date_from_charpotro = req.body.date_from_charpotro;
+    //const commodity = req.body.commodity;
+    // const LA = req.body.LA;
+    // const dest_from = req.body.dest_from;
+    // const dest_to = req.body.dest_to;
+    // const current_location = req.body.current_location;
+    // const remark = req.body.remark;
+    const create_predefinedship =
+        "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
+    db.query(
+        create_predefinedship,
+        [
+            LV_name
+        ],
+        (err, result) => {
+            if (err) console.log(err);
+            console.log(result);
+            res.send(result);
+        }
+    );
+});
+//Get Current Status predefined
+app.get("/management/getpredefinedship", (req, res) => {
+    const sqlSelect = "SELECT * from pre_defined_ship";
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+});
+//Update Current Status predefined
+app.post("/management/updatepredefinedship", (req, res) => {
+    console.log("update job info in backend");
+    const id = req.body.id;
+    const date_from_charpotro = req.body.date_from_charpotro;
+    const commodity = req.body.commodity;
+    const LA = req.body.LA;
+    const dest_from = req.body.dest_from;
+    const dest_to = req.body.dest_to;
+    const current_location = req.body.current_location;
+    const remark = req.body.remark;
+    //console.log(id);
+    const sqlUpdate =
+        "UPDATE pre_defined_ship SET date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
+    db.query(
+        sqlUpdate,
+        [
+            date_from_charpotro,
+            commodity,
+            LA,
+            dest_from,
+            dest_to,
+            current_location,
+            remark,
+            id,
+        ],
+        (err, result) => {
+            if (err) console.log(err);
+            //console.log(result)
+            // res.send(result).json({
+            //     success: true,
+            // });
+        }
+    );
+});
+
+//Delete Current Status predefined
+app.post("/management/deletepredefinedship", (req, res) => {
+    console.log("Delete status in backend");
+    const id = req.body.status_id;
+    const sqlDelete = "DELETE from pre_defined_ship where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
+        }
+    });
 });
 
 
