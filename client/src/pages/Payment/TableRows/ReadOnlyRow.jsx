@@ -1,69 +1,51 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
+import DateTime from "../../../utils/DateTime";
 
-const ReadOnlyRow = ({
-    Pay,
-    handleEditClick,
-    handleDeleteClick,
-}) => {
+const ReadOnlyRow = ({ Pay, handleEditClick, handleDeleteClick }) => {
+    var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <a href="#" className="font-bold text-blue-500 hover:underline">
                     {Pay.id}
                 </a>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {Pay.job_number}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.LV_name}
+            <td className={clsName}>{Pay.LV_name}</td>
+            <td className={clsName}>
+                <DateTime date={Pay.date_from_charpotro} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.date_from_charpotro}
+            <td className={clsName}>{Pay.MV_name}</td>
+            <td className={`text-center ${clsName}`}>
+                {" "}
+                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
+                    {Pay.commodity}
+                </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.MV_name}
+            <td className={`text-center ${clsName}`}>{Pay.chq_no}</td>
+            <td className={clsName}>
+                <DateTime date={Pay.chq_issue_date} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.commodity}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.chq_no}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.chq_issue_date}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.amount}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.part_pay}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.payment_approved}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.balance}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.payment_chq_no}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={`text-center ${clsName}`}>{Pay.amount}</td>
+            <td className={`text-center ${clsName}`}>{Pay.part_pay}</td>
+            <td className={`text-center ${clsName}`}>{Pay.payment_approved}</td>
+            <td className={`text-center ${clsName}`}>{Pay.balance}</td>
+            <td className={`text-center ${clsName}`}>{Pay.payment_chq_no}</td>
+            <td className={`text-center ${clsName}`}>
                 {Pay.payment_chq_amount}
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.payment_chq_date}
+            <td className={clsName}>
+                <DateTime date={Pay.payment_chq_date} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {Pay.added_date}
+            <td className={clsName}>
+                <DateTime date={Pay.added_date} />
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

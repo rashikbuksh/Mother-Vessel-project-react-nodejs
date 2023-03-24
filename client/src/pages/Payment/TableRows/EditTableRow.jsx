@@ -8,7 +8,7 @@ const EditTableRow = ({
 }) => {
     return (
         <>
-            <td></td>
+            <td />
             <td>
                 <input
                     className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
@@ -175,9 +175,8 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td />
-            <td />
-            <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
+
+            <td className="flex justify-center">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

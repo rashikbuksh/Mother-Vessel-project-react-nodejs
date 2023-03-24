@@ -42,7 +42,7 @@ const App = () => {
             .then((data) => {
                 setPayList(data);
             });
-    }, [PayList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -310,7 +310,7 @@ const App = () => {
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
-                    placeholder="Search for name..."
+                    placeholder="Search for anything..."
                     type="search"
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}

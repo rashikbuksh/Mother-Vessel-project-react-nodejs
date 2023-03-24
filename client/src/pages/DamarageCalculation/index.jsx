@@ -5,6 +5,9 @@ import EditableRow from "./TableRows/EditTableRow";
 import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
+import TableHead from "../../components/Table/TableHead"; // new
+import Pagination from "../../components/Table/Pagination"; // new
+import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -13,31 +16,101 @@ import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
-    { id: 1, name: "Id", width: "w-8" },
-    { id: 2, name: "Order Number" },
-    { id: 3, name: "Job Number" },
-    { id: 4, name: "Date" },
-    { id: 5, name: "CP Number" },
-    { id: 6, name: "Date From Charpotro" },
-    { id: 7, name: "Commodity" },
-    { id: 8, name: "Volume" },
-    { id: 9, name: "LV Name" },
-    { id: 10, name: "MV Name" },
-    { id: 11, name: "Loading Location" },
-    { id: 12, name: "Unloading Location" },
-    { id: 13, name: "Loading Start Time Stamp" },
-    { id: 14, name: "Loading Completion Time Stamp" },
-    { id: 15, name: "Sailing Time Stamp" },
-    { id: 16, name: "Duration Of Travel Time" },
-    { id: 17, name: "Unloading Start Time Stamp" },
-    { id: 18, name: "Unloading Completion Time Stamp" },
-    { id: 19, name: "Others" },
-    { id: 20, name: "Total Elapsed Time" },
-    { id: 21, name: "Voyage Time" },
-    { id: 22, name: "Free Time" },
-    { id: 23, name: "Total Despatch" },
-    { id: 24, name: "Daily Despatch" },
-    { id: 25, name: "Actions" },
+    { id: 1, name: "Id", accessor: "id", sortable: true, sortByOrder: "asc" },
+    {
+        id: 2,
+        name: "Order Number",
+        accessor: "order_number",
+        sortable: true,
+    },
+    {
+        id: 3,
+        name: "Job Number",
+        accessor: "job_number",
+        sortable: true,
+    },
+    { id: 4, name: "Date", accessor: "date", sortable: true },
+    { id: 5, name: "CP Number", accessor: "cp_number", sortable: true },
+    {
+        id: 6,
+        name: "Date From Charpotro",
+        accessor: "date_from_charpotro",
+        sortable: true,
+    },
+    { id: 7, name: "Commodity", accessor: "commodity", sortable: true },
+    { id: 8, name: "Volume", accessor: "volume", sortable: true },
+    { id: 9, name: "LV Name", accessor: "LV_name", sortable: true },
+    { id: 10, name: "MV Name", accessor: "MV_name", sortable: true },
+    {
+        id: 11,
+        name: "Loading Location",
+        accessor: "loading_location",
+        sortable: true,
+    },
+    {
+        id: 12,
+        name: "Unloading Location",
+        accessor: "unloading_location",
+        sortable: true,
+    },
+    {
+        id: 13,
+        name: "Loading Started",
+        accessor: "loading_started",
+        sortable: true,
+    },
+    {
+        id: 14,
+        name: "Loading Completed",
+        accessor: "loading_completed",
+        sortable: true,
+    },
+    {
+        id: 15,
+        name: "Sailing",
+        accessor: "sailing",
+        sortable: true,
+    },
+    {
+        id: 16,
+        name: "Duration of Travel",
+        accessor: "duration_of_travel",
+        sortable: true,
+    },
+    {
+        id: 17,
+        name: "Unloading Started",
+        accessor: "unloading_started",
+        sortable: true,
+    },
+    {
+        id: 18,
+        name: "Unloading Completed",
+        accessor: "unloading_completed",
+        sortable: true,
+    },
+    { id: 19, name: "Others", accessor: "others", sortable: true },
+    {
+        id: 20,
+        name: "Total Elapsed Time",
+        accessor: "total_elapsed_time",
+        sortable: true,
+    },
+    { id: 21, name: "Voyage Time", accessor: "voyage_time", sortable: true },
+    { id: 22, name: "Free Time", accessor: "free_time", sortable: true },
+    {
+        id: 23,
+        name: "Total Despatch",
+        accessor: "total_despatch",
+        sortable: true,
+    },
+    {
+        id: 24,
+        name: "Daily Despatch",
+        accessor: "daily_despatch",
+        sortable: true,
+    },
+    { id: 25, name: "Action" },
 ];
 
 const App = () => {
@@ -45,7 +118,27 @@ const App = () => {
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumber, setJobNumber] = useState([]);
 
+    const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
+    const [cursorPos, setCursorPos] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
+
     const { logout } = useAuth();
+
+    // search filter for all fields
+    const [query, setQuery] = useState("");
+
+    const data = Object.values(tableData);
+    function search(items) {
+        const res = items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter]?.toString().toLowerCase().includes(query)
+            )
+        );
+        return res.slice(
+            (cursorPos - 1) * pageSize,
+            (cursorPos - 1) * pageSize + pageSize
+        );
+    }
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getdamarage")
@@ -53,7 +146,7 @@ const App = () => {
             .then((data) => {
                 setDamList(data);
             });
-    }, [DamList]);
+    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -208,7 +301,8 @@ const App = () => {
         });
 
         //DamList의 초기값은 data.json 데이터
-        const newDamList = [...DamList, newDam];
+        //jobList의 초기값은 data.json 데이터
+        const newDamList = [...tableData, newDam];
         setDamList(newDamList);
 
         // close modal
@@ -250,7 +344,7 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
-        console.log("Edited Dam ID : "+editedDam.id);
+        console.log("Edited Dam ID : " + editedDam.id);
 
         Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
@@ -281,11 +375,10 @@ const App = () => {
             daily_despatch: editedDam.daily_despatch,
         });
 
-        const newDamList = [...DamList]; //json.data + data added with setDamList above by receiving new input
-        const index = DamList.findIndex((Dam) => Dam.id === editDamId);
-        newDamList[index] = editedDam; // Assign the modified data object to the object of the index row of the DamList array, which is the entire data
+        const index = tableData.findIndex((td) => td.id === editDamId);
+        tableData[index] = editedDam;
+        setDamList(tableData);
 
-        setDamList(newDamList);
         setEditDamId(null);
         success("Dam updated successfully");
     };
@@ -346,19 +439,6 @@ const App = () => {
         setDamList(newDamList);
     };
 
-    // search filter
-    const [query, setQuery] = useState("");
-
-    const filteredDam =
-        query === ""
-            ? DamList
-            : DamList.filter((Dam) =>
-                  Dam.order_number
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
-
     // modal for add Dam
     let [isOpen, setIsOpen] = useState(false);
 
@@ -395,7 +475,7 @@ const App = () => {
                 </button>
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
-                    placeholder="Search for name..."
+                    placeholder="Search for anything..."
                     type="search"
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
@@ -409,29 +489,21 @@ const App = () => {
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
-                <table className="w-full rounded-md">
-                    <thead className="rounded-md border-b-2 border-gray-400 bg-orange-200">
-                        <tr>
-                            {TableHeader.map((header) => (
-                                <th
-                                    key={header.id}
-                                    className={`border-r-2 px-2 text-left text-sm font-semibold tracking-wide ${header.width}`}
-                                >
-                                    {header.name}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 rounded-md">
-                        {filteredDam.length === 0 && query !== "" ? (
-                            <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                                Nothing found.
-                            </div>
-                        ) : (
-                            filteredDam.map((Dam, idx) => (
+                <table className="table w-full">
+                    <TableHead
+                        columns={TableHeader}
+                        handleSorting={handleSorting}
+                    />
+                    {search(tableData).length === 0 && query !== "" ? (
+                        <div className="py-2 px-4 text-gray-700">
+                            Nothing found.
+                        </div>
+                    ) : (
+                        <tbody className="divide-y divide-gray-100 rounded-md">
+                            {search(tableData).map((Dam, idx) => (
                                 <tr
                                     key={Dam.id}
-                                    className={`bg-white ${
+                                    className={`my-auto items-center justify-center ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
@@ -455,11 +527,17 @@ const App = () => {
                                         />
                                     )}
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
+                            ))}
+                        </tbody>
+                    )}
                 </table>
             </form>
+            <Pagination
+                pageSize={pageSize}
+                cursorPos={cursorPos}
+                setCursorPos={setCursorPos}
+                rowsCount={data.length}
+            />
 
             {/* add item modal */}
             <Suspense fallback={<Loader />}>

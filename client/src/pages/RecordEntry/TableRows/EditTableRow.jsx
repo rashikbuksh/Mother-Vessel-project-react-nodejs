@@ -10,7 +10,7 @@ const EditTableRow = ({
         "peer w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
-            <td></td>
+            <td />
             <td>
                 <input
                     className={clsName}
@@ -160,7 +160,7 @@ const EditTableRow = ({
                 <span className="text-md text-black">Auto generated</span>
             </td>
 
-            <td className="flex items-center justify-center">
+            <td className="flex items-center justify-between">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"
