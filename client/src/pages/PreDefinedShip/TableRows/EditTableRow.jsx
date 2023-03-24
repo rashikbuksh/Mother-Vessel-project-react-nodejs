@@ -17,7 +17,7 @@ const EditTableRow = ({
                     type="date"
                     required="required"
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
+                    /*value={editFormData.date_from_charpotro.slice(0, 10)}*/
                     onChange={handleEditFormChange}
                 />
             </td>
