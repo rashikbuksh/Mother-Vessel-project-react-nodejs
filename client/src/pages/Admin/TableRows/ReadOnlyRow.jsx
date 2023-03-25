@@ -12,22 +12,17 @@ const ReadOnlyRow = ({
     enable_user,
     reset_pass,
 }) => {
+    var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {user.id}
-                </a>
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {user.name}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{user.id}</td>
+            <td className={clsName}>{user.name}</td>
+            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {user.username}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>
                 <span
                     className={`rounded-lg p-1.5 text-xs font-medium uppercase tracking-wider${
                         user.position === "admin"
@@ -45,10 +40,8 @@ const ReadOnlyRow = ({
                     {user.position}
                 </span>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
-                {user.department}
-            </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className={clsName}>{user.department}</td>
+            <td className={`${clsName} text-center`}>
                 {user.enabled === 1 ? (
                     <button
                         type="button"
@@ -84,7 +77,7 @@ const ReadOnlyRow = ({
                     <RxReset className="h-5 w-5 text-black" />
                 </button>
             </td>
-            <td className="whitespace-nowrap py-3 text-sm text-gray-700">
+            <td className="flex items-center justify-around py-2">
                 <button
                     type="button"
                     className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"

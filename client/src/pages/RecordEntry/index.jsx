@@ -36,30 +36,41 @@ const TableHeader = [
         accessor: "job_number",
         sortable: true,
     },
-    { 
-        id: 4, 
+    {
+        id: 4,
         name: "Date From Charpotro",
         accessor: "date_from_charpotro",
-        sortable: true, 
+        sortable: true,
     },
-    { id: 5, name: "CP Number From Charpotro", accessor: "cp_number_from_charpotro", },
-    { id: 6, name: "LA Name", accessor: "LA_name", },
+    {
+        id: 5,
+        name: "CP Number From Charpotro",
+        accessor: "cp_number_from_charpotro",
+    },
+    { id: 6, name: "LA Name", accessor: "LA_name" },
     { id: 7, name: "LV Name", accessor: "LV_name", sortable: true },
-    { id: 8, name: "Destination From", accessor: "dest_from", },
-    { id: 9, name: "Destination To", accessor: "dest_to", },
-    { id: 10, name: "Commodity", accessor: "commodity", },
-    { id: 11, name: "Capacity", accessor: "capacity", },
-    { id: 12, name: "Rate", accessor: "rate", },
-    { id: 13, name: "LV Master Name", accessor: "LV_master_name", },
-    { id: 14, name: "LV Master Contact Number", accessor: "LV_master_contact_number", },
-    { id: 15, name: "Created Date", accessor: "created_date", },
+    { id: 8, name: "Destination From", accessor: "dest_from" },
+    { id: 9, name: "Destination To", accessor: "dest_to" },
+    { id: 10, name: "Commodity", accessor: "commodity" },
+    { id: 11, name: "Capacity", accessor: "capacity" },
+    { id: 12, name: "Rate", accessor: "rate" },
+    { id: 13, name: "LV Master Name", accessor: "LV_master_name" },
+    {
+        id: 14,
+        name: "LV Master Contact Number",
+        accessor: "LV_master_contact_number",
+    },
+    { id: 15, name: "Created Date", accessor: "created_date" },
     { id: 16, name: "Actions" },
 ];
 
 const App = () => {
     // new start
     const [RecordList, setRecordList] = useState([]);
-    const [tableData, handleSorting] = useSortableTable(RecordList, TableHeader); // data, columns // new
+    const [tableData, handleSorting] = useSortableTable(
+        RecordList,
+        TableHeader
+    ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(2);
 
@@ -70,6 +81,9 @@ const App = () => {
 
     const data = Object.values(tableData);
     function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
                 item[parameter]?.toString().toLowerCase().includes(query)
@@ -443,7 +457,7 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-left text-3xl font-medium text-gray-900"
                                         >
-                                            Add Record 
+                                            Add Record
                                             <button
                                                 className="float-right"
                                                 onClick={closeModal}

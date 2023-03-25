@@ -131,6 +131,9 @@ const App = () => {
 
     const data = Object.values(tableData);
     function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
                 item[parameter]?.toString().toLowerCase().includes(query)
@@ -473,8 +476,8 @@ const App = () => {
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-           {/* // new start */}
-           <div className="my-2 mx-auto flex justify-center">
+            {/* // new start */}
+            <div className="my-2 mx-auto flex justify-center">
                 <Pagination
                     pageSize={pageSize}
                     cursorPos={cursorPos}

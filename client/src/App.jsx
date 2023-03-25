@@ -32,6 +32,7 @@ const Payment = lazy(() => import("./pages/Payment"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
+const Navbar = lazy(() => import("./components/Navbar"));
 
 const PublicRoutesList = [
     {
@@ -48,7 +49,7 @@ const PublicRoutesList = [
     },
     {
         link: "/test",
-        component: Table,
+        component: Navbar,
     },
 ];
 
@@ -103,7 +104,6 @@ const AdminRoutesList = [
         component: CurrentStatus,
     },
     {
-
         link: "/predefinedship",
         component: PreDefinedShip,
     },

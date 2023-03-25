@@ -34,21 +34,35 @@ const TableHeader = [
         name: "Job Number",
         accessor: "job_number",
     },
-    { id: 4, name: "Date From Charpotro", accessor: "date_from_charpotro", sortable: true, },
-    { id: 5, name: "CP Number From Charpotro", accessor: "cp_number_from_charpotro", },
-    { id: 6, name: "LA Name", accessor: "LA_name", },
-    { id: 7, name: "LV Name", accessor: "LV_name", },
-    { id: 8, name: "MV Name", accessor: "MV_name", },
-    { id: 9, name: "Destination From", accessor: "dest_from", },
-    { id: 10, name: "Destination To", accessor: "dest_to", },
-    { id: 11, name: "Capacity in Tons", accessor: "capacity_ton", },
-    { id: 12, name: "Rate", accessor: "rate", sortable: true, },
-    { id: 13, name: "60 Percent Payment", accessor: "sixty_percent_payment", sortable: true, },
-    { id: 14, name: "40 Percent Payment", accessor: "forty_percent_payment", },
-    { id: 15, name: "Damarage", accessor: "damarage", },
-    { id: 16, name: "2nd Trip", accessor: "second_trip", },
-    { id: 17, name: "3rd Trip", accessor: "third_trip", },
-    { id: 18, name: "Direct Trip", accessor: "direct_trip", },
+    {
+        id: 4,
+        name: "Date From Charpotro",
+        accessor: "date_from_charpotro",
+        sortable: true,
+    },
+    {
+        id: 5,
+        name: "CP Number From Charpotro",
+        accessor: "cp_number_from_charpotro",
+    },
+    { id: 6, name: "LA Name", accessor: "LA_name" },
+    { id: 7, name: "LV Name", accessor: "LV_name" },
+    { id: 8, name: "MV Name", accessor: "MV_name" },
+    { id: 9, name: "Destination From", accessor: "dest_from" },
+    { id: 10, name: "Destination To", accessor: "dest_to" },
+    { id: 11, name: "Capacity in Tons", accessor: "capacity_ton" },
+    { id: 12, name: "Rate", accessor: "rate", sortable: true },
+    {
+        id: 13,
+        name: "60 Percent Payment",
+        accessor: "sixty_percent_payment",
+        sortable: true,
+    },
+    { id: 14, name: "40 Percent Payment", accessor: "forty_percent_payment" },
+    { id: 15, name: "Damarage", accessor: "damarage" },
+    { id: 16, name: "2nd Trip", accessor: "second_trip" },
+    { id: 17, name: "3rd Trip", accessor: "third_trip" },
+    { id: 18, name: "Direct Trip", accessor: "direct_trip" },
     { id: 19, name: "Actions" },
 ];
 
@@ -66,6 +80,9 @@ const App = () => {
 
     const data = Object.values(tableData);
     function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
                 item[parameter]?.toString().toLowerCase().includes(query)
@@ -85,7 +102,7 @@ const App = () => {
             });
     }, []);
 
-     // new end
+    // new end
 
     // add state
     //id is randomly generated with nanoid generator
