@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2023 at 04:33 PM
+-- Generation Time: Mar 25, 2023 at 06:16 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -214,6 +214,33 @@ INSERT INTO `payment` (`id`, `job_number`, `LV_name`, `date_from_charpotro`, `MV
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pre_defined_ship`
+--
+
+CREATE TABLE `pre_defined_ship` (
+  `id` int(11) NOT NULL,
+  `LV_name` varchar(50) DEFAULT NULL,
+  `date_from_charpotro` date DEFAULT NULL,
+  `commodity` varchar(50) DEFAULT NULL,
+  `LA` varchar(50) DEFAULT NULL,
+  `dest_from` varchar(50) DEFAULT NULL,
+  `dest_to` varchar(50) DEFAULT NULL,
+  `current_location` varchar(50) DEFAULT NULL,
+  `remark` varchar(100) DEFAULT NULL,
+  `time_updated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pre_defined_ship`
+--
+
+INSERT INTO `pre_defined_ship` (`id`, `LV_name`, `date_from_charpotro`, `commodity`, `LA`, `dest_from`, `dest_to`, `current_location`, `remark`, `time_updated`) VALUES
+(2, 'dada', '2023-03-11', 'Suger', 'fafa', 'caf', 'adadd', 'uhu', 'ggs', '2023-03-24 16:16:31'),
+(3, 'lv', '2023-03-24', 'Sugerrrrr', 'fafaffffff', 'kk', 'hh', 'uhudddd', 'ggssdsss', '2023-03-24 17:50:10');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `record_entry`
 --
 
@@ -309,6 +336,12 @@ ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pre_defined_ship`
+--
+ALTER TABLE `pre_defined_ship`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `record_entry`
 --
 ALTER TABLE `record_entry`
@@ -340,7 +373,7 @@ ALTER TABLE `chq_due_list`
 -- AUTO_INCREMENT for table `current_status`
 --
 ALTER TABLE `current_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `damarage_dispatch`
@@ -359,6 +392,12 @@ ALTER TABLE `job_entry`
 --
 ALTER TABLE `payment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `pre_defined_ship`
+--
+ALTER TABLE `pre_defined_ship`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `record_entry`
