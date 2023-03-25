@@ -10,6 +10,7 @@ import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 
 import { IoMdPersonAdd } from "react-icons/io";
+import { MdClose } from "react-icons/md";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -114,13 +115,14 @@ const TableHeader = [
 ];
 
 const App = () => {
+    // new start
     const [DamList, setDamList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumber, setJobNumber] = useState([]);
 
     const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(2);
 
     const { logout } = useAuth();
 
@@ -147,6 +149,8 @@ const App = () => {
                 setDamList(data);
             });
     }, []);
+
+    // new end
 
     // add state
     //id is randomly generated with nanoid generator
@@ -301,9 +305,11 @@ const App = () => {
         });
 
         //DamList의 초기값은 data.json 데이터
-        //jobList의 초기값은 data.json 데이터
-        const newDamList = [...tableData, newDam];
-        setDamList(newDamList);
+        // new start
+        const newTableData = [...tableData, newDam];
+        // new end
+
+        setDamList(newTableData);
 
         // close modal
         closeModal();
@@ -374,10 +380,11 @@ const App = () => {
             total_despatch: editedDam.total_despatch,
             daily_despatch: editedDam.daily_despatch,
         });
-
+        // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editDamId);
         tableData[index] = editedDam;
         setDamList(tableData);
+        // new end
 
         setEditDamId(null);
         success("Dam updated successfully");
@@ -466,13 +473,14 @@ const App = () => {
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-            <div className="flex flex-row justify-center">
-                <button
-                    className="flex flex-row items-center justify-center rounded-md bg-green-300 px-3 py-0 text-sm font-semibold text-gray-900 transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
-                >
-                    Add Dam <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+           {/* // new start */}
+           <div className="my-2 mx-auto flex justify-center">
+                <Pagination
+                    pageSize={pageSize}
+                    cursorPos={cursorPos}
+                    setCursorPos={setCursorPos}
+                    rowsCount={data.length}
+                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -481,10 +489,11 @@ const App = () => {
                     onChange={(event) => setQuery(event.target.value)}
                 />
                 <button
-                    className="rounded-md bg-red-500 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-red-700"
-                    onClick={logout}
+                    // new start // job change copy paste the className
+                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
+                    onClick={openModal}
                 >
-                    Logout
+                    Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
             </div>
             <br />
@@ -532,20 +541,18 @@ const App = () => {
                     )}
                 </table>
             </form>
-            <Pagination
-                pageSize={pageSize}
-                cursorPos={cursorPos}
-                setCursorPos={setCursorPos}
-                rowsCount={data.length}
-            />
+
+            {/* // new end */}
 
             {/* add item modal */}
             <Suspense fallback={<Loader />}>
                 <Transition appear show={isOpen} as={Fragment}>
                     <Dialog
                         as="div"
-                        className="relative z-10"
-                        onClose={closeModal}
+                        className="z-10 overflow-y-auto"
+                        // new start
+                        onClose={() => {}}
+                        // new end
                     >
                         <Transition.Child
                             as={Fragment}
@@ -571,12 +578,21 @@ const App = () => {
                                     leaveTo="opacity-0 scale-95"
                                 >
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                        {/* // new start */}
                                         <Dialog.Title
                                             as="h3"
-                                            className="mb-4 text-center text-3xl font-medium text-gray-900"
+                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
                                         >
                                             Add Dam
+                                            <button
+                                                className="float-right"
+                                                onClick={closeModal}
+                                            >
+                                                <MdClose className="inline text-red-600" />
+                                            </button>
                                         </Dialog.Title>
+                                        {/* // new end */}
+
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
