@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth";
 
@@ -5,8 +6,12 @@ export function DefineRole() {
     const { cookies } = useAuth();
 
     const session_token = localStorage.getItem("token");
+    let cookies_value = useState([]);
 
-    const cookies_value = cookies.token.split("-");
+    if ( cookies.token != null) {
+        cookies_value = cookies.token.split("-");
+    }
+    
     const cookies_token = cookies_value[0];
     const role = cookies_value[1];
 
