@@ -29,11 +29,11 @@ const TableHeader = [
         name: "Order Number",
         accessor: "order_number",
     },
-    { 
-        id: 3, 
-        name: "LA", 
-        accessor: "la", 
-        sortable: true, 
+    {
+        id: 3,
+        name: "LA",
+        accessor: "la",
+        sortable: true,
     },
     { id: 4, name: "LV Name", accessor: "LV_name", sortable: true },
     { id: 5, name: "Commodity", accessor: "commodity", sortable: true },
@@ -41,7 +41,12 @@ const TableHeader = [
     { id: 7, name: "Chq Amount", accessor: "chq_amount" },
     { id: 8, name: "Part Pay", accessor: "part_pay" },
     { id: 9, name: "Balance", accessor: "balance", sortable: true },
-    { id: 10, name: "Chq Issue Date", accessor: "chq_issue_date", sortable: true },
+    {
+        id: 10,
+        name: "Chq Issue Date",
+        accessor: "chq_issue_date",
+        sortable: true,
+    },
     { id: 11, name: "Initial amount", accessor: "init_amount" },
     { id: 12, name: "Payment", accessor: "payment" },
     { id: 13, name: "Final Amount", accessor: "final_amount" },
@@ -56,21 +61,24 @@ const App = () => {
     const [pageSize, setPageSize] = useState(2);
     const { logout } = useAuth();
 
-     // search filter for all fields
-     const [query, setQuery] = useState("");
+    // search filter for all fields
+    const [query, setQuery] = useState("");
 
-     const data = Object.values(tableData);
-     function search(items) {
-         const res = items.filter((item) =>
-             Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                 item[parameter]?.toString().toLowerCase().includes(query)
-             )
-         );
-         return res.slice(
-             (cursorPos - 1) * pageSize,
-             (cursorPos - 1) * pageSize + pageSize
-         );
-     }
+    const data = Object.values(tableData);
+    function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
+        const res = items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter]?.toString().toLowerCase().includes(query)
+            )
+        );
+        return res.slice(
+            (cursorPos - 1) * pageSize,
+            (cursorPos - 1) * pageSize + pageSize
+        );
+    }
 
     useEffect(() => {
         fetch("http://localhost:3001/management/getchqlist")
@@ -293,7 +301,6 @@ const App = () => {
         setChqList(newChqList);
     };
 
-
     const filteredChq =
         query === ""
             ? ChqList
@@ -436,7 +443,7 @@ const App = () => {
                                             </button>
                                         </Dialog.Title>
                                         {/* // new end */}
-                                        
+
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"

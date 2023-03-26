@@ -32,6 +32,7 @@ const Payment = lazy(() => import("./pages/Payment"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
+const Navbar = lazy(() => import("./components/Navbar"));
 
 const PublicRoutesList = [
     {
@@ -48,7 +49,7 @@ const PublicRoutesList = [
     },
     {
         link: "/test",
-        component: Table,
+        component: Navbar,
     },
 ];
 
@@ -103,7 +104,6 @@ const AdminRoutesList = [
         component: CurrentStatus,
     },
     {
-
         link: "/predefinedship",
         component: PreDefinedShip,
     },
@@ -131,72 +131,75 @@ const AdminRoutesList = [
 
 function App() {
     return (
-        <Routes>
-            {OperationRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <OperationRoutes>
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        </OperationRoutes>
-                    }
-                />
-            ))}
-            {AccountsRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <AccountsRoutes>
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        </AccountsRoutes>
-                    }
-                />
-            ))}
-            {AdminRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <AdminRoutes>
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        </AdminRoutes>
-                    }
-                />
-            ))}
-            {AccountsManagerRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <AccountsManagerRoutes>
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        </AccountsManagerRoutes>
-                    }
-                />
-            ))}
+        <>
+            <Navbar />
+            <Routes>
+                {OperationRoutesList.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.link}
+                        element={
+                            <OperationRoutes>
+                                <Suspense fallback={<Loader />}>
+                                    <route.component />
+                                </Suspense>
+                            </OperationRoutes>
+                        }
+                    />
+                ))}
+                {AccountsRoutesList.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.link}
+                        element={
+                            <AccountsRoutes>
+                                <Suspense fallback={<Loader />}>
+                                    <route.component />
+                                </Suspense>
+                            </AccountsRoutes>
+                        }
+                    />
+                ))}
+                {AccountsManagerRoutesList.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.link}
+                        element={
+                            <AccountsManagerRoutes>
+                                <Suspense fallback={<Loader />}>
+                                    <route.component />
+                                </Suspense>
+                            </AccountsManagerRoutes>
+                        }
+                    />
+                ))}
+                {AdminRoutesList.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.link}
+                        element={
+                            <AdminRoutes>
+                                <Suspense fallback={<Loader />}>
+                                    <route.component />
+                                </Suspense>
+                            </AdminRoutes>
+                        }
+                    />
+                ))}
 
-            {PublicRoutesList.map((route, index) => (
-                <Route
-                    key={index}
-                    path={route.link}
-                    element={
-                        <Suspense fallback={<Loader />}>
-                            <route.component />
-                        </Suspense>
-                    }
-                />
-            ))}
-        </Routes>
+                {PublicRoutesList.map((route, index) => (
+                    <Route
+                        key={index}
+                        path={route.link}
+                        element={
+                            <Suspense fallback={<Loader />}>
+                                <route.component />
+                            </Suspense>
+                        }
+                    />
+                ))}
+            </Routes>
+        </>
     );
 }
 

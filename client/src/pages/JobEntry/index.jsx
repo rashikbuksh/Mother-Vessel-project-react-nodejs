@@ -101,6 +101,9 @@ const App = () => {
 
     const data = Object.values(tableData);
     function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
                 item[parameter]?.toString().toLowerCase().includes(query)

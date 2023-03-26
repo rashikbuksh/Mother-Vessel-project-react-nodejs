@@ -14,20 +14,23 @@ export default function Login() {
     const [isInvalidPassword, setIsInvalidPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [cookies, setCookies, removeCookie] = useCookies();
-    const [token, setToken] = React.useState('');
+    const [token, setToken] = React.useState("");
     const [substitutions, setSubstitutions] = React.useState(0);
-    
-    const generateToken=(length) =>{
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    const generateToken = (length) => {
+        let result = "";
+        const characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         const charactersLength = characters.length;
         let counter = 0;
         while (counter < length) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
+            result += characters.charAt(
+                Math.floor(Math.random() * charactersLength)
+            );
+            counter += 1;
         }
         return result;
-    }
+    };
 
     useEffect(() => {
         setToken(generateToken(20));
@@ -91,32 +94,38 @@ export default function Login() {
                     warning("Wrong password");
                 } else {
                     //console.log(token);
-                    localStorage.setItem('token', token); //  token in local storage
+                    localStorage.setItem("token", token); //  token in local storage
 
                     //console.log(substitutions);
                     const new_ascii = [];
-                    for(var i=0;i<response.data.position.length;i++){
-                        new_ascii.push(response.data.position.codePointAt(i)-substitutions);
+                    for (var i = 0; i < response.data.position.length; i++) {
+                        new_ascii.push(
+                            response.data.position.codePointAt(i) -
+                                substitutions
+                        );
                         //console.log(response.data.position.codePointAt(i));
                     }
                     //console.log(new_ascii);
                     const new_string = String.fromCharCode(...new_ascii);
                     //console.log(new_string);
 
-                    setCookies("token", token+"-"+new_string+"-"+substitutions); //  token
+                    setCookies(
+                        "token",
+                        token + "-" + new_string + "-" + substitutions
+                    ); //  token
 
                     switch (response.data.position) {
                         case "admin":
                             navigate("/adminpanel");
                             break;
                         case "operations":
-                            navigate("/jobentry");
-                            break;
-                        case "accounts":
                             navigate("/recordentry");
                             break;
+                        case "accounts":
+                            navigate("/jobentry");
+                            break;
                         case "accounts-manager":
-                            navigate("/currentstatus");
+                            navigate("/chqduelist");
                             break;
                         default:
                             navigate("/login");
@@ -129,12 +138,12 @@ export default function Login() {
     return (
         <div className="flex min-h-screen min-w-max flex-col justify-center bg-gray-100 py-6 sm:py-12">
             <div className="relative min-w-[40%] py-3 sm:mx-auto sm:max-w-xl">
-                <div className="absolute inset-0 -skew-y-6 transform animate-pulse bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
+                <div className="absolute inset-0 -skew-y-6 transform animate-pulse bg-gradient-to-r from-green-300 to-green-600 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
                 <div className="relative bg-white px-4 py-10 shadow-lg sm:rounded-3xl sm:p-20">
                     <div className="mx-auto">
                         <div>
-                            <h1 className="text-2xl font-semibold">
-                                Welcome back
+                            <h1 className="text-center text-4xl font-semibold tracking-wider text-green-700">
+                                Welcome To KEL-BD
                             </h1>
                         </div>
                         <form className="divide-y divide-gray-200">
@@ -190,7 +199,7 @@ export default function Login() {
                                 <button
                                     type="button"
                                     onClick={onSubmit}
-                                    className="mt-4 mb-2 block w-full rounded-2xl bg-indigo-600 py-2 font-semibold text-white"
+                                    className="mt-4 mb-2 block w-full rounded-2xl bg-green-600 py-2 font-semibold text-white"
                                 >
                                     Login
                                 </button>

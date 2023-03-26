@@ -29,20 +29,35 @@ const TableHeader = [
         name: "Job Number",
         accessor: "job_number",
     },
-    { id: 3, name: "LV Name", accessor: "LV_name", sortable: true, },
-    { id: 4, name: "Date From Charpotro", accessor: "date_from_charpotro", sortable: true, },
+    { id: 3, name: "LV Name", accessor: "LV_name", sortable: true },
+    {
+        id: 4,
+        name: "Date From Charpotro",
+        accessor: "date_from_charpotro",
+        sortable: true,
+    },
     { id: 5, name: "MV Name", accessor: "MV_name" },
-    { id: 6, name: "Commodity", accessor: "commodity", sortable: true, },
+    { id: 6, name: "Commodity", accessor: "commodity", sortable: true },
     { id: 7, name: "Chq No", accessor: "chq_no" },
-    { id: 8, name: "Chq Issue Date", accessor: "chq_issue_date", sortable: true, },
+    {
+        id: 8,
+        name: "Chq Issue Date",
+        accessor: "chq_issue_date",
+        sortable: true,
+    },
     { id: 9, name: "Amount", accessor: "amount" },
     { id: 10, name: "Part Pay", accessor: "part_pay" },
     { id: 11, name: "Payment Approved", accessor: "payment_approved" },
     { id: 12, name: "Balance", accessor: "balance" },
     { id: 13, name: "Payment Chq No", accessor: "payment_chq_no" },
     { id: 14, name: "Payment Chq Amount", accessor: "payment_chq_amount" },
-    { id: 15, name: "Payment Chq Date", accessor: "payment_chq_date", sortable: true, },
-    { id: 16, name: "Added Date", accessor: "added_date", sortable: true, },
+    {
+        id: 15,
+        name: "Payment Chq Date",
+        accessor: "payment_chq_date",
+        sortable: true,
+    },
+    { id: 16, name: "Added Date", accessor: "added_date", sortable: true },
     { id: 17, name: "Actions" },
 ];
 
@@ -59,6 +74,9 @@ const App = () => {
 
     const data = Object.values(tableData);
     function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
                 item[parameter]?.toString().toLowerCase().includes(query)
@@ -337,8 +355,8 @@ const App = () => {
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-           {/* // new start */}
-           <div className="my-2 mx-auto flex justify-center">
+            {/* // new start */}
+            <div className="my-2 mx-auto flex justify-center">
                 <Pagination
                     pageSize={pageSize}
                     cursorPos={cursorPos}
@@ -357,7 +375,8 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Payment <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Payment{" "}
+                    <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
             </div>
             <form onSubmit={handleEditFormSubmit}>
