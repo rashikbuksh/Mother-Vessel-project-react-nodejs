@@ -17,7 +17,7 @@ const TableHead = ({ columns, handleSorting }) => {
     };
 
     return (
-        <thead className="break-words rounded-md border-b-2 border-gray-400 bg-green-200">
+        <thead className="break-words rounded-md border-b-2 border-gray-400 bg-green-200 py-6">
             <tr>
                 {columns.map(({ id, name, accessor, sortable, width }) => {
                     return (
@@ -28,7 +28,7 @@ const TableHead = ({ columns, handleSorting }) => {
                                     ? () => handleSortingChange(accessor)
                                     : null
                             }
-                            className={`cursor-pointer select-none border-r-2 border-gray-400 px-2 text-left text-sm font-semibold tracking-wide ${width}`}
+                            className={`cursor-pointer select-none border-r-2 border-gray-400 px-2 py-2 text-left text-sm font-semibold tracking-wide ${width}`}
                         >
                             <span className="flex items-center justify-between space-x-2">
                                 <>{name}</>
