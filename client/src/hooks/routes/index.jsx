@@ -8,25 +8,27 @@ export function DefineRole() {
     const session_token = localStorage.getItem("token");
     let cookies_value = useState([]);
 
-    if ( cookies.token != null) {
+    if (cookies.token != null) {
         cookies_value = cookies.token.split("-");
+        const cookies_token = cookies_value[0];
+        const role = cookies_value[1];
+
+        const substitute = parseInt(cookies_value[2]);
+        const original_ascii = [];
+        for (var i = 0; i < role?.length; i++) {
+            original_ascii.push(role.codePointAt(i) + substitute);
+        }
+
+        const original_role = String.fromCharCode(...original_ascii);
+        const is_NoRoleAssigned_SessionAndCookie_IsNotEqual =
+            original_role === "undefined" || session_token !== cookies_token;
+
+        return { original_role, is_NoRoleAssigned_SessionAndCookie_IsNotEqual };
     }
-    
-    const cookies_token = cookies_value[0];
-    const role = cookies_value[1];
-
-    const substitute = parseInt(cookies_value[2]);
-    const original_ascii = [];
-    for (var i = 0; i < role?.length; i++) {
-        original_ascii.push(role.codePointAt(i) + substitute);
+    else{
+        return { original_role: null, is_NoRoleAssigned_SessionAndCookie_IsNotEqual: true };
     }
-
-    const original_role = String.fromCharCode(...original_ascii);
-    const is_NoRoleAssigned_SessionAndCookie_IsNotEqual =
-        original_role === "undefined" || session_token !== cookies_token;
-
-    return { original_role, is_NoRoleAssigned_SessionAndCookie_IsNotEqual };
-}
+    }  
 
 export function AccountsManagerRoutes({ children }) {
     const { original_role, is_NoRoleAssigned_SessionAndCookie_IsNotEqual } =

@@ -33,6 +33,13 @@ export default function Login() {
     };
 
     useEffect(() => {
+        if (cookies.token == null) {
+            setCookies("token", "undefined");
+            navigate("/login");
+        }
+        else if(cookies.token != "undefined"){
+            navigate("/dashboard");
+        }
         setToken(generateToken(20));
         setSubstitutions(Math.floor(Math.random() * 26));
     }, []);
