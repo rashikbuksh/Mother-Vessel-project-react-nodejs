@@ -10,6 +10,8 @@ import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 
+import Select from "../../components/Select"; // new
+
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
@@ -68,7 +70,7 @@ const App = () => {
     const [userList, setUserList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(userList, TableHeader); // data, columns
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(20);
     const { logout } = useAuth();
 
     // search filter for all fields
@@ -104,9 +106,11 @@ const App = () => {
         name: "",
         username: "",
         password: "",
-        position: "admin",
+        position: "",
         department: "",
     });
+
+    console.log(addFormData);
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -388,6 +392,7 @@ const App = () => {
                                     {editContactId === user.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
+                                            setEditFormData={setEditFormData}
                                             handleEditFormChange={
                                                 handleEditFormChange
                                             }
@@ -509,28 +514,29 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Position
                                                 </label>
-                                                <select
-                                                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+
+                                                <Select
+                                                    options={[
+                                                        {
+                                                            value: "admin",
+                                                        },
+                                                        {
+                                                            value: "operations",
+                                                        },
+                                                        {
+                                                            value: "accounts-manager",
+                                                        },
+                                                        {
+                                                            value: "accounts",
+                                                        },
+                                                    ]}
                                                     name="position"
-                                                    required
-                                                    placeholder="Enter a phone position..."
-                                                    onChange={
-                                                        handleAddFormChange
+                                                    addFormData={addFormData}
+                                                    setAddFormData={
+                                                        setAddFormData
                                                     }
-                                                >
-                                                    <option value="admin">
-                                                        Admin
-                                                    </option>
-                                                    <option value="operations">
-                                                        Operations
-                                                    </option>
-                                                    <option value="accounts-manager">
-                                                        Accounts manager
-                                                    </option>
-                                                    <option value="accounts">
-                                                        Accounts
-                                                    </option>
-                                                </select>
+                                                    isAddFromData={true}
+                                                />
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">

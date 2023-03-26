@@ -25,7 +25,12 @@ const TableHeader = [
         sortByOrder: "asc",
     },
     { id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
-    { id: 3, name: "Date From Charpotro", accessor: "date_from_charpotro", sortable: true },
+    {
+        id: 3,
+        name: "Date From Charpotro",
+        accessor: "date_from_charpotro",
+        sortable: true,
+    },
     { id: 4, name: "Commodity", accessor: "commodity" },
     { id: 5, name: "LA", accessor: "LA" },
     { id: 6, name: "Destination From", accessor: "dest_from" },
@@ -39,9 +44,12 @@ const TableHeader = [
 const App = () => {
     // new start
     const [CurrentStatus, setCurrentStatus] = useState([]);
-    const [tableData, handleSorting] = useSortableTable(CurrentStatus, TableHeader); // data, columns // new
+    const [tableData, handleSorting] = useSortableTable(
+        CurrentStatus,
+        TableHeader
+    ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(20);
 
     const { logout } = useAuth();
 

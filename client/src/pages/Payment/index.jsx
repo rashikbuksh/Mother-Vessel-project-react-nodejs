@@ -65,7 +65,7 @@ const App = () => {
     const [PayList, setPayList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(PayList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(20);
 
     const { logout } = useAuth();
 

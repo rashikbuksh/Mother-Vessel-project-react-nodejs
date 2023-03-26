@@ -12,6 +12,8 @@ import Loader from "../../utils/Loader";
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
+import Select from "../../components/Select";
+
 //toast
 import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
@@ -72,7 +74,7 @@ const App = () => {
         TableHeader
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(20);
 
     const { logout } = useAuth();
 
