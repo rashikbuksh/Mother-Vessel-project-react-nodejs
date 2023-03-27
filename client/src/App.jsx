@@ -25,6 +25,7 @@ const JobEntry = lazy(() => import("./pages/JobEntry"));
 const RecordEntry = lazy(() => import("./pages/RecordEntry"));
 const CurrentStatus = lazy(() => import("./pages/CurrentStatus"));
 const PreDefinedShip = lazy(() => import("./pages/PreDefinedShip"));
+const PreDefinedAdmin = lazy(() => import("./pages/PreDefinedAdmin"));
 const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
 const ChqApproval = lazy(() => import("./pages/ChqApproval"));
@@ -106,6 +107,10 @@ const AdminRoutesList = [
     {
         link: "/predefinedship",
         component: PreDefinedShip,
+    },
+    {
+        link: "/predefinedadmin",
+        component: PreDefinedAdmin,
     },
     {
         link: "/damaragecalculation", // problem is here ( not updating data)
