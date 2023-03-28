@@ -1038,6 +1038,17 @@ app.post("/management/deletepredefinedship", (req, res) => {
     });
 });
 
+//get max job number from job order table
+app.get("/management/getmaxjobnumber", (req, res) => {
+    var order_number = req.query.order_number;
+    console.log(order_number);
+    const sqlSelect = `SELECT MAX(job_number) as max_job_number from order_job_table where order_number = '${order_number}'`;
+    db.query(sqlSelect, [order_number], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+});
+
 app.listen(3001, () => {
     console.log("Running on port 3001");
 });
