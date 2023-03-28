@@ -3,9 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+
 -- Generation Time: Mar 28, 2023 at 06:45 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -181,6 +183,7 @@ INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_n
 (14, 'Akij-28-mv1-Chittagong', 'Akij', 'mv1', '2023-03-28', 'Suger', 'Chittagong', 50, 'Fahim', '01794798101', '2023-03-28 22:16:03'),
 (15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 12, 'Fahim', '01794798101', '2023-03-28 22:18:47');
 
+
 --
 -- Triggers `job_entry`
 --
@@ -214,6 +217,7 @@ INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `or
 (4, 'Akij-28-mv1-Chittagong', 1, 0, 0, 0),
 (6, 'Akij-28-mv1-Chittagong', 2, 0, 0, 0),
 (7, 'afaf', 0, 0, 0, 0);
+
 
 -- --------------------------------------------------------
 
@@ -305,7 +309,21 @@ CREATE TABLE `record_entry` (
 --
 
 INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `commodity`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
-(2, 'order_number_forign_key', 'job_number_auto', '2023-03-10', 10, 'asdasd', 'asdasdasd', 'la', 'la', 'asdasd', 1000, 1000, 'rbr', '0168', '2023-03-10');
+(2, 'order_number_forign_key', 'job_number_auto', '2023-03-10', 10, 'asdasd', 'asdasdasd', 'la', 'la', 'asdasd', 1000, 1000, 'rbr', '0168', '2023-03-10'),
+(4, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-03', 50, '50', '', 'wow', 'll', 'kvxkvx', 520, 47564, 'vjxcjv ', '01521533595', '2023-03-28'),
+(5, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-11', 50, 'j g', 'j kjgx ', 'dj gdjfklg', ' sjljsdf', 'sj fdslj', 5000, 424, 'sd fjsd ', ' jfsdfjsd sjfs', '2023-03-28'),
+(6, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-18', 545, 'dsikfds ', 'jf dlsj', ' lkj', ' sjf', 'j fdsj f', 45, 45, 'h fshf', ' hdff ds', '2023-03-28'),
+(7, 'Akij-28-mv1-Chittagong', '3', '2023-03-17', 56456, 'fg fdgd', ' sdfds f', 'h', 'h ', 'hj', 42445, 44545, 'wsdh fds', ' jlfksf', '2023-03-28'),
+(9, 'Nisha-12/4/2024-Unnoyon-UK', '1', '2023-03-23', 3432432, '32432', '342324', '3243243', '324324', '324324', 34318, 34324, '43324', '32424', '2023-03-28'),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-17', 32432, '432432', '432432', '432432', '432432', '3432', 3432, 3432, '32432', '', '2023-03-28');
+
+--
+-- Triggers `record_entry`
+--
+DELIMITER $$
+CREATE TRIGGER `add_record_job` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO order_job_table (order_number, job_number) VALUES (new.order_number, new.job_number)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -430,13 +448,13 @@ ALTER TABLE `damarage_dispatch`
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -454,7 +472,7 @@ ALTER TABLE `pre_defined_ship`
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`

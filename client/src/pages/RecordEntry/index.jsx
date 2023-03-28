@@ -70,7 +70,7 @@ const App = () => {
     // new start
     const [RecordList, setRecordList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
-    const [JobNumberMax, setJobNumberMax] = useState(-1);
+    const [JobNumberMax, setJobNumberMax] = useState([]);
     const [tableData, handleSorting] = useSortableTable(
         RecordList,
         TableHeader
@@ -203,7 +203,8 @@ const App = () => {
         // const current = new Date();
         // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
         // console.log(order_number_auto)
-        newRecord.job_number = JobNumberMax + 1;
+        newRecord.job_number = JobNumberMax[0]?.max_job_number + 1;
+        console.log(newRecord.job_number);
 
         // api call
         Axios.post("http://localhost:3001/management/recordentry", {
@@ -329,16 +330,6 @@ const App = () => {
         setRecordList(newRecordList);
     };
 
-    const filteredRecord =
-        query === ""
-            ? RecordList
-            : RecordList.filter((Record) =>
-                  Record.order_number
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
-
     // modal for add Record
     let [isOpen, setIsOpen] = useState(false);
 
@@ -356,11 +347,12 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData.order_number}`
+            `http://localhost:3001/management/getmaxjobnumber?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
                 setJobNumberMax(data);
+                console.log(data);
             });
     }, [addFormData.order_number]);
 
@@ -507,23 +499,6 @@ const App = () => {
                                                     />
                                                 )}
                                             </div>
-
-                                            {/* <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Job Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="job_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Auto Generated"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div> */}
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Date From Charpotro
