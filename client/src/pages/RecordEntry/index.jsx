@@ -70,6 +70,7 @@ const App = () => {
     // new start
     const [RecordList, setRecordList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
+    const [JobNumberMax, setJobNumberMax] = useState(-1);
     const [tableData, handleSorting] = useSortableTable(
         RecordList,
         TableHeader
@@ -202,11 +203,12 @@ const App = () => {
         // const current = new Date();
         // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
         // console.log(order_number_auto)
+        newRecord.job_number = JobNumberMax + 1;
 
         // api call
         Axios.post("http://localhost:3001/management/recordentry", {
-            order_number: "order_number_forign_key", //handleAddFormChange로 받은 새 데이터
-            job_number: "job_number_auto",
+            order_number: newRecord.order_number,
+            job_number: newRecord.job_number,
             date_from_charpotro: newRecord.date_from_charpotro,
             cp_number_from_charpotro: newRecord.cp_number_from_charpotro,
             LA_name: newRecord.LA_name,
@@ -352,6 +354,15 @@ const App = () => {
             });
         setIsOpen(true);
     }
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData.order_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setJobNumberMax(data);
+            });
+    }, [addFormData.order_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
