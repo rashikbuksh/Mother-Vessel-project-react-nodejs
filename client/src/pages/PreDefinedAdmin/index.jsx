@@ -25,31 +25,15 @@ const TableHeader = [
         sortByOrder: "asc",
     },
     { id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
-    {
-        id: 3,
-        name: "Date From Charpotro",
-        accessor: "date_from_charpotro",
-        sortable: true,
-    },
-    { id: 4, name: "Commodity", accessor: "commodity" },
-    { id: 5, name: "LA", accessor: "LA" },
-    { id: 6, name: "Destination From", accessor: "dest_from" },
-    { id: 7, name: "Destination To", accessor: "dest_to" },
-    { id: 8, name: "Current Location", accessor: "current_location" },
-    { id: 9, name: "Remark", accessor: "remark" },
-    { id: 10, name: "Created Date", accessor: "created_date", sortable: true },
-    { id: 11, name: "Actions" },
+    { id: 3, name: "Actions" },
 ];
 
 const App = () => {
     // new start
     const [CurrentStatus, setCurrentStatus] = useState([]);
-    const [tableData, handleSorting] = useSortableTable(
-        CurrentStatus,
-        TableHeader
-    ); // data, columns // new
+    const [tableData, handleSorting] = useSortableTable(CurrentStatus, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(2);
 
     const { logout } = useAuth();
 
@@ -283,15 +267,13 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* 
                 <button
                     // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Ship <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> 
-                */}
+                </button>
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
