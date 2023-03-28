@@ -12,6 +12,8 @@ import { useSortableTable } from "../../components/Table/useSortableTable"; // n
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
+import Select from "../../components/Select";
+
 //toast
 import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
@@ -122,7 +124,7 @@ const App = () => {
 
     const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(20);
 
     const { logout } = useAuth();
 
@@ -461,15 +463,16 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setOrderNumber(data);
-                console.log(data);
             });
-        fetch("http://localhost:3001/management/fetch_job_number/")
+        fetch(
+            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData?.order_number}`
+        )
             .then((res) => res.json())
             .then((data) => {
                 setJobNumber(data);
-                console.log(data);
+                console.log("Job", data);
             });
-        console.log(OrderNumber);
+        console.log(JobNumber);
         setIsOpen(true);
     }
 
@@ -604,54 +607,38 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <select
-                                                    name="order_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                >
-                                                    {OrderNumber.map((item) =>
-                                                        item ===
-                                                        OrderNumber ? null : (
-                                                            <option
-                                                                value={
-                                                                    item.order_number
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.order_number
-                                                                }
-                                                            </option>
-                                                        )
-                                                    )}
-                                                </select>
+                                                {OrderNumber && (
+                                                    <Select
+                                                        options={OrderNumber}
+                                                        name="order_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Job Number
                                                 </label>
-                                                <select
-                                                    name="job_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                >
-                                                    {JobNumber.map((item) =>
-                                                        item ===
-                                                        JobNumber ? null : (
-                                                            <option
-                                                                value={
-                                                                    item.job_number
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.job_number
-                                                                }
-                                                            </option>
-                                                        )
-                                                    )}
-                                                </select>
+                                                {JobNumber && (
+                                                    <Select
+                                                        options={JobNumber}
+                                                        name="job_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">

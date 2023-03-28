@@ -1,8 +1,9 @@
-import React from "react";
+import Select from "../../../components/Select";
 import { FiCheck } from "react-icons/fi";
 import { ImCancelCircle } from "react-icons/im";
 const EditTableRow = ({
     editFormData,
+    setEditFormData,
     handleEditFormChange,
     handleCancelClick,
 }) => {
@@ -32,19 +33,27 @@ const EditTableRow = ({
                 />
             </td>
             <td>
-                <select
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    name="position"
-                    required
-                    placeholder="Enter Position..."
+                <Select
+                    options={[
+                        {
+                            value: "admin",
+                        },
+                        {
+                            value: "operations",
+                        },
+                        {
+                            value: "accounts-manager",
+                        },
+                        {
+                            value: "accounts",
+                        },
+                    ]}
                     value={editFormData.position}
-                    onChange={handleEditFormChange}
-                >
-                    <option value="admin">Admin</option>
-                    <option value="operations">Operations</option>
-                    <option value="accounts-manager">Accounts manager</option>
-                    <option value="accounts">Accounts</option>
-                </select>
+                    name="position"
+                    editFormData={editFormData}
+                    setEditFormData={setEditFormData}
+                    isEditFormData={true}
+                />
             </td>
             <td>
                 <input

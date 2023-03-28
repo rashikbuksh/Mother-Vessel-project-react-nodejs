@@ -64,7 +64,9 @@ function Nav() {
     return (
         <div
             className={`flex flex-wrap place-items-center ${
-                window.location.pathname === "/login" && "hidden"
+                (window.location.pathname === "/login" ||
+                    window.location.pathname === "/") &&
+                "hidden"
             } `}
         >
             <section className="relative mx-auto">
@@ -87,7 +89,7 @@ function Nav() {
                                             ${
                                                 window.location.pathname ===
                                                 nav.link
-                                                    ? "border-red-500"
+                                                    ? "border-white"
                                                     : "border-green-700"
                                             }`}
                                             href={nav.link}
@@ -120,7 +122,7 @@ function Nav() {
                             </a> */}
                             <button
                                 onClick={logout}
-                                className="rounded-full bg-red-600 px-6 py-2 uppercase text-white transition-all duration-500 ease-in-out hover:bg-red-700"
+                                className="rounded-full bg-white px-6 py-2 font-sans font-semibold uppercase text-red-600 transition-all duration-500 ease-in-out hover:bg-gray-700"
                             >
                                 logout
                             </button>

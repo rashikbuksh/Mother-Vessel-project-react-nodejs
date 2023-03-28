@@ -37,6 +37,10 @@ const Navbar = lazy(() => import("./components/Navbar"));
 
 const PublicRoutesList = [
     {
+        link: "/",
+        component: Login,
+    },
+    {
         link: "/login",
         component: Login,
     },

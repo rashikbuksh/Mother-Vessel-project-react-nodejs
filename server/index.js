@@ -257,7 +257,21 @@ app.post("/management/recordentry", (req, res) => {
         "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_record,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number],
+        [
+            order_number,
+            job_number,
+            date_from_charpotro,
+            cp_number_from_charpotro,
+            LA_name,
+            LV_name,
+            dest_from,
+            dest_to,
+            commodity,
+            capacity,
+            rate,
+            LV_master_name,
+            LV_master_contact_number,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -294,7 +308,22 @@ app.post("/management/updaterecordentry", (req, res) => {
         "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, commodity=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
     db.query(
         sqlUpdate,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number, id],
+        [
+            order_number,
+            job_number,
+            date_from_charpotro,
+            cp_number_from_charpotro,
+            LA_name,
+            LV_name,
+            dest_from,
+            dest_to,
+            commodity,
+            capacity,
+            rate,
+            LV_master_name,
+            LV_master_contact_number,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             //console.log(result)
@@ -350,14 +379,14 @@ app.post("/management/currentstatus", (req, res) => {
         }
     );
 });
-//Get current status 
+//Get current status
 app.get("/management/getcurrentstatus", (req, res) => {
     const sqlSelect = "SELECT * from current_status";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 });
-//Update current status 
+//Update current status
 app.post("/management/updatecurrentstatus", (req, res) => {
     console.log("update job info in backend");
     const id = req.body.id;
@@ -394,7 +423,7 @@ app.post("/management/updatecurrentstatus", (req, res) => {
         }
     );
 });
-//Delete current status 
+//Delete current status
 app.post("/management/deletecurrentstatus", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.status_id;
@@ -408,8 +437,7 @@ app.post("/management/deletecurrentstatus", (req, res) => {
     });
 });
 
-
-//Insert Damarage 
+//Insert Damarage
 app.post("/management/insertdamarage", (req, res) => {
     console.log("submit in backend");
     const order_number = req.body.order_number;
@@ -438,10 +466,35 @@ app.post("/management/insertdamarage", (req, res) => {
     const total_despatch = req.body.total_despatch;
     const daily_despatch = req.body.daily_despatch;
     console.log(job_number);
-    const create_damarage = "INSERT INTO damarage_dispatch(order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const create_damarage =
+        "INSERT INTO damarage_dispatch(order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_damarage,
-        [order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch],
+        [
+            order_number,
+            job_number,
+            date,
+            cp_number,
+            date_from_charpotro,
+            commodity,
+            volume,
+            LV_name,
+            MV_name,
+            loading_location,
+            unloading_location,
+            loading_start_time_stamp,
+            loading_completion_time_stamp,
+            sailing_time_stamp,
+            duration_of_travel_time,
+            unloading_start_time_stamp,
+            unloading_completion_time_stamp,
+            others,
+            total_elapsed_time,
+            voyage_time,
+            free_time,
+            total_despatch,
+            daily_despatch,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -490,7 +543,32 @@ app.post("/management/updatedamarage", (req, res) => {
         "UPDATE damarage_dispatch SET order_number=?, job_number=?, date=?, cp_number=?, date_from_charpotro=?, commodity=?, volume=?, LV_name=?, MV_name=?, loading_location=?, unloading_location=?, loading_start_time_stamp=?, loading_completion_time_stamp=?, sailing_time_stamp=?, duration_of_travel_time=?, unloading_start_time_stamp=?, unloading_completion_time_stamp=?, others=?, total_elapsed_time=?, voyage_time=?, free_time=?, total_despatch=?, daily_despatch=? WHERE id=?";
     db.query(
         sqlUpdate,
-        [order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp,sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch, id],
+        [
+            order_number,
+            job_number,
+            date,
+            cp_number,
+            date_from_charpotro,
+            commodity,
+            volume,
+            LV_name,
+            MV_name,
+            loading_location,
+            unloading_location,
+            loading_start_time_stamp,
+            loading_completion_time_stamp,
+            sailing_time_stamp,
+            duration_of_travel_time,
+            unloading_start_time_stamp,
+            unloading_completion_time_stamp,
+            others,
+            total_elapsed_time,
+            voyage_time,
+            free_time,
+            total_despatch,
+            daily_despatch,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -515,15 +593,17 @@ app.post("/management/deletedamarage", (req, res) => {
 
 app.get("/management/fetch_order_number", (req, res) => {
     console.log("fetching order number");
-    const sqlSelect = "SELECT order_number from job_entry";
+    const sqlSelect = "SELECT order_number as 'value' from job_entry";
+    // change the order number to value
     db.query(sqlSelect, (err, result) => {
         res.send(result);
+        console.log(result);
     });
 });
 
 app.get("/management/fetch_job_number", (req, res) => {
     console.log("fetching job number");
-    const sqlSelect = "SELECT job_number from record_entry";
+    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = ${req.query.order_number}`;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
@@ -551,13 +631,27 @@ app.post("/management/insertchq", (req, res) => {
     const init_amount = req.body.init_amount;
     const payment = req.body.payment;
     const final_amount = req.body.final_amount;
-    const create_chq = "INSERT INTO chq_due_list (order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    const create_chq =
+        "INSERT INTO chq_due_list (order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_chq,
-        [order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount],
+        [
+            order_number,
+            LA,
+            LV_name,
+            commodity,
+            mode,
+            chq_amount,
+            part_pay,
+            balance,
+            chq_issue_date,
+            init_amount,
+            payment,
+            final_amount,
+        ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -566,19 +660,14 @@ app.post("/management/insertchq", (req, res) => {
 app.post("/management/deletechq", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.Chq_id;
-    const sqlDelete =
-        "DELETE from chq_due_list where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from chq_due_list where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 
 // Uopdate Chq
@@ -601,7 +690,21 @@ app.post("/management/updatechq", (req, res) => {
         "UPDATE chq_due_list SET order_number=?, LA=?, LV_name=?, commodity=?, mode=?, chq_amount=?, part_pay=?, balance=?, chq_issue_date=?, init_amount=?, payment=?, final_amount=? WHERE id=?";
     db.query(
         sqlUpdate,
-        [order_number, LA, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount, id],
+        [
+            order_number,
+            LA,
+            LV_name,
+            commodity,
+            mode,
+            chq_amount,
+            part_pay,
+            balance,
+            chq_issue_date,
+            init_amount,
+            payment,
+            final_amount,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -640,13 +743,32 @@ app.post("/management/insertchq_approval", (req, res) => {
     const second_trip = req.body.second_trip;
     const third_trip = req.body.third_trip;
     const direct_trip = req.body.direct_trip;
-    const create_chq = "INSERT INTO chq_approval (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const create_chq =
+        "INSERT INTO chq_approval (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_chq,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip],
+        [
+            order_number,
+            job_number,
+            date_from_charpotro,
+            cp_number_from_charpotro,
+            LA_name,
+            LV_name,
+            MV_name,
+            dest_from,
+            dest_to,
+            capacity_ton,
+            rate,
+            sixty_percent_payment,
+            forty_percent_payment,
+            damarage,
+            second_trip,
+            third_trip,
+            direct_trip,
+        ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -655,19 +777,14 @@ app.post("/management/insertchq_approval", (req, res) => {
 app.post("/management/deletechq_approval", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.Chq_id;
-    const sqlDelete =
-        "DELETE from chq_approval where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from chq_approval where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 
 // Uopdate Chq
@@ -695,7 +812,26 @@ app.post("/management/updatechq_approval", (req, res) => {
         "UPDATE chq_approval SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, MV_name=?, dest_from=?, dest_to=?, capacity_ton=?, rate=?, sixty_percent_payment=?, forty_percent_payment=?, damarage=?, second_trip=?, third_trip=?, direct_trip=? WHERE id=?";
     db.query(
         sqlUpdate,
-        [order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip, id],
+        [
+            order_number,
+            job_number,
+            date_from_charpotro,
+            cp_number_from_charpotro,
+            LA_name,
+            LV_name,
+            MV_name,
+            dest_from,
+            dest_to,
+            capacity_ton,
+            rate,
+            sixty_percent_payment,
+            forty_percent_payment,
+            damarage,
+            second_trip,
+            third_trip,
+            direct_trip,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -732,13 +868,30 @@ app.post("/management/insertpayment", (req, res) => {
     const payment_chq_amount = req.body.payment_chq_amount;
     const payment_chq_date = req.body.payment_chq_date;
     const added_date = req.body.added_date;
-    const create_chq = "INSERT INTO payment (job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const create_chq =
+        "INSERT INTO payment (job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_chq,
-        [job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date],
+        [
+            job_number,
+            LV_name,
+            date_from_charpotro,
+            MV_name,
+            commodity,
+            chq_no,
+            chq_issue_date,
+            amount,
+            part_pay,
+            payment_approved,
+            balance,
+            payment_chq_no,
+            payment_chq_amount,
+            payment_chq_date,
+            added_date,
+        ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result)
+            console.log(result);
             res.send(result);
         }
     );
@@ -747,19 +900,14 @@ app.post("/management/insertpayment", (req, res) => {
 app.post("/management/deletepayment", (req, res) => {
     console.log("Delete status in backend");
     const id = req.body.Pay_id;
-    const sqlDelete =
-        "DELETE from payment where id= ?";
-    db.query(
-        sqlDelete,
-        [id],(err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            if(!err){
-                res.send("success");
-            }
-            
+    const sqlDelete = "DELETE from payment where id= ?";
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) console.log(err);
+        //console.log(result)
+        if (!err) {
+            res.send("success");
         }
-    );
+    });
 });
 
 // Update Chq
@@ -785,7 +933,24 @@ app.post("/management/updatepayment", (req, res) => {
         "UPDATE payment SET job_number=?, LV_name=?, date_from_charpotro=?, MV_name=?, commodity=?, chq_no=?, chq_issue_date=?, amount=?, part_pay=?, payment_approved=?, balance=?, payment_chq_no=?, payment_chq_amount=?, payment_chq_date=?, added_date=? WHERE id=?";
     db.query(
         sqlUpdate,
-        [job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date, id],
+        [
+            job_number,
+            LV_name,
+            date_from_charpotro,
+            MV_name,
+            commodity,
+            chq_no,
+            chq_issue_date,
+            amount,
+            part_pay,
+            payment_approved,
+            balance,
+            payment_chq_no,
+            payment_chq_amount,
+            payment_chq_date,
+            added_date,
+            id,
+        ],
         (err, result) => {
             if (err) console.log(err);
             console.log(result);
@@ -794,7 +959,6 @@ app.post("/management/updatepayment", (req, res) => {
         }
     );
 });
-
 
 //Insert Current Status predefined
 app.post("/management/predefinedship", (req, res) => {
@@ -809,17 +973,11 @@ app.post("/management/predefinedship", (req, res) => {
     // const remark = req.body.remark;
     const create_predefinedship =
         "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
-    db.query(
-        create_predefinedship,
-        [
-            LV_name
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-            res.send(result);
-        }
-    );
+    db.query(create_predefinedship, [LV_name], (err, result) => {
+        if (err) console.log(err);
+        console.log(result);
+        res.send(result);
+    });
 });
 //Get Current Status predefined
 app.get("/management/getpredefinedship", (req, res) => {
@@ -877,7 +1035,6 @@ app.post("/management/deletepredefinedship", (req, res) => {
         }
     });
 });
-
 
 app.listen(3001, () => {
     console.log("Running on port 3001");
