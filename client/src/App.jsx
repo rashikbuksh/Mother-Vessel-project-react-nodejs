@@ -141,7 +141,7 @@ const AdminRoutesList = [
 function App() {
     return (
         <>
-            <Navbar />
+            
             <Routes>
                 {OperationRoutesList.map((route, index) => (
                     <Route
@@ -150,6 +150,7 @@ function App() {
                         element={
                             <OperationRoutes>
                                 <Suspense fallback={<Loader />}>
+                                <Navbar />
                                     <route.component />
                                 </Suspense>
                             </OperationRoutes>
@@ -163,6 +164,7 @@ function App() {
                         element={
                             <AccountsRoutes>
                                 <Suspense fallback={<Loader />}>
+                                <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsRoutes>
@@ -176,6 +178,7 @@ function App() {
                         element={
                             <AccountsManagerRoutes>
                                 <Suspense fallback={<Loader />}>
+                                <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsManagerRoutes>
@@ -189,6 +192,7 @@ function App() {
                         element={
                             <AdminRoutes>
                                 <Suspense fallback={<Loader />}>
+                                <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AdminRoutes>

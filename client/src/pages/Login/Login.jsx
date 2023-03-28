@@ -8,7 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { warning } from "./../../components/Toast/index";
 import { ToastContainer } from "react-toastify";
 
+import { DefineRole } from "../../hooks/routes";
+
 export default function Login() {
+    const { original_role } = DefineRole();
     const navigate = useNavigate();
     const [isInvalidEmail, setIsInvalidEmail] = useState(false);
     const [isInvalidPassword, setIsInvalidPassword] = useState(false);
@@ -38,7 +41,22 @@ export default function Login() {
             navigate("/login");
         }
         else if(cookies.token != "undefined"){
-            navigate("/dashboard");
+            switch (original_role) {
+                case "admin":
+                    navigate("/adminpanel");
+                    break;
+                case "operations":
+                    navigate("/recordentry");
+                    break;
+                case "accounts":
+                    navigate("/jobentry");
+                    break;
+                case "accounts-manager":
+                    navigate("/chqduelist");
+                    break;
+                default:
+                    navigate("/login");
+            }
         }
         setToken(generateToken(20));
         setSubstitutions(Math.floor(Math.random() * 26));
@@ -118,7 +136,7 @@ export default function Login() {
 
                     setCookies(
                         "token",
-                        token + "-" + new_string + "-" + substitutions
+                        token + ":" + new_string + ":" + substitutions
                     ); //  token
 
                     switch (response.data.position) {

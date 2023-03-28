@@ -9,7 +9,7 @@ export function DefineRole() {
     let cookies_value = useState([]);
 
     if (cookies.token != null) {
-        cookies_value = cookies.token.split("-");
+        cookies_value = cookies.token.split(":");
         const cookies_token = cookies_value[0];
         const role = cookies_value[1];
 
