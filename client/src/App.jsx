@@ -71,6 +71,10 @@ const OperationRoutesList = [
         link: "/damaragecalculation",
         component: DamarageCalculation,
     },
+    {
+        link: "/predefinedship",
+        component: PreDefinedShip,
+    },
 ];
 
 const AccountsRoutesList = [
@@ -117,8 +121,16 @@ const AdminRoutesList = [
         component: PreDefinedAdmin,
     },
     {
-        link: "/damaragecalculation", // problem is here ( not updating data)
+        link: "/damaragecalculation",
         component: DamarageCalculation,
+    },
+    {
+        link: "/predefinedship",
+        component: PreDefinedShip,
+    },
+    {
+        link: "/predefinedadmin",
+        component: PreDefinedAdmin,
     },
     {
         link: "/chqduelist",

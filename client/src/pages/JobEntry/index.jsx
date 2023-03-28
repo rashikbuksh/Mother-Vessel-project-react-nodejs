@@ -208,7 +208,11 @@ const App = () => {
         const order_number_auto =
             newJob.importer_name +
             "-" +
-            current.getDate().toLocaleString() +
+            current.getDate() +
+            "/" +
+            current.getMonth() +
+            "/" +
+            current.getFullYear() +
             "-" +
             newJob.mother_vessel_name +
             "-" +
