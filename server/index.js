@@ -602,9 +602,11 @@ app.get("/management/fetch_order_number", (req, res) => {
 });
 
 app.get("/management/fetch_job_number", (req, res) => {
-    console.log("fetching job number");
-    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = ${req.query.order_number}`;
+    var order_number = req.query.order_number;
+    console.log("query job number: ", order_number);
+    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
     db.query(sqlSelect, (err, result) => {
+        console.log(result);
         res.send(result);
     });
 });

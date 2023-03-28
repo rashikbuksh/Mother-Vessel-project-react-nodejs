@@ -1,6 +1,7 @@
 import React from "react";
 import { FiCheck } from "react-icons/fi";
 import { ImCancelCircle } from "react-icons/im";
+import Select from "../../../components/Select";
 const EditTableRow = ({
     editFormData,
     handleEditFormChange,
@@ -28,6 +29,7 @@ const EditTableRow = ({
                     className={clsName}
                     type="text"
                     required
+                    disabled
                     placeholder="Enter job number..."
                     name="job_number"
                     value={editFormData.job_number}

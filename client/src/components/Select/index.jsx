@@ -2,15 +2,6 @@ import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
-const options = [
-    { id: 1, name: "Wade Cooper" },
-    { id: 2, name: "Arlene Mccoy" },
-    { id: 3, name: "Devon Webb" },
-    { id: 4, name: "Tom Cook" },
-    { id: 5, name: "Tanya Fox" },
-    { id: 6, name: "Hellen Schmidt" },
-];
-
 export default function Select({
     options,
     name,
@@ -21,12 +12,12 @@ export default function Select({
     editFormData,
     setEditFormData,
     isEditFormData = false,
-    isDisabled = false,
+    isDisabled = true,
 }) {
     options = [...new Set(options)];
 
     const [selected, setSelected] = useState(
-        value !== "" ? value : options[0]?.value
+        value !== "" ? value : "Select an option"
     );
     const [query, setQuery] = useState("");
 
@@ -69,7 +60,7 @@ export default function Select({
                             className="peer w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                             displayValue={() => selected}
                             onChange={(event) => setQuery(event.target.value)}
-                            onFocus={onInputFocus}
+                            disabled={isDisabled}
                         />
                         <Combobox.Button
                             onClick={() => onInputFocus}
@@ -78,7 +69,6 @@ export default function Select({
                             <ChevronUpDownIcon
                                 className="h-5 w-5 text-gray-400"
                                 aria-hidden="true"
-                                onFocus={onInputFocus}
                             />
                         </Combobox.Button>
                     </div>
@@ -97,11 +87,12 @@ export default function Select({
                             ) : (
                                 filteredOptions.map((option) => (
                                     <Combobox.Option
-                                        key={option.id}
+                                        key={option.value}
                                         className={({ active }) =>
-                                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                            `relative cursor-default select-none py-2 pl-10 pr-4 transition duration-100 ease-in-out
+                                            ${
                                                 active
-                                                    ? "bg-blue-600 text-white"
+                                                    ? "bg-green-600 text-white"
                                                     : "text-gray-900"
                                             }`
                                         }
@@ -122,8 +113,8 @@ export default function Select({
                                                     <span
                                                         className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                                                             active
-                                                                ? "text-white"
-                                                                : "text-teal-600"
+                                                                ? "bg-green-600 text-white"
+                                                                : "text-green-600"
                                                         }`}
                                                     >
                                                         <CheckIcon

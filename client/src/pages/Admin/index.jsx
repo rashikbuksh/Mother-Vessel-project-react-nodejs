@@ -110,8 +110,6 @@ const App = () => {
         department: "",
     });
 
-    console.log(addFormData);
-
     //edit status
     const [editFormData, setEditFormData] = useState({
         name: "",

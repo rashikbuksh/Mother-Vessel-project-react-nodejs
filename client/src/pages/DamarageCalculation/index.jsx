@@ -464,17 +464,17 @@ const App = () => {
             .then((data) => {
                 setOrderNumber(data);
             });
+        setIsOpen(true);
+    }
+    useEffect(() => {
         fetch(
-            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData?.order_number}`
+            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
                 setJobNumber(data);
-                console.log("Job", data);
             });
-        console.log(JobNumber);
-        setIsOpen(true);
-    }
+    }, [addFormData.order_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
