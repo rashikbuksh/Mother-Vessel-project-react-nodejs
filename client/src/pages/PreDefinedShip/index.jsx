@@ -275,13 +275,15 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
+                {/* 
                 <button
                     // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Ship <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+                </button> 
+                */}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">

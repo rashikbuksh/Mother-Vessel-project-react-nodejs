@@ -61,6 +61,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                 >
                     <BiEdit className="h-5 w-5 text-black" />
                 </button>
+                {/* 
                 <button
                     type="button"
                     className="rounded-md bg-red-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"
@@ -68,6 +69,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                 >
                     <BiTrash className="h-5 w-5 text-black" />
                 </button>
+                */}
             </td>
         </>
     );
