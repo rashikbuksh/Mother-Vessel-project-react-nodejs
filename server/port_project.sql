@@ -3,9 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2023 at 07:21 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+
+-- Generation Time: Mar 28, 2023 at 06:45 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -179,8 +181,8 @@ INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_n
 (3, 'asdasd123123', 'asdasd', 'asdasd567', '2023-03-22', 'asdasd567', 'asdasd567', 15, 'asdasd567', 'asdasd567', '2023-03-03 18:00:46'),
 (12, 'IMP1-4-MV1-SINGAPORE', 'IMP Importer', 'MV1', '2023-02-16', 'SUGAR', 'Malaysia', 2000, 'UNK', '01684545111', '2023-03-04 13:48:37'),
 (14, 'Akij-28-mv1-Chittagong', 'Akij', 'mv1', '2023-03-28', 'Suger', 'Chittagong', 50, 'Fahim', '01794798101', '2023-03-28 22:16:03'),
-(15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 12, 'Fahim', '01794798101', '2023-03-28 22:18:47'),
-(16, 'Nisha-12/4/2024-Unnoyon-UK', 'Nisha', 'Unnoyon', '2024-05-12', 'Water', 'UK', 500, 'null', '015215333595', '2023-03-28 23:04:20');
+(15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 12, 'Fahim', '01794798101', '2023-03-28 22:18:47');
+
 
 --
 -- Triggers `job_entry`
@@ -214,10 +216,8 @@ INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `or
 (3, 'Anik-28/2/2023-mv2-Chittagong', 0, 0, 0, 0),
 (4, 'Akij-28-mv1-Chittagong', 1, 0, 0, 0),
 (6, 'Akij-28-mv1-Chittagong', 2, 0, 0, 0),
-(7, 'afaf', 0, 0, 0, 0),
-(8, 'Nisha-12/4/2024-Unnoyon-UK', 0, 0, 0, 0),
-(9, 'Nisha-12/4/2024-Unnoyon-UK', 1, 0, 0, 0),
-(10, 'Nisha-12/4/2024-Unnoyon-UK', 2, 0, 0, 0);
+(7, 'afaf', 0, 0, 0, 0);
+
 
 -- --------------------------------------------------------
 
