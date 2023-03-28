@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2023 at 06:16 PM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Mar 28, 2023 at 07:21 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -177,7 +177,47 @@ CREATE TABLE `job_entry` (
 
 INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_name`, `eta`, `commodity`, `mv_location`, `bl_quantity`, `stevedore_name`, `stevedore_contact_number`, `time_stamp`) VALUES
 (3, 'asdasd123123', 'asdasd', 'asdasd567', '2023-03-22', 'asdasd567', 'asdasd567', 15, 'asdasd567', 'asdasd567', '2023-03-03 18:00:46'),
-(12, 'IMP1-4-MV1-SINGAPORE', 'IMP Importer', 'MV1', '2023-02-16', 'SUGAR', 'Malaysia', 2000, 'UNK', '01684545111', '2023-03-04 13:48:37');
+(12, 'IMP1-4-MV1-SINGAPORE', 'IMP Importer', 'MV1', '2023-02-16', 'SUGAR', 'Malaysia', 2000, 'UNK', '01684545111', '2023-03-04 13:48:37'),
+(14, 'Akij-28-mv1-Chittagong', 'Akij', 'mv1', '2023-03-28', 'Suger', 'Chittagong', 50, 'Fahim', '01794798101', '2023-03-28 22:16:03'),
+(15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 12, 'Fahim', '01794798101', '2023-03-28 22:18:47'),
+(16, 'Nisha-12/4/2024-Unnoyon-UK', 'Nisha', 'Unnoyon', '2024-05-12', 'Water', 'UK', 500, 'null', '015215333595', '2023-03-28 23:04:20');
+
+--
+-- Triggers `job_entry`
+--
+DELIMITER $$
+CREATE TRIGGER `add_order_job` AFTER INSERT ON `job_entry` FOR EACH ROW INSERT INTO order_job_table(order_number) VALUES(NEW.order_number)
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_job_table`
+--
+
+CREATE TABLE `order_job_table` (
+  `order_job_id` int(11) NOT NULL,
+  `order_number` varchar(50) NOT NULL,
+  `job_number` int(50) NOT NULL DEFAULT 0,
+  `order_number_done` int(11) NOT NULL DEFAULT 0,
+  `sixty_percent_done` int(11) NOT NULL DEFAULT 0,
+  `job_completed` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `order_job_table`
+--
+
+INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `order_number_done`, `sixty_percent_done`, `job_completed`) VALUES
+(2, 'Akij-28-mv1-Chittagong', 0, 0, 0, 0),
+(3, 'Anik-28/2/2023-mv2-Chittagong', 0, 0, 0, 0),
+(4, 'Akij-28-mv1-Chittagong', 1, 0, 0, 0),
+(6, 'Akij-28-mv1-Chittagong', 2, 0, 0, 0),
+(7, 'afaf', 0, 0, 0, 0),
+(8, 'Nisha-12/4/2024-Unnoyon-UK', 0, 0, 0, 0),
+(9, 'Nisha-12/4/2024-Unnoyon-UK', 1, 0, 0, 0),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', 2, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -236,7 +276,9 @@ CREATE TABLE `pre_defined_ship` (
 
 INSERT INTO `pre_defined_ship` (`id`, `LV_name`, `date_from_charpotro`, `commodity`, `LA`, `dest_from`, `dest_to`, `current_location`, `remark`, `time_updated`) VALUES
 (2, 'dada', '2023-03-11', 'Suger', 'fafa', 'caf', 'adadd', 'uhu', 'ggs', '2023-03-24 16:16:31'),
-(3, 'lv', '2023-03-24', 'Sugerrrrr', 'fafaffffff', 'kk', 'hh', 'uhudddd', 'ggssdsss', '2023-03-24 17:50:10');
+(5, 'Fahim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-03-27 13:51:55'),
+(6, 'gg', '2023-03-27', 'Suger', 'fafa', 'caf', 'ada', 'uhu', 'ggs', '2023-03-27 13:52:03'),
+(8, 'LV3', '2023-03-28', 'Suger', 'fafa', 'caf', 'ada', 'uhu', 'ggs', '2023-03-28 21:12:17');
 
 -- --------------------------------------------------------
 
@@ -267,7 +309,21 @@ CREATE TABLE `record_entry` (
 --
 
 INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `commodity`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
-(2, 'order_number_forign_key', 'job_number_auto', '2023-03-10', 10, 'asdasd', 'asdasdasd', 'la', 'la', 'asdasd', 1000, 1000, 'rbr', '0168', '2023-03-10');
+(2, 'order_number_forign_key', 'job_number_auto', '2023-03-10', 10, 'asdasd', 'asdasdasd', 'la', 'la', 'asdasd', 1000, 1000, 'rbr', '0168', '2023-03-10'),
+(4, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-03', 50, '50', '', 'wow', 'll', 'kvxkvx', 520, 47564, 'vjxcjv ', '01521533595', '2023-03-28'),
+(5, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-11', 50, 'j g', 'j kjgx ', 'dj gdjfklg', ' sjljsdf', 'sj fdslj', 5000, 424, 'sd fjsd ', ' jfsdfjsd sjfs', '2023-03-28'),
+(6, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-18', 545, 'dsikfds ', 'jf dlsj', ' lkj', ' sjf', 'j fdsj f', 45, 45, 'h fshf', ' hdff ds', '2023-03-28'),
+(7, 'Akij-28-mv1-Chittagong', '3', '2023-03-17', 56456, 'fg fdgd', ' sdfds f', 'h', 'h ', 'hj', 42445, 44545, 'wsdh fds', ' jlfksf', '2023-03-28'),
+(9, 'Nisha-12/4/2024-Unnoyon-UK', '1', '2023-03-23', 3432432, '32432', '342324', '3243243', '324324', '324324', 34318, 34324, '43324', '32424', '2023-03-28'),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-17', 32432, '432432', '432432', '432432', '432432', '3432', 3432, 3432, '32432', '', '2023-03-28');
+
+--
+-- Triggers `record_entry`
+--
+DELIMITER $$
+CREATE TRIGGER `add_record_job` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO order_job_table (order_number, job_number) VALUES (new.order_number, new.job_number)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -330,6 +386,13 @@ ALTER TABLE `job_entry`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `order_job_table`
+--
+ALTER TABLE `order_job_table`
+  ADD PRIMARY KEY (`order_job_id`),
+  ADD UNIQUE KEY `unique_order_job` (`order_number`,`job_number`);
+
+--
 -- Indexes for table `payment`
 --
 ALTER TABLE `payment`
@@ -385,7 +448,13 @@ ALTER TABLE `damarage_dispatch`
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `order_job_table`
+--
+ALTER TABLE `order_job_table`
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -397,13 +466,13 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `pre_defined_ship`
 --
 ALTER TABLE `pre_defined_ship`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
