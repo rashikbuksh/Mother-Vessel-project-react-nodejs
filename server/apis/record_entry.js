@@ -108,7 +108,18 @@ function deleteRecord(req, res, db){
     });
 }
 
+ function fetchJobNumber(req, res, db){
+    var order_number = req.query.order_number;
+    console.log("query job number: ", order_number);
+    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
+    db.query(sqlSelect, (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+ } 
+
 module.exports.addRecord = addRecord;
 module.exports.getRecord = getRecord;
 module.exports.updaterecord = updaterecord;
 module.exports.deleteRecord = deleteRecord;
+module.exports.fetchJobNumber = fetchJobNumber;

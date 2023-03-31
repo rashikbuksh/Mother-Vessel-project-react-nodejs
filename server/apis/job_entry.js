@@ -100,8 +100,19 @@ function getComodity(req, res, db){
     });
 }
 
+function fetchOrderNumber(req, res, db){
+    //console.log("fetching order number");
+    const sqlSelect = "SELECT order_number as 'value' from job_entry";
+    // change the order number to value
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+        console.log(result);
+    });
+}
+
 module.exports.addJob = addJob;
 module.exports.getJob = getJob;
 module.exports.updatejob = updatejob;
 module.exports.deleteJob = deleteJob;
 module.exports.getComodity = getComodity;
+module.exports.fetchOrderNumber = fetchOrderNumber;

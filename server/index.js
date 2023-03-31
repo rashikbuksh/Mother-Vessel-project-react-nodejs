@@ -4,9 +4,11 @@ const cors = require("cors");
 const app = express();
 const nodemailer = require("nodemailer");
 const {verifyLogin, getusers, enableUser, disableuser, resetpassword, updateinfo, deleteuser, register} = require("./apis/auth");
-const {addRecord, getRecord, updaterecord, deleteRecord} = require("./apis/record_entry");
-const {addJob, getJob, updatejob, deleteJob, getComodity} = require("./apis/job_entry");
+const {addRecord, getRecord, updaterecord, deleteRecord, fetchJobNumber} = require("./apis/record_entry");
+const {addJob, getJob, updatejob, deleteJob, getComodity, fetchOrderNumber} = require("./apis/job_entry");
 const {addCurrentStatus, getCurrentStatus, updateCurrentStatus, deleteCurrentStatus} = require("./apis/current_status");
+const {addDamarage, getDamarage, updateDamarage, deleteDamarage} = require("./apis/damarage_dispatch");
+
 // MySQL
 const mysql = require("mysql");
 const { urlencoded } = require("body-parser");
@@ -112,176 +114,27 @@ app.post("/management/deletecurrentstatus", (req, res) => {
 
 //Insert Damarage
 app.post("/management/insertdamarage", (req, res) => {
-    console.log("submit in backend");
-    const order_number = req.body.order_number;
-    const job_number = req.body.job_number;
-    const date = req.body.date;
-    const cp_number = req.body.cp_number;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const volume = req.body.volume;
-    const LV_name = req.body.LV_name;
-    const MV_name = req.body.MV_name;
-    const loading_location = req.body.loading_location;
-    const unloading_location = req.body.unloading_location;
-    const loading_start_time_stamp = req.body.loading_start_time_stamp;
-    const loading_completion_time_stamp =
-        req.body.loading_completion_time_stamp;
-    const sailing_time_stamp = req.body.sailing_time_stamp;
-    const duration_of_travel_time = req.body.duration_of_travel_time;
-    const unloading_start_time_stamp = req.body.unloading_start_time_stamp;
-    const unloading_completion_time_stamp =
-        req.body.unloading_completion_time_stamp;
-    const others = req.body.others;
-    const total_elapsed_time = req.body.total_elapsed_time;
-    const voyage_time = req.body.voyage_time;
-    const free_time = req.body.free_time;
-    const total_despatch = req.body.total_despatch;
-    const daily_despatch = req.body.daily_despatch;
-    console.log(job_number);
-    const create_damarage =
-        "INSERT INTO damarage_dispatch(order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    db.query(
-        create_damarage,
-        [
-            order_number,
-            job_number,
-            date,
-            cp_number,
-            date_from_charpotro,
-            commodity,
-            volume,
-            LV_name,
-            MV_name,
-            loading_location,
-            unloading_location,
-            loading_start_time_stamp,
-            loading_completion_time_stamp,
-            sailing_time_stamp,
-            duration_of_travel_time,
-            unloading_start_time_stamp,
-            unloading_completion_time_stamp,
-            others,
-            total_elapsed_time,
-            voyage_time,
-            free_time,
-            total_despatch,
-            daily_despatch,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-            res.send(result);
-        }
-    );
+    addDamarage(req, res, db);
 });
 //Get Damarage Entry
 app.get("/management/getdamarage", (req, res) => {
-    const sqlSelect = "SELECT * from damarage_dispatch";
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+    getDamarage(req, res, db);
 });
 //Update Damrage Entry
 app.post("/management/updatedamarage", (req, res) => {
-    console.log("update job info in backend");
-    const id = req.body.id;
-    const order_number = req.body.order_number;
-    const job_number = req.body.job_number;
-    const date = req.body.date;
-    const cp_number = req.body.cp_number;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const volume = req.body.volume;
-    const LV_name = req.body.LV_name;
-    const MV_name = req.body.MV_name;
-    const loading_location = req.body.loading_location;
-    const unloading_location = req.body.unloading_location;
-    const loading_start_time_stamp = req.body.loading_start_time_stamp;
-    const loading_completion_time_stamp =
-        req.body.loading_completion_time_stamp;
-    const sailing_time_stamp = req.body.sailing_time_stamp;
-    const duration_of_travel_time = req.body.duration_of_travel_time;
-    const unloading_start_time_stamp = req.body.unloading_start_time_stamp;
-    const unloading_completion_time_stamp =
-        req.body.unloading_completion_time_stamp;
-    const others = req.body.others;
-    const total_elapsed_time = req.body.total_elapsed_time;
-    const voyage_time = req.body.voyage_time;
-    const free_time = req.body.free_time;
-    const total_despatch = req.body.total_despatch;
-    const daily_despatch = req.body.daily_despatch;
-    console.log(id);
-    const sqlUpdate =
-        "UPDATE damarage_dispatch SET order_number=?, job_number=?, date=?, cp_number=?, date_from_charpotro=?, commodity=?, volume=?, LV_name=?, MV_name=?, loading_location=?, unloading_location=?, loading_start_time_stamp=?, loading_completion_time_stamp=?, sailing_time_stamp=?, duration_of_travel_time=?, unloading_start_time_stamp=?, unloading_completion_time_stamp=?, others=?, total_elapsed_time=?, voyage_time=?, free_time=?, total_despatch=?, daily_despatch=? WHERE id=?";
-    db.query(
-        sqlUpdate,
-        [
-            order_number,
-            job_number,
-            date,
-            cp_number,
-            date_from_charpotro,
-            commodity,
-            volume,
-            LV_name,
-            MV_name,
-            loading_location,
-            unloading_location,
-            loading_start_time_stamp,
-            loading_completion_time_stamp,
-            sailing_time_stamp,
-            duration_of_travel_time,
-            unloading_start_time_stamp,
-            unloading_completion_time_stamp,
-            others,
-            total_elapsed_time,
-            voyage_time,
-            free_time,
-            total_despatch,
-            daily_despatch,
-            id,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-
-            res.send(result);
-        }
-    );
+    updateDamarage(req, res, db);
 });
 //Delete Damrage Entry
 app.post("/management/deletedamarage", (req, res) => {
-    console.log("Delete status in backend");
-    const id = req.body.Dam_id;
-    const sqlDelete = "DELETE from damarage_dispatch where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        if (!err) {
-            res.send("success");
-        }
-    });
+    deleteDamarage(req, res, db);
 });
 
 app.get("/management/fetch_order_number", (req, res) => {
-    console.log("fetching order number");
-    const sqlSelect = "SELECT order_number as 'value' from job_entry";
-    // change the order number to value
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-        console.log(result);
-    });
+    fetchOrderNumber(req, res, db);
 });
 
 app.get("/management/fetch_job_number", (req, res) => {
-    var order_number = req.query.order_number;
-    console.log("query job number: ", order_number);
-    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
-    db.query(sqlSelect, (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    fetchJobNumber(req, res, db);
 });
 //------------------- Chq Due List-----------------------------
 // Get Chq Due List
