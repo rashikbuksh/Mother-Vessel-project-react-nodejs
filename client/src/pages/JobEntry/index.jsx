@@ -7,7 +7,6 @@ import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 import Loader from "../../utils/Loader";
-import { useAuth } from "../../hooks/auth";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
@@ -15,6 +14,7 @@ import { MdClose } from "react-icons/md";
 //toast
 import { success } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
+import PingLoader from "../../utils/PingLoader";
 
 const TableHeader = [
     {
@@ -88,13 +88,47 @@ const TableHeader = [
 ];
 
 const App = () => {
-    // new start
     const [JobList, setJobList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
 
-    const { logout } = useAuth();
+    // new start
+    // fetch data
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const url = "http://localhost:3001/management/getjobentry";
+    useEffect(() => {
+        const abortCont = new AbortController();
+
+        try {
+            fetch(url, { signal: abortCont.signal })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw Error(
+                            "Could not fetch the data for that resource"
+                        );
+                    }
+                    return res.json();
+                })
+                .then((res) => {
+                    setJobList(res);
+                    setLoading(false);
+                    setError(null);
+                });
+        } catch (err) {
+            if (err.name === "AbortError") {
+                console.log("Fetch Aborted");
+            } else {
+                setLoading(false);
+                setError(err.message);
+            }
+        }
+
+        return () => abortCont.abort();
+    }, []);
+    // new end
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -114,16 +148,6 @@ const App = () => {
             (cursorPos - 1) * pageSize + pageSize
         );
     }
-
-    useEffect(() => {
-        fetch("http://localhost:3001/management/getjobentry")
-            .then((res) => res.json())
-            .then((data) => {
-                setJobList(data);
-            });
-    }, []);
-
-    // new end
 
     // add state
     //id is randomly generated with nanoid generator
@@ -336,6 +360,14 @@ const App = () => {
 
     function openModal() {
         setIsOpen(true);
+    }
+
+    // loading and error
+    if (loading) {
+        return <PingLoader />;
+    }
+    if (error) {
+        return <div>{error}</div>;
     }
 
     // <button
