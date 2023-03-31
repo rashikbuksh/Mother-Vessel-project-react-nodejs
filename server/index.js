@@ -5,6 +5,8 @@ const app = express();
 const nodemailer = require("nodemailer");
 const {verifyLogin, getusers, enableUser, disableuser, resetpassword, updateinfo, deleteuser, register} = require("./apis/auth");
 const {addRecord, getRecord, updaterecord, deleteRecord} = require("./apis/record_entry");
+const {addJob, getJob, updatejob, deleteJob, getComodity} = require("./apis/job_entry");
+const {addCurrentStatus, getCurrentStatus, updateCurrentStatus, deleteCurrentStatus} = require("./apis/current_status");
 // MySQL
 const mysql = require("mysql");
 const { urlencoded } = require("body-parser");
@@ -53,96 +55,19 @@ app.post("/admin/deleteuser", (req, res) => {
 //////////////////////MANAGEMENT/////////////////////////
 //Insert Job Entry
 app.post("/management/jobentry", (req, res) => {
-    console.log("submit in backend");
-    const order_number = req.body.order_number;
-    const importer_name = req.body.importer_name;
-    const mother_vessel_name = req.body.mother_vessel_name;
-    const eta = req.body.eta;
-    const commodity = req.body.commodity;
-    const mv_location = req.body.mv_location;
-    const bl_quantity = req.body.bl_quantity;
-    const stevedore_name = req.body.stevedore_name;
-    const stevedore_contact_number = req.body.stevedore_contact_number;
-    const create_job =
-        "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number) VALUES (?,?,?,?,?,?,?,?,?)";
-    db.query(
-        create_job,
-        [
-            order_number,
-            importer_name,
-            mother_vessel_name,
-            eta,
-            commodity,
-            mv_location,
-            bl_quantity,
-            stevedore_name,
-            stevedore_contact_number,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-            res.send(result);
-        }
-    );
+    addJob(req, res, db);
 });
 //Get Job Entry
 app.get("/management/getjobentry", (req, res) => {
-    const sqlSelect = "SELECT * from job_entry";
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+    getJob(req, res, db);
 });
 //Update Job Entry
 app.post("/management/updatejobentry", (req, res) => {
-    console.log("update job info in backend");
-    const id = req.body.id;
-    const order_number = req.body.new_order_number;
-    const importer_name = req.body.new_importer_name;
-    const mother_vessel_name = req.body.new_mother_vessel_name;
-    const eta = req.body.new_eta;
-    const commodity = req.body.new_commodity;
-    const mv_location = req.body.new_mv_location;
-    const bl_quantity = req.body.new_bl_quantity;
-    const stevedore_name = req.body.new_stevedore_name;
-    const stevedore_contact_number = req.body.new_stevedore_contact_number;
-    //console.log(id);
-    const sqlUpdate =
-        "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=? where id= ?";
-    db.query(
-        sqlUpdate,
-        [
-            order_number,
-            importer_name,
-            mother_vessel_name,
-            eta,
-            commodity,
-            mv_location,
-            bl_quantity,
-            stevedore_name,
-            stevedore_contact_number,
-            id,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            // res.send(result).json({
-            //     success: true,
-            // });
-        }
-    );
+    updatejob(req, res, db);
 });
 //Delete Job Entry
 app.post("/management/deletejob", (req, res) => {
-    //console.log("Delete job in backend");
-    const id = req.body.job_id;
-    const sqlDelete = "DELETE from job_entry where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        if (!err) {
-            res.send("success");
-        }
-    });
+    deleteJob(req, res, db);
 });
 
 //Insert Record Entry
@@ -165,102 +90,24 @@ app.post("/management/deleterecord", (req, res) => {
 // fetch comodity from job entry
 
 app.get("/management/getcomodity", (req, res) => {
-    var order_number = req.query.order_number;
-    const sqlSelect = `SELECT commodity from job_entry where order_number =  '${order_number}'`;
-    db.query(sqlSelect, [order_number], (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    getComodity(req, res, db);
 });
 
 //Insert Current Status
 app.post("/management/currentstatus", (req, res) => {
-    console.log("submit in backend");
-    const LV_name = req.body.LV_name;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const LA = req.body.LA;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
-    const create_current_status =
-        "INSERT INTO current_status (LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark) VALUES (?,?,?,?,?,?,?,?)";
-    db.query(
-        create_current_status,
-        [
-            LV_name,
-            date_from_charpotro,
-            commodity,
-            LA,
-            dest_from,
-            dest_to,
-            current_location,
-            remark,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-            res.send(result);
-        }
-    );
+    addCurrentStatus(req, res, db);
 });
 //Get current status
 app.get("/management/getcurrentstatus", (req, res) => {
-    const sqlSelect = "SELECT * from current_status";
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+    getCurrentStatus(req, res, db);
 });
 //Update current status
 app.post("/management/updatecurrentstatus", (req, res) => {
-    console.log("update job info in backend");
-    const id = req.body.id;
-    const LV_name = req.body.LV_name;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const LA = req.body.LA;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
-    //console.log(id);
-    const sqlUpdate =
-        "UPDATE current_status SET LV_name=?, date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
-    db.query(
-        sqlUpdate,
-        [
-            LV_name,
-            date_from_charpotro,
-            commodity,
-            LA,
-            dest_from,
-            dest_to,
-            current_location,
-            remark,
-            id,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            // res.send(result).json({
-            //     success: true,
-            // });
-        }
-    );
+    updateCurrentStatus(req, res, db);
 });
 //Delete current status
 app.post("/management/deletecurrentstatus", (req, res) => {
-    console.log("Delete status in backend");
-    const id = req.body.status_id;
-    const sqlDelete = "DELETE from current_status where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        if (!err) {
-            res.send("success");
-        }
-    });
+    deleteCurrentStatus(req, res, db);
 });
 
 //Insert Damarage
