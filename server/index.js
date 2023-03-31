@@ -16,12 +16,13 @@ const {getMaxJob, getOrderJob} = require("./apis/order_job");
 
 // MySQL
 const mysql = require("mysql");
+require('dotenv').config();
 const { urlencoded } = require("body-parser");
 const db = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "port_project",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
 });
 
 app.use(cors());
