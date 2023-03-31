@@ -104,7 +104,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required
+                    disabled
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}

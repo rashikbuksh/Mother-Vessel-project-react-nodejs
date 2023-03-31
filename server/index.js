@@ -286,7 +286,7 @@ app.get("/management/getrecordentry", (req, res) => {
         res.send(result);
     });
 });
-//Update Job Entry
+//Update Record Entry
 app.post("/management/updaterecordentry", (req, res) => {
     console.log("update job info in backend");
     const id = req.body.id;
@@ -344,6 +344,17 @@ app.post("/management/deleterecord", (req, res) => {
         if (!err) {
             res.send("success");
         }
+    });
+});
+
+// fetch comodity from job entry
+
+app.get("/management/getcomodity", (req, res) => {
+    var order_number = req.query.order_number;
+    const sqlSelect = `SELECT commodity from job_entry where order_number =  '${order_number}'`;
+    db.query(sqlSelect, [order_number], (err, result) => {
+        console.log(result);
+        res.send(result);
     });
 });
 
@@ -1041,8 +1052,45 @@ app.post("/management/deletepredefinedship", (req, res) => {
 //get max job number from job order table
 app.get("/management/getmaxjobnumber", (req, res) => {
     var order_number = req.query.order_number;
-    console.log(order_number);
     const sqlSelect = `SELECT MAX(job_number) as max_job_number from order_job_table where order_number = '${order_number}'`;
+    db.query(sqlSelect, [order_number], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+});
+
+// order job table fetch data joining with order number and job number
+app.get("/management/getorderjob", (req, res) => {
+    const sqlSelect = `SELECT CONCAT(order_number, '-', job_number) as value from order_job_table where job_number != 0 order by order_number, job_number`;
+    db.query(sqlSelect, [], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+});
+
+app.get("/management/getCharpotroCpLaLvRate", (req, res) => {
+    var order_job_number = req.query.order_job_number;
+    console.log("order_job_number", order_job_number);
+    const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
+
+    db.query(sqlSelect, [order_job_number], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+});
+
+app.get("/management/getMvName", (req, res) => {
+    var order_job_number = req.query.order_job_number;
+    var order_number_split = order_job_number.split("-");
+    var order_number = "";
+    for (var i = 0; i < order_number_split.length - 1; i++) {
+        order_number += order_number_split[i] + "-";
+    }
+    order_number = order_number.substring(0, order_number.length - 1);
+    console.log("order_number", order_number);
+
+    const sqlSelect = `SELECT mother_vessel_name as MV_name from job_entry where order_number = '${order_number}'`;
+
     db.query(sqlSelect, [order_number], (err, result) => {
         console.log(result);
         res.send(result);
