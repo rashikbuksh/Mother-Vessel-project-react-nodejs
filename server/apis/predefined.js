@@ -1,4 +1,4 @@
-function addPredefined(req, res, db){
+function addPredefined(req, res, db) {
     //console.log("submit in backend");
     const LV_name = req.body.LV_name;
     //const date_from_charpotro = req.body.date_from_charpotro;
@@ -16,13 +16,13 @@ function addPredefined(req, res, db){
         res.send(result);
     });
 }
-function getPredefined(req, res, db){
+function getPredefined(req, res, db) {
     const sqlSelect = "SELECT * from pre_defined_ship";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
-function updatePredefined(req, res, db){
+function updatePredefined(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const date_from_charpotro = req.body.date_from_charpotro;
@@ -56,7 +56,7 @@ function updatePredefined(req, res, db){
         }
     );
 }
-function deletePredefined(req, res, db){
+function deletePredefined(req, res, db) {
     //console.log("Delete status in backend");
     const id = req.body.status_id;
     const sqlDelete = "DELETE from pre_defined_ship where id= ?";
@@ -68,9 +68,15 @@ function deletePredefined(req, res, db){
         }
     });
 }
-
+function getLV(req, res, db) {
+    const sqlSelect = "SELECT LV_name as value from pre_defined_ship";
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+}
 
 module.exports.addPredefined = addPredefined;
 module.exports.getPredefined = getPredefined;
 module.exports.updatePredefined = updatePredefined;
 module.exports.deletePredefined = deletePredefined;
+module.exports.getLV = getLV;

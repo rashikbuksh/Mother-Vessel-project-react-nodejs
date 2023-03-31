@@ -50,7 +50,7 @@ export default function Select({
               });
 
     return (
-        <div className="w-full">
+        <div className="w-full z-20">
             <Combobox value={selected} onChange={setSelected}>
                 <div className="relative mt-1">
                     <div className=" peer relative w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">

@@ -11,12 +11,7 @@ const ReadOnlyRow = ({ Dam, handleEditClick, handleDeleteClick }) => {
                     {Dam.id}
                 </a>
             </td>
-            <td className={clsName}>{Dam.order_number}</td>
-            <td className={clsName}>
-                <span className="rounded-lg bg-green-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-green-800">
-                    {Dam.job_number}
-                </span>
-            </td>
+            <td className={clsName}>{Dam.order_job_number}</td>
             <td className={clsName}>
                 <DateTime date={Dam.date} />
             </td>

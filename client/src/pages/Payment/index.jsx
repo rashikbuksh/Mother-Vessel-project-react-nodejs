@@ -11,6 +11,7 @@ import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
+import Select from "../../components/Select";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -26,8 +27,8 @@ const TableHeader = [
     },
     {
         id: 2,
-        name: "Job Number",
-        accessor: "job_number",
+        name: "Order Job Number",
+        accessor: "order_job_number",
     },
     { id: 3, name: "LV Name", accessor: "LV_name", sortable: true },
     {
@@ -66,6 +67,7 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(PayList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+    const [orderJobList, setOrderJobList] = useState([]);
 
     const { logout } = useAuth();
 
@@ -101,7 +103,7 @@ const App = () => {
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        job_number: "",
+        order_job_number: "",
         LV_name: "",
         date_from_charpotro: "",
         MV_name: "",
@@ -120,7 +122,7 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        job_number: "",
+        order_job_number: "",
         LV_name: "",
         date_from_charpotro: "",
         MV_name: "",
@@ -178,7 +180,7 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newPay = {
-            job_number: addFormData.job_number, //handleAddFormChange로 받은 새 데이터
+            order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
             LV_name: addFormData.LV_name,
             date_from_charpotro: addFormData.date_from_charpotro,
             MV_name: addFormData.MV_name,
@@ -201,7 +203,7 @@ const App = () => {
 
         // api call
         Axios.post("http://localhost:3001/management/insertpayment", {
-            job_number: newPay.job_number, //handleAddFormChange로 받은 새 데이터
+            order_job_number: newPay.order_job_number, //handleAddFormChange로 받은 새 데이터
             LV_name: newPay.LV_name,
             date_from_charpotro: newPay.date_from_charpotro,
             MV_name: newPay.MV_name,
@@ -238,7 +240,7 @@ const App = () => {
 
         const editedPay = {
             id: editPayId, //initial value null
-            job_number: editFormData.job_number,
+            order_job_number: editFormData.order_job_number,
             LV_name: editFormData.LV_name,
             date_from_charpotro: editFormData.date_from_charpotro,
             MV_name: editFormData.MV_name,
@@ -257,7 +259,7 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatepayment", {
             id: editedPay.id,
-            new_job_number: editedPay.job_number,
+            new_order_job_number: editedPay.order_job_number,
             new_LV_name: editedPay.LV_name,
             new_date_from_charpotro: editedPay.date_from_charpotro,
             new_MV_name: editedPay.MV_name,
@@ -290,7 +292,7 @@ const App = () => {
 
         setEditPayId(Pay.id);
         const formValues = {
-            job_number: Pay.job_number,
+            order_job_number: Pay.order_job_number,
             LV_name: Pay.LV_name,
             date_from_charpotro: Pay.date_from_charpotro,
             MV_name: Pay.MV_name,
@@ -349,8 +351,60 @@ const App = () => {
     }
 
     function openModal() {
+        fetch("http://localhost:3001/management/getorderjob")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrderJobList(data);
+                console.log(data);
+            });
         setIsOpen(true);
     }
+
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/management/getCharpotroLvToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.date_from_charpotro = item.date_from_charpotro;
+                    addFormData.LV_name = item.LV_name;
+                });
+            });
+
+        fetch(
+            `http://localhost:3001/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.MV_name = item.MV_name;
+                });
+            });
+
+        fetch(
+            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.commodity = item.commodity;
+                });
+            });
+
+        fetch(
+            `http://localhost:3001/management/getChqissuePartpayBalanceToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.chq_issue_date = item.chq_issue_date;
+                    addFormData.part_pay = item.part_pay;
+                    addFormData.balance = item.balance;
+                });
+            });
+        console.log("addFormData", addFormData);
+    }, [addFormData.order_job_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -480,75 +534,21 @@ const App = () => {
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Job Number
+                                                    Order Job Number
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    name="job_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Will be fetched"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Date From Charpotro
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="date_from_charpotro"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    MV Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="MV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
+                                                {orderJobList && (
+                                                    <Select
+                                                        options={orderJobList}
+                                                        name="order_job_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
@@ -557,20 +557,6 @@ const App = () => {
                                                 <input
                                                     type="number"
                                                     name="chq_no"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Chq Issue Date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="chq_issue_date"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
@@ -594,20 +580,6 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Part Pay
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="part_pay"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Payment Approved
                                                 </label>
                                                 <input
@@ -617,19 +589,6 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Balance
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="balance"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>

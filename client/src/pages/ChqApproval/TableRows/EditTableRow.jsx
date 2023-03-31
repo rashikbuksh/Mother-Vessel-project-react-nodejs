@@ -107,6 +107,7 @@ const EditTableRow = ({
                     name="capacity_ton"
                     value={editFormData.capacity_ton}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -128,6 +129,7 @@ const EditTableRow = ({
                     name="sixty_percent_payment"
                     value={editFormData.sixty_percent_payment}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -138,6 +140,7 @@ const EditTableRow = ({
                     name="forty_percent_payment"
                     value={editFormData.forty_percent_payment}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -148,6 +151,7 @@ const EditTableRow = ({
                     name="damarage"
                     value={editFormData.damarage}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -158,6 +162,7 @@ const EditTableRow = ({
                     name="second_trip"
                     value={editFormData.second_trip}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -168,6 +173,7 @@ const EditTableRow = ({
                     name="third_trip"
                     value={editFormData.third_trip}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td>
@@ -178,6 +184,7 @@ const EditTableRow = ({
                     name="direct_trip"
                     value={editFormData.direct_trip}
                     onChange={handleEditFormChange}
+                    required
                 />
             </td>
             <td className="flex justify-center">

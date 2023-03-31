@@ -1,7 +1,6 @@
-function addChq_approval(req, res, db){
+function addChq_approval(req, res, db) {
     //console.log("submit in backend");
-    const order_number = req.body.order_number;
-    const job_number = req.body.job_number;
+    const order_job_number = req.body.order_job_number;
     const date_from_charpotro = req.body.date_from_charpotro;
     const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
     const LA_name = req.body.LA_name;
@@ -18,12 +17,11 @@ function addChq_approval(req, res, db){
     const third_trip = req.body.third_trip;
     const direct_trip = req.body.direct_trip;
     const create_chq =
-        "INSERT INTO chq_approval (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO chq_approval (order_job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_chq,
         [
-            order_number,
-            job_number,
+            order_job_number,
             date_from_charpotro,
             cp_number_from_charpotro,
             LA_name,
@@ -47,13 +45,13 @@ function addChq_approval(req, res, db){
         }
     );
 }
-function getChq_approval(req, res, db){
+function getChq_approval(req, res, db) {
     const sqlSelect = "SELECT * from chq_approval";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
-function updateChq_approval(req, res, db){
+function updateChq_approval(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.new_order_number;
@@ -105,7 +103,7 @@ function updateChq_approval(req, res, db){
         }
     );
 }
-function deleteChq_approval(req, res, db){
+function deleteChq_approval(req, res, db) {
     //console.log("Delete status in backend");
     const id = req.body.Chq_id;
     const sqlDelete = "DELETE from chq_approval where id= ?";
@@ -117,7 +115,6 @@ function deleteChq_approval(req, res, db){
         }
     });
 }
-
 
 module.exports.addChq_approval = addChq_approval;
 module.exports.getChq_approval = getChq_approval;

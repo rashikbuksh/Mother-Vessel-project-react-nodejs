@@ -13,7 +13,7 @@ const EditTableRow = ({
             <td />
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     required
                     placeholder="Enter order number..."
@@ -25,7 +25,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     required
                     placeholder="Enter Job Number..."
@@ -102,7 +102,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
                     placeholder="Commodity..."

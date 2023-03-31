@@ -13,7 +13,7 @@ const ReadOnlyRow = ({ Pay, handleEditClick, handleDeleteClick }) => {
             </td>
             <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
-                    {Pay.job_number}
+                    {Pay.order_job_number}
                 </span>
             </td>
             <td className={clsName}>{Pay.LV_name}</td>

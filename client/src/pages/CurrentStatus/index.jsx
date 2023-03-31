@@ -11,6 +11,7 @@ import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
+import Select from "../../components/Select";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -23,6 +24,12 @@ const TableHeader = [
         accessor: "id",
         sortable: true,
         sortByOrder: "asc",
+    },
+    {
+        id: 3,
+        name: "Order Job Number",
+        accessor: "order_job_number",
+        sortable: true,
     },
     { id: 2, name: "LV Name", accessor: "LV_name" },
     {
@@ -50,6 +57,7 @@ const App = () => {
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+    const [orderJobList, setOrderJobList] = useState([]);
 
     const { logout } = useAuth();
 
@@ -282,8 +290,39 @@ const App = () => {
     }
 
     function openModal() {
+        fetch("http://localhost:3001/management/getorderjob")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrderJobList(data);
+                console.log(data);
+            });
         setIsOpen(true);
     }
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.date_from_charpotro = item.date_from_charpotro;
+                    addFormData.LA = item.LA_name;
+                    addFormData.LV_name = item.LV_name;
+                    addFormData.dest_from = item.dest_from;
+                    addFormData.dest_to = item.dest_to;
+                });
+            });
+        fetch(
+            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.commodity = item.commodity;
+                });
+            });
+        console.log("addFormData", addFormData);
+    }, [addFormData.order_job_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -410,6 +449,24 @@ const App = () => {
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
                                         >
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Order Job Number
+                                                </label>
+                                                {orderJobList && (
+                                                    <Select
+                                                        options={orderJobList}
+                                                        name="order_job_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
+                                            </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     LV Name

@@ -17,7 +17,7 @@ const NavLinks = [
     {
         id: 3,
         link: "/currentstatus",
-        name: "Current Status",
+        name: "Current Status (Others)",
         role: ["admin", "operation"],
     },
     {
@@ -29,7 +29,7 @@ const NavLinks = [
     {
         id: 6,
         link: "/predefinedship",
-        name: "Pre Defined Ship",
+        name: "Current Status (Own)",
         role: ["admin", "operation"],
     },
     {

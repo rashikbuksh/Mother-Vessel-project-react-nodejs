@@ -13,11 +13,10 @@ const EditTableRow = ({
             <td />
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
-                    placeholder="Enter order number..."
-                    name="order_number"
+                    placeholder="Enter order job number..."
+                    name="order_job_number"
                     value={editFormData.order_number}
                     onChange={handleEditFormChange}
                     disabled
@@ -25,20 +24,20 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
-                    placeholder="Enter LA..."
-                    name="LA"
-                    value={editFormData.LA}
+                    disabled
+                    placeholder="Enter LA name..."
+                    name="LA_name"
+                    value={editFormData.LA_name}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter LV Name..."
                     name="LV_name"
                     value={editFormData.LV_name}
@@ -47,9 +46,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter commodity..."
                     name="commodity"
                     value={editFormData.commodity}
@@ -60,7 +59,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter mode..."
                     name="mode"
                     value={editFormData.mode}
@@ -71,7 +70,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter chq amount..."
                     name="chq_amount"
                     value={editFormData.chq_amount}
@@ -82,7 +81,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter part pay..."
                     name="part_pay"
                     value={editFormData.part_pay}
@@ -93,7 +92,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter balance..."
                     name="balance"
                     value={editFormData.balance}
@@ -104,7 +103,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required="required"
+                    required
                     placeholder="Enter chq issue date..."
                     name="chq_issue_date"
                     value={editFormData.chq_issue_date.slice(0, 10)}
@@ -115,7 +114,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter initial amount..."
                     name="init_amount"
                     value={editFormData.init_amount}
@@ -126,7 +125,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter payment..."
                     name="payment"
                     value={editFormData.payment}
@@ -137,7 +136,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter final amount..."
                     name="final_amount"
                     value={editFormData.final_amount}

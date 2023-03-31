@@ -3,20 +3,81 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const nodemailer = require("nodemailer");
-const {verifyLogin, getusers, enableUser, disableuser, resetpassword, updateinfo, deleteuser, register} = require("./apis/auth");
-const {addRecord, getRecord, updaterecord, deleteRecord, fetchJobNumber, getCharpotroCpLaLvRate} = require("./apis/record_entry");
-const {addJob, getJob, updatejob, deleteJob, getComodity, fetchOrderNumber, getMvName} = require("./apis/job_entry");
-const {addCurrentStatus, getCurrentStatus, updateCurrentStatus, deleteCurrentStatus} = require("./apis/current_status");
-const {addDamarage, getDamarage, updateDamarage, deleteDamarage} = require("./apis/damarage_dispatch");
-const {addChq_due, getChq_due, updateChq_due, deleteChq_due} = require("./apis/chq_due_list");
-const {addChq_approval, getChq_approval, updateChq_approval, deleteChq_approval} = require("./apis/chq_approval");
-const {addPayment, getPayment, updatePayment, deletePayment} = require("./apis/payment");
-const {addPredefined, getPredefined, updatePredefined, deletePredefined} = require("./apis/predefined");
-const {getMaxJob, getOrderJob} = require("./apis/order_job");
+const {
+    verifyLogin,
+    getusers,
+    enableUser,
+    disableuser,
+    resetpassword,
+    updateinfo,
+    deleteuser,
+    register,
+} = require("./apis/auth");
+const {
+    addRecord,
+    getRecord,
+    updaterecord,
+    deleteRecord,
+    fetchJobNumber,
+    getCharpotroCpLaLvRate,
+} = require("./apis/record_entry");
+const {
+    addJob,
+    getJob,
+    updatejob,
+    deleteJob,
+    getComodity,
+    fetchOrderNumber,
+    getMvName,
+} = require("./apis/job_entry");
+const {
+    addCurrentStatus,
+    getCurrentStatus,
+    updateCurrentStatus,
+    deleteCurrentStatus,
+} = require("./apis/current_status");
+const {
+    addDamarage,
+    getDamarage,
+    updateDamarage,
+    deleteDamarage,
+} = require("./apis/damarage_dispatch");
+const {
+    addChq_due,
+    getChq_due,
+    updateChq_due,
+    deleteChq_due,
+    getLvToChqDue,
+    getComodityToChqDue,
+} = require("./apis/chq_due_list");
+const {
+    addChq_approval,
+    getChq_approval,
+    updateChq_approval,
+    deleteChq_approval,
+} = require("./apis/chq_approval");
+const {
+    addPayment,
+    getPayment,
+    updatePayment,
+    deletePayment,
+    getCharpotroLvToPayment,
+    getMvNameToPayment,
+    getComodityToPayment,
+    getChqissuePartpayBalanceToPayment,
+} = require("./apis/payment");
+const {
+    addPredefined,
+    getPredefined,
+    updatePredefined,
+    deletePredefined,
+    getLV,
+} = require("./apis/predefined");
+const { getMaxJob, getOrderJob } = require("./apis/order_job");
 
 // MySQL
 const mysql = require("mysql");
-require('dotenv').config();
+require("dotenv").config();
 const { urlencoded } = require("body-parser");
 const db = mysql.createPool({
     host: process.env.DB_HOST,
@@ -156,9 +217,17 @@ app.post("/management/deletechq", (req, res) => {
     deleteChq_due(req, res, db);
 });
 
-// Uopdate Chq
+// Update Chq
 app.post("/management/updatechq", (req, res) => {
     updateChq_due(req, res, db);
+});
+// get Lv for chq due
+app.get("/management/getLvToChqDue", (req, res) => {
+    getLvToChqDue(req, res, db);
+});
+// get Comodity for chq due
+app.get("/management/getComodityToChqDue", (req, res) => {
+    getComodityToChqDue(req, res, db);
 });
 
 //------------------- Chq Approval-----------------------------
@@ -184,7 +253,7 @@ app.post("/management/updatechq_approval", (req, res) => {
 //------------------- Payment -----------------------------
 // Get payment
 app.get("/management/getpayment", (req, res) => {
-   getPayment(req, res, db);
+    getPayment(req, res, db);
 });
 
 //Insert Chq
@@ -201,6 +270,24 @@ app.post("/management/updatepayment", (req, res) => {
     updatePayment(req, res, db);
 });
 
+//get date_from_charpotro, LV_name for Payment
+app.get("/management/getCharpotroLvToPayment", (req, res) => {
+    getCharpotroLvToPayment(req, res, db);
+});
+//get MvName for Payment
+app.get("/management/getMvNameToPayment", (req, res) => {
+    getMvNameToPayment(req, res, db);
+});
+//get Comodity for Payment
+app.get("/management/getComodityToPayment", (req, res) => {
+    getComodityToPayment(req, res, db);
+});
+//get Chqissue,Partpay,Balance for Payment
+app.get("/management/getChqissuePartpayBalanceToPayment", (req, res) => {
+    getChqissuePartpayBalanceToPayment(req, res, db);
+});
+
+//------------------- Predefined Ship -----------------------------
 //Insert Current Status predefined
 app.post("/management/predefinedship", (req, res) => {
     addPredefined(req, res, db);
@@ -217,6 +304,10 @@ app.post("/management/updatepredefinedship", (req, res) => {
 //Delete Current Status predefined
 app.post("/management/deletepredefinedship", (req, res) => {
     deletePredefined(req, res, db);
+});
+// Get predefined ships
+app.get("/management/getLV", (req, res) => {
+    getLV(req, res, db);
 });
 
 //get max job number from job order table

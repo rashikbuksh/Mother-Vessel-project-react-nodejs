@@ -13,9 +13,19 @@ const EditTableRow = ({
             <td></td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    placeholder="Select order job number..."
+                    name="order_job_number"
+                    value={editFormData.order_job_number}
+                    onChange={handleEditFormChange}
+                    disabled
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
                     placeholder="Enter LV name..."
                     name="LV_name"
                     value={editFormData.LV_name}
@@ -25,56 +35,56 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required="required"
                     name="date_from_charpotro"
                     value={editFormData.date_from_charpotro.slice(0, 10)}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
                     placeholder="LA"
                     name="LA"
                     value={editFormData.LA}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
                     placeholder="Destination From..."
                     name="dest_from"
                     value={editFormData.dest_from}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
                     placeholder="Destination To..."
                     name="dest_to"
                     value={editFormData.dest_to}
                     onChange={handleEditFormChange}
+                    disabled
                 />
             </td>
 
@@ -82,7 +92,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Current Location..."
                     name="current_location"
                     value={editFormData.current_location}
@@ -93,7 +103,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Remark..."
                     name="remark"
                     value={editFormData.remark}
