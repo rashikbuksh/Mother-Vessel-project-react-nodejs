@@ -34,6 +34,7 @@ const Payment = lazy(() => import("./pages/Payment"));
 // table
 const Table = lazy(() => import("./components/Tables"));
 const Navbar = lazy(() => import("./components/Navbar"));
+const PingLoader = lazy(() => import("./utils/PingLoader"));
 
 const PublicRoutesList = [
     {
@@ -52,10 +53,10 @@ const PublicRoutesList = [
         link: "/*",
         component: NotFound,
     },
-    {
-        link: "/test",
-        component: Navbar,
-    },
+    // {
+    //     link: "/test",
+    //     component: Navbar,
+    // },
 ];
 
 const OperationRoutesList = [
@@ -153,7 +154,6 @@ const AdminRoutesList = [
 function App() {
     return (
         <>
-            
             <Routes>
                 {OperationRoutesList.map((route, index) => (
                     <Route
@@ -162,7 +162,7 @@ function App() {
                         element={
                             <OperationRoutes>
                                 <Suspense fallback={<Loader />}>
-                                <Navbar />
+                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </OperationRoutes>
@@ -176,7 +176,7 @@ function App() {
                         element={
                             <AccountsRoutes>
                                 <Suspense fallback={<Loader />}>
-                                <Navbar />
+                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsRoutes>
@@ -190,7 +190,7 @@ function App() {
                         element={
                             <AccountsManagerRoutes>
                                 <Suspense fallback={<Loader />}>
-                                <Navbar />
+                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsManagerRoutes>
@@ -204,7 +204,7 @@ function App() {
                         element={
                             <AdminRoutes>
                                 <Suspense fallback={<Loader />}>
-                                <Navbar />
+                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AdminRoutes>
@@ -223,6 +223,16 @@ function App() {
                         }
                     />
                 ))}
+
+                <Route
+                    path="/test"
+                    element={
+                        <Suspense fallback={<Loader />}>
+                            <Navbar />
+                            <Loader />
+                        </Suspense>
+                    }
+                />
             </Routes>
         </>
     );
