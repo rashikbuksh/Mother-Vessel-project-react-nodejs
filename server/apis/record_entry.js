@@ -116,10 +116,22 @@ function deleteRecord(req, res, db){
         console.log(result);
         res.send(result);
     });
- } 
+ }
+
+function getCharpotroCpLaLvRate(req, res, db){
+    var order_job_number = req.query.order_job_number;
+    console.log("order_job_number", order_job_number);
+    const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
+
+    db.query(sqlSelect, [order_job_number], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+}
 
 module.exports.addRecord = addRecord;
 module.exports.getRecord = getRecord;
 module.exports.updaterecord = updaterecord;
 module.exports.deleteRecord = deleteRecord;
 module.exports.fetchJobNumber = fetchJobNumber;
+module.exports.getCharpotroCpLaLvRate = getCharpotroCpLaLvRate;

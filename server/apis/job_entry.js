@@ -110,9 +110,28 @@ function fetchOrderNumber(req, res, db){
     });
 }
 
+function getMvName(req, res, db){
+    var order_job_number = req.query.order_job_number;
+    var order_number_split = order_job_number.split("-");
+    var order_number = "";
+    for (var i = 0; i < order_number_split.length - 1; i++) {
+        order_number += order_number_split[i] + "-";
+    }
+    order_number = order_number.substring(0, order_number.length - 1);
+    console.log("order_number", order_number);
+
+    const sqlSelect = `SELECT mother_vessel_name as MV_name from job_entry where order_number = '${order_number}'`;
+
+    db.query(sqlSelect, [order_number], (err, result) => {
+        console.log(result);
+        res.send(result);
+    });
+}
+
 module.exports.addJob = addJob;
 module.exports.getJob = getJob;
 module.exports.updatejob = updatejob;
 module.exports.deleteJob = deleteJob;
 module.exports.getComodity = getComodity;
 module.exports.fetchOrderNumber = fetchOrderNumber;
+module.exports.getMvName = getMvName;

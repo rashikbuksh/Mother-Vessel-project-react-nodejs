@@ -4,12 +4,15 @@ const cors = require("cors");
 const app = express();
 const nodemailer = require("nodemailer");
 const {verifyLogin, getusers, enableUser, disableuser, resetpassword, updateinfo, deleteuser, register} = require("./apis/auth");
-const {addRecord, getRecord, updaterecord, deleteRecord, fetchJobNumber} = require("./apis/record_entry");
-const {addJob, getJob, updatejob, deleteJob, getComodity, fetchOrderNumber} = require("./apis/job_entry");
+const {addRecord, getRecord, updaterecord, deleteRecord, fetchJobNumber, getCharpotroCpLaLvRate} = require("./apis/record_entry");
+const {addJob, getJob, updatejob, deleteJob, getComodity, fetchOrderNumber, getMvName} = require("./apis/job_entry");
 const {addCurrentStatus, getCurrentStatus, updateCurrentStatus, deleteCurrentStatus} = require("./apis/current_status");
 const {addDamarage, getDamarage, updateDamarage, deleteDamarage} = require("./apis/damarage_dispatch");
 const {addChq_due, getChq_due, updateChq_due, deleteChq_due} = require("./apis/chq_due_list");
 const {addChq_approval, getChq_approval, updateChq_approval, deleteChq_approval} = require("./apis/chq_approval");
+const {addPayment, getPayment, updatePayment, deletePayment} = require("./apis/payment");
+const {addPredefined, getPredefined, updatePredefined, deletePredefined} = require("./apis/predefined");
+const {getMaxJob, getOrderJob} = require("./apis/order_job");
 
 // MySQL
 const mysql = require("mysql");
@@ -180,244 +183,57 @@ app.post("/management/updatechq_approval", (req, res) => {
 //------------------- Payment -----------------------------
 // Get payment
 app.get("/management/getpayment", (req, res) => {
-    const sqlSelect = "SELECT * from payment";
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+   getPayment(req, res, db);
 });
 
 //Insert Chq
 app.post("/management/insertpayment", (req, res) => {
-    console.log("submit in backend");
-    const job_number = req.body.job_number;
-    const LV_name = req.body.LV_name;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const MV_name = req.body.MV_name;
-    const commodity = req.body.commodity;
-    const chq_no = req.body.chq_no;
-    const chq_issue_date = req.body.chq_issue_date;
-    const amount = req.body.amount;
-    const part_pay = req.body.part_pay;
-    const payment_approved = req.body.payment_approved;
-    const balance = req.body.balance;
-    const payment_chq_no = req.body.payment_chq_no;
-    const payment_chq_amount = req.body.payment_chq_amount;
-    const payment_chq_date = req.body.payment_chq_date;
-    const added_date = req.body.added_date;
-    const create_chq =
-        "INSERT INTO payment (job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    db.query(
-        create_chq,
-        [
-            job_number,
-            LV_name,
-            date_from_charpotro,
-            MV_name,
-            commodity,
-            chq_no,
-            chq_issue_date,
-            amount,
-            part_pay,
-            payment_approved,
-            balance,
-            payment_chq_no,
-            payment_chq_amount,
-            payment_chq_date,
-            added_date,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-            res.send(result);
-        }
-    );
+    addPayment(req, res, db);
 });
 // Delete Chq
 app.post("/management/deletepayment", (req, res) => {
-    console.log("Delete status in backend");
-    const id = req.body.Pay_id;
-    const sqlDelete = "DELETE from payment where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        if (!err) {
-            res.send("success");
-        }
-    });
+    deletePayment(req, res, db);
 });
 
 // Update Chq
 app.post("/management/updatepayment", (req, res) => {
-    console.log("update job info in backend");
-    const id = req.body.id;
-    const job_number = req.body.new_job_number;
-    const LV_name = req.body.new_LV_name;
-    const date_from_charpotro = req.body.new_date_from_charpotro;
-    const MV_name = req.body.new_MV_name;
-    const commodity = req.body.new_commodity;
-    const chq_no = req.body.new_chq_no;
-    const chq_issue_date = req.body.new_chq_issue_date;
-    const amount = req.body.new_amount;
-    const part_pay = req.body.new_part_pay;
-    const payment_approved = req.body.new_payment_approved;
-    const balance = req.body.new_balance;
-    const payment_chq_no = req.body.new_payment_chq_no;
-    const payment_chq_amount = req.body.new_payment_chq_amount;
-    const payment_chq_date = req.body.new_payment_chq_date;
-    const added_date = req.body.new_added_date;
-    const sqlUpdate =
-        "UPDATE payment SET job_number=?, LV_name=?, date_from_charpotro=?, MV_name=?, commodity=?, chq_no=?, chq_issue_date=?, amount=?, part_pay=?, payment_approved=?, balance=?, payment_chq_no=?, payment_chq_amount=?, payment_chq_date=?, added_date=? WHERE id=?";
-    db.query(
-        sqlUpdate,
-        [
-            job_number,
-            LV_name,
-            date_from_charpotro,
-            MV_name,
-            commodity,
-            chq_no,
-            chq_issue_date,
-            amount,
-            part_pay,
-            payment_approved,
-            balance,
-            payment_chq_no,
-            payment_chq_amount,
-            payment_chq_date,
-            added_date,
-            id,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            console.log(result);
-
-            res.send(result);
-        }
-    );
+    updatePayment(req, res, db);
 });
 
 //Insert Current Status predefined
 app.post("/management/predefinedship", (req, res) => {
-    console.log("submit in backend");
-    const LV_name = req.body.LV_name;
-    //const date_from_charpotro = req.body.date_from_charpotro;
-    //const commodity = req.body.commodity;
-    // const LA = req.body.LA;
-    // const dest_from = req.body.dest_from;
-    // const dest_to = req.body.dest_to;
-    // const current_location = req.body.current_location;
-    // const remark = req.body.remark;
-    const create_predefinedship =
-        "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
-    db.query(create_predefinedship, [LV_name], (err, result) => {
-        if (err) console.log(err);
-        console.log(result);
-        res.send(result);
-    });
+    addPredefined(req, res, db);
 });
 //Get Current Status predefined
 app.get("/management/getpredefinedship", (req, res) => {
-    const sqlSelect = "SELECT * from pre_defined_ship";
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+    getPredefined(req, res, db);
 });
 //Update Current Status predefined
 app.post("/management/updatepredefinedship", (req, res) => {
-    console.log("update job info in backend");
-    const id = req.body.id;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const LA = req.body.LA;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
-    //console.log(id);
-    const sqlUpdate =
-        "UPDATE pre_defined_ship SET date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
-    db.query(
-        sqlUpdate,
-        [
-            date_from_charpotro,
-            commodity,
-            LA,
-            dest_from,
-            dest_to,
-            current_location,
-            remark,
-            id,
-        ],
-        (err, result) => {
-            if (err) console.log(err);
-            //console.log(result)
-            // res.send(result).json({
-            //     success: true,
-            // });
-        }
-    );
+    updatePredefined(req, res, db);
 });
 
 //Delete Current Status predefined
 app.post("/management/deletepredefinedship", (req, res) => {
-    console.log("Delete status in backend");
-    const id = req.body.status_id;
-    const sqlDelete = "DELETE from pre_defined_ship where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-        //console.log(result)
-        if (!err) {
-            res.send("success");
-        }
-    });
+    deletePredefined(req, res, db);
 });
 
 //get max job number from job order table
 app.get("/management/getmaxjobnumber", (req, res) => {
-    var order_number = req.query.order_number;
-    const sqlSelect = `SELECT MAX(job_number) as max_job_number from order_job_table where order_number = '${order_number}'`;
-    db.query(sqlSelect, [order_number], (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    getMaxJob(req, res, db);
 });
 
 // order job table fetch data joining with order number and job number
 app.get("/management/getorderjob", (req, res) => {
-    const sqlSelect = `SELECT CONCAT(order_number, '-', job_number) as value from order_job_table where job_number != 0 order by order_number, job_number`;
-    db.query(sqlSelect, [], (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    getOrderJob(req, res, db);
 });
 
 app.get("/management/getCharpotroCpLaLvRate", (req, res) => {
-    var order_job_number = req.query.order_job_number;
-    console.log("order_job_number", order_job_number);
-    const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
-
-    db.query(sqlSelect, [order_job_number], (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    getCharpotroCpLaLvRate(req, res, db);
 });
 
 app.get("/management/getMvName", (req, res) => {
-    var order_job_number = req.query.order_job_number;
-    var order_number_split = order_job_number.split("-");
-    var order_number = "";
-    for (var i = 0; i < order_number_split.length - 1; i++) {
-        order_number += order_number_split[i] + "-";
-    }
-    order_number = order_number.substring(0, order_number.length - 1);
-    console.log("order_number", order_number);
-
-    const sqlSelect = `SELECT mother_vessel_name as MV_name from job_entry where order_number = '${order_number}'`;
-
-    db.query(sqlSelect, [order_number], (err, result) => {
-        console.log(result);
-        res.send(result);
-    });
+    getMvName(req, res, db);
 });
 
 app.listen(3001, () => {
