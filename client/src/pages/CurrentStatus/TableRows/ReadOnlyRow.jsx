@@ -13,6 +13,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                     {status.id}
                 </a>
             </td>
+            <td className={clsName}>{status.order_job_number}</td>
             <td className={clsName}>{status.LV_name}</td>
             <td className={clsName}>
                 <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">

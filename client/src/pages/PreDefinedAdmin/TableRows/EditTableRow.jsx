@@ -13,9 +13,9 @@ const EditTableRow = ({
             <td></td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required="required"
+                    disabled
                     name="date_from_charpotro"
                     /*value={editFormData.date_from_charpotro.slice(0, 10)}*/
                     onChange={handleEditFormChange}
@@ -23,9 +23,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
@@ -34,9 +34,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="LA"
                     name="LA"
                     value={editFormData.LA}
@@ -45,9 +45,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Destination From..."
                     name="dest_from"
                     value={editFormData.dest_from}
@@ -56,9 +56,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Destination To..."
                     name="dest_to"
                     value={editFormData.dest_to}
@@ -70,7 +70,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Current Location..."
                     name="current_location"
                     value={editFormData.current_location}
@@ -81,7 +81,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Remark..."
                     name="remark"
                     value={editFormData.remark}

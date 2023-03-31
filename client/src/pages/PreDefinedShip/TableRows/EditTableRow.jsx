@@ -1,6 +1,7 @@
 import React from "react";
 import { FiCheck } from "react-icons/fi";
 import { ImCancelCircle } from "react-icons/im";
+import Select from "../../../components/Select";
 const EditTableRow = ({
     editFormData,
     handleEditFormChange,
@@ -11,6 +12,16 @@ const EditTableRow = ({
     return (
         <>
             <td></td>
+            <td>
+                <input
+                    className={clsName}
+                    type="date"
+                    required="required"
+                    name="order_job_date"
+                    /*value={editFormData.date_from_charpotro.slice(0, 10)}*/
+                    onChange={handleEditFormChange}
+                />
+            </td>
             <td>
                 <input
                     className={clsName}

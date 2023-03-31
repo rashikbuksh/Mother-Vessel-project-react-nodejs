@@ -11,6 +11,7 @@ import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
+import Select from "../../components/Select";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -24,7 +25,18 @@ const TableHeader = [
         sortable: true,
         sortByOrder: "asc",
     },
-    { id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
+    {
+        id: 12,
+        name: "Order Job Number",
+        accessor: "order_job_number",
+        sortable: true,
+    },
+    {
+        id: 2,
+        name: "LV Name",
+        accessor: "LV_name",
+        sortable: true,
+    },
     {
         id: 3,
         name: "Date From Charpotro",
@@ -50,6 +62,8 @@ const App = () => {
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+    const [orderJobList, setOrderJobList] = useState([]);
+    const [LVList, setLVList] = useState([]);
 
     const { logout } = useAuth();
 
@@ -87,6 +101,7 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
+        order_job_number: "",
         LV_name: "",
         date_from_charpotro: "",
         commodity: "",
@@ -170,6 +185,7 @@ const App = () => {
 
         const editedStatus = {
             id: editStatusId, //initial value null
+            order_job_number: editFormData.order_job_number,
             LV_name: editFormData.LV_name,
             date_from_charpotro: editFormData.date_from_charpotro,
             commodity: editFormData.commodity,
@@ -182,6 +198,7 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatepredefinedship", {
             id: editedStatus.id,
+            order_job_number: editedStatus.order_job_number,
             LV_name: editedStatus.LV_name,
             date_from_charpotro: editedStatus.date_from_charpotro,
             commodity: editedStatus.commodity,
@@ -208,6 +225,7 @@ const App = () => {
 
         setEditStatusId(Status.id);
         const formValues = {
+            order_job_number: Status.order_job_number,
             LV_name: Status.LV_name,
             date_from_charpotro: Status.date_from_charpotro,
             commodity: Status.commodity,
@@ -262,8 +280,44 @@ const App = () => {
     }
 
     function openModal() {
+        fetch("http://localhost:3001/management/getorderjob")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrderJobList(data);
+                console.log(data);
+            });
+        fetch("http://localhost:3001/management/getLV")
+            .then((res) => res.json())
+            .then((data) => {
+                setLVList(data);
+                console.log(data);
+            });
         setIsOpen(true);
     }
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.date_from_charpotro = item.date_from_charpotro;
+                    addFormData.LA = item.LA_name;
+                    addFormData.dest_from = item.dest_from;
+                    addFormData.dest_to = item.dest_to;
+                });
+            });
+        fetch(
+            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.commodity = item.commodity;
+                });
+            });
+        console.log("addFormData", addFormData);
+    }, [addFormData.order_job_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -283,15 +337,14 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* 
+
                 <button
                     // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Ship <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> 
-                */}
+                </button>
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
@@ -394,17 +447,39 @@ const App = () => {
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Order Job Number
+                                                </label>
+                                                {orderJobList && (
+                                                    <Select
+                                                        options={orderJobList}
+                                                        name="order_job_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     LV Name
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
+                                                {LVList && (
+                                                    <Select
+                                                        options={LVList}
+                                                        name="LV_name"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
                                             </div>
 
                                             <button

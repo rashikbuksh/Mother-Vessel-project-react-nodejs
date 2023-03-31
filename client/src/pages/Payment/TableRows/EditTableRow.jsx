@@ -6,37 +6,38 @@ const EditTableRow = ({
     handleEditFormChange,
     handleCancelClick,
 }) => {
+    var clsName =
+        "peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
             <td />
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
-                    placeholder="Enter job number..."
-                    name="job_number"
-                    value={editFormData.job_number}
+                    placeholder="Enter Order job number..."
+                    name="order_job_number"
+                    value={editFormData.order_job_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
-                    placeholder="Enter MV name..."
-                    name="MV_name"
+                    disabled
+                    placeholder="Enter LV name..."
+                    name="LV_name"
                     value={editFormData.MV_name}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required="required"
+                    disabled
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
                     value={editFormData.date_from_charpotro.slice(0, 10)}
@@ -45,9 +46,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter MV name..."
                     name="MV_name"
                     value={editFormData.MV_name}
@@ -56,9 +57,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter commodity..."
                     name="commodity"
                     value={editFormData.commodity}
@@ -67,9 +68,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter chq no..."
                     name="chq_no"
                     value={editFormData.chq_no}
@@ -78,9 +79,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required="required"
+                    disabled
                     placeholder="Enter chq issue date..."
                     name="chq_issue_date"
                     value={editFormData.chq_issue_date.slice(0, 10)}
@@ -89,9 +90,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter amount..."
                     name="amount"
                     value={editFormData.amount}
@@ -100,9 +101,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required="required"
+                    disabled
                     placeholder="Enter part pay..."
                     name="part_pay"
                     value={editFormData.part_pay}
@@ -111,9 +112,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter payment_approved..."
                     name="payment_approved"
                     value={editFormData.payment_approved}
@@ -122,9 +123,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required="required"
+                    disabled
                     placeholder="Enter balance..."
                     name="balance"
                     value={editFormData.balance}
@@ -133,9 +134,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter payment chq no..."
                     name="payment_chq_no"
                     value={editFormData.payment_chq_no}
@@ -144,9 +145,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
+                    required
                     placeholder="Enter payment chq amount..."
                     name="payment_chq_amount"
                     value={editFormData.payment_chq_amount}
@@ -155,9 +156,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="date"
-                    required="required"
+                    required
                     placeholder="Enter payment chq date..."
                     name="payment_chq_date"
                     value={editFormData.payment_chq_date.slice(0, 10)}
@@ -166,9 +167,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="date"
-                    required="required"
+                    required
                     placeholder="Enter added date..."
                     name="added_date"
                     value={editFormData.added_date.slice(0, 10)}

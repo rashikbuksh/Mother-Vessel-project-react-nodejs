@@ -22,8 +22,8 @@ const TableHeader = [
     { id: 1, name: "Id", accessor: "id", sortable: true, sortByOrder: "asc" },
     {
         id: 2,
-        name: "Order Number",
-        accessor: "order_number",
+        name: "Order job Number",
+        accessor: "order_job_number",
         sortable: true,
     },
     {
@@ -119,8 +119,7 @@ const TableHeader = [
 const App = () => {
     // new start
     const [DamList, setDamList] = useState([]);
-    const [OrderNumber, setOrderNumber] = useState([]);
-    const [JobNumber, setJobNumber] = useState([]);
+    const [orderJobList, setOrderJobList] = useState([]);
 
     const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
@@ -160,8 +159,7 @@ const App = () => {
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        order_number: "",
-        job_number: "",
+        order_job_number: "",
         date: "",
         cp_number: "",
         date_from_charpotro: "",
@@ -188,8 +186,7 @@ const App = () => {
     //edit status
     const [editFormData, setEditFormData] = useState({
         id: "",
-        order_number: "",
-        job_number: "",
+        order_job_number: "",
         date: "",
         cp_number: "",
         date_from_charpotro: "",
@@ -254,8 +251,7 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newDam = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: addFormData.job_number,
+            order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
             date: addFormData.date,
             cp_number: addFormData.cp_number,
             date_from_charpotro: addFormData.date_from_charpotro,
@@ -283,8 +279,7 @@ const App = () => {
         console.log("New Dam : " + addFormData.job_number);
         // api call
         Axios.post("http://localhost:3001/management/insertdamarage", {
-            order_number: newDam.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: newDam.job_number,
+            order_job_number: newDam.order_job_number, //handleAddFormChange로 받은 새 데이터
             date: newDam.date,
             cp_number: newDam.cp_number,
             date_from_charpotro: newDam.date_from_charpotro,
@@ -329,8 +324,7 @@ const App = () => {
 
         const editedDam = {
             id: editDamId, //handleAddFormChange로 받은 새 데이터
-            order_number: editFormData.order_number,
-            job_number: editFormData.job_number,
+            order_job_number: editFormData.order_job_number,
             date: editFormData.date,
             cp_number: editFormData.cp_number,
             date_from_charpotro: editFormData.date_from_charpotro,
@@ -359,8 +353,7 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatedamarage", {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
-            order_number: editedDam.order_number,
-            job_number: editedDam.job_number,
+            order_job_number: editedDam.order_job_number,
             date: editedDam.date,
             cp_number: editedDam.cp_number,
             date_from_charpotro: editedDam.date_from_charpotro,
@@ -401,8 +394,7 @@ const App = () => {
 
         setEditDamId(Dam.id);
         const formValues = {
-            order_number: Dam.order_number,
-            job_number: Dam.job_number,
+            order_job_number: Dam.order_job_number,
             date: Dam.date,
             cp_number: Dam.cp_number,
             date_from_charpotro: Dam.date_from_charpotro,
@@ -459,23 +451,45 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/fetch_order_number")
+        fetch("http://localhost:3001/management/getorderjob")
             .then((res) => res.json())
             .then((data) => {
-                setOrderNumber(data);
+                setOrderJobList(data);
+                console.log(data);
             });
         setIsOpen(true);
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/fetch_job_number?order_number=${addFormData.order_number}`
+            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
-                setJobNumber(data);
+                data?.map((item) => {
+                    addFormData.date_from_charpotro = item.date_from_charpotro;
+                    addFormData.LV_name = item.LV_name;
+                });
             });
-    }, [addFormData.order_number]);
-
+        fetch(
+            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.commodity = item.commodity;
+                });
+            });
+        fetch(
+            `http://localhost:3001/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.MV_name = item.MV_name;
+                });
+            });
+        console.log("addFormData", addFormData);
+    }, [addFormData.order_job_number]);
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
@@ -605,12 +619,12 @@ const App = () => {
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Number
+                                                    Order Job Number
                                                 </label>
-                                                {OrderNumber && (
+                                                {orderJobList && (
                                                     <Select
-                                                        options={OrderNumber}
-                                                        name="order_number"
+                                                        options={orderJobList}
+                                                        name="order_job_number"
                                                         addFormData={
                                                             addFormData
                                                         }
@@ -621,26 +635,6 @@ const App = () => {
                                                     />
                                                 )}
                                             </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Job Number
-                                                </label>
-                                                {JobNumber && (
-                                                    <Select
-                                                        options={JobNumber}
-                                                        name="job_number"
-                                                        addFormData={
-                                                            addFormData
-                                                        }
-                                                        setAddFormData={
-                                                            setAddFormData
-                                                        }
-                                                        isAddFromData={true}
-                                                    />
-                                                )}
-                                            </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Date

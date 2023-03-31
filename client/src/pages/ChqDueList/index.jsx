@@ -11,6 +11,7 @@ import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
+import Select from "../../components/Select";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -26,13 +27,13 @@ const TableHeader = [
     },
     {
         id: 2,
-        name: "Order Number",
-        accessor: "order_number",
+        name: "Order Job Number",
+        accessor: "order_job_number",
     },
     {
         id: 3,
-        name: "LA",
-        accessor: "la",
+        name: "LA name",
+        accessor: "LA_name",
         sortable: true,
     },
     { id: 4, name: "LV Name", accessor: "LV_name", sortable: true },
@@ -59,6 +60,7 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+    const [orderJobList, setOrderJobList] = useState([]);
     const { logout } = useAuth();
 
     // search filter for all fields
@@ -93,8 +95,8 @@ const App = () => {
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        order_number: "",
-        LA: "",
+        order_job_number: "",
+        LA_name: "",
         LV_name: "",
         commodity: "",
         mode: "",
@@ -109,8 +111,8 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        order_number: "",
-        LA: "",
+        order_job_number: "",
+        LA_name: "",
         LV_name: "",
         commodity: "",
         mode: "",
@@ -164,8 +166,8 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newChq = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            LA: addFormData.LA,
+            order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: addFormData.LA_name,
             LV_name: addFormData.LV_name,
             commodity: addFormData.commodity,
             mode: addFormData.mode,
@@ -184,8 +186,8 @@ const App = () => {
 
         // api call
         Axios.post("http://localhost:3001/management/insertchq", {
-            order_number: newChq.order_number, //handleAddFormChange로 받은 새 데이터
-            LA: newChq.LA,
+            order_job_number: newChq.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: newChq.LA_name,
             LV_name: newChq.LV_name,
             commodity: newChq.commodity,
             mode: newChq.mode,
@@ -217,8 +219,8 @@ const App = () => {
 
         const editedChq = {
             id: editChqId, //initial value null
-            order_number: editFormData.order_number,
-            LA: editFormData.LA,
+            order_job_number: editFormData.order_job_number,
+            LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
             commodity: editFormData.commodity,
             mode: editFormData.mode,
@@ -233,8 +235,8 @@ const App = () => {
 
         Axios.post("http://localhost:3001/management/updatechq", {
             id: editedChq.id,
-            new_order_number: editedChq.order_number,
-            new_LA: editedChq.LA,
+            new_order_job_number: editedChq.order_job_number,
+            new_LA_name: editedChq.LA_name,
             new_LV_name: editedChq.LV_name,
             new_commodity: editedChq.commodity,
             new_mode: editedChq.mode,
@@ -263,8 +265,8 @@ const App = () => {
 
         setEditChqId(Chq.id);
         const formValues = {
-            order_number: Chq.order_number,
-            LA: Chq.LA,
+            order_job_number: Chq.order_job_number,
+            LA_name: Chq.LA_name,
             LV_name: Chq.LV_name,
             commodity: Chq.commodity,
             mode: Chq.mode,
@@ -305,7 +307,7 @@ const App = () => {
         query === ""
             ? ChqList
             : ChqList.filter((Chq) =>
-                  Chq.order_number
+                  Chq.order_job_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
@@ -319,8 +321,38 @@ const App = () => {
     }
 
     function openModal() {
+        fetch("http://localhost:3001/management/getorderjob")
+            .then((res) => res.json())
+            .then((data) => {
+                setOrderJobList(data);
+                console.log(data);
+            });
         setIsOpen(true);
     }
+    useEffect(() => {
+        fetch(
+            `http://localhost:3001/management/getLvToChqDue?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.LA_name = item.LA_name;
+                    addFormData.LV_name = item.LV_name;
+                });
+            });
+
+        fetch(
+            `http://localhost:3001/management/getComodityToChqDue?order_job_number=${addFormData.order_job_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                data?.map((item) => {
+                    addFormData.commodity = item.commodity;
+                });
+            });
+
+        console.log("addFormData", addFormData);
+    }, [addFormData.order_job_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -452,61 +484,20 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Number
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    name="order_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    disabled
-                                                    placeholder="Will be Auto Generated"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
+                                                {orderJobList && (
+                                                    <Select
+                                                        options={orderJobList}
+                                                        name="order_job_number"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                )}
                                             </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LA"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Mode
