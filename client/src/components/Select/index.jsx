@@ -16,9 +16,7 @@ export default function Select({
 }) {
     options = [...new Set(options)];
 
-    const [selected, setSelected] = useState(
-        value !== "" ? value : "Select an option"
-    );
+    const [selected, setSelected] = useState(value !== "" ? value : "");
     const [query, setQuery] = useState("");
 
     if (isAddFromData && addFormData[name] !== selected) {
@@ -61,6 +59,7 @@ export default function Select({
                             displayValue={() => selected}
                             onChange={(event) => setQuery(event.target.value)}
                             disabled={isDisabled}
+                            required
                         />
                         <Combobox.Button
                             onClick={() => onInputFocus}

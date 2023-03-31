@@ -6,37 +6,27 @@ const EditTableRow = ({
     handleEditFormChange,
     handleCancelClick,
 }) => {
+    var clsName =
+        "peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
             <td></td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter order number..."
                     name="order_number"
-                    value={editFormData.order_number}
-                    onChange={handleEditFormChange}
-                    disabled
-                />
-            </td>
-            <td>
-                <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    required="required"
-                    placeholder="Enter job number..."
-                    name="job_number"
-                    value={editFormData.job_number}
+                    value={editFormData.order_job_number}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="date"
-                    required="required"
+                    disabled
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
                     value={editFormData.date_from_charpotro.slice(0, 10)}
@@ -45,9 +35,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="number"
-                    required="required"
+                    disabled
                     placeholder="Enter cp number from charpotro..."
                     name="cp_number_from_charpotro"
                     value={editFormData.cp_number_from_charpotro}
@@ -56,9 +46,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter LA name..."
                     name="LA_name"
                     value={editFormData.LA_name}
@@ -67,9 +57,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter LV name..."
                     name="LV_name"
                     value={editFormData.LV_name}
@@ -78,9 +68,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
+                    disabled
                     placeholder="Enter MV name..."
                     name="MV_name"
                     value={editFormData.MV_name}
@@ -89,31 +79,30 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
                     placeholder="Enter destination from..."
                     name="dest_from"
+                    disabled
                     value={editFormData.dest_from}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="text"
-                    required="required"
                     placeholder="Enter destination to..."
                     name="dest_to"
+                    disabled
                     value={editFormData.dest_to}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="number"
-                    required="required"
                     placeholder="Enter capacity in ton..."
                     name="capacity_ton"
                     value={editFormData.capacity_ton}
@@ -122,20 +111,19 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={`${clsName} border-red-600 cursor-not-allowed`}
                     type="number"
-                    required="required"
                     placeholder="Enter rate..."
                     name="rate"
+                    disabled
                     value={editFormData.rate}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter 60 percent payment..."
                     name="sixty_percent_payment"
                     value={editFormData.sixty_percent_payment}
@@ -144,9 +132,8 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter 40 percent payment..."
                     name="forty_percent_payment"
                     value={editFormData.forty_percent_payment}
@@ -155,9 +142,8 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter damarage..."
                     name="damarage"
                     value={editFormData.damarage}
@@ -166,9 +152,8 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter second trip..."
                     name="second_trip"
                     value={editFormData.second_trip}
@@ -177,9 +162,8 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter third trip..."
                     name="third_trip"
                     value={editFormData.third_trip}
@@ -188,9 +172,8 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className="peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                    className={clsName}
                     type="text"
-                    required="required"
                     placeholder="Enter direct trip..."
                     name="direct_trip"
                     value={editFormData.direct_trip}
