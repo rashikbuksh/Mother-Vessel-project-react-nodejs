@@ -24,9 +24,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter importer name..."
                     name="importer_name"
                     value={editFormData.importer_name}
@@ -35,9 +35,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter mother vessel name..."
                     name="mother_vessel_name"
                     value={editFormData.mother_vessel_name}
@@ -46,9 +46,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required
+                    disabled
                     name="eta"
                     value={editFormData.eta.slice(0, 10)}
                     onChange={handleEditFormChange}
@@ -56,9 +56,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter commodity..."
                     name="commodity"
                     value={editFormData.commodity}
@@ -67,9 +67,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter mv location..."
                     name="mv_location"
                     value={editFormData.mv_location}
@@ -78,9 +78,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
                     placeholder="Enter bl quantity..."
                     name="bl_quantity"
                     value={editFormData.bl_quantity}
@@ -89,9 +89,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter stevedore name..."
                     name="stevedore_name"
                     value={editFormData.stevedore_name}

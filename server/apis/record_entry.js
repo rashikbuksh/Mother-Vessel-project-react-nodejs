@@ -1,4 +1,4 @@
-function addRecord(req, res, db){
+function addRecord(req, res, db) {
     //console.log("submit in backend");
     const order_number = req.body.order_number;
     const job_number = req.body.job_number;
@@ -40,15 +40,14 @@ function addRecord(req, res, db){
     );
 }
 
-function getRecord(req, res, db){
+function getRecord(req, res, db) {
     const sqlSelect = "SELECT * from record_entry";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
 
-
-function updaterecord(req, res, db){
+function updaterecord(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.order_number;
@@ -95,7 +94,7 @@ function updaterecord(req, res, db){
     );
 }
 
-function deleteRecord(req, res, db){
+function deleteRecord(req, res, db) {
     //console.log("Delete record in backend");
     const id = req.body.record_id;
     const sqlDelete = "DELETE from record_entry where id= ?";
@@ -108,7 +107,7 @@ function deleteRecord(req, res, db){
     });
 }
 
- function fetchJobNumber(req, res, db){
+function fetchJobNumber(req, res, db) {
     var order_number = req.query.order_number;
     console.log("query job number: ", order_number);
     const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
@@ -116,9 +115,9 @@ function deleteRecord(req, res, db){
         console.log(result);
         res.send(result);
     });
- }
+}
 
-function getCharpotroCpLaLvRate(req, res, db){
+function getCharpotroCpLaLvRate(req, res, db) {
     var order_job_number = req.query.order_job_number;
     console.log("order_job_number", order_job_number);
     const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
@@ -129,9 +128,33 @@ function getCharpotroCpLaLvRate(req, res, db){
     });
 }
 
+function getMaxCapacity(req, res, db) {
+    var order_number = req.query.order_number;
+    console.log("order_job_number", order_number);
+    const sqlSelect = `
+    select 
+        (bl_quantity - (
+            Select 
+                sum(capacity)
+            from record_entry 
+            where order_number = '${order_number}'
+            group by order_number
+        )) as 'max_capacity'
+    from job_entry
+    where order_number = '${order_number}'
+    `;
+
+    db.query(sqlSelect, [order_number], (err, result) => {
+        console.log("max", result);
+        res.send(result);
+    });
+
+}
+
 module.exports.addRecord = addRecord;
 module.exports.getRecord = getRecord;
 module.exports.updaterecord = updaterecord;
 module.exports.deleteRecord = deleteRecord;
 module.exports.fetchJobNumber = fetchJobNumber;
 module.exports.getCharpotroCpLaLvRate = getCharpotroCpLaLvRate;
+module.exports.getMaxCapacity = getMaxCapacity;
