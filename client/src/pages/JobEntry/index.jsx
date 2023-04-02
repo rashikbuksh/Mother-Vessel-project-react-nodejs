@@ -74,7 +74,7 @@ const TableHeader = [
     },
     {
         id: 10,
-        name: "Stevedore Contact Number",
+        name: "Stevedore Number",
         accessor: "stevedore_contact_number",
         sortable: true,
     },

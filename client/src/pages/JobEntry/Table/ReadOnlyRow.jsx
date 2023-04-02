@@ -1,6 +1,7 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
+import FormateNumber from "../../../utils/FormateNumber";
 
 const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
@@ -37,7 +38,9 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{job.mv_location}</td>
             <td className={clsName}>{job.bl_quantity}</td>
             <td className={clsName}>{job.stevedore_name}</td>
-            <td className={clsName}>{job.stevedore_contact_number}</td>
+            <td className={clsName}>
+                <FormateNumber number={job.stevedore_contact_number} />
+            </td>
             <td className={clsName}>
                 <DateTime date={job.time_stamp} />
             </td>

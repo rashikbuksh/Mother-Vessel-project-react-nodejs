@@ -1,8 +1,6 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { RxReset } from "react-icons/rx";
-import { ImCancelCircle } from "react-icons/im";
-import { AiOutlineCheck } from "react-icons/ai";
+import DateTime from "../../../utils/DateTime";
 
 const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
@@ -16,7 +14,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{status.order_job_number}</td>
             <td className={clsName}>{status.LV_name}</td>
             <td className={clsName}>
-                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
+                {/* <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
                     {new Date(status.date_from_charpotro).toLocaleString(
                         "en-GB",
                         {
@@ -29,7 +27,8 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                             year: "numeric",
                         }
                     )}
-                </span>
+                </span> */}
+                <DateTime date={status.date_from_charpotro} />
             </td>
             <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
@@ -42,17 +41,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{status.current_location}</td>
             <td className={clsName}>{status.remark}</td>
             <td className={clsName}>
-                <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
-                    {new Date(status.time_updated).toLocaleString("en-GB", {
-                        timeZone: "Asia/Dhaka",
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                        day: "numeric",
-                        month: "numeric",
-                        year: "numeric",
-                    })}
-                </span>
+                <DateTime date={status.time_updated} />
             </td>
             <td className={clsName}>
                 <button

@@ -13,7 +13,7 @@ const EditTableRow = ({
                 <input
                     className="w-full rounded-md text-sm"
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter a name..."
                     name="fullName"
                     value={editFormData.fullName}
@@ -24,7 +24,7 @@ const EditTableRow = ({
                 <input
                     className="w-full rounded-md text-sm"
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter an address..."
                     name="address"
                     value={editFormData.address}
@@ -35,7 +35,7 @@ const EditTableRow = ({
                 <input
                     className="w-full rounded-md text-sm"
                     type="text"
-                    required="required"
+                    required
                     placeholder="Enter a phone number..."
                     name="phoneNumber"
                     value={editFormData.phoneNumber}
@@ -46,7 +46,7 @@ const EditTableRow = ({
                 <input
                     className="w-full rounded-md text-sm"
                     type="email"
-                    required="required"
+                    required
                     placeholder="Enter an email..."
                     name="email"
                     value={editFormData.email}

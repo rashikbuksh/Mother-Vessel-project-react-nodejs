@@ -1,6 +1,6 @@
 export default function DateTime({ date, isDate = true, isTime = true }) {
     var clsName =
-        "rounded-lg bg-opacity-50 text-xs font-medium uppercase tracking-wider ";
+        "rounded-lg bg-opacity-50 text-xs font-medium uppercase tracking-wider";
     return (
         <div className="flex flex-col items-center justify-center space-y-1">
             {isTime && (
