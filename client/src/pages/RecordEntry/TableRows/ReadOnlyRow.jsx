@@ -1,9 +1,11 @@
 import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
+import FormateNumber from "../../../utils/FormateNumber";
 
 const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
+
     return (
         <>
             <td className={clsName}>
@@ -35,7 +37,10 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
             <td className={`text-center ${clsName}`}>{record.capacity}</td>
             <td className={`text-center ${clsName}`}>{record.rate}</td>
             <td className={clsName}>{record.LV_master_name}</td>
-            <td className={clsName}>{record.LV_master_contact_number}</td>
+
+            <td className={`text-center ${clsName}`}>
+                <FormateNumber number={record.LV_master_contact_number} />
+            </td>
             <td className={clsName}>
                 <DateTime date={record.date_created} />
             </td>

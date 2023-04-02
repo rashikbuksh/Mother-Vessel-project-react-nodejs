@@ -46,14 +46,14 @@ export default function Select({
             : options.filter((option) => {
                   return option.value
                       .toLowerCase()
-                      .includes(query.toLowerCase());
+                      .includes(query.trim().toLowerCase());
               });
 
     return (
-        <div className="w-full z-20">
+        <div className="z-20 w-full">
             <Combobox value={selected} onChange={setSelected}>
-                <div className="relative mt-1">
-                    <div className=" peer relative w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
+                <div className="relative">
+                    <div className="peer relative w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
                         <Combobox.Input
                             className="peer w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                             displayValue={() => selected}
@@ -78,17 +78,17 @@ export default function Select({
                         leaveTo="opacity-0"
                         afterLeave={() => setQuery("")}
                     >
-                        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full divide-y divide-green-400 overflow-auto rounded-md bg-white py-1 text-base shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                             {filteredOptions.length === 0 && query !== "" ? (
-                                <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                                    Nothing found..
+                                <div className="relative cursor-default select-none rounded-md bg-red-600 py-2 px-4 text-white">
+                                    Nothing found...
                                 </div>
                             ) : (
                                 filteredOptions.map((option) => (
                                     <Combobox.Option
                                         key={option.value}
                                         className={({ active }) =>
-                                            `relative cursor-default select-none py-2 pl-10 pr-4 transition duration-100 ease-in-out
+                                            `relative cursor-default select-none rounded-md py-2 pl-10 pr-4 transition duration-100 ease-in-out
                                             ${
                                                 active
                                                     ? "bg-green-600 text-white"
@@ -112,7 +112,7 @@ export default function Select({
                                                     <span
                                                         className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                                                             active
-                                                                ? "bg-green-600 text-white"
+                                                                ? "font-extrabold text-white"
                                                                 : "text-green-600"
                                                         }`}
                                                     >

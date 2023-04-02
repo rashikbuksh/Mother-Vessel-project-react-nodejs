@@ -1,5 +1,6 @@
 import { useAuth } from "../../hooks/auth";
 import { DefineRole } from "../../hooks/routes";
+import shipLogo from "../../assets/img/shipLogo.svg";
 
 const NavLinks = [
     {
@@ -12,25 +13,25 @@ const NavLinks = [
         id: 2,
         link: "/recordentry",
         name: "Record Entry",
-        role: ["admin", "operation"],
+        role: ["admin", "operations"],
     },
     {
         id: 3,
         link: "/currentstatus",
         name: "Current Status (Others)",
-        role: ["admin", "operation"],
+        role: ["admin", "operations"],
     },
     {
         id: 5,
         link: "/damaragecalculation",
         name: "Damarage Calculation",
-        role: ["admin", "operation"],
+        role: ["admin", "operations"],
     },
     {
         id: 6,
         link: "/predefinedship",
         name: "Current Status (Own)",
-        role: ["admin", "operation"],
+        role: ["admin", "operations"],
     },
     {
         id: 7,
@@ -67,6 +68,7 @@ const NavLinks = [
 function Nav() {
     const { logout } = useAuth();
     const { original_role } = DefineRole();
+
     return (
         <div
             className={`flex flex-wrap place-items-center ${
@@ -77,30 +79,35 @@ function Nav() {
         >
             <section className="relative mx-auto">
                 <nav className="flex w-screen justify-between rounded-b-md bg-green-700 text-white">
-                    <div className="flex w-full items-center  px-5 py-2 xl:px-8">
+                    <div className="flex w-full items-center break-normal px-5 py-2 xl:px-4">
                         <a
-                            className="font-heading text-2xl font-bold"
-                            href="/login"
+                            className="font-heading flex items-center justify-center text-2xl font-bold"
+                            href="/"
                         >
+                            <img
+                                className="mr-1 h-10 w-10 text-white"
+                                src={shipLogo}
+                                alt="KEL-BD logo"
+                            />
                             KEL-BD
                         </a>
-                        <ul className="font-heading mx-auto hidden space-x-12 px-4 font-semibold md:flex">
+                        <ul className="font-heading overflow-y mx-auto flex space-x-12 px-4 font-semibold">
                             {NavLinks.filter((nav) => {
                                 return nav.role.includes(original_role);
-                            }).map((nav) => {
+                            }).map(({ id, link, name }) => {
                                 return (
-                                    <li key={nav.id}>
+                                    <li key={id}>
                                         <a
-                                            className={`rounded-md border-b-4 px-2 py-2 transition duration-500 ease-in-out hover:rounded-md hover:border-b-4 hover:border-gray-200 hover:text-gray-200
+                                            className={`rounded-md border-b-4 py-2 text-center transition duration-500 ease-in-out hover:rounded-md hover:border-b-4 hover:border-gray-200 hover:text-gray-200
                                             ${
                                                 window.location.pathname ===
-                                                nav.link
+                                                link
                                                     ? "border-white"
                                                     : "border-green-700"
                                             }`}
-                                            href={nav.link}
+                                            href={link}
                                         >
-                                            {nav.name}
+                                            {name}
                                         </a>
                                     </li>
                                 );

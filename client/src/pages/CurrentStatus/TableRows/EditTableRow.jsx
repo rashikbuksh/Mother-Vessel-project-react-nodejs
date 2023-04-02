@@ -110,10 +110,12 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                <span className="text-md text-black">Auto generated</span>
+            <td className="text-center text-sm">
+                <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                    Auto generated
+                </span>
             </td>
-            <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
+            <td className="flex items-center justify-around py-2">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

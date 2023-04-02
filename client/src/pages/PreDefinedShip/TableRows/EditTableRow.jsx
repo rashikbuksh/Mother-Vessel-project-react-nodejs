@@ -12,11 +12,12 @@ const EditTableRow = ({
     return (
         <>
             <td></td>
+            <td></td>
             <td>
                 <input
                     className={clsName}
                     type="date"
-                    required="required"
+                    required
                     name="order_job_date"
                     /*value={editFormData.date_from_charpotro.slice(0, 10)}*/
                     onChange={handleEditFormChange}
@@ -26,7 +27,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required="required"
+                    required
                     name="date_from_charpotro"
                     /*value={editFormData.date_from_charpotro.slice(0, 10)}*/
                     onChange={handleEditFormChange}
@@ -36,7 +37,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
@@ -47,7 +48,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="LA"
                     name="LA"
                     value={editFormData.LA}
@@ -58,7 +59,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Destination From..."
                     name="dest_from"
                     value={editFormData.dest_from}
@@ -69,7 +70,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Destination To..."
                     name="dest_to"
                     value={editFormData.dest_to}
@@ -81,7 +82,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Current Location..."
                     name="current_location"
                     value={editFormData.current_location}
@@ -92,17 +93,19 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required="required"
+                    required
                     placeholder="Remark..."
                     name="remark"
                     value={editFormData.remark}
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                <span className="text-md text-black">Auto generated</span>
+            <td className="text-center text-sm">
+                <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                    Auto generated
+                </span>
             </td>
-            <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
+            <td className="flex items-center justify-around py-2">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

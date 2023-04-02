@@ -13,9 +13,8 @@ const EditTableRow = ({
             <td></td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
                     placeholder="Enter order number..."
                     name="order_number"
                     value={editFormData.order_number}
@@ -102,7 +101,7 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="text"
+                    type="number"
                     required
                     placeholder="Enter stevedore contact number..."
                     name="stevedore_contact_number"
@@ -110,10 +109,12 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                <span className="text-md text-black">Auto generated</span>
+            <td className="text-center text-sm">
+                <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                    Auto generated
+                </span>
             </td>
-            <td className="flex items-center justify-between">
+            <td className="flex items-center justify-around py-2">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"
