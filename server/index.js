@@ -20,6 +20,7 @@ const {
     deleteRecord,
     fetchJobNumber,
     getCharpotroCpLaLvRate,
+    getMaxCapacity,
 } = require("./apis/record_entry");
 const {
     addJob,
@@ -121,7 +122,11 @@ app.post("/admin/updateinfo", (req, res) => {
 app.post("/admin/deleteuser", (req, res) => {
     deleteuser(req, res, db);
 });
+
 //////////////////////MANAGEMENT/////////////////////////
+
+//======================= Job Entry =======================
+
 //Insert Job Entry
 app.post("/management/jobentry", (req, res) => {
     addJob(req, res, db);
@@ -138,6 +143,8 @@ app.post("/management/updatejobentry", (req, res) => {
 app.post("/management/deletejob", (req, res) => {
     deleteJob(req, res, db);
 });
+
+//======================= Record Entry =======================
 
 //Insert Record Entry
 app.post("/management/recordentry", (req, res) => {
@@ -162,6 +169,13 @@ app.get("/management/getcomodity", (req, res) => {
     getComodity(req, res, db);
 });
 
+// fetch get capacity max
+app.get("/management/getcapacitymax", (req, res) => {
+    getMaxCapacity(req, res, db);
+});
+
+//=======================Current Status =======================
+
 //Insert Current Status
 app.post("/management/currentstatus", (req, res) => {
     addCurrentStatus(req, res, db);
@@ -178,6 +192,8 @@ app.post("/management/updatecurrentstatus", (req, res) => {
 app.post("/management/deletecurrentstatus", (req, res) => {
     deleteCurrentStatus(req, res, db);
 });
+
+//======================= Damarage =======================
 
 //Insert Damarage
 app.post("/management/insertdamarage", (req, res) => {
@@ -203,7 +219,9 @@ app.get("/management/fetch_order_number", (req, res) => {
 app.get("/management/fetch_job_number", (req, res) => {
     fetchJobNumber(req, res, db);
 });
-//------------------- Chq Due List-----------------------------
+
+//======================= Chq Due List =======================
+
 // Get Chq Due List
 app.get("/management/getchqlist", (req, res) => {
     getChq_due(req, res, db);
@@ -230,7 +248,8 @@ app.get("/management/getComodityToChqDue", (req, res) => {
     getComodityToChqDue(req, res, db);
 });
 
-//------------------- Chq Approval-----------------------------
+//======================= Chq Approval =======================
+
 // Get Chq Approval
 app.get("/management/getchqapproval", (req, res) => {
     getChq_approval(req, res, db);
@@ -250,7 +269,8 @@ app.post("/management/updatechq_approval", (req, res) => {
     updateChq_approval(req, res, db);
 });
 
-//------------------- Payment -----------------------------
+//======================= Payment =======================
+
 // Get payment
 app.get("/management/getpayment", (req, res) => {
     getPayment(req, res, db);
@@ -287,7 +307,8 @@ app.get("/management/getChqissuePartpayBalanceToPayment", (req, res) => {
     getChqissuePartpayBalanceToPayment(req, res, db);
 });
 
-//------------------- Predefined Ship -----------------------------
+//======================= Predefined =======================
+
 //Insert Current Status predefined
 app.post("/management/predefinedship", (req, res) => {
     addPredefined(req, res, db);
@@ -309,6 +330,8 @@ app.post("/management/deletepredefinedship", (req, res) => {
 app.get("/management/getLV", (req, res) => {
     getLV(req, res, db);
 });
+
+//======================= Utils =======================
 
 //get max job number from job order table
 app.get("/management/getmaxjobnumber", (req, res) => {

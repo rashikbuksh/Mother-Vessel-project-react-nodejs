@@ -71,6 +71,7 @@ const App = () => {
     const [RecordList, setRecordList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumberMax, setJobNumberMax] = useState([]);
+    const [maxCapacity, setMaxCapacity] = useState(0);
     const [commodity, setCommodity] = useState([]);
     const [tableData, handleSorting] = useSortableTable(
         RecordList,
@@ -364,6 +365,20 @@ const App = () => {
                 setCommodity(data);
                 console.log(data);
             });
+        fetch(
+            `http://localhost:3001/management/getcapacitymax?order_number=${addFormData.order_number}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                setMaxCapacity(
+                    data[0]?.max_capacity
+                        ? data[0]?.max_capacity < 0
+                            ? 0
+                            : data[0]?.max_capacity
+                        : 0
+                );
+                console.log("max capacity", data);
+            });
     }, [addFormData.order_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
@@ -541,7 +556,7 @@ const App = () => {
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA Number
+                                                    Local Agency Name
                                                 </label>
                                                 <input
                                                     type="text"
@@ -549,14 +564,14 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LA Number"
+                                                    placeholder="Local Agency Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Number
+                                                    Lighter Vessel Name
                                                 </label>
                                                 <input
                                                     type="text"
@@ -564,7 +579,7 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Number"
+                                                    placeholder="Lighter Vessel Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -624,7 +639,19 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Capacity"
+                                                    min={0}
+                                                    max={maxCapacity}
+                                                    placeholder={`Capacity (Max: ${maxCapacity})`}
+                                                    // oninput="if(this.value>maxCapacity)this.value=maxCapacity;"
+                                                    onInput={(e) => {
+                                                        (e.target.value >
+                                                            maxCapacity &&
+                                                            (e.target.value =
+                                                                maxCapacity)) ||
+                                                            (e.target.value <
+                                                                0 &&
+                                                                (e.target.value = 0));
+                                                    }}
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -676,7 +703,7 @@ const App = () => {
 
                                             <button
                                                 type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                                             >
                                                 Add
                                             </button>

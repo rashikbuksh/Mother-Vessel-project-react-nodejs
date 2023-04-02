@@ -78,8 +78,8 @@ function Nav() {
             } `}
         >
             <section className="relative mx-auto">
-                <nav className="flex w-screen justify-between rounded-b-md bg-green-700 text-white">
-                    <div className="flex w-full items-center break-normal px-5 py-2 xl:px-4">
+                <nav className="flex justify-between rounded-b-md bg-green-700 text-white">
+                    <div className="flex w-full items-center px-5 py-2 xl:px-8">
                         <a
                             className="font-heading flex items-center justify-center text-2xl font-bold"
                             href="/"
@@ -87,11 +87,11 @@ function Nav() {
                             <img
                                 className="mr-1 h-10 w-10 text-white"
                                 src={shipLogo}
-                                alt="KEL-BD logo"
+                                alt="KEL-BD"
                             />
                             KEL-BD
                         </a>
-                        <ul className="font-heading overflow-y mx-auto flex space-x-12 px-4 font-semibold">
+                        <ul className="font-heading mx-auto flex space-x-12 px-4 font-semibold">
                             {NavLinks.filter((nav) => {
                                 return nav.role.includes(original_role);
                             }).map(({ id, link, name }) => {
