@@ -36,7 +36,7 @@ export default function ForgotPassword() {
 
     const forgot_password = () => {
         axios
-            .get("http://localhost:3001/user/forgot_password/", {
+            .get(`${process.env.REACT_APP_API_URL}/user/forgot_password/`, {
                 params: {
                     email: email,
                     code: generatedcode,

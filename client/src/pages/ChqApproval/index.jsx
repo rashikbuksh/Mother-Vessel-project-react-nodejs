@@ -93,7 +93,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getchqapproval")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getchqapproval`)
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
@@ -207,7 +207,7 @@ const App = () => {
         //console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/insertchq_approval", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertchq_approval`, {
             order_job_number: newChq.order_job_number, //handleAddFormChange로 받은 새 데이터
             date_from_charpotro: newChq.date_from_charpotro,
             cp_number_from_charpotro: newChq.cp_number_from_charpotro,
@@ -263,7 +263,7 @@ const App = () => {
             direct_trip: editFormData.direct_trip,
         };
 
-        Axios.post("http://localhost:3001/management/updatechq_approval", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq_approval`, {
             id: editedChq.id,
             new_order_number: editedChq.order_job_number,
             new_date_from_charpotro: editedChq.date_from_charpotro,
@@ -329,7 +329,7 @@ const App = () => {
         const newChqList = [...ChqList];
         const index = ChqList.findIndex((Chq) => Chq.id === ChqId);
         //console.log("Deleting Chq with id: " + ChqId);
-        Axios.post("http://localhost:3001/management/deletechq_approval", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletechq_approval`, {
             Chq_id: ChqId,
         }).then((response) => {
             if (response.data == "success") {
@@ -349,7 +349,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
@@ -359,7 +359,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -375,7 +375,7 @@ const App = () => {
                 });
             });
         fetch(
-            `http://localhost:3001/management/getMvName?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getMvName?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

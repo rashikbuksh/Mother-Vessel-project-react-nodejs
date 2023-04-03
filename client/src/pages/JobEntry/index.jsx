@@ -98,7 +98,7 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const url = "http://localhost:3001/management/getjobentry";
+    const url = `${process.env.REACT_APP_API_URL}/management/getjobentry`;
     useEffect(() => {
         const abortCont = new AbortController();
 
@@ -245,7 +245,7 @@ const App = () => {
         newJob.order_number = order_number_auto;
 
         // api call
-        Axios.post("http://localhost:3001/management/jobentry", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/jobentry`, {
             order_number: newJob.order_number, //handleAddFormChange로 받은 새 데이터
             importer_name: newJob.importer_name,
             mother_vessel_name: newJob.mother_vessel_name,
@@ -288,7 +288,7 @@ const App = () => {
             stevedore_contact_number: editFormData.stevedore_contact_number,
         };
 
-        Axios.post("http://localhost:3001/management/updatejobentry", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatejobentry`, {
             id: editedJob.id,
             new_order_number: editedJob.order_number,
             new_importer_name: editedJob.importer_name,
@@ -339,7 +339,7 @@ const App = () => {
         const newJobList = [...JobList];
         const index = JobList.findIndex((job) => job.id === jobId);
         //console.log("Deleting job with id: " + jobId);
-        Axios.post("http://localhost:3001/management/deletejob", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletejob`, {
             job_id: jobId,
         }).then((response) => {
             if (response.data == "success") {

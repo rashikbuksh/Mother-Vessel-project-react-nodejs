@@ -83,7 +83,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getchqlist")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getchqlist`)
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
@@ -185,7 +185,7 @@ const App = () => {
         //console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/insertchq", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertchq`, {
             order_job_number: newChq.order_job_number, //handleAddFormChange로 받은 새 데이터
             LA_name: newChq.LA_name,
             LV_name: newChq.LV_name,
@@ -233,7 +233,7 @@ const App = () => {
             final_amount: editFormData.final_amount,
         };
 
-        Axios.post("http://localhost:3001/management/updatechq", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq`, {
             id: editedChq.id,
             new_order_job_number: editedChq.order_job_number,
             new_LA_name: editedChq.LA_name,
@@ -291,7 +291,7 @@ const App = () => {
         const newChqList = [...ChqList];
         const index = ChqList.findIndex((Chq) => Chq.id === ChqId);
         //console.log("Deleting Chq with id: " + ChqId);
-        Axios.post("http://localhost:3001/management/deletechq", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletechq`, {
             Chq_id: ChqId,
         }).then((response) => {
             if (response.data == "success") {
@@ -321,7 +321,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
@@ -331,7 +331,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getLvToChqDue?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getLvToChqDue?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -342,7 +342,7 @@ const App = () => {
             });
 
         fetch(
-            `http://localhost:3001/management/getComodityToChqDue?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToChqDue?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

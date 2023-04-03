@@ -78,7 +78,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getcurrentstatus")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getcurrentstatus`)
             .then((res) => res.json())
             .then((data) => {
                 setCurrentStatus(data);
@@ -168,7 +168,7 @@ const App = () => {
         // console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/currentstatus", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/currentstatus`, {
             LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
             date_from_charpotro: newStatus.date_from_charpotro,
             commodity: newStatus.commodity,
@@ -209,7 +209,7 @@ const App = () => {
             remark: editFormData.remark,
         };
 
-        Axios.post("http://localhost:3001/management/updatecurrentstatus", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatecurrentstatus`, {
             id: editedStatus.id,
             LV_name: editedStatus.LV_name,
             date_from_charpotro: editedStatus.date_from_charpotro,
@@ -260,7 +260,7 @@ const App = () => {
             (Status) => Status.id === StatusId
         );
         //console.log("Deleting Status with id: " + StatusId);
-        Axios.post("http://localhost:3001/management/deletecurrentstatus", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletecurrentstatus`, {
             status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
@@ -290,7 +290,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
@@ -300,7 +300,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -313,7 +313,7 @@ const App = () => {
                 });
             });
         fetch(
-            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

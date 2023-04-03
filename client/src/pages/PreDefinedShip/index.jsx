@@ -84,7 +84,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getpredefinedship")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getpredefinedship`)
             .then((res) => res.json())
             .then((data) => {
                 setCurrentStatus(data);
@@ -161,7 +161,7 @@ const App = () => {
         // console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/predefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/predefinedship`, {
             LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
         });
 
@@ -196,7 +196,7 @@ const App = () => {
             remark: editFormData.remark,
         };
 
-        Axios.post("http://localhost:3001/management/updatepredefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatepredefinedship`, {
             id: editedStatus.id,
             order_job_number: editedStatus.order_job_number,
             LV_name: editedStatus.LV_name,
@@ -250,7 +250,7 @@ const App = () => {
             (Status) => Status.id === StatusId
         );
         //console.log("Deleting Status with id: " + StatusId);
-        Axios.post("http://localhost:3001/management/deletepredefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletepredefinedship`, {
             status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
@@ -280,13 +280,13 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
                 console.log(data);
             });
-        fetch("http://localhost:3001/management/getLV")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getLV`)
             .then((res) => res.json())
             .then((data) => {
                 setLVList(data);
@@ -296,7 +296,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -308,7 +308,7 @@ const App = () => {
                 });
             });
         fetch(
-            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

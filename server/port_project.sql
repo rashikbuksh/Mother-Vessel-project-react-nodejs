@@ -3,11 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-
--- Generation Time: Mar 28, 2023 at 06:45 PM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
-
+-- Generation Time: Apr 03, 2023 at 01:45 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,13 +47,6 @@ CREATE TABLE `chq_approval` (
   `third_trip` varchar(100) NOT NULL,
   `direct_trip` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `chq_approval`
---
-
-INSERT INTO `chq_approval` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `MV_name`, `dest_from`, `dest_to`, `capacity_ton`, `rate`, `sixty_percent_payment`, `forty_percent_payment`, `damarage`, `second_trip`, `third_trip`, `direct_trip`) VALUES
-(2, '', 'GGWP', '2023-03-10', 4, 'asdasd', 'asdasd', 'asdasd', 'la', 'la', 6, 42, 'done, Chq Number: xxx', 'Done, Chq No: XXX', 'gg', 'gg', 'gg', 'gg');
 
 -- --------------------------------------------------------
 
@@ -150,7 +141,7 @@ CREATE TABLE `damarage_dispatch` (
 --
 
 INSERT INTO `damarage_dispatch` (`id`, `order_number`, `job_number`, `date`, `cp_number`, `date_from_charpotro`, `commodity`, `volume`, `LV_name`, `MV_name`, `loading_location`, `unloading_location`, `loading_start_time_stamp`, `loading_completion_time_stamp`, `sailing_time_stamp`, `duration_of_travel_time`, `unloading_start_time_stamp`, `unloading_completion_time_stamp`, `others`, `total_elapsed_time`, `voyage_time`, `free_time`, `total_despatch`, `daily_despatch`) VALUES
-(11, 'asdasd', '', '2023-03-08 00:00:00', 1, '2023-03-08', 'asdasd', 1, 'asdasd', 'asdasd', 'asdasd', 'asdasd', '2023-03-08 00:00:00', '2023-03-08 00:00:00', '2023-03-08 00:00:00', '00:20:23', '2023-03-08 00:00:00', '2023-03-08 00:00:00', 'asdasdasd', '00:20:23', '00:20:23', '00:20:23', 2, 2),
+(11, '', '', '2023-03-07 18:00:00', 1, '2023-03-07', 'asdasd', 1, 'asdasd', 'asdasd', 'asdasd', 'asdasd', '2023-03-07 18:00:00', '2023-03-07 18:00:00', '2023-03-07 18:00:00', '00:20:23', '2023-03-07 18:00:00', '2023-03-07 18:00:00', 'asdasdasd', '00:20:23', '00:20:23', '00:20:23', 2, 2),
 (12, '11', 'GGWP', '2023-03-08 18:00:00', 2, '2023-03-08', '44', 4, '11', '11', '11', '11', '2023-03-08 18:00:00', '2023-03-08 18:00:00', '2023-03-08 18:00:00', '00:20:23', '2023-03-08 18:00:00', '2023-03-08 18:00:00', '11', '00:20:23', '00:20:23', '00:20:23', 3, 3);
 
 -- --------------------------------------------------------
@@ -178,17 +169,20 @@ CREATE TABLE `job_entry` (
 --
 
 INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_name`, `eta`, `commodity`, `mv_location`, `bl_quantity`, `stevedore_name`, `stevedore_contact_number`, `time_stamp`) VALUES
-(3, 'asdasd123123', 'asdasd', 'asdasd567', '2023-03-22', 'asdasd567', 'asdasd567', 15, 'asdasd567', 'asdasd567', '2023-03-03 18:00:46'),
-(12, 'IMP1-4-MV1-SINGAPORE', 'IMP Importer', 'MV1', '2023-02-16', 'SUGAR', 'Malaysia', 2000, 'UNK', '01684545111', '2023-03-04 13:48:37'),
-(14, 'Akij-28-mv1-Chittagong', 'Akij', 'mv1', '2023-03-28', 'Suger', 'Chittagong', 50, 'Fahim', '01794798101', '2023-03-28 22:16:03'),
-(15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 12, 'Fahim', '01794798101', '2023-03-28 22:18:47');
-
+(15, 'Anik-28/2/2023-mv2-Chittagong', 'Anik', 'mv2', '2023-03-28', 'Suger', 'Chittagong', 1200, 'Fahim', '01794798101', '2023-03-28 22:18:47'),
+(16, 'Nisha-12/4/2024-Unnoyon-UK', 'Nisha', 'Unnoyon', '2024-05-12', 'Water', 'UK', 500, 'null', '015215333595', '2023-03-28 23:04:20'),
+(18, 'Akij-12/3/2023-Paharika-Srilanka', 'Akij', 'Paharika', '2023-04-12', 'Suger', 'Srilanka', 50, 'Fahim ', '01856212168', '2023-04-02 23:10:22');
 
 --
 -- Triggers `job_entry`
 --
 DELIMITER $$
 CREATE TRIGGER `add_order_job` AFTER INSERT ON `job_entry` FOR EACH ROW INSERT INTO order_job_table(order_number) VALUES(NEW.order_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_record_entry_from_job_entry` AFTER DELETE ON `job_entry` FOR EACH ROW DELETE FROM record_entry 
+where old.order_number = order_number
 $$
 DELIMITER ;
 
@@ -212,12 +206,26 @@ CREATE TABLE `order_job_table` (
 --
 
 INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `order_number_done`, `sixty_percent_done`, `job_completed`) VALUES
-(2, 'Akij-28-mv1-Chittagong', 0, 0, 0, 0),
 (3, 'Anik-28/2/2023-mv2-Chittagong', 0, 0, 0, 0),
-(4, 'Akij-28-mv1-Chittagong', 1, 0, 0, 0),
-(6, 'Akij-28-mv1-Chittagong', 2, 0, 0, 0),
-(7, 'afaf', 0, 0, 0, 0);
+(8, 'Nisha-12/4/2024-Unnoyon-UK', 0, 0, 0, 0),
+(9, 'Nisha-12/4/2024-Unnoyon-UK', 1, 0, 0, 0),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', 2, 0, 0, 0),
+(11, 'Nisha-12/4/2024-Unnoyon-UK', 3, 0, 0, 0),
+(13, 'Akij-12/3/2023-Paharika-Srilanka', 0, 0, 0, 0),
+(14, 'Akij-12/3/2023-Paharika-Srilanka', 1, 0, 0, 0),
+(15, 'Akij-12/3/2023-Paharika-Srilanka', 2, 0, 0, 0),
+(16, 'Anik-28/2/2023-mv2-Chittagong', 1, 0, 0, 0),
+(17, 'Anik-28/2/2023-mv2-Chittagong', 2, 0, 0, 0),
+(19, 'Anik-28/2/2023-mv2-Chittagong', 3, 0, 0, 0);
 
+--
+-- Triggers `order_job_table`
+--
+DELIMITER $$
+CREATE TRIGGER `delete_order_job_table_from_job_entry` AFTER DELETE ON `order_job_table` FOR EACH ROW DELETE FROM order_job_table 
+where old.order_number = order_number
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -275,8 +283,7 @@ CREATE TABLE `pre_defined_ship` (
 --
 
 INSERT INTO `pre_defined_ship` (`id`, `LV_name`, `date_from_charpotro`, `commodity`, `LA`, `dest_from`, `dest_to`, `current_location`, `remark`, `time_updated`) VALUES
-(2, 'dada', '2023-03-11', 'Suger', 'fafa', 'caf', 'adadd', 'uhu', 'ggs', '2023-03-24 16:16:31'),
-(5, 'Fahim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-03-27 13:51:55'),
+(2, 'dada', '2023-03-30', 'Suger', 'fafa', 'caf', 'adadd', 'uhu', 'ggs', '2023-03-24 16:16:31'),
 (6, 'gg', '2023-03-27', 'Suger', 'fafa', 'caf', 'ada', 'uhu', 'ggs', '2023-03-27 13:52:03'),
 (8, 'LV3', '2023-03-28', 'Suger', 'fafa', 'caf', 'ada', 'uhu', 'ggs', '2023-03-28 21:12:17');
 
@@ -296,7 +303,6 @@ CREATE TABLE `record_entry` (
   `LV_name` varchar(50) NOT NULL,
   `dest_from` varchar(50) NOT NULL,
   `dest_to` varchar(50) NOT NULL,
-  `commodity` varchar(50) NOT NULL,
   `capacity` int(11) NOT NULL,
   `rate` int(11) NOT NULL,
   `LV_master_name` varchar(50) NOT NULL,
@@ -308,20 +314,26 @@ CREATE TABLE `record_entry` (
 -- Dumping data for table `record_entry`
 --
 
-INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `commodity`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
-(2, 'order_number_forign_key', 'job_number_auto', '2023-03-10', 10, 'asdasd', 'asdasdasd', 'la', 'la', 'asdasd', 1000, 1000, 'rbr', '0168', '2023-03-10'),
-(4, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-03', 50, '50', '', 'wow', 'll', 'kvxkvx', 520, 47564, 'vjxcjv ', '01521533595', '2023-03-28'),
-(5, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-11', 50, 'j g', 'j kjgx ', 'dj gdjfklg', ' sjljsdf', 'sj fdslj', 5000, 424, 'sd fjsd ', ' jfsdfjsd sjfs', '2023-03-28'),
-(6, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-18', 545, 'dsikfds ', 'jf dlsj', ' lkj', ' sjf', 'j fdsj f', 45, 45, 'h fshf', ' hdff ds', '2023-03-28'),
-(7, 'Akij-28-mv1-Chittagong', '3', '2023-03-17', 56456, 'fg fdgd', ' sdfds f', 'h', 'h ', 'hj', 42445, 44545, 'wsdh fds', ' jlfksf', '2023-03-28'),
-(9, 'Nisha-12/4/2024-Unnoyon-UK', '1', '2023-03-23', 3432432, '32432', '342324', '3243243', '324324', '324324', 34318, 34324, '43324', '32424', '2023-03-28'),
-(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-17', 32432, '432432', '432432', '432432', '432432', '3432', 3432, 3432, '32432', '', '2023-03-28');
+INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
+(4, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-04', 50, 'WOW', 'Mayer Dua', 'wow', 'CTG', 520, 47564, 'Fahim', '01321533595', '2023-03-28'),
+(9, 'Nisha-12/4/2024-Unnoyon-UK', '1', '2023-03-23', 3432432, '32432', '342324', '3243243', '324324', 34318, 34324, '43324', '32424', '2023-03-28'),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-17', 32432, '432432', '432432', '432432', '432432', 3432, 3432, '32432', '', '2023-03-28'),
+(11, 'Nisha-12/4/2024-Unnoyon-UK', '3', '2023-03-30', 123, '123', '123', '123', '123', 123, 123, '123', '132', '2023-03-30'),
+(12, 'Akij-12/3/2023-Paharika-Srilanka', '1', '2023-04-11', 123, 'XYZ', 'Shitol-3', 'Chittagong', 'Dhaka', 30, 10200, 'Prime', '01521533595', '2023-04-02'),
+(13, 'Akij-12/3/2023-Paharika-Srilanka', '2', '2023-04-28', 13, 'WPW', 'djfk', 'ctg', 'dhk', 10, 20, 'ANik', '01521533595', '2023-04-03'),
+(15, 'Anik-28/2/2023-mv2-Chittagong', '2', '2023-04-29', 2364, 'Amar Dua', 'Probaho', '', 'DHK', 0, 50, 'Fahim', '01521533595', '2023-04-03'),
+(17, 'Anik-28/2/2023-mv2-Chittagong', '3', '2023-04-03', 123456, 'Amar Dua', 'Kao nai', '', 'CTG', 75, 50, 'Rashik', '01521533595', '2023-04-03');
 
 --
 -- Triggers `record_entry`
 --
 DELIMITER $$
 CREATE TRIGGER `add_record_job` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO order_job_table (order_number, job_number) VALUES (new.order_number, new.job_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_order_job_table` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM order_job_table 
+where old.order_number = order_number and old.job_number = job_number
 $$
 DELIMITER ;
 
@@ -347,9 +359,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `position`, `department`, `user_created_time`, `enabled`) VALUES
-(1, 'Fahim', 'hasibarrafiulfahim@gmail.com', '18bf931b32b6d4b8a78c62e4144bc5a1d07f6fd3e34245fc98a17e76531284a2', 'admin', 'accounts', '2023-02-26 12:00:58', 1),
+(1, 'Fahim', 'hasibarrafiulfahim@gmail.com', '456d857786314e3a20a6c90582d25a0995f15977940c91e7b466e52b937f7e50', 'admin', 'accounts', '2023-02-26 12:00:58', 1),
 (2, 'rashik', 'rashik', '5fb62704057fe5b652be548e74c628c5681adf87ca77b1b27ee470e33f29b6f9', 'admin', 'accounts', '2023-02-28 03:43:41', 1),
-(3, 'rafsan', 'rafsan', '07437b56e7f47386cf6ceba429169eff6e7a965bcdc1e5b65e061781e6403947', 'operations', 'Operations', '2023-02-28 03:46:18', 1);
+(4, 'Shahadat Anik', 'Anik', 'a9f5007446fc27de3c8e785574e0c10ea2bebd088e38a5c50143be35350b3328', 'operations', 'Napa', '2023-04-02 19:55:54', 1),
+(5, 'Nakib Bhai', 'Nakib', 'f09e4bc8c9ee106c535e01fc372484f275cb422689fc8cfb6dceddbd074fd130', 'operations', 'null', '2023-04-02 23:03:42', 1),
+(6, 'Anik123', 'Anik123', 'bd3730f88242d05062c2c59be1284cd51887bf7ac6aa084295f0941f3397998c', 'accounts', 'null', '2023-04-02 23:07:41', 1),
+(7, 'Prime', 'Prime', 'dd8444850764b8740de73e71453b36697dc0c8bfa173ec1f3cece323ffff98e0', 'accounts-manager', 'null', '2023-04-02 23:08:49', 1);
 
 --
 -- Indexes for dumped tables
@@ -448,13 +463,13 @@ ALTER TABLE `damarage_dispatch`
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -472,13 +487,13 @@ ALTER TABLE `pre_defined_ship`
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
