@@ -1,4 +1,4 @@
-function addDamarage(req, res, db){
+function addDamarage(req, res, db) {
     //console.log("submit in backend");
     const order_number = req.body.order_number;
     const job_number = req.body.job_number;
@@ -57,18 +57,17 @@ function addDamarage(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
 }
-function getDamarage(req, res, db){
+function getDamarage(req, res, db) {
     const sqlSelect = "SELECT * from damarage_dispatch";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
-function updateDamarage(req, res, db){
+function updateDamarage(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.order_number;
@@ -129,19 +128,17 @@ function updateDamarage(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
-
             res.send(result);
         }
     );
 }
-function deleteDamarage(req, res, db){
+function deleteDamarage(req, res, db) {
     //console.log("Delete status in backend");
     const id = req.body.Dam_id;
     const sqlDelete = "DELETE from damarage_dispatch where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }
@@ -152,4 +149,3 @@ module.exports.addDamarage = addDamarage;
 module.exports.getDamarage = getDamarage;
 module.exports.updateDamarage = updateDamarage;
 module.exports.deleteDamarage = deleteDamarage;
-
