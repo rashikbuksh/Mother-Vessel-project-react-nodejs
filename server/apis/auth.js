@@ -27,7 +27,7 @@ function verifyLogin(req, res, db){
     return res;
 }
 
-function getusers(req, res, db) {
+function getUsers(req, res, db) {
     const sqlSelect = "SELECT * from users";
     db.query(sqlSelect, (err, result) => {
         //console.log(result)
@@ -45,7 +45,7 @@ function enableUser(req, res, db) {
     });
 }
 
-function disableuser(req, res, db){
+function disableUser(req, res, db){
     const id = req.body.user_id;
     const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
     db.query(sqlUpdate, [id], (err, result) => {
@@ -55,7 +55,7 @@ function disableuser(req, res, db){
     });
 }
 
-function resetpassword(req, res, db){
+function resetPassword(req, res, db){
     const id = req.body.user_id;
     const password = req.body.new_password;
     console.log(id + " " + password);
@@ -88,7 +88,7 @@ function register(req, res, db){
     );
 }
 
-function updateinfo(req, res, db){
+function updateInfo(req, res, db){
     //console.log("update info in backend");
     const id = req.body.user_id;
     const name = req.body.new_name;
@@ -111,7 +111,7 @@ function updateinfo(req, res, db){
     );
 }
 
-function deleteuser(req, res, db){
+function deleteUser(req, res, db){
     console.log("Delete info in backend");
     const id = req.body.user_id;
     const sqlDelete = "DELETE from users where id= ?";
@@ -125,10 +125,10 @@ function deleteuser(req, res, db){
 }
 
 module.exports.verifyLogin = verifyLogin;
-module.exports.getusers = getusers;
+module.exports.getUsers = getUsers;
 module.exports.enableUser = enableUser;
-module.exports.disableuser = disableuser;
-module.exports.resetpassword = resetpassword;
+module.exports.disableUser = disableUser;
+module.exports.resetPassword = resetPassword;
 module.exports.register = register;
-module.exports.updateinfo = updateinfo;
-module.exports.deleteuser = deleteuser;
+module.exports.updateInfo = updateInfo;
+module.exports.deleteUser = deleteUser;

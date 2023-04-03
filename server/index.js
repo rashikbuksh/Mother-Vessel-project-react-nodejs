@@ -5,18 +5,18 @@ const app = express();
 const nodemailer = require("nodemailer");
 const {
     verifyLogin,
-    getusers,
+    getUsers,
     enableUser,
-    disableuser,
-    resetpassword,
-    updateinfo,
-    deleteuser,
+    disableUser,
+    resetPassword,
+    updateInfo,
+    deleteUser,
     register,
 } = require("./apis/auth");
 const {
     addRecord,
     getRecord,
-    updaterecord,
+    updateRecord,
     deleteRecord,
     fetchJobNumber,
     getCharpotroCpLaLvRate,
@@ -25,7 +25,7 @@ const {
 const {
     addJob,
     getJob,
-    updatejob,
+    updateJob,
     deleteJob,
     getComodity,
     fetchOrderNumber,
@@ -44,18 +44,18 @@ const {
     deleteDamarage,
 } = require("./apis/damarage_dispatch");
 const {
-    addChq_due,
-    getChq_due,
-    updateChq_due,
-    deleteChq_due,
+    addChqDue,
+    getChqDue,
+    updateChqDue,
+    deleteChqDue,
     getLvToChqDue,
     getComodityToChqDue,
 } = require("./apis/chq_due_list");
 const {
-    addChq_approval,
-    getChq_approval,
-    updateChq_approval,
-    deleteChq_approval,
+    addChqApproval,
+    getChqApproval,
+    updateChqApproval,
+    deleteChqApproval,
 } = require("./apis/chq_approval");
 const {
     addPayment,
@@ -96,7 +96,7 @@ app.get("/user/verify_login/", (req, res) => {
 });
 
 app.get("/admin/getusers", (req, res) => {
-    getusers(req, res, db);
+    getUsers(req, res, db);
 });
 
 app.post("/admin/enableuser", (req, res) => {
@@ -104,11 +104,11 @@ app.post("/admin/enableuser", (req, res) => {
 });
 
 app.post("/admin/disableuser", (req, res) => {
-    disableuser(req, res, db);
+    disableUser(req, res, db);
 });
 
 app.post("/admin/resetpassword", (req, res) => {
-    resetpassword(req, res, db);
+    resetPassword(req, res, db);
 });
 
 app.post("/user/register", (req, res) => {
@@ -116,11 +116,11 @@ app.post("/user/register", (req, res) => {
 });
 
 app.post("/admin/updateinfo", (req, res) => {
-    updateinfo(req, res, db);
+    updateInfo(req, res, db);
 });
 
 app.post("/admin/deleteuser", (req, res) => {
-    deleteuser(req, res, db);
+    deleteUser(req, res, db);
 });
 
 //////////////////////MANAGEMENT/////////////////////////
@@ -137,7 +137,7 @@ app.get("/management/getjobentry", (req, res) => {
 });
 //Update Job Entry
 app.post("/management/updatejobentry", (req, res) => {
-    updatejob(req, res, db);
+    updateJob(req, res, db);
 });
 //Delete Job Entry
 app.post("/management/deletejob", (req, res) => {
@@ -156,7 +156,7 @@ app.get("/management/getrecordentry", (req, res) => {
 });
 //Update Record Entry
 app.post("/management/updaterecordentry", (req, res) => {
-    updaterecord(req, res, db);
+    updateRecord(req, res, db);
 });
 //Delete Record Entry
 app.post("/management/deleterecord", (req, res) => {
@@ -224,20 +224,20 @@ app.get("/management/fetch_job_number", (req, res) => {
 
 // Get Chq Due List
 app.get("/management/getchqlist", (req, res) => {
-    getChq_due(req, res, db);
+    getChqDue(req, res, db);
 });
 //Insert Chq
 app.post("/management/insertchq", (req, res) => {
-    addChq_due(req, res, db);
+    addChqDue(req, res, db);
 });
 // Delete Chq
 app.post("/management/deletechq", (req, res) => {
-    deleteChq_due(req, res, db);
+    deleteChqDue(req, res, db);
 });
 
 // Update Chq
 app.post("/management/updatechq", (req, res) => {
-    updateChq_due(req, res, db);
+    updateChqDue(req, res, db);
 });
 // get Lv for chq due
 app.get("/management/getLvToChqDue", (req, res) => {
@@ -252,21 +252,21 @@ app.get("/management/getComodityToChqDue", (req, res) => {
 
 // Get Chq Approval
 app.get("/management/getchqapproval", (req, res) => {
-    getChq_approval(req, res, db);
+    getChqApproval(req, res, db);
 });
 
 //Insert Chq
 app.post("/management/insertchq_approval", (req, res) => {
-    addChq_approval(req, res, db);
+    addChqApproval(req, res, db);
 });
 // Delete Chq
 app.post("/management/deletechq_approval", (req, res) => {
-    deleteChq_approval(req, res, db);
+    deleteChqApproval(req, res, db);
 });
 
 // Uopdate Chq
 app.post("/management/updatechq_approval", (req, res) => {
-    updateChq_approval(req, res, db);
+    updateChqApproval(req, res, db);
 });
 
 //======================= Payment =======================
