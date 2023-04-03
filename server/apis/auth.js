@@ -1,4 +1,4 @@
-function verifyLogin(req, res, db){
+function verifyLogin(req, res, db) {
     //console.log("verify login")
     const username = req.query.username;
     const password = req.query.password;
@@ -6,7 +6,6 @@ function verifyLogin(req, res, db){
     const get_user =
         "select id, position, password, enabled from users where username = ?";
     db.query(get_user, [username], (err, result) => {
-        //console.log(result)
         if (result.length === 0) {
             console.log("No user found");
             res.send("No user found");
@@ -30,7 +29,6 @@ function verifyLogin(req, res, db){
 function getUsers(req, res, db) {
     const sqlSelect = "SELECT * from users";
     db.query(sqlSelect, (err, result) => {
-        //console.log(result)
         res.send(result);
     });
 }
@@ -40,21 +38,23 @@ function enableUser(req, res, db) {
     const sqlUpdate = "UPDATE users SET enabled=1 where id= ?";
     db.query(sqlUpdate, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         res.send(result);
     });
 }
+
 
 function disableUser(req, res, db){
     const id = req.body.user_id;
     const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
     db.query(sqlUpdate, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         res.send(result);
     });
 }
 
+=======
 function resetPassword(req, res, db){
     const id = req.body.user_id;
     const password = req.body.new_password;
@@ -62,12 +62,12 @@ function resetPassword(req, res, db){
     const sqlUpdate = "UPDATE users SET password=? where id= ?";
     db.query(sqlUpdate, [password, id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         res.send(result);
     });
 }
 
-function register(req, res, db){
+function register(req, res, db) {
     //console.log("submit in backend");
     const name = req.body.name;
     const username = req.body.username;
@@ -82,11 +82,11 @@ function register(req, res, db){
         [name, username, password, position, department],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
 }
+
 
 function updateInfo(req, res, db){
     //console.log("update info in backend");
@@ -103,7 +103,7 @@ function updateInfo(req, res, db){
         [name, username, position, department, id],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+
             // res.send(result).json({
             //     success: true,
             // });
@@ -111,13 +111,14 @@ function updateInfo(req, res, db){
     );
 }
 
+
 function deleteUser(req, res, db){
     console.log("Delete info in backend");
     const id = req.body.user_id;
     const sqlDelete = "DELETE from users where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }
@@ -132,3 +133,4 @@ module.exports.resetPassword = resetPassword;
 module.exports.register = register;
 module.exports.updateInfo = updateInfo;
 module.exports.deleteUser = deleteUser;
+

@@ -32,7 +32,6 @@ function addRecord(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result);
             res.send(result);
         }
     );
@@ -67,7 +66,6 @@ function getRecord(req, res, db) {
                             record_entry`;
 
     db.query(sqlSelect, (err, result) => {
-        console.log("getRecord: " + result);
         res.send(result);
     });
 }
@@ -109,7 +107,7 @@ function updateRecord(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+
             // res.send(result).json({
             //     success: true,
             // });
@@ -123,7 +121,7 @@ function deleteRecord(req, res, db) {
     const sqlDelete = "DELETE from record_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }
@@ -135,7 +133,6 @@ function fetchJobNumber(req, res, db) {
     console.log("query job number: ", order_number);
     const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
     db.query(sqlSelect, (err, result) => {
-        console.log(result);
         res.send(result);
     });
 }
@@ -146,7 +143,6 @@ function getCharpotroCpLaLvRate(req, res, db) {
     const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
 
     db.query(sqlSelect, [order_job_number], (err, result) => {
-        console.log(result);
         res.send(result);
     });
 }

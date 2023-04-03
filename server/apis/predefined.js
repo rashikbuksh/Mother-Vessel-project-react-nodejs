@@ -12,7 +12,6 @@ function addPredefined(req, res, db) {
         "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
     db.query(create_predefinedship, [LV_name], (err, result) => {
         if (err) console.log(err);
-        console.log(result);
         res.send(result);
     });
 }
@@ -49,7 +48,7 @@ function updatePredefined(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+
             // res.send(result).json({
             //     success: true,
             // });
@@ -62,7 +61,7 @@ function deletePredefined(req, res, db) {
     const sqlDelete = "DELETE from pre_defined_ship where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }

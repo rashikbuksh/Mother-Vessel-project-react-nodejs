@@ -623,21 +623,6 @@ const App = () => {
                                                 />
                                             </div>
 
-                                            {/* <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Commodity"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div> */}
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Capacity

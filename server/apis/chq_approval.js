@@ -40,7 +40,6 @@ function addChqApproval(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
@@ -97,8 +96,6 @@ function updateChqApproval(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
-
             res.send(result);
         }
     );
@@ -109,7 +106,7 @@ function deleteChqApproval(req, res, db) {
     const sqlDelete = "DELETE from chq_approval where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }

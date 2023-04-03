@@ -1,4 +1,4 @@
-function addJob(req, res, db){
+function addJob(req, res, db) {
     //console.log("submit in backend");
     const order_number = req.body.order_number;
     const importer_name = req.body.importer_name;
@@ -26,18 +26,18 @@ function addJob(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
 }
 
-function getJob(req, res, db){
+function getJob(req, res, db) {
     const sqlSelect = "SELECT * from job_entry";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
+
 
 function updateJob(req, res, db){
     //console.log("update job info in backend");
@@ -70,7 +70,7 @@ function updateJob(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+
             // res.send(result).json({
             //     success: true,
             // });
@@ -78,39 +78,37 @@ function updateJob(req, res, db){
     );
 }
 
-function deleteJob(req, res, db){
+function deleteJob(req, res, db) {
     //console.log("Delete job in backend");
     const id = req.body.job_id;
     const sqlDelete = "DELETE from job_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }
     });
 }
 
-function getComodity(req, res, db){
+function getComodity(req, res, db) {
     var order_number = req.query.order_number;
     const sqlSelect = `SELECT commodity from job_entry where order_number =  '${order_number}'`;
     db.query(sqlSelect, [order_number], (err, result) => {
-        console.log(result);
         res.send(result);
     });
 }
 
-function fetchOrderNumber(req, res, db){
+function fetchOrderNumber(req, res, db) {
     //console.log("fetching order number");
     const sqlSelect = "SELECT order_number as 'value' from job_entry";
     // change the order number to value
     db.query(sqlSelect, (err, result) => {
         res.send(result);
-        console.log(result);
     });
 }
 
-function getMvName(req, res, db){
+function getMvName(req, res, db) {
     var order_job_number = req.query.order_job_number;
     var order_number_split = order_job_number.split("-");
     var order_number = "";
@@ -123,7 +121,6 @@ function getMvName(req, res, db){
     const sqlSelect = `SELECT mother_vessel_name as MV_name from job_entry where order_number = '${order_number}'`;
 
     db.query(sqlSelect, [order_number], (err, result) => {
-        console.log(result);
         res.send(result);
     });
 }

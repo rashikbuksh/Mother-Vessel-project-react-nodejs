@@ -1,4 +1,4 @@
-function addCurrentStatus(req, res, db){
+function addCurrentStatus(req, res, db) {
     //console.log("submit in backend");
     const LV_name = req.body.LV_name;
     const date_from_charpotro = req.body.date_from_charpotro;
@@ -24,20 +24,19 @@ function addCurrentStatus(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
 }
 
-function getCurrentStatus(req, res, db){
+function getCurrentStatus(req, res, db) {
     const sqlSelect = "SELECT * from current_status";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
 
-function updateCurrentStatus(req, res, db){
+function updateCurrentStatus(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const LV_name = req.body.LV_name;
@@ -66,7 +65,7 @@ function updateCurrentStatus(req, res, db){
         ],
         (err, result) => {
             if (err) console.log(err);
-            //console.log(result)
+
             // res.send(result).json({
             //     success: true,
             // });
@@ -74,13 +73,13 @@ function updateCurrentStatus(req, res, db){
     );
 }
 
-function deleteCurrentStatus(req, res, db){
+function deleteCurrentStatus(req, res, db) {
     //console.log("Delete status in backend");
     const id = req.body.status_id;
     const sqlDelete = "DELETE from current_status where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }

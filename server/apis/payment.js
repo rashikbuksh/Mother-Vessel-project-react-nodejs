@@ -38,7 +38,6 @@ function addPayment(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
             res.send(result);
         }
     );
@@ -91,8 +90,6 @@ function updatePayment(req, res, db) {
         ],
         (err, result) => {
             if (err) console.log(err);
-            console.log(result);
-
             res.send(result);
         }
     );
@@ -103,7 +100,7 @@ function deletePayment(req, res, db) {
     const sqlDelete = "DELETE from payment where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         if (err) console.log(err);
-        //console.log(result)
+
         if (!err) {
             res.send("success");
         }
