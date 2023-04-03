@@ -70,7 +70,7 @@ function getRecord(req, res, db) {
     });
 }
 
-function updaterecord(req, res, db) {
+function updateRecord(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.order_number;
@@ -171,7 +171,7 @@ function getMaxCapacity(req, res, db) {
 
 module.exports.addRecord = addRecord;
 module.exports.getRecord = getRecord;
-module.exports.updaterecord = updaterecord;
+module.exports.updateRecord = updateRecord;
 module.exports.deleteRecord = deleteRecord;
 module.exports.fetchJobNumber = fetchJobNumber;
 module.exports.getCharpotroCpLaLvRate = getCharpotroCpLaLvRate;

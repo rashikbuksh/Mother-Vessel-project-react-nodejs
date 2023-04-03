@@ -1,4 +1,4 @@
-function addChq_due(req, res, db) {
+function addChqDue(req, res, db) {
     //console.log("submit in backend");
     const order_job_number = req.body.order_job_number;
     const LA_name = req.body.LA_name;
@@ -36,13 +36,13 @@ function addChq_due(req, res, db) {
         }
     );
 }
-function getChq_due(req, res, db) {
+function getChqDue(req, res, db) {
     const sqlSelect = "SELECT * from chq_due_list";
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
-function updateChq_due(req, res, db) {
+function updateChqDue(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_job_number = req.body.new_order_job_number;
@@ -82,7 +82,7 @@ function updateChq_due(req, res, db) {
         }
     );
 }
-function deleteChq_due(req, res, db) {
+function deleteChqDue(req, res, db) {
     console.log("Delete status in backend");
     const id = req.body.Chq_id;
     const sqlDelete = "DELETE from chq_due_list where id= ?";
@@ -121,9 +121,9 @@ function getComodityToChqDue(req, res, db) {
     });
 }
 
-module.exports.addChq_due = addChq_due;
-module.exports.getChq_due = getChq_due;
-module.exports.updateChq_due = updateChq_due;
-module.exports.deleteChq_due = deleteChq_due;
+module.exports.addChqDue = addChqDue;
+module.exports.getChqDue = getChqDue;
+module.exports.updateChqDue = updateChqDue;
+module.exports.deleteChqDue = deleteChqDue;
 module.exports.getLvToChqDue = getLvToChqDue;
 module.exports.getComodityToChqDue = getComodityToChqDue;

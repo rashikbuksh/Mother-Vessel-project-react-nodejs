@@ -38,7 +38,8 @@ function getJob(req, res, db) {
     });
 }
 
-function updatejob(req, res, db) {
+
+function updateJob(req, res, db){
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.new_order_number;
@@ -126,7 +127,7 @@ function getMvName(req, res, db) {
 
 module.exports.addJob = addJob;
 module.exports.getJob = getJob;
-module.exports.updatejob = updatejob;
+module.exports.updateJob = updateJob;
 module.exports.deleteJob = deleteJob;
 module.exports.getComodity = getComodity;
 module.exports.fetchOrderNumber = fetchOrderNumber;
