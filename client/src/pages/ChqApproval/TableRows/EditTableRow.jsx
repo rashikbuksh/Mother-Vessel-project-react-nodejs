@@ -13,7 +13,7 @@ const EditTableRow = ({
             <td></td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
                     placeholder="Enter order number..."
@@ -24,7 +24,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
                     disabled
                     placeholder="Enter date from charpotro..."
@@ -35,7 +35,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
                     disabled
                     placeholder="Enter cp number from charpotro..."
@@ -46,7 +46,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
                     placeholder="Enter LA name..."
@@ -57,7 +57,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
                     placeholder="Enter LV name..."
@@ -68,7 +68,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
                     placeholder="Enter MV name..."
@@ -79,7 +79,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     placeholder="Enter destination from..."
                     name="dest_from"
@@ -90,7 +90,7 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     placeholder="Enter destination to..."
                     name="dest_to"
@@ -101,18 +101,18 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
                     placeholder="Enter capacity in ton..."
                     name="capacity_ton"
                     value={editFormData.capacity_ton}
                     onChange={handleEditFormChange}
-                    required
+                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={`${clsName} border-red-600 cursor-not-allowed`}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
                     placeholder="Enter rate..."
                     name="rate"
@@ -140,7 +140,6 @@ const EditTableRow = ({
                     name="forty_percent_payment"
                     value={editFormData.forty_percent_payment}
                     onChange={handleEditFormChange}
-                    required
                 />
             </td>
             <td>
@@ -151,7 +150,6 @@ const EditTableRow = ({
                     name="damarage"
                     value={editFormData.damarage}
                     onChange={handleEditFormChange}
-                    required
                 />
             </td>
             <td>
@@ -162,7 +160,6 @@ const EditTableRow = ({
                     name="second_trip"
                     value={editFormData.second_trip}
                     onChange={handleEditFormChange}
-                    required
                 />
             </td>
             <td>
@@ -173,7 +170,6 @@ const EditTableRow = ({
                     name="third_trip"
                     value={editFormData.third_trip}
                     onChange={handleEditFormChange}
-                    required
                 />
             </td>
             <td>
@@ -184,7 +180,6 @@ const EditTableRow = ({
                     name="direct_trip"
                     value={editFormData.direct_trip}
                     onChange={handleEditFormChange}
-                    required
                 />
             </td>
             <td className="flex justify-center">

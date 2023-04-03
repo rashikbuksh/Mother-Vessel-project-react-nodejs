@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2023 at 01:45 PM
+-- Generation Time: Apr 03, 2023 at 08:30 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -29,24 +29,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `chq_approval` (
   `id` int(11) NOT NULL,
-  `order_number` varchar(50) NOT NULL,
-  `job_number` varchar(50) NOT NULL,
-  `date_from_charpotro` date NOT NULL,
-  `cp_number_from_charpotro` int(11) NOT NULL,
-  `LA_name` varchar(50) NOT NULL,
-  `LV_name` varchar(50) NOT NULL,
-  `MV_name` varchar(50) NOT NULL,
-  `dest_from` varchar(50) NOT NULL,
-  `dest_to` varchar(50) NOT NULL,
-  `capacity_ton` int(11) NOT NULL,
-  `rate` int(11) NOT NULL,
-  `sixty_percent_payment` varchar(100) NOT NULL,
-  `forty_percent_payment` varchar(100) NOT NULL,
-  `damarage` varchar(100) NOT NULL,
-  `second_trip` varchar(100) NOT NULL,
-  `third_trip` varchar(100) NOT NULL,
-  `direct_trip` varchar(100) NOT NULL
+  `order_job_number` varchar(255) NOT NULL,
+  `sixty_percent_payment` varchar(100) DEFAULT NULL,
+  `forty_percent_payment` varchar(100) DEFAULT NULL,
+  `damarage` varchar(100) DEFAULT NULL,
+  `second_trip` varchar(100) DEFAULT NULL,
+  `third_trip` varchar(100) DEFAULT NULL,
+  `direct_trip` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `chq_approval`
+--
+
+INSERT INTO `chq_approval` (`id`, `order_job_number`, `sixty_percent_payment`, `forty_percent_payment`, `damarage`, `second_trip`, `third_trip`, `direct_trip`) VALUES
+(6, 'Anik-28/2/2023-mv2-Chittagong-6', NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 'Nisha-12/4/2024-Unnoyon-UK-4', 'done', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -216,7 +214,12 @@ INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `or
 (15, 'Akij-12/3/2023-Paharika-Srilanka', 2, 0, 0, 0),
 (16, 'Anik-28/2/2023-mv2-Chittagong', 1, 0, 0, 0),
 (17, 'Anik-28/2/2023-mv2-Chittagong', 2, 0, 0, 0),
-(19, 'Anik-28/2/2023-mv2-Chittagong', 3, 0, 0, 0);
+(19, 'Anik-28/2/2023-mv2-Chittagong', 3, 0, 0, 0),
+(20, 'Akij-12/3/2023-Paharika-Srilanka', 3, 0, 0, 0),
+(21, 'Anik-28/2/2023-mv2-Chittagong', 4, 0, 0, 0),
+(22, 'Anik-28/2/2023-mv2-Chittagong', 5, 0, 0, 0),
+(23, 'Anik-28/2/2023-mv2-Chittagong', 6, 0, 0, 0),
+(24, 'Nisha-12/4/2024-Unnoyon-UK', 4, 0, 0, 0);
 
 --
 -- Triggers `order_job_table`
@@ -317,12 +320,12 @@ CREATE TABLE `record_entry` (
 INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
 (4, 'Anik-28/2/2023-mv2-Chittagong', '1', '2023-03-04', 50, 'WOW', 'Mayer Dua', 'wow', 'CTG', 520, 47564, 'Fahim', '01321533595', '2023-03-28'),
 (9, 'Nisha-12/4/2024-Unnoyon-UK', '1', '2023-03-23', 3432432, '32432', '342324', '3243243', '324324', 34318, 34324, '43324', '32424', '2023-03-28'),
-(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-17', 32432, '432432', '432432', '432432', '432432', 3432, 3432, '32432', '', '2023-03-28'),
+(10, 'Nisha-12/4/2024-Unnoyon-UK', '2', '2023-03-16', 32432, '432432', '432432', '432432', '432432', 3432, 3432, '32432', '1', '2023-03-28'),
 (11, 'Nisha-12/4/2024-Unnoyon-UK', '3', '2023-03-30', 123, '123', '123', '123', '123', 123, 123, '123', '132', '2023-03-30'),
 (12, 'Akij-12/3/2023-Paharika-Srilanka', '1', '2023-04-11', 123, 'XYZ', 'Shitol-3', 'Chittagong', 'Dhaka', 30, 10200, 'Prime', '01521533595', '2023-04-02'),
 (13, 'Akij-12/3/2023-Paharika-Srilanka', '2', '2023-04-28', 13, 'WPW', 'djfk', 'ctg', 'dhk', 10, 20, 'ANik', '01521533595', '2023-04-03'),
-(15, 'Anik-28/2/2023-mv2-Chittagong', '2', '2023-04-29', 2364, 'Amar Dua', 'Probaho', '', 'DHK', 0, 50, 'Fahim', '01521533595', '2023-04-03'),
-(17, 'Anik-28/2/2023-mv2-Chittagong', '3', '2023-04-03', 123456, 'Amar Dua', 'Kao nai', '', 'CTG', 75, 50, 'Rashik', '01521533595', '2023-04-03');
+(21, 'Anik-28/2/2023-mv2-Chittagong', '6', '2023-04-10', 10, '10', '10', 'kapashia', '10', 10, 10, '1', '10', '2023-04-03'),
+(22, 'Nisha-12/4/2024-Unnoyon-UK', '4', '2023-04-29', 20, '20', '20', 'Narsingdi', '20', 0, 20, '20', '20', '2023-04-03');
 
 --
 -- Triggers `record_entry`
@@ -332,8 +335,8 @@ CREATE TRIGGER `add_record_job` AFTER INSERT ON `record_entry` FOR EACH ROW INSE
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `delete_order_job_table` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM order_job_table 
-where old.order_number = order_number and old.job_number = job_number
+CREATE TRIGGER `insert_chq_approval_list` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO chq_approval (order_job_number) 
+VALUE (concat(new.order_number, '-', new.job_number))
 $$
 DELIMITER ;
 
@@ -439,7 +442,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `chq_approval`
 --
 ALTER TABLE `chq_approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `chq_due_list`
@@ -469,7 +472,7 @@ ALTER TABLE `job_entry`
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -487,7 +490,7 @@ ALTER TABLE `pre_defined_ship`
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `users`

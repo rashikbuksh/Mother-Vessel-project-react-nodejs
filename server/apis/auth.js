@@ -43,8 +43,7 @@ function enableUser(req, res, db) {
     });
 }
 
-
-function disableUser(req, res, db){
+function disableUser(req, res, db) {
     const id = req.body.user_id;
     const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
     db.query(sqlUpdate, [id], (err, result) => {
@@ -54,8 +53,7 @@ function disableUser(req, res, db){
     });
 }
 
-=======
-function resetPassword(req, res, db){
+function resetPassword(req, res, db) {
     const id = req.body.user_id;
     const password = req.body.new_password;
     console.log(id + " " + password);
@@ -87,8 +85,7 @@ function register(req, res, db) {
     );
 }
 
-
-function updateInfo(req, res, db){
+function updateInfo(req, res, db) {
     //console.log("update info in backend");
     const id = req.body.user_id;
     const name = req.body.new_name;
@@ -111,8 +108,7 @@ function updateInfo(req, res, db){
     );
 }
 
-
-function deleteUser(req, res, db){
+function deleteUser(req, res, db) {
     console.log("Delete info in backend");
     const id = req.body.user_id;
     const sqlDelete = "DELETE from users where id= ?";
@@ -133,4 +129,3 @@ module.exports.resetPassword = resetPassword;
 module.exports.register = register;
 module.exports.updateInfo = updateInfo;
 module.exports.deleteUser = deleteUser;
-

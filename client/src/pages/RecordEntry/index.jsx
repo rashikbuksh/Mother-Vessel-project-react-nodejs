@@ -79,7 +79,6 @@ const App = () => {
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
 
-
     // search filter for all fields
     const [query, setQuery] = useState("");
 
@@ -319,6 +318,16 @@ const App = () => {
         }).then((response) => {
             if (response.data == "success") {
                 success("Record deleted successfully");
+            }
+        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/deleteorderjob`,
+            {
+                record_id: RecordId,
+            }
+        ).then((response) => {
+            if (response.data == "success") {
+                success("Record deleted successfully from order job table");
             }
         });
 
@@ -572,15 +581,6 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination From
                                                 </label>
-                                                {/* <input
-                                                    type="text"
-                                                    name="dest_from"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Destination From"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                /> */}
                                                 <Select
                                                     options={[
                                                         {
@@ -590,7 +590,7 @@ const App = () => {
                                                             value: "Dhaka",
                                                         },
                                                         {
-                                                            value: "kapashia",
+                                                            value: "Kapashia",
                                                         },
                                                         {
                                                             value: "Khulna",
@@ -599,7 +599,7 @@ const App = () => {
                                                             value: "Narsingdi",
                                                         },
                                                     ]}
-                                                    name="position"
+                                                    name="dest_from"
                                                     addFormData={addFormData}
                                                     setAddFormData={
                                                         setAddFormData
