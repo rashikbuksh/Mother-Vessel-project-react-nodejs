@@ -147,7 +147,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getdamarage")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getdamarage`)
             .then((res) => res.json())
             .then((data) => {
                 setDamList(data);
@@ -278,7 +278,7 @@ const App = () => {
         };
         console.log("New Dam : " + addFormData.job_number);
         // api call
-        Axios.post("http://localhost:3001/management/insertdamarage", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertdamarage`, {
             order_job_number: newDam.order_job_number, //handleAddFormChange로 받은 새 데이터
             date: newDam.date,
             cp_number: newDam.cp_number,
@@ -351,7 +351,7 @@ const App = () => {
         };
         console.log("Edited Dam ID : " + editedDam.id);
 
-        Axios.post("http://localhost:3001/management/updatedamarage", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatedamarage`, {
             id: editedDam.id, //handleAddFormChange로 받은 새 데이터
             order_job_number: editedDam.order_job_number,
             date: editedDam.date,
@@ -431,7 +431,7 @@ const App = () => {
         const newDamList = [...DamList];
         const index = DamList.findIndex((Dam) => Dam.id === DamId);
         //console.log("Deleting Dam with id: " + DamId);
-        Axios.post("http://localhost:3001/management/deletedamarage", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletedamarage`, {
             Dam_id: DamId,
         }).then((response) => {
             if (response.data == "success") {
@@ -451,7 +451,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
@@ -461,7 +461,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -471,7 +471,7 @@ const App = () => {
                 });
             });
         fetch(
-            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -480,7 +480,7 @@ const App = () => {
                 });
             });
         fetch(
-            `http://localhost:3001/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

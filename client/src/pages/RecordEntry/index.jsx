@@ -38,6 +38,7 @@ const TableHeader = [
         accessor: "job_number",
         sortable: true,
     },
+    { id: 10, name: "Commodity", accessor: "commodity" },
     {
         id: 4,
         name: "Date From Charpotro",
@@ -53,7 +54,6 @@ const TableHeader = [
     { id: 7, name: "LV Name", accessor: "LV_name", sortable: true },
     { id: 8, name: "Destination From", accessor: "dest_from" },
     { id: 9, name: "Destination To", accessor: "dest_to" },
-    { id: 10, name: "Commodity", accessor: "commodity" },
     { id: 11, name: "Capacity", accessor: "capacity" },
     { id: 12, name: "Rate", accessor: "rate" },
     { id: 13, name: "LV Master Name", accessor: "LV_master_name" },
@@ -72,7 +72,6 @@ const App = () => {
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumberMax, setJobNumberMax] = useState([]);
     const [maxCapacity, setMaxCapacity] = useState(0);
-    const [commodity, setCommodity] = useState([]);
     const [tableData, handleSorting] = useSortableTable(
         RecordList,
         TableHeader
@@ -80,7 +79,6 @@ const App = () => {
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
 
-    const { logout } = useAuth();
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -102,7 +100,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getrecordentry")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getrecordentry`)
             .then((res) => res.json())
             .then((data) => {
                 setRecordList(data);
@@ -122,7 +120,6 @@ const App = () => {
         LV_name: "",
         dest_from: "",
         dest_to: "",
-        commodity: "",
         capacity: "",
         rate: "",
         LV_master_name: "",
@@ -195,22 +192,17 @@ const App = () => {
             LV_name: addFormData.LV_name,
             dest_from: addFormData.dest_from,
             dest_to: addFormData.dest_to,
-            commodity: addFormData.commodity,
             capacity: addFormData.capacity,
             rate: addFormData.rate,
             LV_master_name: addFormData.LV_master_name,
             LV_master_contact_number: addFormData.LV_master_contact_number,
         };
-        newRecord.commodity = commodity[0]?.commodity;
 
-        // const current = new Date();
-        // const order_number_auto = newRecord.importer_name+'-'+current.getDate().toLocaleString()+'-'+newRecord.mother_vessel_name+'-'+newRecord.mv_location
-        // console.log(order_number_auto)
         newRecord.job_number = JobNumberMax[0]?.max_job_number + 1;
         console.log(newRecord.job_number);
 
         // api call
-        Axios.post("http://localhost:3001/management/recordentry", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/recordentry`, {
             order_number: newRecord.order_number,
             job_number: newRecord.job_number,
             date_from_charpotro: newRecord.date_from_charpotro,
@@ -219,7 +211,6 @@ const App = () => {
             LV_name: newRecord.LV_name,
             dest_from: newRecord.dest_from,
             dest_to: newRecord.dest_to,
-            commodity: newRecord.commodity,
             capacity: newRecord.capacity,
             rate: newRecord.rate,
             LV_master_name: newRecord.LV_master_name,
@@ -261,22 +252,24 @@ const App = () => {
             LV_master_contact_number: editFormData.LV_master_contact_number,
         };
 
-        Axios.post("http://localhost:3001/management/updaterecordentry", {
-            id: editedRecord.id,
-            order_number: editedRecord.order_number, //handleAddFormChange로 받은 새 데이터
-            job_number: editedRecord.job_number,
-            date_from_charpotro: editedRecord.date_from_charpotro,
-            cp_number_from_charpotro: editedRecord.cp_number_from_charpotro,
-            LA_name: editedRecord.LA_name,
-            LV_name: editedRecord.LV_name,
-            dest_from: editedRecord.dest_from,
-            dest_to: editedRecord.dest_to,
-            commodity: editedRecord.commodity,
-            capacity: editedRecord.capacity,
-            rate: editedRecord.rate,
-            LV_master_name: editedRecord.LV_master_name,
-            LV_master_contact_number: editedRecord.LV_master_contact_number,
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updaterecordentry`,
+            {
+                id: editedRecord.id,
+                order_number: editedRecord.order_number, //handleAddFormChange로 받은 새 데이터
+                job_number: editedRecord.job_number,
+                date_from_charpotro: editedRecord.date_from_charpotro,
+                cp_number_from_charpotro: editedRecord.cp_number_from_charpotro,
+                LA_name: editedRecord.LA_name,
+                LV_name: editedRecord.LV_name,
+                dest_from: editedRecord.dest_from,
+                dest_to: editedRecord.dest_to,
+                capacity: editedRecord.capacity,
+                rate: editedRecord.rate,
+                LV_master_name: editedRecord.LV_master_name,
+                LV_master_contact_number: editedRecord.LV_master_contact_number,
+            }
+        );
 
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editRecordId);
@@ -321,7 +314,7 @@ const App = () => {
         const newRecordList = [...RecordList];
         const index = RecordList.findIndex((Record) => Record.id === RecordId);
         //console.log("Deleting Record with id: " + RecordId);
-        Axios.post("http://localhost:3001/management/deleterecord", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deleterecord`, {
             record_id: RecordId,
         }).then((response) => {
             if (response.data == "success") {
@@ -341,7 +334,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/fetch_order_number")
+        fetch(`${process.env.REACT_APP_API_URL}/management/fetch_order_number`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderNumber(data);
@@ -350,23 +343,14 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getmaxjobnumber?order_number=${addFormData.order_number}`
+            `${process.env.REACT_APP_API_URL}/management/getmaxjobnumber?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
                 setJobNumberMax(data);
             });
-
         fetch(
-            `http://localhost:3001/management/getcomodity?order_number=${addFormData.order_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                setCommodity(data);
-                console.log(data);
-            });
-        fetch(
-            `http://localhost:3001/management/getcapacitymax?order_number=${addFormData.order_number}`
+            `${process.env.REACT_APP_API_URL}/management/getcapacitymax?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -588,7 +572,7 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination From
                                                 </label>
-                                                <input
+                                                {/* <input
                                                     type="text"
                                                     name="dest_from"
                                                     onChange={
@@ -596,6 +580,31 @@ const App = () => {
                                                     }
                                                     placeholder="Destination From"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                /> */}
+                                                <Select
+                                                    options={[
+                                                        {
+                                                            value: "Chittagong",
+                                                        },
+                                                        {
+                                                            value: "Dhaka",
+                                                        },
+                                                        {
+                                                            value: "kapashia",
+                                                        },
+                                                        {
+                                                            value: "Khulna",
+                                                        },
+                                                        {
+                                                            value: "Narsingdi",
+                                                        },
+                                                    ]}
+                                                    name="position"
+                                                    addFormData={addFormData}
+                                                    setAddFormData={
+                                                        setAddFormData
+                                                    }
+                                                    isAddFromData={true}
                                                 />
                                             </div>
 
@@ -691,6 +700,7 @@ const App = () => {
                                                     LV Master Number
                                                 </label>
                                                 <input
+                                                    pattern="[0-9]*"
                                                     type="text"
                                                     name="LV_master_contact_number"
                                                     onChange={

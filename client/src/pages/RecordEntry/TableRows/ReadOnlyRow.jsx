@@ -19,6 +19,11 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
                     {record.job_number}
                 </span>
             </td>
+            <td className={`text-center ${clsName}`}>
+                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
+                    {record.commodity}
+                </span>
+            </td>
             <td className={clsName}>
                 <DateTime date={record.date_from_charpotro} />
             </td>
@@ -29,11 +34,6 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{record.LV_name}</td>
             <td className={clsName}>{record.dest_from}</td>
             <td className={clsName}>{record.dest_to}</td>
-            <td className={`text-center ${clsName}`}>
-                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
-                    {record.commodity}
-                </span>
-            </td>
             <td className={`text-center ${clsName}`}>{record.capacity}</td>
             <td className={`text-center ${clsName}`}>{record.rate}</td>
             <td className={clsName}>{record.LV_master_name}</td>

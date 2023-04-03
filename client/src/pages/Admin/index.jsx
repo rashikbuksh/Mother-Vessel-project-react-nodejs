@@ -93,7 +93,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/admin/getusers")
+        fetch(`${process.env.REACT_APP_API_URL}/admin/getusers`)
             .then((res) => res.json())
             .then((data) => {
                 setUserList(data);
@@ -192,7 +192,7 @@ const App = () => {
         };
 
         // api call
-        Axios.post("http://localhost:3001/user/register", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/user/register`, {
             name: newContact.name,
             username: newContact.username,
             password: sha256(newContact.password),
@@ -228,7 +228,7 @@ const App = () => {
 
         // api call
         if (newPass.password === newPass.reset_password) {
-            Axios.post("http://localhost:3001/admin/resetpassword/", {
+            Axios.post(`${process.env.REACT_APP_API_URL}/admin/resetpassword/`, {
                 user_id: resetPassUserId,
                 new_password: sha256(newPass.password),
             });
@@ -251,7 +251,7 @@ const App = () => {
             department: editFormData.department,
         };
 
-        Axios.post("http://localhost:3001/admin/updateinfo/", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/admin/updateinfo/`, {
             user_id: editedContact.id,
             new_name: editedContact.name,
             new_username: editedContact.username,
@@ -291,7 +291,7 @@ const App = () => {
     const handleDeleteClick = (userId) => {
         const newUserList = [...userList];
         const index = userList.findIndex((user) => user.id === userId);
-        Axios.post("http://localhost:3001/admin/deleteuser/", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/admin/deleteuser/`, {
             user_id: userId,
         }).then((response) => {
             if (response.data == "success") {
@@ -327,14 +327,14 @@ const App = () => {
 
     // enable user
     const enable_user = (userId) => {
-        Axios.post("http://localhost:3001/admin/enableuser/", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/admin/enableuser/`, {
             user_id: userId,
         });
 
         success("User enabled");
     };
     const disable_user = (userId) => {
-        Axios.post("http://localhost:3001/admin/disableuser/", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/admin/disableuser/`, {
             user_id: userId,
         });
 

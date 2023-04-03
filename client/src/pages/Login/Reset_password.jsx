@@ -23,7 +23,7 @@ export default function ForgotPassword(){
         //setEmail(query.get("email"));
         //console.log(email);
         if(new_password === confirm_password){
-            axios.get("http://localhost:3001/user/reset_password/", {
+            axios.get(`${process.env.REACT_APP_API_URL}/user/reset_password/`, {
                 params:{
                     email: email,
                     password: sha256(new_password),

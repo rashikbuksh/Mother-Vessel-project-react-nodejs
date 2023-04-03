@@ -37,6 +37,17 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
+                    className={`${clsName} cursor-not-allowed select-none border-red-600`}
+                    type="text"
+                    disabled
+                    placeholder="Commodity..."
+                    name="commodity"
+                    value={editFormData.commodity}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
                     className={clsName}
                     type="date"
                     required
@@ -80,9 +91,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Destination From..."
                     name="dest_from"
                     value={editFormData.dest_from}
@@ -102,20 +113,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={`${clsName} cursor-not-allowed select-none border-red-600`}
-                    type="text"
-                    disabled
-                    placeholder="Commodity..."
-                    name="commodity"
-                    value={editFormData.commodity}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
                     placeholder="Capacity..."
                     name="capacity"
                     value={editFormData.capacity}
@@ -124,9 +124,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
                     placeholder="Rate..."
                     name="rate"
                     value={editFormData.rate}
@@ -153,6 +153,7 @@ const EditTableRow = ({
                     name="LV_master_contact_number"
                     value={editFormData.LV_master_contact_number}
                     onChange={handleEditFormChange}
+                    pattern="[0-0]{1}[1-1]{1}[3-9]{1}[0-9]{8}"
                 />
             </td>
 

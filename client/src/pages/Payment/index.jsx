@@ -91,7 +91,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getpayment")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getpayment`)
             .then((res) => res.json())
             .then((data) => {
                 setPayList(data);
@@ -202,7 +202,7 @@ const App = () => {
         //console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/insertpayment", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertpayment`, {
             order_job_number: newPay.order_job_number, //handleAddFormChange로 받은 새 데이터
             LV_name: newPay.LV_name,
             date_from_charpotro: newPay.date_from_charpotro,
@@ -257,7 +257,7 @@ const App = () => {
             added_date: editFormData.added_date,
         };
 
-        Axios.post("http://localhost:3001/management/updatepayment", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatepayment`, {
             id: editedPay.id,
             new_order_job_number: editedPay.order_job_number,
             new_LV_name: editedPay.LV_name,
@@ -321,7 +321,7 @@ const App = () => {
         const newPayList = [...PayList];
         const index = PayList.findIndex((Pay) => Pay.id === PayId);
         //console.log("Deleting Pay with id: " + PayId);
-        Axios.post("http://localhost:3001/management/deletepayment", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletepayment`, {
             Pay_id: PayId,
         }).then((response) => {
             if (response.data == "success") {
@@ -351,7 +351,7 @@ const App = () => {
     }
 
     function openModal() {
-        fetch("http://localhost:3001/management/getorderjob")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
             .then((res) => res.json())
             .then((data) => {
                 setOrderJobList(data);
@@ -362,7 +362,7 @@ const App = () => {
 
     useEffect(() => {
         fetch(
-            `http://localhost:3001/management/getCharpotroLvToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getCharpotroLvToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -373,7 +373,7 @@ const App = () => {
             });
 
         fetch(
-            `http://localhost:3001/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -383,7 +383,7 @@ const App = () => {
             });
 
         fetch(
-            `http://localhost:3001/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -393,7 +393,7 @@ const App = () => {
             });
 
         fetch(
-            `http://localhost:3001/management/getChqissuePartpayBalanceToPayment?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getChqissuePartpayBalanceToPayment?order_job_number=${addFormData.order_job_number}`
         )
             .then((res) => res.json())
             .then((data) => {

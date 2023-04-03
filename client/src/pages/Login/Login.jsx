@@ -103,7 +103,7 @@ export default function Login() {
         // }
         else {
             //console.log(user.email);
-            Axios.get("http://localhost:3001/user/verify_login/", {
+            Axios.get(`${process.env.REACT_APP_API_URL}/user/verify_login/`, {
                 params: {
                     username: user.username,
                     password: sha256(user.password),

@@ -8,13 +8,12 @@ function addRecord(req, res, db) {
     const LV_name = req.body.LV_name;
     const dest_from = req.body.dest_from;
     const dest_to = req.body.dest_to;
-    const commodity = req.body.commodity;
     const capacity = req.body.capacity;
     const rate = req.body.rate;
     const LV_master_name = req.body.LV_master_name;
     const LV_master_contact_number = req.body.LV_master_contact_number;
     const create_record =
-        "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, commodity, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_record,
         [
@@ -26,7 +25,6 @@ function addRecord(req, res, db) {
             LV_name,
             dest_from,
             dest_to,
-            commodity,
             capacity,
             rate,
             LV_master_name,
@@ -41,8 +39,35 @@ function addRecord(req, res, db) {
 }
 
 function getRecord(req, res, db) {
-    const sqlSelect = "SELECT * from record_entry";
+    const sqlSelect = `SELECT 
+                            id,
+                            order_number, 
+                            job_number, 
+                            date_from_charpotro, 
+                            cp_number_from_charpotro, 
+                            LA_name, 
+                            LV_name, 
+                            dest_from, 
+                            dest_to, 
+                            capacity, 
+                            rate, 
+                            LV_master_name, 
+                            LV_master_contact_number, 
+                            date_created,
+                            (
+                                select 
+                                    commodity
+                                from
+                                    job_entry
+                                where
+                                    job_entry.order_number = record_entry.order_number
+
+                            ) as commodity 
+                        from 
+                            record_entry`;
+
     db.query(sqlSelect, (err, result) => {
+        console.log("getRecord: " + result);
         res.send(result);
     });
 }
@@ -58,14 +83,13 @@ function updaterecord(req, res, db) {
     const LV_name = req.body.LV_name;
     const dest_from = req.body.dest_from;
     const dest_to = req.body.dest_to;
-    const commodity = req.body.commodity;
     const capacity = req.body.capacity;
     const rate = req.body.rate;
     const LV_master_name = req.body.LV_master_name;
     const LV_master_contact_number = req.body.LV_master_contact_number;
     //console.log(id);
     const sqlUpdate =
-        "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, commodity=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
+        "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
     db.query(
         sqlUpdate,
         [
@@ -77,7 +101,6 @@ function updaterecord(req, res, db) {
             LV_name,
             dest_from,
             dest_to,
-            commodity,
             capacity,
             rate,
             LV_master_name,
@@ -148,7 +171,6 @@ function getMaxCapacity(req, res, db) {
         console.log("max", result);
         res.send(result);
     });
-
 }
 
 module.exports.addRecord = addRecord;

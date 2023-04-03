@@ -54,7 +54,7 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch("http://localhost:3001/management/getpredefinedship")
+        fetch(`${process.env.REACT_APP_API_URL}/management/getpredefinedship`)
             .then((res) => res.json())
             .then((data) => {
                 setCurrentStatus(data);
@@ -130,7 +130,7 @@ const App = () => {
         // console.log(order_number_auto)
 
         // api call
-        Axios.post("http://localhost:3001/management/predefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/predefinedship`, {
             LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
         });
 
@@ -164,7 +164,7 @@ const App = () => {
             remark: editFormData.remark,
         };
 
-        Axios.post("http://localhost:3001/management/updatepredefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatepredefinedship`, {
             id: editedStatus.id,
             LV_name: editedStatus.LV_name,
             date_from_charpotro: editedStatus.date_from_charpotro,
@@ -216,7 +216,7 @@ const App = () => {
             (Status) => Status.id === StatusId
         );
         //console.log("Deleting Status with id: " + StatusId);
-        Axios.post("http://localhost:3001/management/deletepredefinedship", {
+        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletepredefinedship`, {
             status_id: StatusId,
         }).then((response) => {
             if (response.data == "success") {
