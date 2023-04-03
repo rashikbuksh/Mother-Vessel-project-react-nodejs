@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-const nodemailer = require("nodemailer");
+
 const {
     verifyLogin,
     getUsers,
@@ -74,7 +74,7 @@ const {
     deletePredefined,
     getLV,
 } = require("./apis/predefined");
-const { getMaxJob, getOrderJob } = require("./apis/order_job");
+const { getMaxJob, getOrderJob, deleteOrderJob } = require("./apis/order_job");
 
 // MySQL
 const mysql = require("mysql");
@@ -174,7 +174,7 @@ app.get("/management/getcapacitymax", (req, res) => {
     getMaxCapacity(req, res, db);
 });
 
-//=======================Current Status =======================
+//======================= Current Status =======================
 
 //Insert Current Status
 app.post("/management/currentstatus", (req, res) => {
@@ -331,7 +331,7 @@ app.get("/management/getLV", (req, res) => {
     getLV(req, res, db);
 });
 
-//======================= Utils =======================
+//======================= order job =======================
 
 //get max job number from job order table
 app.get("/management/getmaxjobnumber", (req, res) => {
@@ -342,6 +342,12 @@ app.get("/management/getmaxjobnumber", (req, res) => {
 app.get("/management/getorderjob", (req, res) => {
     getOrderJob(req, res, db);
 });
+
+app.post("/management/deleteorderjob", (req, res) => {
+    deleteOrderJob(req, res, db);
+});
+
+//======================= utils =======================
 
 app.get("/management/getCharpotroCpLaLvRate", (req, res) => {
     getCharpotroCpLaLvRate(req, res, db);

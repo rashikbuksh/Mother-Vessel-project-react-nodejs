@@ -7,10 +7,17 @@ const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
     return (
         <>
             <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {Chq.id}
-                </a>
+                {!Chq.sixty_percent_payment ? (
+                    <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                        Pending
+                    </span>
+                ) : (
+                    <span className="rounded-lg bg-blue-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-blue-800">
+                        Current
+                    </span>
+                )}
             </td>
+
             <td className={clsName}>{Chq.order_job_number}</td>
             <td className={clsName}>
                 <DateTime date={Chq.date_from_charpotro} />

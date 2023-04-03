@@ -1,15 +1,6 @@
 function addChqApproval(req, res, db) {
     //console.log("submit in backend");
     const order_job_number = req.body.order_job_number;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
-    const LA_name = req.body.LA_name;
-    const LV_name = req.body.LV_name;
-    const MV_name = req.body.MV_name;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const capacity_ton = req.body.capacity_ton;
-    const rate = req.body.rate;
     const sixty_percent_payment = req.body.sixty_percent_payment;
     const forty_percent_payment = req.body.forty_percent_payment;
     const damarage = req.body.damarage;
@@ -17,20 +8,11 @@ function addChqApproval(req, res, db) {
     const third_trip = req.body.third_trip;
     const direct_trip = req.body.direct_trip;
     const create_chq =
-        "INSERT INTO chq_approval (order_job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, MV_name, dest_from, dest_to, capacity_ton, rate, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO chq_approval (order_job_number, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?)";
     db.query(
         create_chq,
         [
             order_job_number,
-            date_from_charpotro,
-            cp_number_from_charpotro,
-            LA_name,
-            LV_name,
-            MV_name,
-            dest_from,
-            dest_to,
-            capacity_ton,
-            rate,
             sixty_percent_payment,
             forty_percent_payment,
             damarage,
@@ -45,25 +27,59 @@ function addChqApproval(req, res, db) {
     );
 }
 function getChqApproval(req, res, db) {
-    const sqlSelect = "SELECT * from chq_approval";
-    db.query(sqlSelect, (err, result) => {
+    const status = req.body.status;
+    var addedSql = "";
+    switch (status) {
+        case "All":
+            addedSql = "";
+            break;
+        case "Pending":
+            addedSql = "WHERE c.sixty_percent_payment is NULL";
+            break;
+        case "Current":
+            addedSql = "WHERE c.sixty_percent_payment is not NULL";
+            break;
+        default:
+            addedSql = "";
+            break;
+    }
+    console.log("status: " + status);
+
+    var sqlSelect =
+        `SELECT 
+            c.id as id,
+            c.order_job_number as order_job_number,
+            r.date_from_charpotro as date_from_charpotro, 
+            r.cp_number_from_charpotro as cp_number_from_charpotro, 
+            r.LA_name as LA_name, 
+            r.LV_name as LV_name, 
+            (   select mother_vessel_name
+                from job_entry
+                where order_number = r.order_number
+            ) as MV_name, 
+            r.dest_from as dest_from, 
+            r.dest_to as dest_to, 
+            r.capacity as capacity_ton, 
+            r.rate as rate, 
+            c.sixty_percent_payment as sixty_percent_payment, 
+            c.forty_percent_payment as forty_percent_payment, 
+            c.damarage as damarage, 
+            c.second_trip as second_trip,
+            c.third_trip as third_trip, 
+            c.direct_trip as direct_trip                      
+        from 
+            chq_approval c join record_entry r 
+            on c.order_job_number = concat(r.order_number, '-', r.job_number) ` +
+        addedSql +
+        ";";
+    db.query(sqlSelect, [addedSql], (err, result) => {
+        console.log("chq approval: " + result[0].id);
         res.send(result);
     });
 }
 function updateChqApproval(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
-    const order_number = req.body.new_order_number;
-    const job_number = req.body.new_job_number;
-    const date_from_charpotro = req.body.new_date_from_charpotro;
-    const cp_number_from_charpotro = req.body.new_cp_number_from_charpotro;
-    const LA_name = req.body.new_LA_name;
-    const LV_name = req.body.new_LV_name;
-    const MV_name = req.body.new_MV_name;
-    const dest_from = req.body.new_dest_from;
-    const dest_to = req.body.new_dest_to;
-    const capacity_ton = req.body.new_capacity_ton;
-    const rate = req.body.new_rate;
     const sixty_percent_payment = req.body.new_sixty_percent_payment;
     const forty_percent_payment = req.body.new_forty_percent_payment;
     const damarage = req.body.new_damarage;
@@ -71,21 +87,10 @@ function updateChqApproval(req, res, db) {
     const third_trip = req.body.new_third_trip;
     const direct_trip = req.body.new_direct_trip;
     const sqlUpdate =
-        "UPDATE chq_approval SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, MV_name=?, dest_from=?, dest_to=?, capacity_ton=?, rate=?, sixty_percent_payment=?, forty_percent_payment=?, damarage=?, second_trip=?, third_trip=?, direct_trip=? WHERE id=?";
+        "UPDATE chq_approval SET sixty_percent_payment=?, forty_percent_payment=?, damarage=?, second_trip=?, third_trip=?, direct_trip=? WHERE id=?";
     db.query(
         sqlUpdate,
         [
-            order_number,
-            job_number,
-            date_from_charpotro,
-            cp_number_from_charpotro,
-            LA_name,
-            LV_name,
-            MV_name,
-            dest_from,
-            dest_to,
-            capacity_ton,
-            rate,
             sixty_percent_payment,
             forty_percent_payment,
             damarage,

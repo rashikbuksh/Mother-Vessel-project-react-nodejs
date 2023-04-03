@@ -26,12 +26,6 @@ const TableHeader = [
         accessor: "order_job_number",
         sortable: true,
     },
-    {
-        id: 3,
-        name: "Job Number",
-        accessor: "job_number",
-        sortable: true,
-    },
     { id: 4, name: "Date", accessor: "date", sortable: true },
     { id: 5, name: "CP Number", accessor: "cp_number", sortable: true },
     {

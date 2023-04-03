@@ -13,5 +13,22 @@ function getOrderJob(req, res, db) {
     });
 }
 
+function deleteOrderJob(req, res, db) {
+    const idOfRecordEntry = req.body.record_id;
+    const sqlDelete = `DELETE from order_job_table 
+                        where concat(order_number, '-', job_number) = (
+                                                SELECT CONCAT(order_number, '-', job_number) 
+                                                from record_entry 
+                                                where id = '${idOfRecordEntry}')`;
+    db.query(sqlDelete, [idOfRecordEntry], (err, result) => {
+        if (err) console.log(err);
+
+        if (!err) {
+            res.send("success");
+        }
+    });
+}
+
 module.exports.getMaxJob = getMaxJob;
 module.exports.getOrderJob = getOrderJob;
+module.exports.deleteOrderJob = deleteOrderJob;
