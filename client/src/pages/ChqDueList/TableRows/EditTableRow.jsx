@@ -15,8 +15,8 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    placeholder="Enter order job number..."
-                    name="order_job_number"
+                    placeholder="Enter order number..."
+                    name="order_number"
                     value={editFormData.order_number}
                     onChange={handleEditFormChange}
                     disabled

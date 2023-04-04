@@ -10,7 +10,7 @@ const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
                     {Chq.id}
                 </a>
             </td>
-            <td className={clsName}>{Chq.order_job_number}</td>
+            <td className={clsName}>{Chq.order_number}</td>
             <td className={clsName}>{Chq.LA_name}</td>
             <td className={clsName}>{Chq.LV_name}</td>
             <td className={`text-center ${clsName}`}>
