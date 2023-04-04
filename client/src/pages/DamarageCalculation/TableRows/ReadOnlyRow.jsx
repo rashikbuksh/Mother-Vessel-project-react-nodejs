@@ -24,7 +24,7 @@ const ReadOnlyRow = ({ Dam, handleEditClick, handleDeleteClick }) => {
                     {Dam.commodity}
                 </span>
             </td>
-            <td className={`text-center ${clsName}`}>{Dam.volume}</td>
+            <td className={`text-center ${clsName}`}>{Dam.capacity}</td>
             <td className={clsName}>{Dam.LV_name}</td>
             <td className={clsName}>{Dam.MV_name}</td>
             <td className={clsName}>{Dam.loading_location}</td>

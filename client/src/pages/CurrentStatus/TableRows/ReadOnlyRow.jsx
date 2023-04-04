@@ -35,7 +35,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                     {status.commodity}
                 </span>
             </td>
-            <td className={clsName}>{status.LA}</td>
+            <td className={clsName}>{status.LA_name}</td>
             <td className={clsName}>{status.dest_from}</td>
             <td className={clsName}>{status.dest_to}</td>
             <td className={clsName}>{status.current_location}</td>

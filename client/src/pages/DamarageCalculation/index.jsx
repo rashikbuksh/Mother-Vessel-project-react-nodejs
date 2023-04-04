@@ -35,7 +35,7 @@ const TableHeader = [
         sortable: true,
     },
     { id: 7, name: "Commodity", accessor: "commodity", sortable: true },
-    { id: 8, name: "Volume", accessor: "volume", sortable: true },
+    { id: 8, name: "Capacity", accessor: "capacity", sortable: true },
     { id: 9, name: "LV Name", accessor: "LV_name", sortable: true },
     { id: 10, name: "MV Name", accessor: "MV_name", sortable: true },
     {
@@ -113,13 +113,9 @@ const TableHeader = [
 const App = () => {
     // new start
     const [DamList, setDamList] = useState([]);
-    const [orderJobList, setOrderJobList] = useState([]);
-
     const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-
-    const { logout } = useAuth();
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -145,6 +141,7 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setDamList(data);
+                console.log("DamList: " + data);
             });
     }, []);
 
@@ -152,30 +149,30 @@ const App = () => {
 
     // add state
     //id is randomly generated with nanoid generator
-    const [addFormData, setAddFormData] = useState({
-        order_job_number: "",
-        date: "",
-        cp_number: "",
-        date_from_charpotro: "",
-        commodity: "",
-        volume: "",
-        LV_name: "",
-        MV_name: "",
-        loading_location: "",
-        unloading_location: "",
-        loading_start_time_stamp: "",
-        loading_completion_time_stamp: "",
-        sailing_time_stamp: "",
-        duration_of_travel_time: "",
-        unloading_start_time_stamp: "",
-        unloading_completion_time_stamp: "",
-        others: "",
-        total_elapsed_time: "",
-        voyage_time: "",
-        free_time: "",
-        total_despatch: "",
-        daily_despatch: "",
-    });
+    // const [addFormData, setAddFormData] = useState({
+    //     order_job_number: "",
+    //     date: "",
+    //     cp_number: "",
+    //     date_from_charpotro: "",
+    //     commodity: "",
+    //     capacity: "",
+    //     LV_name: "",
+    //     MV_name: "",
+    //     loading_location: "",
+    //     unloading_location: "",
+    //     loading_start_time_stamp: "",
+    //     loading_completion_time_stamp: "",
+    //     sailing_time_stamp: "",
+    //     duration_of_travel_time: "",
+    //     unloading_start_time_stamp: "",
+    //     unloading_completion_time_stamp: "",
+    //     others: "",
+    //     total_elapsed_time: "",
+    //     voyage_time: "",
+    //     free_time: "",
+    //     total_despatch: "",
+    //     daily_despatch: "",
+    // });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -185,7 +182,7 @@ const App = () => {
         cp_number: "",
         date_from_charpotro: "",
         commodity: "",
-        volume: "",
+        capacity: "",
         LV_name: "",
         MV_name: "",
         loading_location: "",
@@ -209,21 +206,21 @@ const App = () => {
 
     //changeHandler
     //Update state with input data
-    const handleAddFormChange = (event) => {
-        event.preventDefault();
+    // const handleAddFormChange = (event) => {
+    //     event.preventDefault();
 
-        //fullname, address, phoneNumber, email
-        const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
-        const fieldValue = event.target.value;
+    //     //fullname, address, phoneNumber, email
+    //     const fieldName = event.target.getAttribute("name");
+    //     //각 input 입력값
+    //     const fieldValue = event.target.value;
 
-        const newFormData = { ...addFormData };
-        newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
+    //     const newFormData = { ...addFormData };
+    //     newFormData[fieldName] = fieldValue;
+    //     //addFormData > event.target(input)
+    //     //fullName:"" > name="fullName", value=fullName input 입력값
 
-        setAddFormData(newFormData);
-    };
+    //     setAddFormData(newFormData);
+    // };
 
     //Update status with correction data
     const handleEditFormChange = (event) => {
@@ -240,77 +237,81 @@ const App = () => {
 
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
-    const handleAddFormSubmit = (event) => {
-        event.preventDefault(); // ???
+    // const handleAddFormSubmit = (event) => {
+    //     event.preventDefault(); // ???
 
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newDam = {
-            order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
-            date: addFormData.date,
-            cp_number: addFormData.cp_number,
-            date_from_charpotro: addFormData.date_from_charpotro,
-            commodity: addFormData.commodity,
-            volume: addFormData.volume,
-            LV_name: addFormData.LV_name,
-            MV_name: addFormData.MV_name,
-            loading_location: addFormData.loading_location,
-            unloading_location: addFormData.unloading_location,
-            loading_start_time_stamp: addFormData.loading_start_time_stamp,
-            loading_completion_time_stamp:
-                addFormData.loading_completion_time_stamp,
-            sailing_time_stamp: addFormData.sailing_time_stamp,
-            duration_of_travel_time: addFormData.duration_of_travel_time,
-            unloading_start_time_stamp: addFormData.unloading_start_time_stamp,
-            unloading_completion_time_stamp:
-                addFormData.unloading_completion_time_stamp,
-            others: addFormData.others,
-            total_elapsed_time: addFormData.total_elapsed_time,
-            voyage_time: addFormData.voyage_time,
-            free_time: addFormData.free_time,
-            total_despatch: addFormData.total_despatch,
-            daily_despatch: addFormData.daily_despatch,
-        };
-        console.log("New Dam : " + addFormData.job_number);
-        // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertdamarage`, {
-            order_job_number: newDam.order_job_number, //handleAddFormChange로 받은 새 데이터
-            date: newDam.date,
-            cp_number: newDam.cp_number,
-            date_from_charpotro: newDam.date_from_charpotro,
-            commodity: newDam.commodity,
-            volume: newDam.volume,
-            LV_name: newDam.LV_name,
-            MV_name: newDam.MV_name,
-            loading_location: newDam.loading_location,
-            unloading_location: newDam.unloading_location,
-            loading_start_time_stamp: newDam.loading_start_time_stamp,
-            loading_completion_time_stamp: newDam.loading_completion_time_stamp,
-            sailing_time_stamp: newDam.sailing_time_stamp,
-            duration_of_travel_time: newDam.duration_of_travel_time,
-            unloading_start_time_stamp: newDam.unloading_start_time_stamp,
-            unloading_completion_time_stamp:
-                newDam.unloading_completion_time_stamp,
-            others: newDam.others,
-            total_elapsed_time: newDam.total_elapsed_time,
-            voyage_time: newDam.voyage_time,
-            free_time: newDam.free_time,
-            total_despatch: newDam.total_despatch,
-            daily_despatch: newDam.daily_despatch,
-        });
+    //     //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
+    //     const newDam = {
+    //         order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
+    //         date: addFormData.date,
+    //         cp_number: addFormData.cp_number,
+    //         date_from_charpotro: addFormData.date_from_charpotro,
+    //         commodity: addFormData.commodity,
+    //         capacity: addFormData.capacity,
+    //         LV_name: addFormData.LV_name,
+    //         MV_name: addFormData.MV_name,
+    //         loading_location: addFormData.loading_location,
+    //         unloading_location: addFormData.unloading_location,
+    //         loading_start_time_stamp: addFormData.loading_start_time_stamp,
+    //         loading_completion_time_stamp:
+    //             addFormData.loading_completion_time_stamp,
+    //         sailing_time_stamp: addFormData.sailing_time_stamp,
+    //         duration_of_travel_time: addFormData.duration_of_travel_time,
+    //         unloading_start_time_stamp: addFormData.unloading_start_time_stamp,
+    //         unloading_completion_time_stamp:
+    //             addFormData.unloading_completion_time_stamp,
+    //         others: addFormData.others,
+    //         total_elapsed_time: addFormData.total_elapsed_time,
+    //         voyage_time: addFormData.voyage_time,
+    //         free_time: addFormData.free_time,
+    //         total_despatch: addFormData.total_despatch,
+    //         daily_despatch: addFormData.daily_despatch,
+    //     };
+    //     console.log("New Dam : " + addFormData.job_number);
+    //     // api call
+    //     Axios.post(
+    //         `${process.env.REACT_APP_API_URL}/management/insertdamarage`,
+    //         {
+    //             order_job_number: newDam.order_job_number, //handleAddFormChange로 받은 새 데이터
+    //             date: newDam.date,
+    //             cp_number: newDam.cp_number,
+    //             date_from_charpotro: newDam.date_from_charpotro,
+    //             commodity: newDam.commodity,
+    //             capacity: newDam.capacity,
+    //             LV_name: newDam.LV_name,
+    //             MV_name: newDam.MV_name,
+    //             loading_location: newDam.loading_location,
+    //             unloading_location: newDam.unloading_location,
+    //             loading_start_time_stamp: newDam.loading_start_time_stamp,
+    //             loading_completion_time_stamp:
+    //                 newDam.loading_completion_time_stamp,
+    //             sailing_time_stamp: newDam.sailing_time_stamp,
+    //             duration_of_travel_time: newDam.duration_of_travel_time,
+    //             unloading_start_time_stamp: newDam.unloading_start_time_stamp,
+    //             unloading_completion_time_stamp:
+    //                 newDam.unloading_completion_time_stamp,
+    //             others: newDam.others,
+    //             total_elapsed_time: newDam.total_elapsed_time,
+    //             voyage_time: newDam.voyage_time,
+    //             free_time: newDam.free_time,
+    //             total_despatch: newDam.total_despatch,
+    //             daily_despatch: newDam.daily_despatch,
+    //         }
+    //     );
 
-        //DamList의 초기값은 data.json 데이터
-        // new start
-        const newTableData = [...tableData, newDam];
-        // new end
+    //     //DamList의 초기값은 data.json 데이터
+    //     // new start
+    //     const newTableData = [...tableData, newDam];
+    //     // new end
 
-        setDamList(newTableData);
+    //     setDamList(newTableData);
 
-        // close modal
-        closeModal();
+    //     // close modal
+    //     closeModal();
 
-        // toast
-        success("Dam added successfully");
-    };
+    //     // toast
+    //     success("Dam added successfully");
+    // };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
@@ -323,7 +324,7 @@ const App = () => {
             cp_number: editFormData.cp_number,
             date_from_charpotro: editFormData.date_from_charpotro,
             commodity: editFormData.commodity,
-            volume: editFormData.volume,
+            capacity: editFormData.capacity,
             LV_name: editFormData.LV_name,
             MV_name: editFormData.MV_name,
             loading_location: editFormData.loading_location,
@@ -345,33 +346,30 @@ const App = () => {
         };
         console.log("Edited Dam ID : " + editedDam.id);
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatedamarage`, {
-            id: editedDam.id, //handleAddFormChange로 받은 새 데이터
-            order_job_number: editedDam.order_job_number,
-            date: editedDam.date,
-            cp_number: editedDam.cp_number,
-            date_from_charpotro: editedDam.date_from_charpotro,
-            commodity: editedDam.commodity,
-            volume: editedDam.volume,
-            LV_name: editedDam.LV_name,
-            MV_name: editedDam.MV_name,
-            loading_location: editedDam.loading_location,
-            unloading_location: editedDam.unloading_location,
-            loading_start_time_stamp: editedDam.loading_start_time_stamp,
-            loading_completion_time_stamp:
-                editedDam.loading_completion_time_stamp,
-            sailing_time_stamp: editedDam.sailing_time_stamp,
-            duration_of_travel_time: editedDam.duration_of_travel_time,
-            unloading_start_time_stamp: editedDam.unloading_start_time_stamp,
-            unloading_completion_time_stamp:
-                editedDam.unloading_completion_time_stamp,
-            others: editedDam.others,
-            total_elapsed_time: editedDam.total_elapsed_time,
-            voyage_time: editedDam.voyage_time,
-            free_time: editedDam.free_time,
-            total_despatch: editedDam.total_despatch,
-            daily_despatch: editedDam.daily_despatch,
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatedamarage`,
+            {
+                id: editedDam.id, //handleAddFormChange로 받은 새 데이터
+                date: editedDam.date,
+                loading_location: editedDam.loading_location,
+                unloading_location: editedDam.unloading_location,
+                loading_start_time_stamp: editedDam.loading_start_time_stamp,
+                loading_completion_time_stamp:
+                    editedDam.loading_completion_time_stamp,
+                sailing_time_stamp: editedDam.sailing_time_stamp,
+                duration_of_travel_time: editedDam.duration_of_travel_time,
+                unloading_start_time_stamp:
+                    editedDam.unloading_start_time_stamp,
+                unloading_completion_time_stamp:
+                    editedDam.unloading_completion_time_stamp,
+                others: editedDam.others,
+                total_elapsed_time: editedDam.total_elapsed_time,
+                voyage_time: editedDam.voyage_time,
+                free_time: editedDam.free_time,
+                total_despatch: editedDam.total_despatch,
+                daily_despatch: editedDam.daily_despatch,
+            }
+        );
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editDamId);
         tableData[index] = editedDam;
@@ -393,7 +391,7 @@ const App = () => {
             cp_number: Dam.cp_number,
             date_from_charpotro: Dam.date_from_charpotro,
             commodity: Dam.commodity,
-            volume: Dam.volume,
+            capacity: Dam.capacity,
             LV_name: Dam.LV_name,
             MV_name: Dam.MV_name,
             loading_location: Dam.loading_location,
@@ -425,9 +423,12 @@ const App = () => {
         const newDamList = [...DamList];
         const index = DamList.findIndex((Dam) => Dam.id === DamId);
         //console.log("Deleting Dam with id: " + DamId);
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletedamarage`, {
-            Dam_id: DamId,
-        }).then((response) => {
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/deletedamarage`,
+            {
+                Dam_id: DamId,
+            }
+        ).then((response) => {
             if (response.data == "success") {
                 success("Dam deleted successfully");
             }
@@ -438,52 +439,52 @@ const App = () => {
     };
 
     // modal for add Dam
-    let [isOpen, setIsOpen] = useState(false);
+    // let [isOpen, setIsOpen] = useState(false);
 
-    function closeModal() {
-        setIsOpen(false);
-    }
+    // function closeModal() {
+    //     setIsOpen(false);
+    // }
 
-    function openModal() {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-            .then((res) => res.json())
-            .then((data) => {
-                setOrderJobList(data);
-                console.log(data);
-            });
-        setIsOpen(true);
-    }
-    useEffect(() => {
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.date_from_charpotro = item.date_from_charpotro;
-                    addFormData.LV_name = item.LV_name;
-                });
-            });
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.commodity = item.commodity;
-                });
-            });
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.MV_name = item.MV_name;
-                });
-            });
-        console.log("addFormData", addFormData);
-    }, [addFormData.order_job_number]);
+    // function openModal() {
+    //     fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setOrderJobList(data);
+    //             console.log(data);
+    //         });
+    //     setIsOpen(true);
+    // }
+    // useEffect(() => {
+    //     fetch(
+    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+    //     )
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             data?.map((item) => {
+    //                 addFormData.date_from_charpotro = item.date_from_charpotro;
+    //                 addFormData.LV_name = item.LV_name;
+    //             });
+    //         });
+    //     fetch(
+    //         `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
+    //     )
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             data?.map((item) => {
+    //                 addFormData.commodity = item.commodity;
+    //             });
+    //         });
+    //     fetch(
+    //         `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
+    //     )
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             data?.map((item) => {
+    //                 addFormData.MV_name = item.MV_name;
+    //             });
+    //         });
+    //     console.log("addFormData", addFormData);
+    // }, [addFormData.order_job_number]);
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
@@ -502,13 +503,13 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                <button
+                {/* <button
                     // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+                </button> */}
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
@@ -559,14 +560,12 @@ const App = () => {
             {/* // new end */}
 
             {/* add item modal */}
-            <Suspense fallback={<Loader />}>
+            {/* <Suspense fallback={<Loader />}>
                 <Transition appear show={isOpen} as={Fragment}>
                     <Dialog
                         as="div"
                         className="z-10 overflow-y-auto"
-                        // new start
                         onClose={() => {}}
-                        // new end
                     >
                         <Transition.Child
                             as={Fragment}
@@ -592,7 +591,6 @@ const App = () => {
                                     leaveTo="opacity-0 scale-95"
                                 >
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        {/* // new start */}
                                         <Dialog.Title
                                             as="h3"
                                             className="mb-4 text-left text-3xl font-medium text-gray-900"
@@ -605,8 +603,6 @@ const App = () => {
                                                 <MdClose className="inline text-red-600" />
                                             </button>
                                         </Dialog.Title>
-                                        {/* // new end */}
-
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
@@ -688,11 +684,11 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Volume
+                                                    capacity
                                                 </label>
                                                 <input
                                                     type="number"
-                                                    name="volume"
+                                                    name="capacity"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
@@ -939,7 +935,7 @@ const App = () => {
                         </div>
                     </Dialog>
                 </Transition>
-            </Suspense>
+            </Suspense> */}
 
             {/* toast  */}
             <ToastContainer closeOnClick />

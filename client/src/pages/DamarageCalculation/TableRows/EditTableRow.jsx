@@ -36,9 +36,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
                     name="cp_number"
                     value={editFormData.cp_number}
                     onChange={handleEditFormChange}
@@ -68,12 +68,12 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
                     placeholder="Enter volume..."
                     name="volume"
-                    value={editFormData.volume}
+                    value={editFormData.capacity}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -103,7 +103,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required
                     placeholder="Enter loading location..."
                     name="loading_location"
                     value={editFormData.loading_location}
@@ -114,7 +113,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required
                     placeholder="Enter unloading location..."
                     name="unloading_location"
                     value={editFormData.unloading_location}
@@ -125,7 +123,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required
                     placeholder="Enter loading start time stamp..."
                     name="loading_start_time_stamp"
                     value={editFormData.loading_start_time_stamp.slice(0, 10)}
@@ -136,7 +133,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required
                     placeholder="Enter loading completion time stamp..."
                     name="loading_completion_time_stamp"
                     value={editFormData.loading_completion_time_stamp.slice(
@@ -150,7 +146,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required
                     placeholder="Enter sailing time stamp..."
                     name="sailing_time_stamp"
                     value={editFormData.sailing_time_stamp.slice(0, 10)}
@@ -162,7 +157,6 @@ const EditTableRow = ({
                     className={clsName}
                     type="time"
                     step="3600000"
-                    required
                     placeholder="Enter duration of travel time..."
                     name="duration_of_travel_time"
                     value={editFormData.duration_of_travel_time}
@@ -173,7 +167,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required
                     placeholder="Enter unloading start time stamp..."
                     name="unloading_start_time_stamp"
                     value={editFormData.unloading_start_time_stamp.slice(0, 10)}
@@ -184,7 +177,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="date"
-                    required
                     placeholder="Enter unloading completion time stamp..."
                     name="unloading_completion_time_stamp"
                     value={editFormData.unloading_completion_time_stamp.slice(
@@ -198,7 +190,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required
                     placeholder="Enter others..."
                     name="others"
                     value={editFormData.others}
@@ -210,7 +201,6 @@ const EditTableRow = ({
                     className={clsName}
                     type="time"
                     step="3600"
-                    required
                     placeholder="Enter total elapsed time..."
                     name="total_elapsed_time"
                     value={editFormData.total_elapsed_time}
@@ -222,7 +212,6 @@ const EditTableRow = ({
                     className={clsName}
                     type="time"
                     step="3600"
-                    required
                     placeholder="Enter voyage time..."
                     name="voyage_time"
                     value={editFormData.voyage_time}
@@ -234,7 +223,6 @@ const EditTableRow = ({
                     className={clsName}
                     type="time"
                     step="3600"
-                    required
                     placeholder="Enter free time..."
                     name="free_time"
                     value={editFormData.free_time}
@@ -245,7 +233,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
-                    required
                     placeholder="Enter total dispatch..."
                     name="total_despatch"
                     value={editFormData.total_despatch}
@@ -256,7 +243,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
-                    required
                     placeholder="Enter daily dispatch..."
                     name="daily_despatch"
                     value={editFormData.daily_despatch}
