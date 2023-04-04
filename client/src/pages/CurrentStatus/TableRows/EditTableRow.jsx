@@ -103,7 +103,6 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    required
                     placeholder="Remark..."
                     name="remark"
                     value={editFormData.remark}
