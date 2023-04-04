@@ -12,8 +12,23 @@ function addChqDue(req, res, db) {
     const init_amount = req.body.init_amount;
     const payment = req.body.payment;
     const final_amount = req.body.final_amount;
-    const create_chq =
-        "INSERT INTO chq_due_list (order_job_number, LA_name, LV_name, commodity, mode, chq_amount, part_pay, balance, chq_issue_date, init_amount, payment, final_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    const create_chq = `INSERT INTO 
+        chq_due_list 
+        (
+            order_number, 
+            LA_name, 
+            LV_name, 
+            commodity, 
+            mode, 
+            chq_amount, 
+            part_pay, 
+            balance, 
+            chq_issue_date, 
+            init_amount, 
+            payment, 
+            final_amount
+        ) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
     db.query(
         create_chq,
         [
@@ -37,7 +52,24 @@ function addChqDue(req, res, db) {
     );
 }
 function getChqDue(req, res, db) {
-    const sqlSelect = "SELECT * from chq_due_list";
+    const sqlSelect = `
+    SELECT c.id as id,
+            c.order_number as order_number, 
+            r.LA_name as LA_name, 
+            r.LV_name as LV_name, 
+            j.commodity as commodity, 
+            c.mode as mode, 
+            c.chq_amount as chq_amount, 
+            c.part_pay as part_pay, 
+            c.balance as balance, 
+            c.chq_issue_date as chq_issue_date, 
+            c.init_amount as init_amount, 
+            c.payment as payment, 
+            c.final_amount as final_amount
+        FROM chq_due_list c join record_entry r
+            on c.order_number = r.order_number 
+            join job_entry j
+            on c.order_number = j.order_number;`;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
@@ -58,7 +90,7 @@ function updateChqDue(req, res, db) {
     const payment = req.body.new_payment;
     const final_amount = req.body.new_final_amount;
     const sqlUpdate =
-        "UPDATE chq_due_list SET order_job_number=?, LA_name=?, LV_name=?, commodity=?, mode=?, chq_amount=?, part_pay=?, balance=?, chq_issue_date=?, init_amount=?, payment=?, final_amount=? WHERE id=?";
+        "UPDATE chq_due_list SET order_number=?, LA_name=?, LV_name=?, commodity=?, mode=?, chq_amount=?, part_pay=?, balance=?, chq_issue_date=?, init_amount=?, payment=?, final_amount=? WHERE id=?";
     db.query(
         sqlUpdate,
         [

@@ -27,8 +27,8 @@ const TableHeader = [
     },
     {
         id: 2,
-        name: "Order Job Number",
-        accessor: "order_job_number",
+        name: "Order Number",
+        accessor: "order_number",
     },
     {
         id: 3,
@@ -95,7 +95,7 @@ const App = () => {
     // add state
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
-        order_job_number: "",
+        order_number: "",
         LA_name: "",
         LV_name: "",
         commodity: "",
@@ -111,7 +111,7 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        order_job_number: "",
+        order_number: "",
         LA_name: "",
         LV_name: "",
         commodity: "",
@@ -166,7 +166,7 @@ const App = () => {
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newChq = {
-            order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
             LA_name: addFormData.LA_name,
             LV_name: addFormData.LV_name,
             commodity: addFormData.commodity,
@@ -186,7 +186,7 @@ const App = () => {
 
         // api call
         Axios.post(`${process.env.REACT_APP_API_URL}/management/insertchq`, {
-            order_job_number: newChq.order_job_number, //handleAddFormChange로 받은 새 데이터
+            order_number: newChq.order_number, //handleAddFormChange로 받은 새 데이터
             LA_name: newChq.LA_name,
             LV_name: newChq.LV_name,
             commodity: newChq.commodity,
@@ -219,7 +219,7 @@ const App = () => {
 
         const editedChq = {
             id: editChqId, //initial value null
-            order_job_number: editFormData.order_job_number,
+            order_number: editFormData.order_number,
             LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
             commodity: editFormData.commodity,
@@ -235,7 +235,7 @@ const App = () => {
 
         Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq`, {
             id: editedChq.id,
-            new_order_job_number: editedChq.order_job_number,
+            new_order_number: editedChq.order_number,
             new_LA_name: editedChq.LA_name,
             new_LV_name: editedChq.LV_name,
             new_commodity: editedChq.commodity,
@@ -265,7 +265,7 @@ const App = () => {
 
         setEditChqId(Chq.id);
         const formValues = {
-            order_job_number: Chq.order_job_number,
+            order_number: Chq.order_number,
             LA_name: Chq.LA_name,
             LV_name: Chq.LV_name,
             commodity: Chq.commodity,
@@ -307,7 +307,7 @@ const App = () => {
         query === ""
             ? ChqList
             : ChqList.filter((Chq) =>
-                  Chq.order_job_number
+                  Chq.order_number
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, ""))
@@ -331,7 +331,7 @@ const App = () => {
     }
     useEffect(() => {
         fetch(
-            `${process.env.REACT_APP_API_URL}/management/getLvToChqDue?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getLvToChqDue?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -342,7 +342,7 @@ const App = () => {
             });
 
         fetch(
-            `${process.env.REACT_APP_API_URL}/management/getComodityToChqDue?order_job_number=${addFormData.order_job_number}`
+            `${process.env.REACT_APP_API_URL}/management/getComodityToChqDue?order_number=${addFormData.order_number}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -352,7 +352,7 @@ const App = () => {
             });
 
         console.log("addFormData", addFormData);
-    }, [addFormData.order_job_number]);
+    }, [addFormData.order_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -487,7 +487,7 @@ const App = () => {
                                                 {orderJobList && (
                                                     <Select
                                                         options={orderJobList}
-                                                        name="order_job_number"
+                                                        name="order_number"
                                                         addFormData={
                                                             addFormData
                                                         }
