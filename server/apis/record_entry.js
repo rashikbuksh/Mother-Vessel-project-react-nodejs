@@ -154,7 +154,7 @@ function getMaxCapacity(req, res, db) {
     select 
         (bl_quantity - (
             Select 
-                IFNULL(sum(capacity), 0)
+                IFNULL(SUM(capacity), 0)
             from record_entry 
             where order_number = '${order_number}'
         )) as 'max_capacity'

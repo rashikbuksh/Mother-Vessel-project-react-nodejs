@@ -41,6 +41,7 @@ function getCurrentStatus(req, res, db) {
             c.current_location as current_location,    
             c.remark as remark,
             c.time_updated as time_updated,
+            c.trip_completed as trip_completed,
             (   select commodity
                 from job_entry
                 where order_number = r.order_number
@@ -63,12 +64,13 @@ function updateCurrentStatus(req, res, db) {
     const id = req.body.id;
     const current_location = req.body.current_location;
     const remark = req.body.remark;
+    const trip_completed = req.body.trip_completed;
     const time_updated = new Date().toISOString();
     const sqlUpdate =
-        "UPDATE current_status SET current_location=?, remark=?, time_updated=?  where id= ?";
+        "UPDATE current_status SET current_location=?, remark=?, time_updated=?, trip_completed=?  where id= ?";
     db.query(
         sqlUpdate,
-        [current_location, remark, time_updated, id],
+        [current_location, remark, time_updated, trip_completed, id],
         (err, result) => {
             if (err) console.log(err);
         }

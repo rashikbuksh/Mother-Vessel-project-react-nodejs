@@ -41,6 +41,9 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{status.current_location}</td>
             <td className={clsName}>{status.remark}</td>
             <td className={clsName}>
+                {status.trip_completed == 0 ? "NO" : "YES"}
+            </td>
+            <td className={clsName}>
                 <DateTime date={status.time_updated} />
             </td>
             <td className={clsName}>

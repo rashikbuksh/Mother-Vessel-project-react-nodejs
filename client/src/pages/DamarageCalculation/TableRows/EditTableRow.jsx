@@ -30,7 +30,7 @@ const EditTableRow = ({
                     required
                     placeholder="Enter date..."
                     name="date"
-                    value={editFormData.date.slice(0, 10)}
+                    value={editFormData.date && editFormData.date.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -51,7 +51,10 @@ const EditTableRow = ({
                     disabled
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
+                    value={
+                        editFormData.date_from_charpotro &&
+                        editFormData.date_from_charpotro.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -125,7 +128,10 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter loading start time stamp..."
                     name="loading_start_time_stamp"
-                    value={editFormData.loading_start_time_stamp.slice(0, 10)}
+                    value={
+                        editFormData.loading_start_time_stamp &&
+                        editFormData.loading_start_time_stamp.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -135,10 +141,10 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter loading completion time stamp..."
                     name="loading_completion_time_stamp"
-                    value={editFormData.loading_completion_time_stamp.slice(
-                        0,
-                        10
-                    )}
+                    value={
+                        editFormData.loading_completion_time_stamp &&
+                        editFormData.loading_completion_time_stamp.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -148,15 +154,17 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter sailing time stamp..."
                     name="sailing_time_stamp"
-                    value={editFormData.sailing_time_stamp.slice(0, 10)}
+                    value={
+                        editFormData.sailing_time_stamp &&
+                        editFormData.sailing_time_stamp.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
                 <input
                     className={clsName}
-                    type="time"
-                    step="3600000"
+                    type="number"
                     placeholder="Enter duration of travel time..."
                     name="duration_of_travel_time"
                     value={editFormData.duration_of_travel_time}
@@ -169,7 +177,7 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter unloading start time stamp..."
                     name="unloading_start_time_stamp"
-                    value={editFormData.unloading_start_time_stamp.slice(0, 10)}
+                    value={editFormData.unloading_start_time_stamp && editFormData.unloading_start_time_stamp.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -179,10 +187,7 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter unloading completion time stamp..."
                     name="unloading_completion_time_stamp"
-                    value={editFormData.unloading_completion_time_stamp.slice(
-                        0,
-                        10
-                    )}
+                    value={editFormData.unloading_completion_time_stamp && editFormData.unloading_completion_time_stamp.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -199,8 +204,7 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="time"
-                    step="3600"
+                    type="number"
                     placeholder="Enter total elapsed time..."
                     name="total_elapsed_time"
                     value={editFormData.total_elapsed_time}
@@ -210,8 +214,7 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="time"
-                    step="3600"
+                    type="number"
                     placeholder="Enter voyage time..."
                     name="voyage_time"
                     value={editFormData.voyage_time}
@@ -221,8 +224,7 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="time"
-                    step="3600"
+                    type="number"
                     placeholder="Enter free time..."
                     name="free_time"
                     value={editFormData.free_time}
@@ -249,9 +251,7 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td />
-            <td />
-            <td className="rounded-md bg-gray-50 py-3 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">
+            <td className="flex items-center justify-center">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"
