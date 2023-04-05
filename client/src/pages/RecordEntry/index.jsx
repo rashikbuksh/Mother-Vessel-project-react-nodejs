@@ -374,6 +374,8 @@ const App = () => {
             });
     }, [addFormData.order_number]);
 
+    console.log("min date: ", addFormData?.order_number.split("-")[1]);
+
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">

@@ -1,4 +1,11 @@
-import React, { useState, Fragment, useEffect, Suspense } from "react";
+import React, {
+    useState,
+    Fragment,
+    useEffect,
+    Suspense,
+    useRef,
+    useCallback,
+} from "react";
 import Axios from "axios";
 import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
@@ -10,6 +17,9 @@ import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
+
+import { VariableSizeList as List } from "react-window";
+import { useWindowResize } from "../../hooks/useWindowResize";
 
 //toast
 import { success } from "../../components/Toast";
@@ -91,9 +101,10 @@ const App = () => {
     const [JobList, setJobList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(1);
 
     // new start
+
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -288,18 +299,22 @@ const App = () => {
             stevedore_contact_number: editFormData.stevedore_contact_number,
         };
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatejobentry`, {
-            id: editedJob.id,
-            new_order_number: editedJob.order_number,
-            new_importer_name: editedJob.importer_name,
-            new_mother_vessel_name: editedJob.mother_vessel_name,
-            new_eta: editedJob.eta,
-            new_commodity: editedJob.commodity,
-            new_mv_location: editedJob.mv_location,
-            new_bl_quantity: editedJob.bl_quantity,
-            new_stevedore_name: editedJob.stevedore_name,
-            new_stevedore_contact_number: editedJob.stevedore_contact_number,
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatejobentry`,
+            {
+                id: editedJob.id,
+                new_order_number: editedJob.order_number,
+                new_importer_name: editedJob.importer_name,
+                new_mother_vessel_name: editedJob.mother_vessel_name,
+                new_eta: editedJob.eta,
+                new_commodity: editedJob.commodity,
+                new_mv_location: editedJob.mv_location,
+                new_bl_quantity: editedJob.bl_quantity,
+                new_stevedore_name: editedJob.stevedore_name,
+                new_stevedore_contact_number:
+                    editedJob.stevedore_contact_number,
+            }
+        );
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editJobId);
         tableData[index] = editedJob;
@@ -370,24 +385,10 @@ const App = () => {
         return <div>{error}</div>;
     }
 
-    // <button
-    //     className="rounded-md bg-red-500 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-red-700"
-    //     onClick={logout}
-    // >
-    //     Logout
-    // </button>
-
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-            {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
-                <Pagination
-                    pageSize={pageSize}
-                    cursorPos={cursorPos}
-                    setCursorPos={setCursorPos}
-                    rowsCount={data.length}
-                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -409,20 +410,17 @@ const App = () => {
                         columns={TableHeader}
                         handleSorting={handleSorting}
                     />
-                    {search(tableData).length === 0 && query !== "" ? (
-                        <div className="py-2 px-4 text-gray-700">
-                            Nothing found.
-                        </div>
-                    ) : (
+                    {search(tableData).length > 0 && (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((job, idx) => (
+                            {search(tableData).map((job, index) => (
                                 <tr
-                                    key={job.id}
+                                    key={search(tableData)[index]?.id}
                                     className={`my-auto items-center justify-center ${
-                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                        index % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editJobId === job.id ? (
+                                    {editJobId ===
+                                    search(tableData)[index]?.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -434,7 +432,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            job={job}
+                                            job={search(tableData)[index]}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -446,7 +444,45 @@ const App = () => {
                         </tbody>
                     )}
                 </table>
+                {search(tableData).length < 1 && (
+                    <div className="flex flex-row items-center justify-center">
+                        <h1 className="text-2xl font-semibold text-gray-500">
+                            No Data Found
+                        </h1>
+                    </div>
+                )}
             </form>
+
+            {search(tableData).length < data.length ? (
+                <div className="mt-4 flex items-center justify-center divide-x">
+                    <button
+                        className="text-md flex flex-row items-center justify-center space-x-2 rounded-full bg-green-600 px-6 py-2 font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
+                        onClick={() => {
+                            setPageSize((prevValue) =>
+                                cursorPos + prevValue > data.length
+                                    ? prevValue
+                                    : prevValue + 20
+                            );
+                        }}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="h-5 w-5"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                            />
+                        </svg>
+                        <span>Load More</span>
+                    </button>
+                </div>
+            ) : null}
 
             {/* // new end */}
 

@@ -16,6 +16,8 @@ export default function Select({
 }) {
     options = [...new Set(options)];
 
+
+
     const [selected, setSelected] = useState(value !== "" ? value : "");
     const [query, setQuery] = useState("");
 
