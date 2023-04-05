@@ -7,7 +7,7 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
 
     return (
-        <>
+        <React.Fragment>
             <td className={clsName}>
                 <span className="font-bold text-blue-500 hover:underline">
                     {job.id}
@@ -60,7 +60,7 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
                     <BiTrash className="h-5 w-5 text-black" />
                 </button>
             </td>
-        </>
+        </React.Fragment>
     );
 };
 

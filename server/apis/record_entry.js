@@ -154,10 +154,9 @@ function getMaxCapacity(req, res, db) {
     select 
         (bl_quantity - (
             Select 
-                sum(capacity)
+                IFNULL(sum(capacity), 0)
             from record_entry 
             where order_number = '${order_number}'
-            group by order_number
         )) as 'max_capacity'
     from job_entry
     where order_number = '${order_number}'
