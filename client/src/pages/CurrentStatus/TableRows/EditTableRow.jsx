@@ -109,6 +109,17 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
+            <td>
+                <select
+                    className={clsName}
+                    name="trip_completed"
+                    value={editFormData.trip_completed}
+                    onChange={handleEditFormChange}
+                >
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
             <td className="text-center text-sm">
                 <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
                     Auto generated

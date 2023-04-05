@@ -13,11 +13,13 @@ const ReadOnlyRow = ({ Dam, handleEditClick, handleDeleteClick }) => {
             </td>
             <td className={clsName}>{Dam.order_job_number}</td>
             <td className={clsName}>
-                <DateTime date={Dam.date} />
+                {Dam.date && <DateTime date={Dam.date} isTime={false} />}
             </td>
             <td className={`text-center ${clsName}`}>{Dam.cp_number}</td>
             <td className={clsName}>
-                <DateTime date={Dam.date_from_charpotro} />
+                {Dam.date_from_charpotro && (
+                    <DateTime date={Dam.date_from_charpotro} isTime={false} />
+                )}
             </td>
             <td className={`text-center ${clsName}`}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
@@ -30,20 +32,42 @@ const ReadOnlyRow = ({ Dam, handleEditClick, handleDeleteClick }) => {
             <td className={clsName}>{Dam.loading_location}</td>
             <td className={clsName}>{Dam.unloading_location}</td>
             <td className={clsName}>
-                <DateTime date={Dam.loading_start_time_stamp} />
+                {Dam.loading_start_time_stamp && (
+                    <DateTime
+                        date={Dam.loading_start_time_stamp}
+                        isTime={false}
+                    />
+                )}
             </td>
             <td className={clsName}>
-                <DateTime date={Dam.loading_completion_time_stamp} />
+                {Dam.loading_completion_time_stamp && (
+                    <DateTime
+                        date={Dam.loading_completion_time_stamp}
+                        isTime={false}
+                    />
+                )}
             </td>
             <td className={clsName}>
-                <DateTime date={Dam.sailing_time_stamp} />
+                {Dam.sailing_time_stamp && (
+                    <DateTime date={Dam.sailing_time_stamp} isTime={false} />
+                )}
             </td>
             <td className={clsName}>{Dam.duration_of_travel_time}</td>
             <td className={clsName}>
-                <DateTime date={Dam.unloading_start_time_stamp} />
+                {Dam.unloading_start_time_stamp && (
+                    <DateTime
+                        date={Dam.unloading_start_time_stamp}
+                        isTime={false}
+                    />
+                )}
             </td>
             <td className={clsName}>
-                <DateTime date={Dam.unloading_completion_time_stamp} />
+                {Dam.unloading_completion_time_stamp && (
+                    <DateTime
+                        date={Dam.unloading_completion_time_stamp}
+                        isTime={false}
+                    />
+                )}
             </td>
             <td className={clsName}>{Dam.others}</td>
             <td className={clsName}>{Dam.total_elapsed_time}</td>

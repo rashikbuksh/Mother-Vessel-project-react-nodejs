@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2023 at 07:45 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Apr 05, 2023 at 07:34 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET GLOBAL time_zone = '+6:00';
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -36,7 +36,14 @@ CREATE TABLE `chq_approval` (
   `second_trip` varchar(100) DEFAULT NULL,
   `third_trip` varchar(100) DEFAULT NULL,
   `direct_trip` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `chq_approval`
+--
+
+INSERT INTO `chq_approval` (`id`, `order_job_number`, `sixty_percent_payment`, `forty_percent_payment`, `damarage`, `second_trip`, `third_trip`, `direct_trip`) VALUES
+(10, 'Anik-10/3/2023-Samsung-SINGAPORE-1', 'done, Chq Number: xxx', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -55,7 +62,7 @@ CREATE TABLE `chq_due_list` (
   `init_amount` float NOT NULL,
   `payment` varchar(50) NOT NULL,
   `final_amount` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -68,8 +75,16 @@ CREATE TABLE `current_status` (
   `order_job_number` varchar(255) NOT NULL,
   `current_location` varchar(50) DEFAULT NULL,
   `remark` varchar(100) DEFAULT NULL,
-  `time_updated` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `time_updated` datetime NOT NULL DEFAULT current_timestamp(),
+  `trip_completed` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `current_status`
+--
+
+INSERT INTO `current_status` (`id`, `order_job_number`, `current_location`, `remark`, `time_updated`, `trip_completed`) VALUES
+(7, 'Anik-10/3/2023-Samsung-SINGAPORE-1', 'Chittagong', 'Port', '2023-04-05 17:00:37', 1);
 
 -- --------------------------------------------------------
 
@@ -95,7 +110,14 @@ CREATE TABLE `damarage_dispatch` (
   `free_time` time DEFAULT NULL,
   `total_despatch` int(11) DEFAULT NULL,
   `daily_despatch` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `damarage_dispatch`
+--
+
+INSERT INTO `damarage_dispatch` (`id`, `order_job_number`, `date`, `loading_location`, `unloading_location`, `loading_start_time_stamp`, `loading_completion_time_stamp`, `sailing_time_stamp`, `duration_of_travel_time`, `unloading_start_time_stamp`, `unloading_completion_time_stamp`, `others`, `total_elapsed_time`, `voyage_time`, `free_time`, `total_despatch`, `daily_despatch`) VALUES
+(14, 'Anik-10/3/2023-Samsung-SINGAPORE-1', '2023-04-14 12:00:00', 'Singapore', 'Chittagong', '2023-04-12 00:00:00', '2023-04-14 00:00:00', '2023-04-15 00:00:00', '8', '2023-04-17 00:00:00', '2023-04-19 00:00:00', 'Nothing', '00:00:10', '00:00:10', '00:00:01', 50, 10);
 
 -- --------------------------------------------------------
 
@@ -115,13 +137,25 @@ CREATE TABLE `job_entry` (
   `stevedore_name` varchar(50) NOT NULL,
   `stevedore_contact_number` varchar(20) NOT NULL,
   `time_stamp` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `job_entry`
+--
+
+INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_name`, `eta`, `commodity`, `mv_location`, `bl_quantity`, `stevedore_name`, `stevedore_contact_number`, `time_stamp`) VALUES
+(23, 'Anik-10/3/2023-Samsung-SINGAPORE', 'Anik', 'Samsung', '2023-04-10', 'Mobile', 'SINGAPORE', 1500, 'Anik', '01684545111', '2023-04-05 22:55:55');
 
 --
 -- Triggers `job_entry`
 --
 DELIMITER $$
 CREATE TRIGGER `add_order_job` AFTER INSERT ON `job_entry` FOR EACH ROW INSERT INTO order_job_table(order_number) VALUES(NEW.order_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_order_job_table_from_job_entry` AFTER DELETE ON `job_entry` FOR EACH ROW DELETE FROM order_job_table 
+where old.order_number = order_number
 $$
 DELIMITER ;
 DELIMITER $$
@@ -143,16 +177,15 @@ CREATE TABLE `order_job_table` (
   `order_number_done` int(11) NOT NULL DEFAULT 0,
   `sixty_percent_done` int(11) NOT NULL DEFAULT 0,
   `job_completed` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Triggers `order_job_table`
+-- Dumping data for table `order_job_table`
 --
-DELIMITER $$
-CREATE TRIGGER `delete_order_job_table_from_job_entry` AFTER DELETE ON `order_job_table` FOR EACH ROW DELETE FROM order_job_table 
-where old.order_number = order_number
-$$
-DELIMITER ;
+
+INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `order_number_done`, `sixty_percent_done`, `job_completed`) VALUES
+(31, 'Anik-10/3/2023-Samsung-SINGAPORE', 0, 0, 0, 0),
+(32, 'Anik-10/3/2023-Samsung-SINGAPORE', 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -170,7 +203,7 @@ CREATE TABLE `payment` (
   `payment_chq_amount` int(11) NOT NULL,
   `payment_chq_date` datetime NOT NULL,
   `added_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -189,7 +222,7 @@ CREATE TABLE `pre_defined_ship` (
   `current_location` varchar(50) DEFAULT NULL,
   `remark` varchar(100) DEFAULT NULL,
   `time_updated` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -212,7 +245,14 @@ CREATE TABLE `record_entry` (
   `LV_master_name` varchar(50) NOT NULL,
   `LV_master_contact_number` varchar(15) NOT NULL,
   `date_created` date NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `record_entry`
+--
+
+INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
+(25, 'Anik-10/3/2023-Samsung-SINGAPORE', '1', '2023-04-12', 123456, 'Samsung BD', 'Mayer Dua', 'Chittagong', 'Dhaka', 10, 10000, 'Raf', '01684545111', '2023-04-05');
 
 --
 -- Triggers `record_entry`
@@ -231,6 +271,11 @@ CREATE TRIGGER `insert_current_status` AFTER INSERT ON `record_entry` FOR EACH R
 VALUE (concat(new.order_number, '-', new.job_number))
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `insert_damarage_dispatch` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO damarage_dispatch (order_job_number)
+VALUES (CONCAT(NEW.order_number, '-', NEW.job_number))
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -247,7 +292,7 @@ CREATE TABLE `users` (
   `department` varchar(50) NOT NULL,
   `user_created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `enabled` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -334,7 +379,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `chq_approval`
 --
 ALTER TABLE `chq_approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `chq_due_list`
@@ -346,25 +391,25 @@ ALTER TABLE `chq_due_list`
 -- AUTO_INCREMENT for table `current_status`
 --
 ALTER TABLE `current_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `damarage_dispatch`
 --
 ALTER TABLE `damarage_dispatch`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -382,7 +427,7 @@ ALTER TABLE `pre_defined_ship`
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `users`

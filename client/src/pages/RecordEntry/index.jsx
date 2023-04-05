@@ -365,7 +365,8 @@ const App = () => {
             .then((data) => {
                 setMaxCapacity(
                     data[0]?.max_capacity
-                        ? data[0]?.max_capacity < 0
+                        ? data[0]?.max_capacity < 0 ||
+                          data[0]?.max_capacity == null
                             ? 0
                             : data[0]?.max_capacity
                         : 0

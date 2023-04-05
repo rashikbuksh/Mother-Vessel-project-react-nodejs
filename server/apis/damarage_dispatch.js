@@ -89,6 +89,7 @@ function getDamarage(req, res, db) {
         FROM 
             damarage_dispatch d join record_entry r
             on d.order_job_number = concat(r.order_number, '-', r.job_number)
+        WHERE d.order_job_number in (SELECT order_job_number From current_status where trip_completed = 1 )
     `;
     db.query(sqlSelect, (err, result) => {
         res.send(result);

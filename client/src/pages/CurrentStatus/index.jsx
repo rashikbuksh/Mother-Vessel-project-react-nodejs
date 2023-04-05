@@ -44,6 +44,7 @@ const TableHeader = [
     { id: 9, name: "Destination To", accessor: "dest_to" },
     { id: 11, name: "Current Location", accessor: "current_location" },
     { id: 12, name: "Remark", accessor: "current_location" },
+    { id: 13, name: "Trip Completed", accessor: "trip_completed" },
     { id: 15, name: "Updated Date", accessor: "updated_date", sortable: true },
     { id: 16, name: "Actions" },
 ];
@@ -106,6 +107,7 @@ const App = () => {
         dest_from: "",
         dest_to: "",
         current_location: "",
+        trip_completed: "",
         remark: "",
     });
 
@@ -207,6 +209,7 @@ const App = () => {
             dest_to: editFormData.dest_to,
             current_location: editFormData.current_location,
             remark: editFormData.remark,
+            trip_completed: editFormData.trip_completed,
         };
 
         Axios.post(
@@ -215,6 +218,7 @@ const App = () => {
                 id: editedStatus.id,
                 current_location: editedStatus.current_location,
                 remark: editedStatus.remark,
+                trip_completed: editedStatus.trip_completed,
             }
         );
 
@@ -241,6 +245,7 @@ const App = () => {
             dest_to: Status.dest_to,
             current_location: Status.current_location,
             remark: Status.remark,
+            trip_completed: Status.trip_completed,
         };
         setEditFormData(formValues);
     };
