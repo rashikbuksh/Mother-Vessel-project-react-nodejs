@@ -73,7 +73,6 @@ function getChqApproval(req, res, db) {
         addedSql +
         ";";
     db.query(sqlSelect, [addedSql], (err, result) => {
-        console.log("chq approval: " + result[0].id);
         res.send(result);
     });
 }
