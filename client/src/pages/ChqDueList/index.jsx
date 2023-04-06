@@ -13,22 +13,17 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
+import Tabs from "./Tabs";
+
 //toast
 import { success, warning } from "../../components/Toast";
 import { ToastContainer } from "react-toastify";
 
 const TableHeader = [
     {
-        id: 1,
-        name: "Id",
-        accessor: "id",
-        sortable: true,
-        sortByOrder: "asc",
-    },
-    {
         id: 2,
-        name: "Order Number",
-        accessor: "order_number",
+        name: "Order Job Number",
+        accessor: "order_job_number",
     },
     {
         id: 3,
@@ -39,29 +34,29 @@ const TableHeader = [
     { id: 4, name: "LV Name", accessor: "LV_name", sortable: true },
     { id: 5, name: "Commodity", accessor: "commodity", sortable: true },
     { id: 6, name: "Mode", accessor: "mode", sortable: true },
-    { id: 7, name: "Chq Amount", accessor: "chq_amount" },
-    { id: 8, name: "Part Pay", accessor: "part_pay" },
-    { id: 9, name: "Balance", accessor: "balance", sortable: true },
     {
         id: 10,
         name: "Chq Issue Date",
         accessor: "chq_issue_date",
         sortable: true,
     },
-    { id: 11, name: "Initial amount", accessor: "init_amount" },
+    { id: 7, name: "Chq Amount", accessor: "chq_amount" },
+    { id: 8, name: "Part Pay", accessor: "part_pay" },
+    { id: 9, name: "Balance", accessor: "balance", sortable: true },
+    { id: 11, name: "Amount", accessor: "init_amount" },
     { id: 12, name: "Payment", accessor: "payment" },
-    { id: 13, name: "Final Amount", accessor: "final_amount" },
+    { id: 13, name: "Amount", accessor: "final_amount" },
     { id: 14, name: "Actions" },
 ];
 
 const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
+    const [laNames, setLaNames] = useState([]);
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
     const [orderJobList, setOrderJobList] = useState([]);
-    const { logout } = useAuth();
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -87,6 +82,12 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
+                console.log(data);
+            });
+        fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
+            .then((res) => res.json())
+            .then((data) => {
+                setLaNames(data);
             });
     }, []);
 
@@ -111,22 +112,22 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
-        order_number: "",
+        order_job_number: "",
         LA_name: "",
         LV_name: "",
         commodity: "",
         mode: "",
         chq_amount: "",
+        chq_issue_date: "",
         part_pay: "",
         balance: "",
-        chq_issue_date: "",
-        init_amount: "",
-        payment: "",
-        final_amount: "",
+        payment: "Part",
+        amount: "",
     });
 
     //modified id status
-    const [editChqId, setEditChqId] = useState(null);
+    const [editChqOrderJobNumber, setEditChqOrderJobNumber] = useState(null);
+    const [editChqMode, setEditChqMode] = useState(null);
 
     //changeHandler
     //Update state with input data
@@ -218,44 +219,38 @@ const App = () => {
         event.preventDefault(); // prevent submit
 
         const editedChq = {
-            id: editChqId, //initial value null
-            order_number: editFormData.order_number,
+            order_job_number: editFormData.order_job_number,
             LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
             commodity: editFormData.commodity,
             mode: editFormData.mode,
             chq_amount: editFormData.chq_amount,
+            chq_issue_date: editFormData.chq_issue_date,
             part_pay: editFormData.part_pay,
             balance: editFormData.balance,
-            chq_issue_date: editFormData.chq_issue_date,
-            init_amount: editFormData.init_amount,
             payment: editFormData.payment,
-            final_amount: editFormData.final_amount,
+            amount: editFormData.amount,
         };
 
         Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq`, {
-            id: editedChq.id,
-            new_order_number: editedChq.order_number,
-            new_LA_name: editedChq.LA_name,
-            new_LV_name: editedChq.LV_name,
-            new_commodity: editedChq.commodity,
+            new_order_job_number: editedChq.order_job_number,
             new_mode: editedChq.mode,
-            new_chq_amount: editedChq.chq_amount,
-            new_part_pay: editedChq.part_pay,
-            new_balance: editedChq.balance,
-            new_chq_issue_date: editedChq.chq_issue_date,
-            new_init_amount: editedChq.init_amount,
             new_payment: editedChq.payment,
-            new_final_amount: editedChq.final_amount,
+            new_amount: editedChq.amount,
         });
 
         // these 3 lines will be replaced // new start
-        const index = tableData.findIndex((td) => td.id === editChqId);
+        const index = tableData.findIndex(
+            (td) =>
+                td.order_job_number === editChqOrderJobNumber &&
+                td.mode === editChqMode
+        );
         tableData[index] = editedChq;
         setChqList(tableData);
         // new end
 
-        setEditChqId(null);
+        setEditChqOrderJobNumber(null);
+        setEditChqMode(null);
         success("Chq updated successfully");
     };
 
@@ -263,27 +258,29 @@ const App = () => {
     const handleEditClick = (event, Chq) => {
         event.preventDefault(); // ???
 
-        setEditChqId(Chq.id);
+        setEditChqOrderJobNumber(Chq.order_job_number);
+        setEditChqMode(Chq.mode);
+
         const formValues = {
-            order_number: Chq.order_number,
+            order_job_number: Chq.order_job_number,
             LA_name: Chq.LA_name,
             LV_name: Chq.LV_name,
             commodity: Chq.commodity,
             mode: Chq.mode,
             chq_amount: Chq.chq_amount,
+            chq_issue_date: Chq.chq_issue_date,
             part_pay: Chq.part_pay,
             balance: Chq.balance,
-            chq_issue_date: Chq.chq_issue_date,
-            init_amount: Chq.init_amount,
             payment: Chq.payment,
-            final_amount: Chq.final_amount,
+            amount: Chq.amount,
         };
         setEditFormData(formValues);
     };
 
     //Cancel button when clicked on edit
     const handleCancelClick = () => {
-        setEditChqId(null);
+        setEditChqOrderJobNumber(null);
+        setEditChqMode(null);
     };
 
     // delete
@@ -302,16 +299,6 @@ const App = () => {
         newChqList.splice(index, 1);
         setChqList(newChqList);
     };
-
-    const filteredChq =
-        query === ""
-            ? ChqList
-            : ChqList.filter((Chq) =>
-                  Chq.order_number
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
 
     // modal for add Chq
     let [isOpen, setIsOpen] = useState(false);
@@ -351,13 +338,14 @@ const App = () => {
                 });
             });
 
-        console.log("addFormData", addFormData);
+        // console.log("addFormData", addFormData);
     }, [addFormData.order_number]);
+    // console.log("laNames", laNames);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
-        <div className="m-2 mt-4">
-            {/* // new start */}
+        <div className="m-2 mt-2">
+            {/* {laNames && <Tabs tabHeaders={laNames} />} */}
             <div className="my-2 mx-auto flex justify-center">
                 <Pagination
                     pageSize={pageSize}
@@ -372,13 +360,13 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                <button
+                {/* <button
                     // new start // Chq change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+                </button> */}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
@@ -394,12 +382,14 @@ const App = () => {
                         <tbody className="divide-y divide-gray-100 rounded-md">
                             {search(tableData).map((Chq, idx) => (
                                 <tr
-                                    key={Chq.id}
+                                    key={idx}
                                     className={`my-auto items-center justify-center ${
                                         idx % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editChqId === Chq.id ? (
+                                    {editChqOrderJobNumber ===
+                                        Chq.order_job_number &&
+                                    editChqMode === Chq.mode ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -424,9 +414,7 @@ const App = () => {
                     )}
                 </table>
             </form>
-
             {/* // new end */}
-
             {/* add item modal */}
             <Suspense fallback={<Loader />}>
                 <Transition appear show={isOpen} as={Fragment}>
@@ -624,7 +612,6 @@ const App = () => {
                     </Dialog>
                 </Transition>
             </Suspense>
-
             {/* toast  */}
             <ToastContainer closeOnClick />
         </div>

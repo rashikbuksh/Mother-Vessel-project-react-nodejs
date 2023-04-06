@@ -1,23 +1,24 @@
 import React from "react";
 import { FiCheck } from "react-icons/fi";
 import { ImCancelCircle } from "react-icons/im";
+import { DefineRole } from "../../../hooks/routes";
 const EditTableRow = ({
     editFormData,
     handleEditFormChange,
     handleCancelClick,
 }) => {
+    const { original_role } = DefineRole();
     var clsName =
         "peer w-full rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
-            <td />
             <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     placeholder="Enter order number..."
-                    name="order_number"
-                    value={editFormData.order_number}
+                    name="order_job_number"
+                    value={editFormData.order_job_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
@@ -57,9 +58,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    required
+                    disabled
                     placeholder="Enter mode..."
                     name="mode"
                     value={editFormData.mode}
@@ -68,42 +69,9 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
-                    type="text"
-                    required
-                    placeholder="Enter chq amount..."
-                    name="chq_amount"
-                    value={editFormData.chq_amount}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={clsName}
-                    type="text"
-                    required
-                    placeholder="Enter part pay..."
-                    name="part_pay"
-                    value={editFormData.part_pay}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={clsName}
-                    type="number"
-                    required
-                    placeholder="Enter balance..."
-                    name="balance"
-                    value={editFormData.balance}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    required
+                    disabled
                     placeholder="Enter chq issue date..."
                     name="chq_issue_date"
                     value={editFormData.chq_issue_date.slice(0, 10)}
@@ -112,35 +80,86 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
+                    disabled
+                    placeholder="Enter chq amount..."
+                    name="chq_amount"
+                    value={editFormData.chq_amount}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
+                    disabled
+                    placeholder="Enter part pay..."
+                    name="part_pay"
+                    value={editFormData.part_pay}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
-                    required
+                    disabled
+                    placeholder="Enter balance..."
+                    name="balance"
+                    value={editFormData.balance}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                {/* <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="number"
+                    disabled
                     placeholder="Enter initial amount..."
                     name="init_amount"
-                    value={editFormData.init_amount}
+                    value={"calc"}
                     onChange={handleEditFormChange}
-                />
+                /> */}
             </td>
             <td>
-                <input
-                    className={clsName}
-                    type="text"
-                    required
-                    placeholder="Enter payment..."
+                <select
+                    className={`${clsName} ${
+                        original_role === "admin"
+                            ? ""
+                            : "cursor-not-allowed border-red-600"
+                    }`}
                     name="payment"
-                    value={editFormData.payment}
+                    value={editFormData.payment || "Part"}
                     onChange={handleEditFormChange}
-                />
+                    disabled={original_role === "admin" ? false : true}
+                >
+                    <option value="Part">Part</option>
+                    <option value="Full">Full</option>
+                </select>
             </td>
             <td>
                 <input
-                    className={clsName}
+                    className={`${clsName} ${
+                        original_role === "admin"
+                            ? ""
+                            : "cursor-not-allowed border-red-600"
+                    }`}
                     type="number"
                     required
+                    disabled={original_role === "admin" ? false : true}
                     placeholder="Enter final amount..."
-                    name="final_amount"
-                    value={editFormData.final_amount}
+                    name="amount"
+                    value={editFormData.amount}
                     onChange={handleEditFormChange}
+                    onInput={(e) => {
+                        (e.target.value >
+                            editFormData.chq_amount - editFormData.part_pay &&
+                            (e.target.value =
+                                editFormData.chq_amount -
+                                editFormData.part_pay)) ||
+                            (e.target.value < 0 && (e.target.value = 0));
+                    }}
                 />
             </td>
             <td className="flex items-center">

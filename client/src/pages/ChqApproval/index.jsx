@@ -46,11 +46,15 @@ const TableHeader = [
     { id: 12, name: "Rate", accessor: "rate", sortable: true },
     {
         id: 13,
-        name: "60 Percent Payment",
+        name: "60% (Amount, Cheque Number, Date)",
         accessor: "sixty_percent_payment",
         sortable: true,
     },
-    { id: 14, name: "40 Percent Payment", accessor: "forty_percent_payment" },
+    {
+        id: 14,
+        name: "40% (Amount, Cheque Number, Date)",
+        accessor: "forty_percent_payment",
+    },
     { id: 15, name: "Damarage", accessor: "damarage" },
     { id: 16, name: "2nd Trip", accessor: "second_trip" },
     { id: 17, name: "3rd Trip", accessor: "third_trip" },
@@ -133,8 +137,12 @@ const App = () => {
         dest_to: "",
         capacity_ton: "",
         rate: "",
-        sixty_percent_payment: "",
-        forty_percent_payment: "",
+        sixty_percent_payment_amount: "",
+        sixty_percent_payment_chq_number: "",
+        sixty_percent_payment_chq_date: "",
+        forty_percent_payment_amount: "",
+        forty_percent_payment_chq_number: "",
+        forty_percent_payment_chq_date: "",
         damarage: "",
         second_trip: "",
         third_trip: "",
@@ -252,8 +260,18 @@ const App = () => {
             dest_to: editFormData.dest_to,
             capacity_ton: editFormData.capacity_ton,
             rate: editFormData.rate,
-            sixty_percent_payment: editFormData.sixty_percent_payment,
-            forty_percent_payment: editFormData.forty_percent_payment,
+            sixty_percent_payment_amount:
+                editFormData.sixty_percent_payment_amount,
+            sixty_percent_payment_chq_number:
+                editFormData.sixty_percent_payment_chq_number,
+            sixty_percent_payment_chq_date:
+                editFormData.sixty_percent_payment_chq_date,
+            forty_percent_payment_amount:
+                editFormData.forty_percent_payment_amount,
+            forty_percent_payment_chq_number:
+                editFormData.forty_percent_payment_chq_number,
+            forty_percent_payment_chq_date:
+                editFormData.forty_percent_payment_chq_date,
             damarage: editFormData.damarage,
             second_trip: editFormData.second_trip,
             third_trip: editFormData.third_trip,
@@ -264,8 +282,18 @@ const App = () => {
             `${process.env.REACT_APP_API_URL}/management/updatechq_approval`,
             {
                 id: editedChq.id,
-                new_sixty_percent_payment: editedChq.sixty_percent_payment,
-                new_forty_percent_payment: editedChq.forty_percent_payment,
+                new_sixty_percent_payment_amount:
+                    editedChq.sixty_percent_payment_amount,
+                new_sixty_percent_payment_chq_number:
+                    editedChq.sixty_percent_payment_chq_number,
+                new_sixty_percent_payment_chq_date:
+                    editedChq.sixty_percent_payment_chq_date,
+                new_forty_percent_payment_amount:
+                    editedChq.forty_percent_payment_amount,
+                new_forty_percent_payment_chq_number:
+                    editedChq.forty_percent_payment_chq_number,
+                new_forty_percent_payment_chq_date:
+                    editedChq.forty_percent_payment_chq_date,
                 new_damarage: editedChq.damarage,
                 new_second_trip: editedChq.second_trip,
                 new_third_trip: editedChq.third_trip,
@@ -299,8 +327,14 @@ const App = () => {
             dest_to: Chq.dest_to,
             capacity_ton: Chq.capacity_ton,
             rate: Chq.rate,
-            sixty_percent_payment: Chq.sixty_percent_payment,
-            forty_percent_payment: Chq.forty_percent_payment,
+            sixty_percent_payment_amount: Chq.sixty_percent_payment_amount,
+            sixty_percent_payment_chq_number:
+                Chq.sixty_percent_payment_chq_number,
+            sixty_percent_payment_chq_date: Chq.sixty_percent_payment_chq_date,
+            forty_percent_payment_amount: Chq.forty_percent_payment_amount,
+            forty_percent_payment_chq_number:
+                Chq.forty_percent_payment_chq_number,
+            forty_percent_payment_chq_date: Chq.forty_percent_payment_chq_date,
             damarage: Chq.damarage,
             second_trip: Chq.second_trip,
             third_trip: Chq.third_trip,

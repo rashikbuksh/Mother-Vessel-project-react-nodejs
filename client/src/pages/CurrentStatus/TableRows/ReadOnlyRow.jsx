@@ -3,7 +3,9 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 
 const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
-    var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
+    var clsName = "whitespace-nowrap py-2 text-center text-sm text-gray-700";
+    var spanClsName =
+        "rounded-lg bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider";
     return (
         <>
             <td className={clsName}>
@@ -12,36 +14,53 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                 </a>
             </td>
             <td className={clsName}>{status.order_job_number}</td>
+            <td className={clsName}>
+                <span className={`${spanClsName} bg-blue-200 text-blue-800`}>
+                    {status.LA_name}
+                </span>
+            </td>
             <td className={clsName}>{status.LV_name}</td>
             <td className={clsName}>
-                {/* <span className="rounded-lg bg-red-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800">
-                    {new Date(status.date_from_charpotro).toLocaleString(
-                        "en-GB",
-                        {
-                            timeZone: "Asia/Dhaka",
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                            day: "numeric",
-                            month: "numeric",
-                            year: "numeric",
-                        }
-                    )}
-                </span> */}
                 <DateTime date={status.date_from_charpotro} />
             </td>
             <td className={clsName}>
-                <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
+                <span className={`${spanClsName} bg-green-200 text-green-800`}>
                     {status.commodity}
                 </span>
             </td>
-            <td className={clsName}>{status.LA_name}</td>
-            <td className={clsName}>{status.dest_from}</td>
-            <td className={clsName}>{status.dest_to}</td>
-            <td className={clsName}>{status.current_location}</td>
-            <td className={clsName}>{status.remark}</td>
+
             <td className={clsName}>
-                {status.trip_completed == 0 ? "NO" : "YES"}
+                <span className={`${spanClsName} bg-green-200 text-green-800`}>
+                    {status.dest_from}
+                </span>
+            </td>
+            <td className={clsName}>
+                <span className={`${spanClsName} bg-red-200 text-red-800`}>
+                    {status.dest_to}
+                </span>
+            </td>
+            <td className={clsName}>
+                <span className={`${spanClsName} bg-green-200 text-green-800`}>
+                    {status.current_location}
+                </span>
+            </td>
+            <td className={clsName}>
+                <span
+                    className={`${spanClsName} bg-purple-200 text-purple-800`}
+                >
+                    {status.remark}
+                </span>
+            </td>
+            <td className={clsName}>
+                <span
+                    className={`${spanClsName} ${
+                        status.trip_completed == 0
+                            ? "bg-red-200 text-red-800"
+                            : "bg-green-200 text-green-800"
+                    }`}
+                >
+                    {status.trip_completed == 0 ? "NO" : "YES"}
+                </span>
             </td>
             <td className={clsName}>
                 <DateTime date={status.time_updated} />

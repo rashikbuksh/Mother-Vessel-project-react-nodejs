@@ -3,14 +3,10 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
+    console.log("Chq: " + Chq);
     return (
         <>
-            <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {Chq.id}
-                </a>
-            </td>
-            <td className={clsName}>{Chq.order_number}</td>
+            <td className={clsName}>{Chq.order_job_number}</td>
             <td className={clsName}>{Chq.LA_name}</td>
             <td className={clsName}>{Chq.LV_name}</td>
             <td className={`text-center ${clsName}`}>
@@ -19,15 +15,16 @@ const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
                 </span>
             </td>
             <td className={`text-center ${clsName}`}>{Chq.mode}</td>
-            <td className={`text-center ${clsName}`}>{Chq.chq_amount}</td>
-            <td className={`text-center ${clsName}`}>{Chq.part_pay}</td>
-            <td className={`text-center ${clsName}`}>{Chq.balance}</td>
             <td className={clsName}>
                 <DateTime date={Chq.chq_issue_date} />
             </td>
-            <td className={`text-center ${clsName}`}>{Chq.init_amount}</td>
+            <td className={`text-center ${clsName}`}>{Chq.chq_amount}</td>
+            <td className={`text-center ${clsName}`}>{Chq.part_pay}</td>
+            <td className={`text-center ${clsName}`}>{Chq.balance}</td>
+
+            <td className={`text-center ${clsName}`}>Calculate</td>
             <td className={`text-center ${clsName}`}>{Chq.payment}</td>
-            <td className={`text-center ${clsName}`}>{Chq.final_amount}</td>
+            <td className={`text-center ${clsName}`}>{Chq.amount}</td>
             <td className={clsName}>
                 <button
                     type="button"

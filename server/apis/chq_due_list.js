@@ -53,61 +53,85 @@ function addChqDue(req, res, db) {
 }
 function getChqDue(req, res, db) {
     const sqlSelect = `
-    SELECT c.id as id,
-            c.order_number as order_number, 
-            r.LA_name as LA_name, 
-            r.LV_name as LV_name, 
-            j.commodity as commodity, 
-            c.mode as mode, 
-            c.chq_amount as chq_amount, 
-            c.part_pay as part_pay, 
-            c.balance as balance, 
-            c.chq_issue_date as chq_issue_date, 
-            c.init_amount as init_amount, 
-            c.payment as payment, 
-            c.final_amount as final_amount
-        FROM chq_due_list c join record_entry r
-            on c.order_number = r.order_number 
-            join job_entry j
-            on c.order_number = j.order_number;`;
+ SELECT 
+  cdl.order_job_number as order_job_number, 
+  r.LA_name as LA_name, 
+  r.LV_name as LV_name, 
+  (
+    select 
+      DISTINCT commodity 
+    from 
+      job_entry 
+    where 
+      order_number = r.order_number
+  ) as commodity, 
+  '60' as mode, 
+  ca.sixty_percent_payment_amount as chq_amount, 
+  ca.sixty_percent_payment_chq_date as chq_issue_date, 
+  cdl.part_pay as part_pay, 
+  cdl.balance as balance, 
+  cdl.payment as payment,
+  cdl.amount as amount
+FROM 
+  chq_due_list cdl 
+  join chq_approval ca on cdl.order_job_number = ca.order_job_number 
+  join record_entry r on ca.order_job_number = concat(
+    r.order_number, '-', r.job_number
+  ) 
+where 
+  ca.sixty_percent_payment_amount > 0 
+  and ca.sixty_percent_payment_amount is not null 
+UNION 
+SELECT 
+  cdl.order_job_number as order_job_number, 
+  r.LA_name as LA_name, 
+  r.LV_name as LV_name, 
+  (
+    select 
+      DISTINCT commodity 
+    from 
+      job_entry 
+    where 
+      order_number = r.order_number
+  ) as commodity, 
+  '40' as mode, 
+  ca.forty_percent_payment_amount as chq_amount, 
+  ca.forty_percent_payment_chq_date as chq_issue_date, 
+  cdl.part_pay as part_pay, 
+  cdl.balance as balance, 
+  cdl.payment as payment,
+  cdl.amount as amount
+FROM 
+  chq_due_list cdl 
+  join chq_approval ca on cdl.order_job_number = ca.order_job_number 
+  join record_entry r on ca.order_job_number = concat(
+    r.order_number, '-', r.job_number
+  ) 
+where 
+  ca.forty_percent_payment_amount > 0 
+  and ca.forty_percent_payment_amount is not null
+order by 
+  LA_name asc
+            `;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
 function updateChqDue(req, res, db) {
     //console.log("update job info in backend");
-    const id = req.body.id;
     const order_job_number = req.body.new_order_job_number;
-    const LA_name = req.body.new_LA_name;
-    const LV_name = req.body.new_LV_name;
-    const commodity = req.body.new_commodity;
     const mode = req.body.new_mode;
-    const chq_amount = req.body.new_chq_amount;
-    const part_pay = req.body.new_part_pay;
-    const balance = req.body.new_balance;
-    const chq_issue_date = req.body.new_chq_issue_date;
-    const init_amount = req.body.new_init_amount;
+
+    const amount = req.body.new_amount;
     const payment = req.body.new_payment;
-    const final_amount = req.body.new_final_amount;
+
+    console.log("updateChqDue: " + order_job_number + " " + mode);
+
     const sqlUpdate =
-        "UPDATE chq_due_list SET order_number=?, LA_name=?, LV_name=?, commodity=?, mode=?, chq_amount=?, part_pay=?, balance=?, chq_issue_date=?, init_amount=?, payment=?, final_amount=? WHERE id=?";
+        "UPDATE chq_due_list SET payment=?, amount=? WHERE order_job_number=? and mode=?";
     db.query(
         sqlUpdate,
-        [
-            order_job_number,
-            LA_name,
-            LV_name,
-            commodity,
-            mode,
-            chq_amount,
-            part_pay,
-            balance,
-            chq_issue_date,
-            init_amount,
-            payment,
-            final_amount,
-            id,
-        ],
+        [payment, amount, order_job_number, mode],
         (err, result) => {
             if (err) console.log(err);
             res.send(result);
@@ -153,9 +177,17 @@ function getComodityToChqDue(req, res, db) {
     });
 }
 
+function getLANameToChqDue(req, res, db) {
+    const sqlSelect = `SELECT LA_name from record_entry order by LA_name asc`;
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+}
+
 module.exports.addChqDue = addChqDue;
 module.exports.getChqDue = getChqDue;
 module.exports.updateChqDue = updateChqDue;
 module.exports.deleteChqDue = deleteChqDue;
 module.exports.getLvToChqDue = getLvToChqDue;
 module.exports.getComodityToChqDue = getComodityToChqDue;
+module.exports.getLANameToChqDue = getLANameToChqDue;

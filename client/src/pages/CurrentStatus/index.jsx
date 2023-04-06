@@ -31,6 +31,7 @@ const TableHeader = [
         accessor: "order_job_number",
         sortable: true,
     },
+    { id: 5, name: "Local Agency", accessor: "LA_name", sortable: true },
     { id: 2, name: "LV Name", accessor: "LV_name" },
     {
         id: 4,
@@ -39,7 +40,6 @@ const TableHeader = [
         sortable: true,
     },
     { id: 10, name: "Commodity", accessor: "commodity" },
-    { id: 5, name: "LA", accessor: "LA" },
     { id: 8, name: "Destination From", accessor: "dest_from" },
     { id: 9, name: "Destination To", accessor: "dest_to" },
     { id: 11, name: "Current Location", accessor: "current_location" },
@@ -91,7 +91,7 @@ const App = () => {
         LV_name: "",
         date_from_charpotro: "",
         commodity: "",
-        LA: "",
+        LA_name: "",
         dest_from: "",
         dest_to: "",
         current_location: "",
@@ -100,10 +100,11 @@ const App = () => {
 
     //edit status
     const [editFormData, setEditFormData] = useState({
+        order_job_number: "",
         LV_name: "",
         date_from_charpotro: "",
         commodity: "",
-        LA: "",
+        LA_name: "",
         dest_from: "",
         dest_to: "",
         current_location: "",
@@ -155,7 +156,7 @@ const App = () => {
     //         LV_name: addFormData.LV_name, //handleAddFormChange로 받은 새 데이터
     //         date_from_charpotro: addFormData.date_from_charpotro,
     //         commodity: addFormData.commodity,
-    //         LA: addFormData.LA,
+    //         LA_name: addFormData.LA_name,
     //         dest_from: addFormData.dest_from,
     //         dest_to: addFormData.dest_to,
     //         current_location: addFormData.current_location,
@@ -173,7 +174,7 @@ const App = () => {
     //             LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
     //             date_from_charpotro: newStatus.date_from_charpotro,
     //             commodity: newStatus.commodity,
-    //             LA: newStatus.LA,
+    //             LA_name: newStatus.LA_name,
     //             dest_from: newStatus.dest_from,
     //             dest_to: newStatus.dest_to,
     //             current_location: newStatus.current_location,
@@ -201,10 +202,11 @@ const App = () => {
 
         const editedStatus = {
             id: editStatusId, //initial value null
+            order_job_number: editFormData.order_job_number,
+            LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
             date_from_charpotro: editFormData.date_from_charpotro,
             commodity: editFormData.commodity,
-            LA: editFormData.LA,
             dest_from: editFormData.dest_from,
             dest_to: editFormData.dest_to,
             current_location: editFormData.current_location,
@@ -222,7 +224,7 @@ const App = () => {
             }
         );
 
-        // these 3 lines will be replaced // new start
+        // these 3 lines will be repLA_nameced // new start
         const index = tableData.findIndex((td) => td.id === editStatusId);
         tableData[index] = editedStatus;
         setCurrentStatus(tableData);
@@ -231,16 +233,17 @@ const App = () => {
         success("Status updated successfully");
     };
 
-    //Read-only data If you click the edit button, the existing data is displayed
+    //Read-only data If you click the edit button, the existing data is dispLA_nameyed
     const handleEditClick = (event, Status) => {
         event.preventDefault(); // ???
 
         setEditStatusId(Status.id);
         const formValues = {
+            order_job_number: Status.order_job_number,
+            LA_name: Status.LA_name,
             LV_name: Status.LV_name,
             date_from_charpotro: Status.date_from_charpotro,
             commodity: Status.commodity,
-            LA: Status.LA,
             dest_from: Status.dest_from,
             dest_to: Status.dest_to,
             current_location: Status.current_location,
@@ -295,13 +298,13 @@ const App = () => {
     // }
     // useEffect(() => {
     //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
+    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLA_nameLvRate?order_job_number=${addFormData.order_job_number}`
     //     )
     //         .then((res) => res.json())
     //         .then((data) => {
     //             data?.map((item) => {
     //                 addFormData.date_from_charpotro = item.date_from_charpotro;
-    //                 addFormData.LA = item.LA_name;
+    //                 addFormData.LA_name = item.LA_name_name;
     //                 addFormData.LV_name = item.LV_name;
     //                 addFormData.dest_from = item.dest_from;
     //                 addFormData.dest_to = item.dest_to;
@@ -409,7 +412,7 @@ const App = () => {
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
+                            <div className="fixed inset-0 bg-bLA_nameck bg-opacity-25" />
                         </Transition.Child>
 
                         <div className="fixed inset-0 overflow-y-auto">
@@ -440,10 +443,10 @@ const App = () => {
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
                                         >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Order Job Number
-                                                </label>
+                                                </LA_namebel>
                                                 {orderJobList && (
                                                     <Select
                                                         options={orderJobList}
@@ -458,122 +461,122 @@ const App = () => {
                                                     />
                                                 )}
                                             </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     LV Name
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="LV_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LV Name"
+                                                    pLA_nameceholder="LV Name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Date From Charpotro
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="date"
                                                     name="date_from_charpotro"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Date From Charpotro"
+                                                    pLA_nameceholder="Date From Charpotro"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Commodity
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="commodity"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Commodity"
+                                                    pLA_nameceholder="Commodity"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA
-                                                </label>
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    LA_name
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
-                                                    name="LA"
+                                                    name="LA_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="LA"
+                                                    pLA_nameceholder="LA_name"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination From
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="dest_from"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Destination From"
+                                                    pLA_nameceholder="Destination From"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Destination To
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="dest_to"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Destination To"
+                                                    pLA_nameceholder="Destination To"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Current Location
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="current_location"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Current Location"
+                                                    pLA_nameceholder="Current Location"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
 
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
+                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Remark
-                                                </label>
+                                                </LA_namebel>
                                                 <input
                                                     type="text"
                                                     name="remark"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Remark"
+                                                    pLA_nameceholder="Remark"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
