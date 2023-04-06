@@ -29,7 +29,10 @@ const EditTableRow = ({
                     disabled
                     placeholder="Enter date from charpotro..."
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
+                    value={
+                        editFormData.date_from_charpotro &&
+                        editFormData.date_from_charpotro.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -124,22 +127,95 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="text"
-                    placeholder="Enter 60 percent payment..."
-                    name="sixty_percent_payment"
-                    value={editFormData.sixty_percent_payment}
+                    type="number"
+                    placeholder="Amount..."
+                    name="sixty_percent_payment_amount"
+                    value={editFormData.sixty_percent_payment_amount}
                     onChange={handleEditFormChange}
-                    required
+                    required={
+                        editFormData.sixty_percent_payment_chq_number !== "" ||
+                        editFormData.sixty_percent_payment_chq_date !== ""
+                            ? true
+                            : false
+                    }
+                />
+                <input
+                    className={clsName}
+                    type="number"
+                    placeholder="Chq Number..."
+                    name="sixty_percent_payment_chq_number"
+                    value={editFormData.sixty_percent_payment_chq_number}
+                    onChange={handleEditFormChange}
+                    required={
+                        editFormData.sixty_percent_payment_amount !== "" ||
+                        editFormData.sixty_percent_payment_chq_date !== ""
+                            ? true
+                            : false
+                    }
+                />
+                <input
+                    className={clsName}
+                    type="date"
+                    placeholder="Chq Date..."
+                    name="sixty_percent_payment_chq_date"
+                    value={
+                        editFormData.sixty_percent_payment_chq_date &&
+                        editFormData.sixty_percent_payment_chq_date.slice(0, 10)
+                    }
+                    onChange={handleEditFormChange}
+                    required={
+                        editFormData.sixty_percent_payment_amount !== "" ||
+                        editFormData.sixty_percent_payment_chq_number !== ""
+                            ? true
+                            : false
+                    }
                 />
             </td>
             <td>
                 <input
                     className={clsName}
-                    type="text"
-                    placeholder="Enter 40 percent payment..."
-                    name="forty_percent_payment"
-                    value={editFormData.forty_percent_payment}
+                    type="number"
+                    placeholder="Amount..."
+                    name="forty_percent_payment_amount"
+                    value={editFormData.forty_percent_payment_amount}
                     onChange={handleEditFormChange}
+                    required={
+                        editFormData.forty_percent_payment_chq_number !== "" ||
+                        editFormData.forty_percent_payment_chq_date !== ""
+                            ? true
+                            : false
+                    }
+                />
+                <input
+                    className={clsName}
+                    type="number"
+                    placeholder="Chq Number..."
+                    name="forty_percent_payment_chq_number"
+                    value={editFormData.forty_percent_payment_chq_number}
+                    onChange={handleEditFormChange}
+                    required={
+                        editFormData.forty_percent_payment_amount !== "" ||
+                        editFormData.forty_percent_payment_chq_date !== ""
+                            ? true
+                            : false
+                    }
+                />
+                <input
+                    className={clsName}
+                    type="date"
+                    placeholder="Chq Date..."
+                    name="forty_percent_payment_chq_date"
+                    value={
+                        editFormData.forty_percent_payment_chq_date &&
+                        editFormData.forty_percent_payment_chq_date.slice(0, 10)
+                    }
+                    onChange={handleEditFormChange}
+                    required={
+                        editFormData.forty_percent_payment_amount !== "" ||
+                        editFormData.forty_percent_payment_chq_number !== ""
+                            ? true
+                            : false
+                    }
                 />
             </td>
             <td>
@@ -182,7 +258,7 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td className="flex justify-center">
+            <td className="flex items-center justify-center">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

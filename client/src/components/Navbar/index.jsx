@@ -10,10 +10,22 @@ const NavLinks = [
         role: ["admin"],
     },
     {
+        id: 11,
+        link: "/jobentry",
+        name: "Job Entry",
+        role: ["admin", "accounts"],
+    },
+    {
         id: 2,
         link: "/recordentry",
         name: "Record Entry",
         role: ["admin", "operations"],
+    },
+    {
+        id: 9,
+        link: "/chqapproval",
+        name: "Chq Approval",
+        role: ["admin", "accounts-manager"],
     },
     {
         id: 3,
@@ -28,6 +40,12 @@ const NavLinks = [
         role: ["admin", "operations"],
     },
     {
+        id: 8,
+        link: "/chqduelist",
+        name: "Chq Due List",
+        role: ["admin", "accounts-manager"],
+    },
+    {
         id: 6,
         link: "/predefinedship",
         name: "Current Status (Own)",
@@ -40,28 +58,10 @@ const NavLinks = [
         role: ["admin"],
     },
     {
-        id: 8,
-        link: "/chqduelist",
-        name: "Chq Due List",
-        role: ["admin", "accounts-manager"],
-    },
-    {
-        id: 9,
-        link: "/chqapproval",
-        name: "Chq Approval",
-        role: ["admin", "accounts-manager"],
-    },
-    {
         id: 10,
         link: "/payment",
         name: "Payment",
         role: ["admin", "accounts-manager"],
-    },
-    {
-        id: 11,
-        link: "/jobentry",
-        name: "Job Entry",
-        role: ["admin", "accounts"],
     },
 ];
 

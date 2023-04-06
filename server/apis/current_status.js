@@ -52,7 +52,7 @@ function getCurrentStatus(req, res, db) {
         where c.order_job_number in (
                                 select order_job_number
                                 from chq_approval
-                                where sixty_percent_payment is not NULL
+                                where sixty_percent_payment_amount is not NULL 
         );`;
 
     db.query(sqlSelect, (err, result) => {

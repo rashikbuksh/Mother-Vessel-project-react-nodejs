@@ -61,8 +61,12 @@ function getChqApproval(req, res, db) {
             r.dest_to as dest_to, 
             r.capacity as capacity_ton, 
             r.rate as rate, 
-            c.sixty_percent_payment as sixty_percent_payment, 
-            c.forty_percent_payment as forty_percent_payment, 
+            c.sixty_percent_payment_amount as sixty_percent_payment_amount, 
+            c.sixty_percent_payment_chq_number as sixty_percent_payment_chq_number,
+            c.sixty_percent_payment_chq_date as sixty_percent_payment_chq_date,
+            c.forty_percent_payment_amount as forty_percent_payment_amount,
+            c.forty_percent_payment_chq_number as forty_percent_payment_chq_number,
+            c.forty_percent_payment_chq_date as forty_percent_payment_chq_date,
             c.damarage as damarage, 
             c.second_trip as second_trip,
             c.third_trip as third_trip, 
@@ -79,19 +83,43 @@ function getChqApproval(req, res, db) {
 function updateChqApproval(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
-    const sixty_percent_payment = req.body.new_sixty_percent_payment;
-    const forty_percent_payment = req.body.new_forty_percent_payment;
+    const sixty_percent_payment_amount =
+        req.body.new_sixty_percent_payment_amount;
+    const sixty_percent_payment_chq_number =
+        req.body.new_sixty_percent_payment_chq_number;
+    const sixty_percent_payment_chq_date =
+        req.body.new_sixty_percent_payment_chq_date;
+    const forty_percent_payment_amount =
+        req.body.new_forty_percent_payment_amount;
+    const forty_percent_payment_chq_number =
+        req.body.new_forty_percent_payment_chq_number;
+    const forty_percent_payment_chq_date =
+        req.body.new_forty_percent_payment_chq_date;
     const damarage = req.body.new_damarage;
     const second_trip = req.body.new_second_trip;
     const third_trip = req.body.new_third_trip;
     const direct_trip = req.body.new_direct_trip;
-    const sqlUpdate =
-        "UPDATE chq_approval SET sixty_percent_payment=?, forty_percent_payment=?, damarage=?, second_trip=?, third_trip=?, direct_trip=? WHERE id=?";
+    const sqlUpdate = `UPDATE chq_approval SET 
+            sixty_percent_payment_amount=?, 
+            sixty_percent_payment_chq_number=?,
+            sixty_percent_payment_chq_date=?,
+            forty_percent_payment_amount=?,
+            forty_percent_payment_chq_number=?,
+            forty_percent_payment_chq_date=?, 
+            damarage=?, 
+            second_trip=?, 
+            third_trip=?, 
+            direct_trip=? 
+        WHERE id=?`;
     db.query(
         sqlUpdate,
         [
-            sixty_percent_payment,
-            forty_percent_payment,
+            sixty_percent_payment_amount,
+            sixty_percent_payment_chq_number,
+            sixty_percent_payment_chq_date,
+            forty_percent_payment_amount,
+            forty_percent_payment_chq_number,
+            forty_percent_payment_chq_date,
             damarage,
             second_trip,
             third_trip,

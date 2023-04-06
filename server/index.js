@@ -50,6 +50,7 @@ const {
     deleteChqDue,
     getLvToChqDue,
     getComodityToChqDue,
+    getLANameToChqDue,
 } = require("./apis/chq_due_list");
 const {
     addChqApproval,
@@ -246,6 +247,10 @@ app.get("/management/getLvToChqDue", (req, res) => {
 // get Comodity for chq due
 app.get("/management/getComodityToChqDue", (req, res) => {
     getComodityToChqDue(req, res, db);
+});
+
+app.get("/management/getLANames", (req, res) => {
+    getLANameToChqDue(req, res, db);
 });
 
 //======================= Chq Approval =======================

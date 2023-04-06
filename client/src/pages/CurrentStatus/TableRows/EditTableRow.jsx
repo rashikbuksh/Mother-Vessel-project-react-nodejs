@@ -26,6 +26,17 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
+                    placeholder="LA"
+                    name="LA"
+                    value={editFormData.LA_name}
+                    onChange={handleEditFormChange}
+                    disabled
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
                     placeholder="Enter LV name..."
                     name="LV_name"
                     value={editFormData.LV_name}
@@ -50,17 +61,6 @@ const EditTableRow = ({
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
-                    onChange={handleEditFormChange}
-                    disabled
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
-                    placeholder="LA"
-                    name="LA"
-                    value={editFormData.LA}
                     onChange={handleEditFormChange}
                     disabled
                 />
