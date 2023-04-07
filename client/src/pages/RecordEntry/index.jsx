@@ -13,6 +13,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
 import Select from "../../components/Select";
+import Switch from "../../components/Switch";
 
 //toast
 import { success, warning } from "../../components/Toast";
@@ -78,6 +79,9 @@ const App = () => {
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+
+    const [enabled, setEnabled] = useState(false);
+    console.log("enabled: " + enabled);
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -400,7 +404,7 @@ const App = () => {
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
-                    Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
+                    Add Record <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button>
             </div>
             <form onSubmit={handleEditFormSubmit}>
@@ -551,17 +555,39 @@ const App = () => {
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Local Agency Name
-                                                </label>
+                                                <div className="flex items-center justify-between">
+                                                    <label
+                                                        className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                            enabled
+                                                                ? " text-red-500 "
+                                                                : "text-gray-500 group-focus-within:text-blue-400"
+                                                        } `}
+                                                    >
+                                                        Local Agency Name
+                                                    </label>
+                                                    <>
+                                                        <Switch
+                                                            enabled={enabled}
+                                                            setEnabled={
+                                                                setEnabled
+                                                            }
+                                                        />{" "}
+                                                        Own
+                                                    </>
+                                                </div>
                                                 <input
                                                     type="text"
                                                     name="LA_name"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
+                                                    disabled={enabled}
                                                     placeholder="Local Agency Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                    className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                        enabled
+                                                            ? "cursor-not-allowed border-red-600"
+                                                            : ""
+                                                    } `}
                                                 />
                                             </div>
 
@@ -576,7 +602,7 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     placeholder="Lighter Vessel Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                    className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 `}
                                                 />
                                             </div>
 
