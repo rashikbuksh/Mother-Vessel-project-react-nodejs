@@ -43,7 +43,7 @@ const TableHeader = [
     { id: 7, name: "Chq Amount", accessor: "chq_amount" },
     { id: 8, name: "Part Pay", accessor: "part_pay" },
     { id: 9, name: "Balance", accessor: "balance", sortable: true },
-    { id: 11, name: "Amount", accessor: "init_amount" },
+    // { id: 11, name: "Amount", accessor: "init_amount" },
     { id: 12, name: "Payment", accessor: "payment" },
     { id: 13, name: "Amount", accessor: "final_amount" },
     { id: 14, name: "Actions" },
@@ -120,7 +120,6 @@ const App = () => {
         chq_amount: "",
         chq_issue_date: "",
         part_pay: "",
-        balance: "",
         payment: "Part",
         amount: "",
     });
@@ -227,11 +226,10 @@ const App = () => {
             chq_amount: editFormData.chq_amount,
             chq_issue_date: editFormData.chq_issue_date,
             part_pay: editFormData.part_pay,
-            balance: editFormData.balance,
+            balance: editFormData.chq_amount - editFormData.part_pay,
             payment: editFormData.payment,
             amount: editFormData.amount,
         };
-        console.log(editedChq.payment);
         editedChq.payment =
             editedChq.payment == null ? "Part" : editedChq.payment;
 
@@ -349,7 +347,7 @@ const App = () => {
     return (
         <div className="m-2 mt-2">
             {/* {laNames && <Tabs tabHeaders={laNames} />} */}
-            <div className="my-2 mx-auto flex justify-center">
+            <div className="my-2 mx-auto flex justify-between">
                 <Pagination
                     pageSize={pageSize}
                     cursorPos={cursorPos}
@@ -370,6 +368,15 @@ const App = () => {
                 >
                     Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button> */}
+                {laNames && (
+                    <Select
+                        options={laNames}
+                        name="order_number"
+                        addFormData={addFormData}
+                        setAddFormData={setAddFormData}
+                        isAddFromData={true}
+                    />
+                )}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">

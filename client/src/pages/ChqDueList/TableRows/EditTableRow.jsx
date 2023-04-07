@@ -107,12 +107,12 @@ const EditTableRow = ({
                     disabled
                     placeholder="Enter balance..."
                     name="balance"
-                    value={editFormData.balance}
+                    value={editFormData.chq_amount - editFormData.part_pay}
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                {/* <input
+            {/* <td>
+                <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
                     disabled
@@ -120,8 +120,8 @@ const EditTableRow = ({
                     name="init_amount"
                     value={"calc"}
                     onChange={handleEditFormChange}
-                /> */}
-            </td>
+                />
+            </td> */}
             <td>
                 <select
                     className={`${clsName} ${

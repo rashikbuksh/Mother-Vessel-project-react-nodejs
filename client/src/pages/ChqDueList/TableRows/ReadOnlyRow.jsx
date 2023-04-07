@@ -20,9 +20,11 @@ const ReadOnlyRow = ({ Chq, handleEditClick, handleDeleteClick }) => {
             </td>
             <td className={`text-center ${clsName}`}>{Chq.chq_amount}</td>
             <td className={`text-center ${clsName}`}>{Chq.part_pay}</td>
-            <td className={`text-center ${clsName}`}>{Chq.balance}</td>
+            <td className={`text-center ${clsName}`}>
+                {Chq.chq_amount - Chq.part_pay}
+            </td>
 
-            <td className={`text-center ${clsName}`}>Calculate</td>
+            {/* <td className={`text-center ${clsName}`}>Calculate</td> */}
             <td className={`text-center ${clsName}`}>{Chq.payment}</td>
             <td className={`text-center ${clsName}`}>{Chq.amount}</td>
             <td className={clsName}>
