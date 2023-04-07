@@ -231,6 +231,9 @@ const App = () => {
             payment: editFormData.payment,
             amount: editFormData.amount,
         };
+        console.log(editedChq.payment);
+        editedChq.payment =
+            editedChq.payment == null ? "Part" : editedChq.payment;
 
         Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq`, {
             new_order_job_number: editedChq.order_job_number,

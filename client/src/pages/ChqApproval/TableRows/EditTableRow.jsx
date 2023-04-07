@@ -179,12 +179,6 @@ const EditTableRow = ({
                     name="forty_percent_payment_amount"
                     value={editFormData.forty_percent_payment_amount}
                     onChange={handleEditFormChange}
-                    required={
-                        editFormData.forty_percent_payment_chq_number !== "" ||
-                        editFormData.forty_percent_payment_chq_date !== ""
-                            ? true
-                            : false
-                    }
                 />
                 <input
                     className={clsName}
@@ -193,12 +187,6 @@ const EditTableRow = ({
                     name="forty_percent_payment_chq_number"
                     value={editFormData.forty_percent_payment_chq_number}
                     onChange={handleEditFormChange}
-                    required={
-                        editFormData.forty_percent_payment_amount !== "" ||
-                        editFormData.forty_percent_payment_chq_date !== ""
-                            ? true
-                            : false
-                    }
                 />
                 <input
                     className={clsName}
@@ -210,12 +198,6 @@ const EditTableRow = ({
                         editFormData.forty_percent_payment_chq_date.slice(0, 10)
                     }
                     onChange={handleEditFormChange}
-                    required={
-                        editFormData.forty_percent_payment_amount !== "" ||
-                        editFormData.forty_percent_payment_chq_number !== ""
-                            ? true
-                            : false
-                    }
                 />
             </td>
             <td>
