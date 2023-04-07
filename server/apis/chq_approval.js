@@ -27,23 +27,24 @@ function addChqApproval(req, res, db) {
     );
 }
 function getChqApproval(req, res, db) {
-    const status = req.body.status;
+    const status = req.query.status;
     var addedSql = "";
     switch (status) {
         case "All":
             addedSql = "";
             break;
         case "Pending":
-            addedSql = "WHERE c.sixty_percent_payment is NULL";
+            addedSql = "WHERE c.sixty_percent_payment_amount is NULL";
             break;
         case "Current":
-            addedSql = "WHERE c.sixty_percent_payment is not NULL";
+            addedSql = "WHERE c.sixty_percent_payment_amount is not NULL";
             break;
         default:
             addedSql = "";
             break;
     }
     console.log("status: " + status);
+    //console.log("Added SQL: " + addedSql);
 
     var sqlSelect =
         `SELECT 
@@ -76,6 +77,8 @@ function getChqApproval(req, res, db) {
             on c.order_job_number = concat(r.order_number, '-', r.job_number) ` +
         addedSql +
         ";";
+
+    //console.log("SQL Select: " + sqlSelect);
     db.query(sqlSelect, [addedSql], (err, result) => {
         res.send(result);
     });
