@@ -130,11 +130,13 @@ const EditTableRow = ({
                             : "cursor-not-allowed border-red-600"
                     }`}
                     name="payment"
-                    value={editFormData.payment || "Part"}
+                    value={editFormData.payment || "default"}
                     onChange={handleEditFormChange}
                     disabled={original_role === "admin" ? false : true}
                 >
-                    <option value="Part">Part</option>
+                    <option value="Part" selected>
+                        Part
+                    </option>
                     <option value="Full">Full</option>
                 </select>
             </td>
