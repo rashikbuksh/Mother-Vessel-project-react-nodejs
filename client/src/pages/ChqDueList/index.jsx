@@ -54,6 +54,7 @@ const App = () => {
     const [ChqList, setChqList] = useState([]);
     const [laNames, setLaNames] = useState([]);
     const [filterByLA, setFilterByLA] = useState("");
+    const [btnPayClicked, setBtnPayClicked] = useState(false);
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
@@ -126,27 +127,29 @@ const App = () => {
         amount: "",
     });
 
+    const [paymentModalData, setPaymentModalData] = useState({
+        order_job_number: "",
+        LA_name: "",
+        LV_name: "",
+        commodity: "",
+        mode: "",
+        chq_issue_date: "",
+        chq_amount: "",
+        part_pay: "",
+        balance: "",
+        payment: "",
+        amount: "",
+        payment_chq_no: "",
+        payment_chq_amount: "",
+        payment_chq_date: "",
+    });
+
     //modified id status
     const [editChqOrderJobNumber, setEditChqOrderJobNumber] = useState(null);
     const [editChqMode, setEditChqMode] = useState(null);
 
     //changeHandler
     //Update state with input data
-    const handleAddFormChange = (event) => {
-        event.preventDefault();
-
-        //fullname, address, phoneNumber, email
-        const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
-        const fieldValue = event.target.value;
-
-        const newFormData = { ...addFormData };
-        newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
-
-        setAddFormData(newFormData);
-    };
 
     //Update status with correction data
     const handleEditFormChange = (event) => {
@@ -163,57 +166,6 @@ const App = () => {
 
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
-    const handleAddFormSubmit = (event) => {
-        event.preventDefault(); // ???
-
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newChq = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
-            LA_name: addFormData.LA_name,
-            LV_name: addFormData.LV_name,
-            commodity: addFormData.commodity,
-            mode: addFormData.mode,
-            chq_amount: addFormData.chq_amount,
-            part_pay: addFormData.part_pay,
-            balance: addFormData.balance,
-            chq_issue_date: addFormData.chq_issue_date,
-            init_amount: addFormData.init_amount,
-            payment: addFormData.payment,
-            final_amount: addFormData.final_amount,
-        };
-
-        //const current = new Date();
-        //const order_number_auto = newChq.importer_name+'-'+current.getDate().toLocaleString()+'-'+newChq.mother_vessel_name+'-'+newChq.mv_location
-        //console.log(order_number_auto)
-
-        // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertchq`, {
-            order_number: newChq.order_number, //handleAddFormChange로 받은 새 데이터
-            LA_name: newChq.LA_name,
-            LV_name: newChq.LV_name,
-            commodity: newChq.commodity,
-            mode: newChq.mode,
-            chq_amount: newChq.chq_amount,
-            part_pay: newChq.part_pay,
-            balance: newChq.balance,
-            chq_issue_date: newChq.chq_issue_date,
-            init_amount: newChq.init_amount,
-            payment: newChq.payment,
-            final_amount: newChq.final_amount,
-        });
-
-        //ChqList의 초기값은 data.json 데이터
-        // new start
-        const newTableData = [...tableData, newChq];
-        // new end
-        setChqList(newTableData);
-
-        // close modal
-        closeModal();
-
-        // toast
-        success("Chq added successfully");
-    };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
@@ -303,6 +255,132 @@ const App = () => {
         setChqList(newChqList);
     };
 
+    const handlePaymentOpenModal = (event, Chq) => {
+        event.preventDefault(); // ???
+
+        setEditChqOrderJobNumber(Chq.order_job_number);
+        setEditChqMode(Chq.mode);
+
+        const formValues = {
+            order_job_number: Chq.order_job_number,
+            LA_name: Chq.LA_name,
+            LV_name: Chq.LV_name,
+            commodity: Chq.commodity,
+            mode: Chq.mode,
+            chq_issue_date: Chq.chq_issue_date,
+            chq_amount: Chq.chq_amount,
+            part_pay: Chq.part_pay,
+            balance: Chq.chq_amount - Chq.part_pay,
+            payment: Chq.payment,
+            amount: Chq.amount,
+            payment_chq_no: "",
+            payment_chq_amount: Chq.amount,
+            payment_chq_date: "",
+        };
+        setPaymentModalData(formValues);
+        openModal();
+    };
+
+    const handlePaymentModalFormChange = (event) => {
+        event.preventDefault();
+
+        const fieldName = event.target.getAttribute("name");
+
+        const fieldValue = event.target.value;
+
+        const newFormData = { ...paymentModalData };
+        newFormData[fieldName] = fieldValue;
+
+        setPaymentModalData(newFormData);
+    };
+
+    const handlePaymentModalFormSubmit = (event) => {
+        event.preventDefault(); // ???
+
+        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
+        const newPay = {
+            order_job_number: paymentModalData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: paymentModalData.LA_name,
+            LV_name: paymentModalData.LV_name,
+            commodity: paymentModalData.commodity,
+            mode: paymentModalData.mode,
+            chq_issue_date: paymentModalData.chq_issue_date,
+            chq_amount: paymentModalData.chq_amount,
+            part_pay: paymentModalData.part_pay,
+            balance: paymentModalData.balance,
+            payment: paymentModalData.payment,
+            amount: paymentModalData.amount,
+            payment_chq_no: paymentModalData.payment_chq_no,
+            payment_chq_amount: paymentModalData.payment_chq_amount,
+            payment_chq_date: paymentModalData.payment_chq_date,
+        };
+
+        // api call
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/insertpayment`,
+            {
+                order_job_number: newPay.order_job_number, //handleAddFormChange로 받은 새 데이터
+                LA_name: newPay.LA_name,
+                LV_name: newPay.LV_name,
+                commodity: newPay.commodity,
+                mode: newPay.mode,
+                chq_issue_date: newPay.chq_issue_date,
+                chq_amount: newPay.chq_amount,
+                part_pay: newPay.part_pay,
+                balance: newPay.balance,
+                payment: newPay.payment,
+                amount: newPay.amount,
+                payment_chq_no: newPay.payment_chq_no,
+                payment_chq_amount: newPay.payment_chq_amount,
+                payment_chq_date: newPay.payment_chq_date,
+            }
+        );
+
+        const editedChq = {
+            order_job_number: newPay.order_job_number,
+            LA_name: newPay.LA_name,
+            LV_name: newPay.LV_name,
+            commodity: newPay.commodity,
+            mode: newPay.mode,
+            chq_amount: newPay.chq_amount,
+            chq_issue_date: newPay.chq_issue_date,
+            part_pay: newPay.part_pay + newPay.amount,
+            balance: newPay.chq_amount - (newPay.part_pay + newPay.amount),
+            payment: null,
+            amount: null,
+        };
+
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatechqPartPay`,
+            {
+                new_order_job_number: editedChq.order_job_number,
+                new_mode: editedChq.mode,
+                new_part_pay: editedChq.part_pay,
+                new_payment: editedChq.payment,
+                new_amount: editedChq.amount,
+            }
+        );
+
+        // these 3 lines will be replaced // new start
+        const index = tableData.findIndex(
+            (td) =>
+                td.order_job_number === editChqOrderJobNumber &&
+                td.mode === editChqMode
+        );
+        tableData[index] = editedChq;
+        setChqList(tableData);
+
+        setBtnPayClicked(false);
+        setEditChqOrderJobNumber(null);
+        setEditChqMode(null);
+
+        // close modal
+        closeModal();
+
+        // toast
+        success("Pay added successfully");
+    };
+
     // modal for add Chq
     let [isOpen, setIsOpen] = useState(false);
 
@@ -311,39 +389,9 @@ const App = () => {
     }
 
     function openModal() {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-            .then((res) => res.json())
-            .then((data) => {
-                setOrderJobList(data);
-                console.log(data);
-            });
         setIsOpen(true);
+        setBtnPayClicked(true);
     }
-    useEffect(() => {
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getLvToChqDue?order_number=${addFormData.order_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.LA_name = item.LA_name;
-                    addFormData.LV_name = item.LV_name;
-                });
-            });
-
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getComodityToChqDue?order_number=${addFormData.order_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.commodity = item.commodity;
-                });
-            });
-
-        // console.log("addFormData", addFormData);
-    }, [addFormData.order_number]);
-    // console.log("laNames", laNames);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -399,7 +447,8 @@ const App = () => {
                                 >
                                     {editChqOrderJobNumber ===
                                         Chq.order_job_number &&
-                                    editChqMode === Chq.mode ? (
+                                    editChqMode === Chq.mode &&
+                                    !btnPayClicked ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             handleEditFormChange={
@@ -415,6 +464,9 @@ const App = () => {
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
+                                            }
+                                            handlePaymentOpenModal={
+                                                handlePaymentOpenModal
                                             }
                                         />
                                     )}
@@ -464,7 +516,7 @@ const App = () => {
                                             as="h3"
                                             className="mb-4 text-left text-3xl font-medium text-gray-900"
                                         >
-                                            Add Chq
+                                            Add Payment
                                             <button
                                                 className="float-right"
                                                 onClick={closeModal}
@@ -475,26 +527,97 @@ const App = () => {
                                         {/* // new end */}
 
                                         <form
-                                            onSubmit={handleAddFormSubmit}
+                                            onSubmit={
+                                                handlePaymentModalFormSubmit
+                                            }
                                             className="flex flex-col gap-4"
                                         >
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Number
+                                                    Order Job Number
                                                 </label>
-                                                {orderJobList && (
-                                                    <Select
-                                                        options={orderJobList}
-                                                        name="order_number"
-                                                        addFormData={
-                                                            addFormData
-                                                        }
-                                                        setAddFormData={
-                                                            setAddFormData
-                                                        }
-                                                        isAddFromData={true}
-                                                    />
-                                                )}
+                                                <input
+                                                    type="text"
+                                                    name="order_job_number"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.order_job_number
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    LV Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="LV_name"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.LV_name
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    LA Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="LA_name"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.LA_name
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Commodity
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="commodity"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.commodity
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    chq_issue_date
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="chq_issue_date"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={paymentModalData.chq_issue_date.slice(
+                                                        0,
+                                                        10
+                                                    )}
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
@@ -504,107 +627,131 @@ const App = () => {
                                                     type="text"
                                                     name="mode"
                                                     onChange={
-                                                        handleAddFormChange
+                                                        handlePaymentModalFormChange
                                                     }
-                                                    required
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.mode
+                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Chq Amount
+                                                    Amount
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="chq_amount"
+                                                    name="amount"
                                                     onChange={
-                                                        handleAddFormChange
+                                                        handlePaymentModalFormChange
                                                     }
-                                                    required
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.amount
+                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Part Pay
+                                                    Part payment
                                                 </label>
                                                 <input
                                                     type="text"
                                                     name="part_pay"
                                                     onChange={
-                                                        handleAddFormChange
+                                                        handlePaymentModalFormChange
                                                     }
-                                                    required
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.part_pay
+                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Balance
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="balance"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Chq Issue Date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="chq_issue_date"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Iniial Amount
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="init_amount"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Payment
+                                                    payment
                                                 </label>
                                                 <input
                                                     type="text"
                                                     name="payment"
                                                     onChange={
-                                                        handleAddFormChange
+                                                        handlePaymentModalFormChange
                                                     }
-                                                    required
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.payment
+                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Final Amount
+                                                    balance
                                                 </label>
                                                 <input
-                                                    type="number"
-                                                    name="final_amount"
+                                                    type="text"
+                                                    name="balance"
                                                     onChange={
-                                                        handleAddFormChange
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.balance
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    payment chq no
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="payment_chq_no"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
                                                     }
                                                     required
+                                                    value={
+                                                        paymentModalData.payment_chq_no
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    payment_chq_amount
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="payment_chq_amount"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    disabled
+                                                    value={
+                                                        paymentModalData.payment_chq_amount
+                                                    }
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    payment_chq_date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="payment_chq_date"
+                                                    onChange={
+                                                        handlePaymentModalFormChange
+                                                    }
+                                                    required
+                                                    value={
+                                                        paymentModalData.payment_chq_date
+                                                    }
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
