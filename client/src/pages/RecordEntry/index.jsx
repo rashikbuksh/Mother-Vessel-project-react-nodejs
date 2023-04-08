@@ -5,7 +5,6 @@ import EditableRow from "./TableRows/EditTableRow";
 import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 
@@ -202,7 +201,7 @@ const App = () => {
         };
 
         newRecord.job_number = JobNumberMax[0]?.max_job_number + 1;
-        console.log(newRecord.job_number);
+        newRecord.LA_name = enabled ? "KEL-BD" : newRecord.LA_name;
 
         // api call
         Axios.post(`${process.env.REACT_APP_API_URL}/management/recordentry`, {
@@ -254,9 +253,6 @@ const App = () => {
             LV_master_name: editFormData.LV_master_name,
             LV_master_contact_number: editFormData.LV_master_contact_number,
         };
-
-        editedRecord.LA_name = enabled ? "KEL-BD" : editedRecord.LA_name;
-        console.log("editedRecord.LA_name" + editedRecord.LA_name);
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updaterecordentry`,

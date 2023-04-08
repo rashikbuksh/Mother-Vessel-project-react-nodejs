@@ -47,6 +47,7 @@ const {
     addChqDue,
     getChqDue,
     updateChqDue,
+    updateChqDuePartPay,
     deleteChqDue,
     getLvToChqDue,
     getComodityToChqDue,
@@ -240,6 +241,10 @@ app.post("/management/deletechq", (req, res) => {
 app.post("/management/updatechq", (req, res) => {
     updateChqDue(req, res, db);
 });
+app.post("/management/updatechqPartPay", (req, res) => {
+    updateChqDuePartPay(req, res, db);
+});
+
 // get Lv for chq due
 app.get("/management/getLvToChqDue", (req, res) => {
     getLvToChqDue(req, res, db);

@@ -2,39 +2,34 @@ function addPayment(req, res, db) {
     //console.log("submit in backend");
     const order_job_number = req.body.order_job_number;
     const LV_name = req.body.LV_name;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const MV_name = req.body.MV_name;
+    const LA_name = req.body.LA_name;
     const commodity = req.body.commodity;
-    const chq_no = req.body.chq_no;
     const chq_issue_date = req.body.chq_issue_date;
     const amount = req.body.amount;
     const part_pay = req.body.part_pay;
-    const payment_approved = req.body.payment_approved;
+    const payment = req.body.payment;
     const balance = req.body.balance;
     const payment_chq_no = req.body.payment_chq_no;
     const payment_chq_amount = req.body.payment_chq_amount;
     const payment_chq_date = req.body.payment_chq_date;
-    const added_date = req.body.added_date;
+
     const create_chq =
-        "INSERT INTO payment (order_job_number, LV_name, date_from_charpotro, MV_name, commodity, chq_no, chq_issue_date, amount, part_pay, payment_approved, balance, payment_chq_no, payment_chq_amount, payment_chq_date, added_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO payment (order_job_number, LA_name, LV_name, commodity, chq_issue_date, amount, part_pay, payment, balance, payment_chq_no, payment_chq_amount, payment_chq_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_chq,
         [
             order_job_number,
+            LA_name,
             LV_name,
-            date_from_charpotro,
-            MV_name,
             commodity,
-            chq_no,
             chq_issue_date,
             amount,
             part_pay,
-            payment_approved,
+            payment,
             balance,
             payment_chq_no,
             payment_chq_amount,
             payment_chq_date,
-            added_date,
         ],
         (err, result) => {
             if (err) console.log(err);

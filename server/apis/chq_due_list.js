@@ -136,6 +136,27 @@ function updateChqDue(req, res, db) {
         }
     );
 }
+function updateChqDuePartPay(req, res, db) {
+    //console.log("update job info in backend");
+    const order_job_number = req.body.new_order_job_number;
+    const mode = req.body.new_mode;
+    const part_pay = req.body.new_part_pay;
+    const amount = req.body.new_amount;
+    const payment = req.body.new_payment;
+
+    console.log("updateChqDue: " + order_job_number + " " + mode);
+
+    const sqlUpdate =
+        "UPDATE chq_due_list SET part_pay=?, payment=?, amount=? WHERE order_job_number=? and mode=?";
+    db.query(
+        sqlUpdate,
+        [part_pay, payment, amount, order_job_number, mode],
+        (err, result) => {
+            if (err) console.log(err);
+            res.send(result);
+        }
+    );
+}
 function deleteChqDue(req, res, db) {
     console.log("Delete status in backend");
     const id = req.body.Chq_id;
@@ -206,6 +227,7 @@ order by
 module.exports.addChqDue = addChqDue;
 module.exports.getChqDue = getChqDue;
 module.exports.updateChqDue = updateChqDue;
+module.exports.updateChqDuePartPay = updateChqDuePartPay;
 module.exports.deleteChqDue = deleteChqDue;
 module.exports.getLvToChqDue = getLvToChqDue;
 module.exports.getComodityToChqDue = getComodityToChqDue;
