@@ -53,6 +53,7 @@ const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
     const [laNames, setLaNames] = useState([]);
+    const [filterByLA, setFilterByLA] = useState("");
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
@@ -66,10 +67,12 @@ const App = () => {
         if (query !== "" && cursorPos !== 1) {
             setCursorPos(1);
         }
-        const res = items.filter((item) =>
-            Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
-            )
+        const res = items.filter(
+            (item) =>
+                item.LA_name.includes(filterByLA) &&
+                Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                    item[parameter]?.toString().toLowerCase().includes(query)
+                )
         );
         return res.slice(
             (cursorPos - 1) * pageSize,
@@ -82,7 +85,6 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
-                console.log(data);
             });
         fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
             .then((res) => res.json())
@@ -371,10 +373,8 @@ const App = () => {
                 {laNames && (
                     <Select
                         options={laNames}
-                        name="order_number"
-                        addFormData={addFormData}
-                        setAddFormData={setAddFormData}
-                        isAddFromData={true}
+                        isSetItems={true}
+                        setItems={setFilterByLA}
                     />
                 )}
             </div>
