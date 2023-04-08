@@ -4,7 +4,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 export default function Select({
     options,
-    name,
+    name = "",
     value = "",
     addFormData,
     setAddFormData,
@@ -13,6 +13,8 @@ export default function Select({
     setEditFormData,
     isEditFormData = false,
     isDisabled = true,
+    setItems,
+    isSetItems = false,
 }) {
     options = [...new Set(options)];
 
@@ -29,6 +31,10 @@ export default function Select({
         const newFormData = { ...editFormData };
         newFormData[name] = selected;
         setEditFormData(newFormData);
+    }
+
+    if (isSetItems) {
+        setItems(selected);
     }
 
     const onInputFocus = (event) => {
@@ -50,7 +56,7 @@ export default function Select({
               });
 
     return (
-        <div className="z-20 w-full">
+        <div className="z-20">
             <Combobox value={selected} onChange={setSelected}>
                 <div className="relative">
                     <div className="peer relative w-full rounded-md bg-gray-50 capitalize outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400">

@@ -43,7 +43,7 @@ const TableHeader = [
     { id: 7, name: "Chq Amount", accessor: "chq_amount" },
     { id: 8, name: "Part Pay", accessor: "part_pay" },
     { id: 9, name: "Balance", accessor: "balance", sortable: true },
-    { id: 11, name: "Amount", accessor: "init_amount" },
+    // { id: 11, name: "Amount", accessor: "init_amount" },
     { id: 12, name: "Payment", accessor: "payment" },
     { id: 13, name: "Amount", accessor: "final_amount" },
     { id: 14, name: "Actions" },
@@ -53,6 +53,7 @@ const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
     const [laNames, setLaNames] = useState([]);
+    const [filterByLA, setFilterByLA] = useState("");
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
@@ -66,10 +67,12 @@ const App = () => {
         if (query !== "" && cursorPos !== 1) {
             setCursorPos(1);
         }
-        const res = items.filter((item) =>
-            Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
-            )
+        const res = items.filter(
+            (item) =>
+                item.LA_name.includes(filterByLA) &&
+                Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                    item[parameter]?.toString().toLowerCase().includes(query)
+                )
         );
         return res.slice(
             (cursorPos - 1) * pageSize,
@@ -82,7 +85,6 @@ const App = () => {
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
-                console.log(data);
             });
         fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
             .then((res) => res.json())
@@ -120,7 +122,6 @@ const App = () => {
         chq_amount: "",
         chq_issue_date: "",
         part_pay: "",
-        balance: "",
         payment: "Part",
         amount: "",
     });
@@ -227,11 +228,10 @@ const App = () => {
             chq_amount: editFormData.chq_amount,
             chq_issue_date: editFormData.chq_issue_date,
             part_pay: editFormData.part_pay,
-            balance: editFormData.balance,
+            balance: editFormData.chq_amount - editFormData.part_pay,
             payment: editFormData.payment,
             amount: editFormData.amount,
         };
-        console.log(editedChq.payment);
         editedChq.payment =
             editedChq.payment == null ? "Part" : editedChq.payment;
 
@@ -349,7 +349,7 @@ const App = () => {
     return (
         <div className="m-2 mt-2">
             {/* {laNames && <Tabs tabHeaders={laNames} />} */}
-            <div className="my-2 mx-auto flex justify-center">
+            <div className="my-2 mx-auto flex justify-between">
                 <Pagination
                     pageSize={pageSize}
                     cursorPos={cursorPos}
@@ -370,6 +370,13 @@ const App = () => {
                 >
                     Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button> */}
+                {laNames && (
+                    <Select
+                        options={laNames}
+                        isSetItems={true}
+                        setItems={setFilterByLA}
+                    />
+                )}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">

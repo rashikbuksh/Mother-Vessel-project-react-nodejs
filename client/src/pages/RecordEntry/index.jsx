@@ -255,6 +255,9 @@ const App = () => {
             LV_master_contact_number: editFormData.LV_master_contact_number,
         };
 
+        editedRecord.LA_name = enabled ? "KEL-BD" : editedRecord.LA_name;
+        console.log("editedRecord.LA_name" + editedRecord.LA_name);
+
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updaterecordentry`,
             {
@@ -595,15 +598,39 @@ const App = () => {
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Lighter Vessel Name
                                                 </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Lighter Vessel Name"
-                                                    className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 `}
-                                                />
+                                                {enabled ? (
+                                                    <Select
+                                                        options={[
+                                                            {
+                                                                value: "Rahim",
+                                                            },
+                                                            {
+                                                                value: "Karim",
+                                                            },
+                                                            {
+                                                                value: "Kalihati",
+                                                            },
+                                                        ]}
+                                                        name="LV_name"
+                                                        addFormData={
+                                                            addFormData
+                                                        }
+                                                        setAddFormData={
+                                                            setAddFormData
+                                                        }
+                                                        isAddFromData={true}
+                                                    />
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        name="LV_name"
+                                                        onChange={
+                                                            handleAddFormChange
+                                                        }
+                                                        placeholder="Lighter Vessel Name"
+                                                        className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 `}
+                                                    />
+                                                )}
                                             </div>
 
                                             <div className="group relative w-72 md:w-80 lg:w-96">

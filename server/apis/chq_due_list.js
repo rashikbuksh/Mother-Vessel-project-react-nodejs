@@ -69,7 +69,6 @@ function getChqDue(req, res, db) {
   ca.sixty_percent_payment_amount as chq_amount, 
   ca.sixty_percent_payment_chq_date as chq_issue_date, 
   cdl.part_pay as part_pay, 
-  cdl.balance as balance, 
   cdl.payment as payment,
   cdl.amount as amount
 FROM 
@@ -80,7 +79,7 @@ FROM
   ) 
 where 
   ca.sixty_percent_payment_amount > 0 
-  and ca.sixty_percent_payment_amount is not null 
+  and ca.sixty_percent_payment_amount is not null and cdl.mode ='60'
 UNION 
 SELECT 
   cdl.order_job_number as order_job_number, 
@@ -97,8 +96,7 @@ SELECT
   '40' as mode, 
   ca.forty_percent_payment_amount as chq_amount, 
   ca.forty_percent_payment_chq_date as chq_issue_date, 
-  cdl.part_pay as part_pay, 
-  cdl.balance as balance, 
+  cdl.part_pay as part_pay,  
   cdl.payment as payment,
   cdl.amount as amount
 FROM 
@@ -109,7 +107,7 @@ FROM
   ) 
 where 
   ca.forty_percent_payment_amount > 0 
-  and ca.forty_percent_payment_amount is not null
+  and ca.forty_percent_payment_amount is not null and cdl.mode ='40'
 order by 
   LA_name asc
             `;
@@ -178,7 +176,28 @@ function getComodityToChqDue(req, res, db) {
 }
 
 function getLANameToChqDue(req, res, db) {
-    const sqlSelect = `SELECT LA_name from record_entry order by LA_name asc`;
+    const sqlSelect = ` 
+select 
+  distinct LA_name as value 
+from 
+  record_entry 
+where 
+  LA_name in (
+    SELECT 
+      r.LA_name 
+    FROM 
+      chq_due_list cdl 
+      join chq_approval ca on cdl.order_job_number = ca.order_job_number 
+      join record_entry r on ca.order_job_number = concat(
+        r.order_number, '-', r.job_number
+      ) 
+    where 
+      cdl.mode = '60' 
+      or cdl.mode = '40'
+  ) 
+order by 
+  value asc
+`;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
