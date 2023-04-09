@@ -30,35 +30,32 @@ const TableHeader = [
         name: "Order Job Number",
         accessor: "order_job_number",
     },
-    { id: 3, name: "LV Name", accessor: "LV_name", sortable: true },
+    { id: 3, name: "LA Name", accessor: "LA_name", sortable: true },
     {
         id: 4,
-        name: "Date From Charpotro",
-        accessor: "date_from_charpotro",
+        name: "LV Name",
+        accessor: "LV_name",
         sortable: true,
     },
-    { id: 5, name: "MV Name", accessor: "MV_name" },
-    { id: 6, name: "Commodity", accessor: "commodity", sortable: true },
-    { id: 7, name: "Chq No", accessor: "chq_no" },
-    {
-        id: 8,
-        name: "Chq Issue Date",
-        accessor: "chq_issue_date",
-        sortable: true,
-    },
-    { id: 9, name: "Amount", accessor: "amount" },
-    { id: 10, name: "Part Pay", accessor: "part_pay" },
-    { id: 11, name: "Payment Approved", accessor: "payment_approved" },
-    { id: 12, name: "Balance", accessor: "balance" },
-    { id: 13, name: "Payment Chq No", accessor: "payment_chq_no" },
-    { id: 14, name: "Payment Chq Amount", accessor: "payment_chq_amount" },
+    { id: 5, name: "Commodity", accessor: "commodity", sortable: true },
+    { id: 7, name: "Cheque Issue Date", accessor: "chq_issue_date" },
+    { id: 9, name: "Part Payment", accessor: "part_pay" },
+    { id: 11, name: "Balance", accessor: "balance" },
+    { id: 12, name: "Payment", accessor: "payment" },
+    { id: 13, name: "Amount", accessor: "amount" },
+    { id: 14, name: "Payment Cheque No", accessor: "payment_chq_no" },
     {
         id: 15,
-        name: "Payment Chq Date",
+        name: "Payment Cheque Amount",
+        accessor: "payment_chq_amount",
+        sortable: true,
+    },
+    {
+        id: 16,
+        name: "Payment Cheque Date",
         accessor: "payment_chq_date",
         sortable: true,
     },
-    { id: 16, name: "Added Date", accessor: "added_date", sortable: true },
     { id: 17, name: "Actions" },
 ];
 
@@ -104,39 +101,37 @@ const App = () => {
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
         order_job_number: "",
+        LA_name: "",
         LV_name: "",
-        date_from_charpotro: "",
-        MV_name: "",
         commodity: "",
-        chq_no: "",
+        mode: "",
         chq_issue_date: "",
-        amount: "",
+        chq_amount: "",
         part_pay: "",
-        payment_approved: "",
         balance: "",
+        payment: "",
+        amount: "",
         payment_chq_no: "",
         payment_chq_amount: "",
         payment_chq_date: "",
-        added_date: "",
     });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
         order_job_number: "",
+        LA_name: "",
         LV_name: "",
-        date_from_charpotro: "",
-        MV_name: "",
         commodity: "",
-        chq_no: "",
+        mode: "",
         chq_issue_date: "",
-        amount: "",
+        chq_amount: "",
         part_pay: "",
-        payment_approved: "",
         balance: "",
+        payment: "",
+        amount: "",
         payment_chq_no: "",
         payment_chq_amount: "",
         payment_chq_date: "",
-        added_date: "",
     });
 
     //modified id status
@@ -179,56 +174,57 @@ const App = () => {
         event.preventDefault(); // ???
 
         //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-        const newPay = {
+        const editedPay = {
             order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: addFormData.LA_name,
             LV_name: addFormData.LV_name,
-            date_from_charpotro: addFormData.date_from_charpotro,
-            MV_name: addFormData.MV_name,
             commodity: addFormData.commodity,
-            chq_no: addFormData.chq_no,
+            mode: addFormData.mode,
             chq_issue_date: addFormData.chq_issue_date,
-            amount: addFormData.amount,
+            chq_amount: addFormData.chq_amount,
             part_pay: addFormData.part_pay,
-            payment_approved: addFormData.payment_approved,
             balance: addFormData.balance,
+            payment: addFormData.payment,
+            amount: addFormData.amount,
             payment_chq_no: addFormData.payment_chq_no,
             payment_chq_amount: addFormData.payment_chq_amount,
             payment_chq_date: addFormData.payment_chq_date,
-            added_date: addFormData.added_date,
         };
 
         //const current = new Date();
-        //const order_number_auto = newPay.importer_name+'-'+current.getDate().toLocaleString()+'-'+newPay.mother_vessel_name+'-'+newPay.mv_location
+        //const order_number_auto = editedPay.importer_name+'-'+current.getDate().toLocaleString()+'-'+editedPay.mother_vessel_name+'-'+editedPay.mv_location
         //console.log(order_number_auto)
 
         // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/insertpayment`, {
-            order_job_number: newPay.order_job_number, //handleAddFormChange로 받은 새 데이터
-            LV_name: newPay.LV_name,
-            date_from_charpotro: newPay.date_from_charpotro,
-            MV_name: newPay.MV_name,
-            commodity: newPay.commodity,
-            chq_no: newPay.chq_no,
-            chq_issue_date: newPay.chq_issue_date,
-            amount: newPay.amount,
-            part_pay: newPay.part_pay,
-            payment_approved: newPay.payment_approved,
-            balance: newPay.balance,
-            payment_chq_no: newPay.payment_chq_no,
-            payment_chq_amount: newPay.payment_chq_amount,
-            payment_chq_date: newPay.payment_chq_date,
-            added_date: newPay.added_date,
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/insertpayment`,
+            {
+                order_job_number: editedPay.order_job_number, //handleAddFormChange로 받은 새 데이터
+                LA_name: editedPay.LA_name,
+                LV_name: editedPay.LV_name,
+                commodity: editedPay.commodity,
+                mode: editedPay.mode,
+                chq_issue_date: editedPay.chq_issue_date,
+                chq_amount: editedPay.chq_amount,
+                part_pay: editedPay.part_pay,
+                balance: editedPay.balance,
+                payment: editedPay.payment,
+                amount: editedPay.amount,
+                payment_chq_no: editedPay.payment_chq_no,
+                payment_chq_amount: editedPay.payment_chq_amount,
+                payment_chq_date: editedPay.payment_chq_date,
+            }
+        );
 
         //PayList의 초기값은 data.json 데이터
         // new start
-        const newTableData = [...tableData, newPay];
+        const newTableData = [...tableData, editedPay];
         // new end
 
         setPayList(newTableData);
 
         // close modal
-        closeModal();
+        // closeModal();
 
         // toast
         success("Pay added successfully");
@@ -240,41 +236,42 @@ const App = () => {
 
         const editedPay = {
             id: editPayId, //initial value null
-            order_job_number: editFormData.order_job_number,
+            order_job_number: editFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
-            date_from_charpotro: editFormData.date_from_charpotro,
-            MV_name: editFormData.MV_name,
             commodity: editFormData.commodity,
-            chq_no: editFormData.chq_no,
+            mode: editFormData.mode,
             chq_issue_date: editFormData.chq_issue_date,
-            amount: editFormData.amount,
+            chq_amount: editFormData.chq_amount,
             part_pay: editFormData.part_pay,
-            payment_approved: editFormData.payment_approved,
             balance: editFormData.balance,
+            payment: editFormData.payment,
+            amount: editFormData.amount,
             payment_chq_no: editFormData.payment_chq_no,
             payment_chq_amount: editFormData.payment_chq_amount,
             payment_chq_date: editFormData.payment_chq_date,
-            added_date: editFormData.added_date,
         };
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatepayment`, {
-            id: editedPay.id,
-            new_order_job_number: editedPay.order_job_number,
-            new_LV_name: editedPay.LV_name,
-            new_date_from_charpotro: editedPay.date_from_charpotro,
-            new_MV_name: editedPay.MV_name,
-            new_commodity: editedPay.commodity,
-            new_chq_no: editedPay.chq_no,
-            new_chq_issue_date: editedPay.chq_issue_date,
-            new_amount: editedPay.amount,
-            new_part_pay: editedPay.part_pay,
-            new_payment_approved: editedPay.payment_approved,
-            new_balance: editedPay.balance,
-            new_payment_chq_no: editedPay.payment_chq_no,
-            new_payment_chq_amount: editedPay.payment_chq_amount,
-            new_payment_chq_date: editedPay.payment_chq_date,
-            new_added_date: editedPay.added_date,
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatepayment`,
+            {
+                id: editedPay.id,
+                order_job_number: editedPay.order_job_number, //handleAddFormChange로 받은 새 데이터
+                LA_name: editedPay.LA_name,
+                LV_name: editedPay.LV_name,
+                commodity: editedPay.commodity,
+                mode: editedPay.mode,
+                chq_issue_date: editedPay.chq_issue_date,
+                chq_amount: editedPay.chq_amount,
+                part_pay: editedPay.part_pay,
+                balance: editedPay.balance,
+                payment: editedPay.payment,
+                amount: editedPay.amount,
+                payment_chq_no: editedPay.payment_chq_no,
+                payment_chq_amount: editedPay.payment_chq_amount,
+                payment_chq_date: editedPay.payment_chq_date,
+            }
+        );
 
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editPayId);
@@ -292,21 +289,20 @@ const App = () => {
 
         setEditPayId(Pay.id);
         const formValues = {
-            order_job_number: Pay.order_job_number,
+            order_job_number: Pay.order_job_number, //handleAddFormChange로 받은 새 데이터
+            LA_name: Pay.LA_name,
             LV_name: Pay.LV_name,
-            date_from_charpotro: Pay.date_from_charpotro,
-            MV_name: Pay.MV_name,
             commodity: Pay.commodity,
-            chq_no: Pay.chq_no,
+            mode: Pay.mode,
             chq_issue_date: Pay.chq_issue_date,
-            amount: Pay.amount,
+            chq_amount: Pay.chq_amount,
             part_pay: Pay.part_pay,
-            payment_approved: Pay.payment_approved,
             balance: Pay.balance,
+            payment: Pay.payment,
+            amount: Pay.amount,
             payment_chq_no: Pay.payment_chq_no,
             payment_chq_amount: Pay.payment_chq_amount,
             payment_chq_date: Pay.payment_chq_date,
-            added_date: Pay.added_date,
         };
         setEditFormData(formValues);
     };
@@ -318,19 +314,22 @@ const App = () => {
 
     // delete
     const handleDeleteClick = (PayId) => {
-        const newPayList = [...PayList];
+        const editedPayList = [...PayList];
         const index = PayList.findIndex((Pay) => Pay.id === PayId);
         //console.log("Deleting Pay with id: " + PayId);
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletepayment`, {
-            Pay_id: PayId,
-        }).then((response) => {
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/deletepayment`,
+            {
+                Pay_id: PayId,
+            }
+        ).then((response) => {
             if (response.data == "success") {
                 success("Pay deleted successfully");
             }
         });
 
-        newPayList.splice(index, 1);
-        setPayList(newPayList);
+        editedPayList.splice(index, 1);
+        setPayList(editedPayList);
     };
 
     const filteredPay =
@@ -344,67 +343,15 @@ const App = () => {
               );
 
     // modal for add Pay
-    let [isOpen, setIsOpen] = useState(false);
+    // let [isOpen, setIsOpen] = useState(false);
 
-    function closeModal() {
-        setIsOpen(false);
-    }
+    // function closeModal() {
+    //     setIsOpen(false);
+    // }
 
-    function openModal() {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-            .then((res) => res.json())
-            .then((data) => {
-                setOrderJobList(data);
-                console.log(data);
-            });
-        setIsOpen(true);
-    }
-
-    useEffect(() => {
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getCharpotroLvToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.date_from_charpotro = item.date_from_charpotro;
-                    addFormData.LV_name = item.LV_name;
-                });
-            });
-
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.MV_name = item.MV_name;
-                });
-            });
-
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.commodity = item.commodity;
-                });
-            });
-
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getChqissuePartpayBalanceToPayment?order_job_number=${addFormData.order_job_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                data?.map((item) => {
-                    addFormData.chq_issue_date = item.chq_issue_date;
-                    addFormData.part_pay = item.part_pay;
-                    addFormData.balance = item.balance;
-                });
-            });
-        console.log("addFormData", addFormData);
-    }, [addFormData.order_job_number]);
+    // function openModal() {
+    //     setIsOpen(true);
+    // }
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
@@ -424,14 +371,14 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                <button
+                {/* <button
                     // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
                     Add Payment{" "}
                     <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button>
+                </button> */}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
@@ -481,7 +428,7 @@ const App = () => {
             {/* // new end */}
 
             {/* add item modal */}
-            <Suspense fallback={<Loader />}>
+            {/* <Suspense fallback={<Loader />}>
                 <Transition appear show={isOpen} as={Fragment}>
                     <Dialog
                         as="div"
@@ -514,7 +461,6 @@ const App = () => {
                                     leaveTo="opacity-0 scale-95"
                                 >
                                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        {/* // new start */}
                                         <Dialog.Title
                                             as="h3"
                                             className="mb-4 text-left text-3xl font-medium text-gray-900"
@@ -527,7 +473,6 @@ const App = () => {
                                                 <MdClose className="inline text-red-600" />
                                             </button>
                                         </Dialog.Title>
-                                        {/* // new end */}
                                         <form
                                             onSubmit={handleAddFormSubmit}
                                             className="flex flex-col gap-4"
@@ -657,7 +602,7 @@ const App = () => {
                         </div>
                     </Dialog>
                 </Transition>
-            </Suspense>
+            </Suspense> */}
 
             {/* toast  */}
             <ToastContainer closeOnClick />

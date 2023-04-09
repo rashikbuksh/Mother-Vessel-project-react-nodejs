@@ -344,11 +344,12 @@ const App = () => {
             mode: newPay.mode,
             chq_amount: newPay.chq_amount,
             chq_issue_date: newPay.chq_issue_date,
-            part_pay: newPay.part_pay + newPay.amount,
+            part_pay: newPay.part_pay + +newPay.amount,
             balance: newPay.chq_amount - (newPay.part_pay + newPay.amount),
             payment: null,
             amount: null,
         };
+        console.log("editedChq Part Pay: ", editedChq.part_pay);
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updatechqPartPay`,
@@ -641,7 +642,7 @@ const App = () => {
                                                     Amount
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     name="amount"
                                                     onChange={
                                                         handlePaymentModalFormChange
@@ -658,7 +659,7 @@ const App = () => {
                                                     Part payment
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     name="part_pay"
                                                     onChange={
                                                         handlePaymentModalFormChange

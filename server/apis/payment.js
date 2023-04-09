@@ -38,7 +38,7 @@ function addPayment(req, res, db) {
     );
 }
 function getPayment(req, res, db) {
-    const sqlSelect = "SELECT * from payment";
+    const sqlSelect = `SELECT id, order_job_number, payment_chq_no,payment_chq_amount, payment_chq_date, LV_name, LA_name, commodity, chq_issue_date, amount, part_pay, payment, balance FROM payment`;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
@@ -60,7 +60,6 @@ function updatePayment(req, res, db) {
     const payment_chq_no = req.body.new_payment_chq_no;
     const payment_chq_amount = req.body.new_payment_chq_amount;
     const payment_chq_date = req.body.new_payment_chq_date;
-    const added_date = req.body.new_added_date;
     const sqlUpdate =
         "UPDATE payment SET order_job_number=?, LV_name=?, date_from_charpotro=?, MV_name=?, commodity=?, chq_no=?, chq_issue_date=?, amount=?, part_pay=?, payment_approved=?, balance=?, payment_chq_no=?, payment_chq_amount=?, payment_chq_date=?, added_date=? WHERE id=?";
     db.query(
