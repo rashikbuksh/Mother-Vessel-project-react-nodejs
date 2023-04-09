@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2023 at 09:21 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Apr 09, 2023 at 07:29 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,7 @@ CREATE TABLE `chq_approval` (
   `sixty_percent_payment_chq_date` date DEFAULT NULL,
   `forty_percent_payment_chq_number` varchar(255) DEFAULT NULL,
   `forty_percent_payment_chq_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `chq_approval`
@@ -103,22 +103,22 @@ DELIMITER ;
 CREATE TABLE `chq_due_list` (
   `id` int(11) NOT NULL,
   `order_job_number` varchar(255) NOT NULL,
-  `part_pay` varchar(255) DEFAULT NULL,
+  `part_pay` double DEFAULT NULL,
   `payment` varchar(255) DEFAULT NULL,
   `mode` varchar(255) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `chq_due_list`
 --
 
 INSERT INTO `chq_due_list` (`id`, `order_job_number`, `part_pay`, `payment`, `mode`, `amount`) VALUES
-(9, 'Anik-13/3/2023-Paharika-Srilanka-1', '100490', NULL, '60', NULL),
-(10, 'Prime-21/3/2023-Uddoyon-Srilanka-2', '100200', NULL, '60', NULL),
-(11, 'Prime-21/3/2023-Uddoyon-Srilanka-2', NULL, 'Part', '40', 500),
-(12, 'Anik-13/3/2023-Paharika-Srilanka-2', NULL, NULL, '60', NULL),
-(13, 'Anik-13/3/2023-Paharika-Srilanka-2', NULL, NULL, '40', NULL);
+(9, 'Anik-13/3/2023-Paharika-Srilanka-1', 3000, NULL, '60', NULL),
+(10, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 300, NULL, '60', NULL),
+(11, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 500, NULL, '40', NULL),
+(12, 'Anik-13/3/2023-Paharika-Srilanka-2', 300, NULL, '60', NULL),
+(13, 'Anik-13/3/2023-Paharika-Srilanka-2', 300, NULL, '40', NULL);
 
 -- --------------------------------------------------------
 
@@ -133,7 +133,7 @@ CREATE TABLE `current_status` (
   `remark` varchar(100) DEFAULT NULL,
   `time_updated` datetime NOT NULL DEFAULT current_timestamp(),
   `trip_completed` int(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `current_status`
@@ -173,7 +173,7 @@ CREATE TABLE `damarage_dispatch` (
   `free_time` time DEFAULT NULL,
   `total_despatch` int(11) DEFAULT NULL,
   `daily_despatch` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `damarage_dispatch`
@@ -207,7 +207,7 @@ CREATE TABLE `job_entry` (
   `stevedore_name` varchar(50) NOT NULL,
   `stevedore_contact_number` varchar(20) NOT NULL,
   `time_stamp` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `job_entry`
@@ -248,7 +248,7 @@ CREATE TABLE `order_job_table` (
   `order_number_done` int(11) NOT NULL DEFAULT 0,
   `sixty_percent_done` int(11) NOT NULL DEFAULT 0,
   `job_completed` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `order_job_table`
@@ -286,7 +286,7 @@ CREATE TABLE `payment` (
   `part_pay` varchar(255) NOT NULL,
   `payment` varchar(255) NOT NULL,
   `balance` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `payment`
@@ -294,7 +294,15 @@ CREATE TABLE `payment` (
 
 INSERT INTO `payment` (`id`, `order_job_number`, `payment_chq_no`, `payment_chq_amount`, `payment_chq_date`, `LV_name`, `LA_name`, `commodity`, `chq_issue_date`, `amount`, `part_pay`, `payment`, `balance`) VALUES
 (3, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 222, 2222, '2023-04-29 00:00:00', 'Mayer Dua', 'Amar Dua', 'Suger', '2023-04-23T18:00:00.000Z', '200', '100', 'Part', '300'),
-(4, 'Anik-13/3/2023-Paharika-Srilanka-1', 111, 490, '2023-04-26 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '490', '100', 'Part', '4900');
+(4, 'Anik-13/3/2023-Paharika-Srilanka-1', 111, 490, '2023-04-26 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '490', '100', 'Part', '4900'),
+(5, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-26T18:00:00.000Z', '100', '100', 'Part', '400'),
+(6, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-26T18:00:00.000Z', '100', '200', 'Part', '200'),
+(7, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-25T18:00:00.000Z', '100', '200', 'Part', '300'),
+(8, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 10, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '10', '590', 'Part', '4410'),
+(9, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 400, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '400', '600', 'Part', '4400'),
+(10, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 500, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '500', '1000', 'Part', '4000'),
+(11, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 500, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '500', '1500', 'Part', '3500'),
+(12, 'Anik-13/3/2023-Paharika-Srilanka-1', 321654, 1000, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '1000', '2000', 'Part', '3000');
 
 -- --------------------------------------------------------
 
@@ -313,7 +321,7 @@ CREATE TABLE `pre_defined_ship` (
   `current_location` varchar(50) DEFAULT NULL,
   `remark` varchar(100) DEFAULT NULL,
   `time_updated` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pre_defined_ship`
@@ -343,7 +351,7 @@ CREATE TABLE `record_entry` (
   `LV_master_name` varchar(50) NOT NULL,
   `LV_master_contact_number` varchar(15) NOT NULL,
   `date_created` date NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `record_entry`
@@ -397,7 +405,7 @@ CREATE TABLE `users` (
   `department` varchar(50) NOT NULL,
   `user_created_time` datetime NOT NULL DEFAULT current_timestamp(),
   `enabled` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -521,7 +529,7 @@ ALTER TABLE `order_job_table`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pre_defined_ship`
