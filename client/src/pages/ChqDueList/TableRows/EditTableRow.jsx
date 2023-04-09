@@ -92,7 +92,7 @@ const EditTableRow = ({
             <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
+                    type="number"
                     disabled
                     placeholder="Enter part pay..."
                     name="part_pay"

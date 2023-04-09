@@ -16,34 +16,27 @@ const ReadOnlyRow = ({ Pay, handleEditClick, handleDeleteClick }) => {
                     {Pay.order_job_number}
                 </span>
             </td>
+            <td className={clsName}>{Pay.LA_name}</td>
             <td className={clsName}>{Pay.LV_name}</td>
-            <td className={clsName}>
-                <DateTime date={Pay.date_from_charpotro} />
-            </td>
-            <td className={clsName}>{Pay.MV_name}</td>
             <td className={`text-center ${clsName}`}>
                 {" "}
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {Pay.commodity}
                 </span>
             </td>
-            <td className={`text-center ${clsName}`}>{Pay.chq_no}</td>
             <td className={clsName}>
                 <DateTime date={Pay.chq_issue_date} />
             </td>
-            <td className={`text-center ${clsName}`}>{Pay.amount}</td>
             <td className={`text-center ${clsName}`}>{Pay.part_pay}</td>
-            <td className={`text-center ${clsName}`}>{Pay.payment_approved}</td>
             <td className={`text-center ${clsName}`}>{Pay.balance}</td>
+            <td className={`text-center ${clsName}`}>{Pay.payment}</td>
+            <td className={`text-center ${clsName}`}>{Pay.amount}</td>
             <td className={`text-center ${clsName}`}>{Pay.payment_chq_no}</td>
             <td className={`text-center ${clsName}`}>
                 {Pay.payment_chq_amount}
             </td>
             <td className={clsName}>
                 <DateTime date={Pay.payment_chq_date} />
-            </td>
-            <td className={clsName}>
-                <DateTime date={Pay.added_date} />
             </td>
             <td className={clsName}>
                 <button

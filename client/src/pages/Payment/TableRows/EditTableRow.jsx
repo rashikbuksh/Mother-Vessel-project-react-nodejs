@@ -27,20 +27,20 @@ const EditTableRow = ({
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
-                    placeholder="Enter LV name..."
+                    placeholder="Enter LA name..."
+                    name="LA_name"
+                    value={editFormData.LA_name}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
+                    disabled
+                    placeholder="Enter LV Name..."
                     name="LV_name"
-                    value={editFormData.MV_name}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="date"
-                    disabled
-                    placeholder="Enter date from charpotro..."
-                    name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
+                    value={editFormData.LV_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -49,18 +49,7 @@ const EditTableRow = ({
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
                     disabled
-                    placeholder="Enter MV name..."
-                    name="MV_name"
-                    value={editFormData.MV_name}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
-                    disabled
-                    placeholder="Enter commodity..."
+                    placeholder="Enter Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
                     onChange={handleEditFormChange}
@@ -69,20 +58,9 @@ const EditTableRow = ({
             <td>
                 <input
                     className={clsName}
-                    type="number"
-                    required
-                    placeholder="Enter chq no..."
-                    name="chq_no"
-                    value={editFormData.chq_no}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
                     type="date"
-                    disabled
-                    placeholder="Enter chq issue date..."
+                    required
+                    placeholder="Enter chq_issue_date..."
                     name="chq_issue_date"
                     value={editFormData.chq_issue_date.slice(0, 10)}
                     onChange={handleEditFormChange}
@@ -93,17 +71,6 @@ const EditTableRow = ({
                     className={clsName}
                     type="number"
                     required
-                    placeholder="Enter amount..."
-                    name="amount"
-                    value={editFormData.amount}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="number"
-                    disabled
                     placeholder="Enter part pay..."
                     name="part_pay"
                     value={editFormData.part_pay}
@@ -112,12 +79,23 @@ const EditTableRow = ({
             </td>
             <td>
                 <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="number"
+                    disabled
+                    placeholder="Enter balance..."
+                    name="balance"
+                    value={editFormData.balance}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
                     className={clsName}
                     type="number"
                     required
-                    placeholder="Enter payment_approved..."
-                    name="payment_approved"
-                    value={editFormData.payment_approved}
+                    placeholder="Enter payment..."
+                    name="payment"
+                    value={editFormData.payment}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -165,18 +143,6 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                <input
-                    className={clsName}
-                    type="date"
-                    required
-                    placeholder="Enter added date..."
-                    name="added_date"
-                    value={editFormData.added_date.slice(0, 10)}
-                    onChange={handleEditFormChange}
-                />
-            </td>
-
             <td className="flex justify-center">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
