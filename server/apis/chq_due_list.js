@@ -52,7 +52,26 @@ function addChqDue(req, res, db) {
     );
 }
 function getChqDue(req, res, db) {
-    const sqlSelect = `
+    const filterByShip = req.query.filterByShip;
+    var addedSql = "";
+    switch (filterByShip) {
+        case "All":
+            addedSql = "";
+            break;
+        case "Own":
+            addedSql = "join pre_defined_ship pdf on r.LV_name = pdf.LV_name";
+            break;
+        case "Other":
+            addedSql = "join pre_defined_ship pdf on r.LV_name != pdf.LV_name";
+            break;
+        default:
+            addedSql = "";
+            break;
+    }
+    console.log("status: " + filterByShip);
+
+    const sqlSelect =
+        `
  SELECT 
   cdl.order_job_number as order_job_number, 
   r.LA_name as LA_name, 
@@ -77,6 +96,9 @@ FROM
   join record_entry r on ca.order_job_number = concat(
     r.order_number, '-', r.job_number
   ) 
+  ` +
+        addedSql +
+        `
 where 
   ca.sixty_percent_payment_amount > 0 
   and ca.sixty_percent_payment_amount is not null and cdl.mode ='60'
@@ -105,6 +127,9 @@ FROM
   join record_entry r on ca.order_job_number = concat(
     r.order_number, '-', r.job_number
   ) 
+  ` +
+        addedSql +
+        `
 where 
   ca.forty_percent_payment_amount > 0 
   and ca.forty_percent_payment_amount is not null and cdl.mode ='40'
