@@ -13,6 +13,9 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
+import { Listbox } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+
 import Tabs from "./Tabs";
 
 //toast
@@ -49,11 +52,13 @@ const TableHeader = [
     { id: 14, name: "Actions" },
 ];
 
+const opt = [{ value: "All" }, { value: "Own" }, { value: "Other" }];
+
 const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
     const [laNames, setLaNames] = useState([]);
-    const [filterByLA, setFilterByLA] = useState("");
+    const [filterByShip, setFilterByShip] = useState(opt[0]);
     const [btnPayClicked, setBtnPayClicked] = useState(false);
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
@@ -70,7 +75,7 @@ const App = () => {
         }
         const res = items.filter(
             (item) =>
-                item.LA_name.includes(filterByLA) &&
+                item.LA_name.includes(laNames) &&
                 Object.keys(Object.assign({}, ...data)).some((parameter) =>
                     item[parameter]?.toString().toLowerCase().includes(query)
                 )
@@ -82,17 +87,19 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getchqlist`)
+        fetch(
+            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`
+        )
             .then((res) => res.json())
             .then((data) => {
                 setChqList(data);
             });
-        fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
-            .then((res) => res.json())
-            .then((data) => {
-                setLaNames(data);
-            });
-    }, []);
+        // fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         setLaNames(data);
+        //     });
+    }, [filterByShip]);
 
     // new end
 
@@ -419,13 +426,75 @@ const App = () => {
                 >
                     Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
                 </button> */}
-                {laNames && (
-                    <Select
-                        options={laNames}
-                        isSetItems={true}
-                        setItems={setFilterByLA}
-                    />
-                )}
+                <Listbox
+                    value={filterByShip}
+                    onChange={setFilterByShip}
+                    className=" w-1/6"
+                >
+                    <div className="relative mt-1">
+                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-green-300 sm:text-sm">
+                            <span className="block truncate">
+                                {filterByShip.value}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <ChevronUpDownIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                            </span>
+                        </Listbox.Button>
+                        <Transition
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full divide-y divide-green-400 overflow-auto rounded-md bg-white py-1 text-base shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                {opt.map((val, idx) => (
+                                    <Listbox.Option
+                                        key={idx}
+                                        className={({ active }) =>
+                                            `relative cursor-default select-none rounded-md py-2 pl-10 pr-4 transition duration-100 ease-in-out ${
+                                                active
+                                                    ? "bg-green-600 text-white"
+                                                    : "text-gray-900"
+                                            }`
+                                        }
+                                        value={val}
+                                    >
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span
+                                                    className={`block truncate ${
+                                                        selected
+                                                            ? "font-medium"
+                                                            : "font-normal"
+                                                    }`}
+                                                >
+                                                    {val.value}
+                                                </span>
+                                                {selected ? (
+                                                    <span
+                                                        className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                                            active
+                                                                ? "font-extrabold text-white"
+                                                                : "text-green-600"
+                                                        }`}
+                                                    >
+                                                        <CheckIcon
+                                                            className="h-5 w-5"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </span>
+                                                ) : null}
+                                            </>
+                                        )}
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </Transition>
+                    </div>
+                </Listbox>
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
