@@ -10,8 +10,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -299,7 +298,10 @@ const App = () => {
                 new_third_trip: editedChq.third_trip,
                 new_direct_trip: editedChq.direct_trip,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
 
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editChqId);
@@ -308,7 +310,7 @@ const App = () => {
         // new end
 
         setEditChqId(null);
-        success("Chq updated successfully");
+        // success("Chq updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -359,9 +361,8 @@ const App = () => {
                 Chq_id: ChqId,
             }
         ).then((response) => {
-            if (response.data == "success") {
-                success("Chq deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newChqList.splice(index, 1);
@@ -729,7 +730,7 @@ const App = () => {
             </Suspense> */}
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

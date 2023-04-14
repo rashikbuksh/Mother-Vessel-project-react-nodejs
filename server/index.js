@@ -27,7 +27,7 @@ const {
     getJob,
     updateJob,
     deleteJob,
-    getComodity,
+    getCommodity,
     fetchOrderNumber,
     getMvName,
 } = require("./apis/job_entry");
@@ -168,7 +168,7 @@ app.post("/management/deleterecord", (req, res) => {
 // fetch comodity from job entry
 
 app.get("/management/getcomodity", (req, res) => {
-    getComodity(req, res, db);
+    getCommodity(req, res, db);
 });
 
 // fetch get capacity max

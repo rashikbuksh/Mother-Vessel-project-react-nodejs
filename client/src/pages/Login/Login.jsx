@@ -6,7 +6,6 @@ import Loader from "../../utils/Loader";
 import { useNavigate } from "react-router-dom";
 
 import { warning } from "./../../components/Toast/index";
-import { ToastContainer } from "react-toastify";
 
 import { DefineRole } from "../../hooks/routes";
 
@@ -39,8 +38,7 @@ export default function Login() {
         if (cookies.token == null) {
             setCookies("token", "undefined");
             navigate("/login");
-        }
-        else if(cookies.token != "undefined"){
+        } else if (cookies.token != "undefined") {
             switch (original_role) {
                 case "admin":
                     navigate("/adminpanel");
@@ -233,7 +231,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 }

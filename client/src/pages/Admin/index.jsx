@@ -16,8 +16,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -198,6 +197,9 @@ const App = () => {
             password: sha256(newContact.password),
             position: newContact.position,
             department: newContact.department,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         //userList의 초기값은 data.json 데이터
@@ -208,7 +210,6 @@ const App = () => {
         closeModal();
 
         // toast
-        success("User added successfully");
     };
 
     //submit handler
@@ -228,12 +229,17 @@ const App = () => {
 
         // api call
         if (newPass.password === newPass.reset_password) {
-            Axios.post(`${process.env.REACT_APP_API_URL}/admin/resetpassword/`, {
-                user_id: resetPassUserId,
-                new_password: sha256(newPass.password),
+            Axios.post(
+                `${process.env.REACT_APP_API_URL}/admin/resetpassword/`,
+                {
+                    user_id: resetPassUserId,
+                    new_password: sha256(newPass.password),
+                }
+            ).then((response) => {
+                console.log(response);
+                generatedToast(response);
             });
             closeResPassModal();
-            success("Password reset successfully");
         } else {
             warning("Password does not match");
         }
@@ -257,6 +263,9 @@ const App = () => {
             new_username: editedContact.username,
             new_position: editedContact.position,
             new_department: editedContact.department,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         const index = tableData.findIndex((td) => td.id === editContactId);
@@ -264,7 +273,7 @@ const App = () => {
         setUserList(tableData);
 
         setEditContactId(null);
-        success("User updated successfully");
+        // success("User updated successfully");
         window.location.reload();
     };
 
@@ -294,9 +303,8 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/deleteuser/`, {
             user_id: userId,
         }).then((response) => {
-            if (response.data == "success") {
-                success("User deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newUserList.splice(index, 1);
@@ -329,16 +337,18 @@ const App = () => {
     const enable_user = (userId) => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/enableuser/`, {
             user_id: userId,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
-
-        success("User enabled");
     };
     const disable_user = (userId) => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/disableuser/`, {
             user_id: userId,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
-
-        warning("User disabled");
     };
 
     // logout
@@ -651,7 +661,7 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

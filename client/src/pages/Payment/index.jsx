@@ -14,8 +14,7 @@ import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -214,7 +213,10 @@ const App = () => {
                 payment_chq_amount: editedPay.payment_chq_amount,
                 payment_chq_date: editedPay.payment_chq_date,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
 
         //PayList의 초기값은 data.json 데이터
         // new start
@@ -227,7 +229,7 @@ const App = () => {
         // closeModal();
 
         // toast
-        success("Pay added successfully");
+        // success("Pay added successfully");
     };
 
     //save modified data (App component)
@@ -271,7 +273,10 @@ const App = () => {
                 payment_chq_amount: editedPay.payment_chq_amount,
                 payment_chq_date: editedPay.payment_chq_date,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
 
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editPayId);
@@ -280,7 +285,7 @@ const App = () => {
         // new end
 
         setEditPayId(null);
-        success("Pay updated successfully");
+        // success("Pay updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -323,9 +328,8 @@ const App = () => {
                 Pay_id: PayId,
             }
         ).then((response) => {
-            if (response.data == "success") {
-                success("Pay deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         editedPayList.splice(index, 1);
@@ -605,7 +609,7 @@ const App = () => {
             </Suspense> */}
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

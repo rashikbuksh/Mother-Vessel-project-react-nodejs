@@ -19,8 +19,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import Tabs from "./Tabs";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -184,12 +183,13 @@ const App = () => {
             LV_name: editFormData.LV_name,
             commodity: editFormData.commodity,
             mode: editFormData.mode,
-            chq_amount: editFormData.chq_amount,
+            chq_amount: Number(editFormData.part_pay),
             chq_issue_date: editFormData.chq_issue_date,
-            part_pay: editFormData.part_pay,
-            balance: editFormData.chq_amount - editFormData.part_pay,
+            part_pay: Number(editFormData.part_pay),
+            balance:
+                Number(editFormData.chq_amount) - Number(editFormData.part_pay),
             payment: editFormData.payment,
-            amount: editFormData.amount,
+            amount: Number(editFormData.amount),
         };
         editedChq.payment =
             editedChq.payment == null ? "Part" : editedChq.payment;
@@ -199,6 +199,9 @@ const App = () => {
             new_mode: editedChq.mode,
             new_payment: editedChq.payment,
             new_amount: editedChq.amount,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         // these 3 lines will be replaced // new start
@@ -213,11 +216,12 @@ const App = () => {
 
         setEditChqOrderJobNumber(null);
         setEditChqMode(null);
-        success("Chq updated successfully");
+        // success("Chq updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
     const handleEditClick = (event, Chq) => {
+        setBtnPayClicked(false);
         event.preventDefault(); // ???
 
         setEditChqOrderJobNumber(Chq.order_job_number);
@@ -229,12 +233,12 @@ const App = () => {
             LV_name: Chq.LV_name,
             commodity: Chq.commodity,
             mode: Chq.mode,
-            chq_amount: Chq.chq_amount,
+            chq_amount: Number(Chq.chq_amount),
             chq_issue_date: Chq.chq_issue_date,
-            part_pay: Chq.part_pay,
-            balance: Chq.balance,
+            part_pay: Number(Chq.part_pay),
+            balance: Number(Chq.balance),
             payment: Chq.payment,
-            amount: Chq.amount,
+            amount: Number(Chq.amount),
         };
         setEditFormData(formValues);
     };
@@ -253,9 +257,8 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deletechq`, {
             Chq_id: ChqId,
         }).then((response) => {
-            if (response.data == "success") {
-                success("Chq deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newChqList.splice(index, 1);
@@ -274,16 +277,18 @@ const App = () => {
             LV_name: Chq.LV_name,
             commodity: Chq.commodity,
             mode: Chq.mode,
+            chq_amount: Number(Chq.chq_amount),
             chq_issue_date: Chq.chq_issue_date,
-            chq_amount: Chq.chq_amount,
-            part_pay: Chq.part_pay,
-            balance: Chq.chq_amount - Chq.part_pay,
+            part_pay: Number(Chq.part_pay),
+            balance: Number(Chq.chq_amount) - Number(Chq.part_pay),
             payment: Chq.payment,
-            amount: Chq.amount,
+            amount: Number(Chq.amount),
             payment_chq_no: "",
             payment_chq_amount: Chq.amount,
             payment_chq_date: "",
         };
+        formValues.part_pay =
+            formValues.part_pay == null ? "Part" : formValues.part_pay;
         setPaymentModalData(formValues);
         openModal();
     };
@@ -351,8 +356,10 @@ const App = () => {
             mode: newPay.mode,
             chq_amount: newPay.chq_amount,
             chq_issue_date: newPay.chq_issue_date,
-            part_pay: newPay.part_pay + +newPay.amount,
-            balance: newPay.chq_amount - (newPay.part_pay + newPay.amount),
+            part_pay: Number(newPay.part_pay) + Number(newPay.amount),
+            balance:
+                Number(newPay.chq_amount) -
+                (Number(newPay.part_pay) + Number(newPay.amount)),
             payment: null,
             amount: null,
         };
@@ -367,7 +374,10 @@ const App = () => {
                 new_payment: editedChq.payment,
                 new_amount: editedChq.amount,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
 
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex(
@@ -386,7 +396,7 @@ const App = () => {
         closeModal();
 
         // toast
-        success("Pay added successfully");
+        // success("Pay added successfully");
     };
 
     // modal for add Chq
@@ -840,7 +850,7 @@ const App = () => {
                 </Transition>
             </Suspense>
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

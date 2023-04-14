@@ -14,8 +14,7 @@ import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -222,7 +221,10 @@ const App = () => {
                 remark: editedStatus.remark,
                 trip_completed: editedStatus.trip_completed,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
 
         // these 3 lines will be repLA_nameced // new start
         const index = tableData.findIndex((td) => td.id === editStatusId);
@@ -230,7 +232,7 @@ const App = () => {
         setCurrentStatus(tableData);
         // new end
         setEditStatusId(null);
-        success("Status updated successfully");
+        // success("Status updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is dispLA_nameyed
@@ -271,9 +273,8 @@ const App = () => {
                 status_id: StatusId,
             }
         ).then((response) => {
-            if (response.data == "success") {
-                success("Status deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newCurrentStatus.splice(index, 1);
@@ -597,7 +598,7 @@ const App = () => {
             </Suspense> */}
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

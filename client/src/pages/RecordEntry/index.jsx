@@ -15,8 +15,7 @@ import Select from "../../components/Select";
 import Switch from "../../components/Switch";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -145,6 +144,23 @@ const App = () => {
         LV_master_contact_number: "",
     });
 
+    // error status
+    const errorData = {
+        order_number: "",
+        job_number: "",
+        date_from_charpotro: "",
+        cp_number_from_charpotro: "",
+        LA_name: "",
+        LV_name: "",
+        dest_from: "",
+        dest_to: "",
+        commodity: "",
+        capacity: "",
+        rate: "",
+        LV_master_name: "",
+        LV_master_contact_number: "",
+    };
+
     //modified id status
     const [editRecordId, setEditRecordId] = useState(null);
 
@@ -217,6 +233,9 @@ const App = () => {
             rate: newRecord.rate,
             LV_master_name: newRecord.LV_master_name,
             LV_master_contact_number: newRecord.LV_master_contact_number,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         //RecordList의 초기값은 data.json 데이터
@@ -230,7 +249,7 @@ const App = () => {
         closeModal();
 
         // toast
-        success("Record added successfully");
+        // success("Record added successfully");
     };
 
     //save modified data (App component)
@@ -271,8 +290,10 @@ const App = () => {
                 LV_master_name: editedRecord.LV_master_name,
                 LV_master_contact_number: editedRecord.LV_master_contact_number,
             }
-        );
-
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editRecordId);
         tableData[index] = editedRecord;
@@ -280,7 +301,7 @@ const App = () => {
         // new end
 
         setEditRecordId(null);
-        success("Record updated successfully");
+        // success("Record updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -319,9 +340,8 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deleterecord`, {
             record_id: RecordId,
         }).then((response) => {
-            if (response.data == "success") {
-                success("Record deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deleteorderjob`,
@@ -329,9 +349,8 @@ const App = () => {
                 record_id: RecordId,
             }
         ).then((response) => {
-            if (response.data == "success") {
-                success("Record deleted successfully from order job table");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newRecordList.splice(index, 1);
@@ -533,7 +552,7 @@ const App = () => {
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="Date From Charpotro"
+                                                    placeholder="dd-mm-yyyy"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -570,8 +589,16 @@ const App = () => {
                                                             setEnabled={
                                                                 setEnabled
                                                             }
-                                                        />{" "}
-                                                        Own
+                                                        />
+                                                        <label
+                                                            className={`ml-1 block text-sm font-medium transition-all duration-200 ease-in-out  ${
+                                                                enabled
+                                                                    ? "text-gray-500 group-focus-within:text-blue-600"
+                                                                    : " text-red-500 "
+                                                            } `}
+                                                        >
+                                                            Own
+                                                        </label>
                                                     </>
                                                 </div>
                                                 <input
@@ -737,8 +764,16 @@ const App = () => {
                                                     LV Master Number
                                                 </label>
                                                 <input
-                                                    pattern="[0-9]*"
-                                                    type="text"
+                                                    type="number"
+                                                    onInput={(e) => {
+                                                        e.target.value.length >
+                                                            11 &&
+                                                            (e.target.value =
+                                                                e.target.value.slice(
+                                                                    0,
+                                                                    11
+                                                                ));
+                                                    }}
                                                     name="LV_master_contact_number"
                                                     onChange={
                                                         handleAddFormChange
@@ -764,7 +799,7 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };
