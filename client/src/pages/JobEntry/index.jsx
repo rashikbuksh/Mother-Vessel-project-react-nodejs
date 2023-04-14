@@ -13,27 +13,22 @@ import EditableRow from "./Table/EditTableRow";
 import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import Loader from "../../utils/Loader";
+import { fetchData, errorData, errorCheck } from "./Table/api";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
-import { VariableSizeList as List } from "react-window";
-import { useWindowResize } from "../../hooks/useWindowResize";
+import Select from "../../components/Select";
+import NoDataFound from "../../utils/NoDataFound";
+import LoadMore from "../../utils/LoadMore";
 
 //toast
-import { success } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
+
 import PingLoader from "../../utils/PingLoader";
+import Loader from "../../utils/Loader";
 
 const TableHeader = [
-    {
-        id: 1,
-        name: "Id",
-        accessor: "id",
-        sortable: true,
-        sortByOrder: "asc",
-    },
     {
         id: 2,
         name: "Order Number",
@@ -101,45 +96,20 @@ const App = () => {
     const [JobList, setJobList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
-
-    // new start
+    const [pageSize, setPageSize] = useState(3);
 
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const url = `${process.env.REACT_APP_API_URL}/management/getjobentry`;
     useEffect(() => {
-        const abortCont = new AbortController();
-
-        try {
-            fetch(url, { signal: abortCont.signal })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw Error(
-                            "Could not fetch the data for that resource"
-                        );
-                    }
-                    return res.json();
-                })
-                .then((res) => {
-                    setJobList(res);
-                    setLoading(false);
-                    setError(null);
-                });
-        } catch (err) {
-            if (err.name === "AbortError") {
-                console.log("Fetch Aborted");
-            } else {
-                setLoading(false);
-                setError(err.message);
-            }
-        }
-
-        return () => abortCont.abort();
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getjobentry`,
+            setJobList,
+            setLoading,
+            setError
+        );
     }, []);
-    // new end
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -195,17 +165,18 @@ const App = () => {
     const handleAddFormChange = (event) => {
         event.preventDefault();
 
-        //fullname, address, phoneNumber, email
         const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
-        const fieldValue = event.target.value;
+        var fieldValue = event.target.value;
+
+        errorCheck(fieldValue, fieldName);
+        console.log(errorData.stevedore_contact_number);
 
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
+
+        console.log(errorData);
     };
 
     //Update status with correction data
@@ -266,6 +237,9 @@ const App = () => {
             bl_quantity: newJob.bl_quantity,
             stevedore_name: newJob.stevedore_name,
             stevedore_contact_number: newJob.stevedore_contact_number,
+        }).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         //jobList의 초기값은 data.json 데이터
@@ -279,7 +253,7 @@ const App = () => {
         closeModal();
 
         // toast
-        success("Job added successfully");
+        // success("Job added successfully");
     };
 
     //save modified data (App component)
@@ -314,7 +288,10 @@ const App = () => {
                 new_stevedore_contact_number:
                     editedJob.stevedore_contact_number,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editJobId);
         tableData[index] = editedJob;
@@ -322,7 +299,7 @@ const App = () => {
         // new end
 
         setEditJobId(null);
-        success("Job updated successfully");
+        // success("Job updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -356,10 +333,10 @@ const App = () => {
         //console.log("Deleting job with id: " + jobId);
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deletejob`, {
             job_id: jobId,
+            job_order_number: JobList[index].order_number,
         }).then((response) => {
-            if (response.data == "success") {
-                success("job deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newJobList.splice(index, 1);
@@ -444,45 +421,20 @@ const App = () => {
                         </tbody>
                     )}
                 </table>
-                {search(tableData).length < 1 && (
-                    <div className="flex flex-row items-center justify-center">
-                        <h1 className="text-2xl font-semibold text-gray-500">
-                            No Data Found
-                        </h1>
-                    </div>
-                )}
+                {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
-            {search(tableData).length < data.length ? (
-                <div className="mt-4 flex items-center justify-center divide-x">
-                    <button
-                        className="text-md flex flex-row items-center justify-center space-x-2 rounded-full bg-green-600 px-6 py-2 font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
-                        onClick={() => {
-                            setPageSize((prevValue) =>
-                                cursorPos + prevValue > data.length
-                                    ? prevValue
-                                    : prevValue + 20
-                            );
-                        }}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-5 w-5"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                            />
-                        </svg>
-                        <span>Load More</span>
-                    </button>
-                </div>
-            ) : null}
+            {search(tableData).length < data.length && (
+                <LoadMore
+                    onClick={() => {
+                        setPageSize((prevValue) =>
+                            cursorPos + prevValue > data.length
+                                ? prevValue
+                                : prevValue + 20
+                        );
+                    }}
+                />
+            )}
 
             {/* // new end */}
 
@@ -569,19 +521,34 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    ETA
+                                                    Mother Vessel Location
                                                 </label>
-                                                <input
-                                                    type="date"
-                                                    name="eta"
-                                                    onChange={
-                                                        handleAddFormChange
+                                                <Select
+                                                    options={[
+                                                        {
+                                                            value: "Sri Lanka",
+                                                        },
+                                                        {
+                                                            value: "India",
+                                                        },
+                                                        {
+                                                            value: "USA",
+                                                        },
+                                                        {
+                                                            value: "UK",
+                                                        },
+                                                        {
+                                                            value: "Bangladesh",
+                                                        },
+                                                    ]}
+                                                    name="mv_location"
+                                                    addFormData={addFormData}
+                                                    setAddFormData={
+                                                        setAddFormData
                                                     }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                    isAddFromData={true}
                                                 />
                                             </div>
-
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Commodity
@@ -596,27 +563,32 @@ const App = () => {
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
+
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    MV Location
+                                                    BL Quantity in Metric Ton
                                                 </label>
                                                 <input
-                                                    type="text"
-                                                    name="mv_location"
+                                                    type="number"
+                                                    name="bl_quantity"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
+                                                    onInput={(e) => {
+                                                        e.target.value < 0 &&
+                                                            (e.target.value = 0);
+                                                    }}
                                                     required
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    BL Quantity
+                                                    Estimated time of arrival
                                                 </label>
                                                 <input
-                                                    type="number"
-                                                    name="bl_quantity"
+                                                    type="date"
+                                                    name="eta"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
@@ -643,18 +615,36 @@ const App = () => {
                                                     Stevedore Contact Number
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
+                                                    onInput={(e) => {
+                                                        e.target.value.length >
+                                                            11 &&
+                                                            (e.target.value =
+                                                                e.target.value.slice(
+                                                                    0,
+                                                                    11
+                                                                ));
+                                                    }}
                                                     name="stevedore_contact_number"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                    required={
+                                                        errorData?.stevedore_contact_number !==
+                                                        ""
+                                                            ? false
+                                                            : true
+                                                    }
+                                                    className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out  ${
+                                                        errorData?.stevedore_contact_number !==
+                                                            "" &&
+                                                        "text-red-600 ring-2 ring-red-500"
+                                                    }`}
                                                 />
                                             </div>
                                             <button
                                                 type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                                                className="inline-flex w-72 justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 md:w-80 lg:w-96"
                                             >
                                                 Add
                                             </button>
@@ -668,7 +658,7 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

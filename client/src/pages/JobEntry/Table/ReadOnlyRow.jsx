@@ -2,17 +2,13 @@ import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 import FormateNumber from "../../../utils/FormateNumber";
+import CommaFormatted from "../../../utils/CommaFormatted";
 
 const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
-    var clsName = "whitespace-nowrap py-2 text-sm text-gray-700";
+    var clsName = "whitespace-nowrap py-2 text-sm text-gray-700 text-center";
 
     return (
         <React.Fragment>
-            <td className={clsName}>
-                <span className="font-bold text-blue-500 hover:underline">
-                    {job.id}
-                </span>
-            </td>
             <td className={clsName}>{job.order_number}</td>
             <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
@@ -36,7 +32,7 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
                 </span>
             </td>
             <td className={clsName}>{job.mv_location}</td>
-            <td className={clsName}>{job.bl_quantity}</td>
+            <td className={clsName}>{job.bl_quantity.toLocaleString()}</td>
             <td className={clsName}>{job.stevedore_name}</td>
             <td className={clsName}>
                 <FormateNumber number={job.stevedore_contact_number} />

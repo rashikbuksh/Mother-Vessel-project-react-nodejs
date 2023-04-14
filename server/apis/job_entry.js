@@ -1,5 +1,6 @@
+const { ToastRes } = require("./util");
+
 function addJob(req, res, db) {
-    //console.log("submit in backend");
     const order_number = req.body.order_number;
     const importer_name = req.body.importer_name;
     const mother_vessel_name = req.body.mother_vessel_name;
@@ -9,8 +10,9 @@ function addJob(req, res, db) {
     const bl_quantity = req.body.bl_quantity;
     const stevedore_name = req.body.stevedore_name;
     const stevedore_contact_number = req.body.stevedore_contact_number;
+    const time_stamp = new Date();
     const create_job =
-        "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number) VALUES (?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, time_stamp) VALUES (?,?,?,?,?,?,?,?,?,?)";
     db.query(
         create_job,
         [
@@ -23,10 +25,14 @@ function addJob(req, res, db) {
             bl_quantity,
             stevedore_name,
             stevedore_contact_number,
+            time_stamp,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating job")
+                    : ToastRes("create", `${order_number}`)
+            );
         }
     );
 }
@@ -38,8 +44,7 @@ function getJob(req, res, db) {
     });
 }
 
-
-function updateJob(req, res, db){
+function updateJob(req, res, db) {
     //console.log("update job info in backend");
     const id = req.body.id;
     const order_number = req.body.new_order_number;
@@ -51,9 +56,10 @@ function updateJob(req, res, db){
     const bl_quantity = req.body.new_bl_quantity;
     const stevedore_name = req.body.new_stevedore_name;
     const stevedore_contact_number = req.body.new_stevedore_contact_number;
+    const time_stamp = new Date();
     //console.log(id);
     const sqlUpdate =
-        "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=? where id= ?";
+        "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=?, time_stamp=? where id= ?";
     db.query(
         sqlUpdate,
         [
@@ -66,14 +72,15 @@ function updateJob(req, res, db){
             bl_quantity,
             stevedore_name,
             stevedore_contact_number,
+            time_stamp,
             id,
         ],
         (err, result) => {
-            if (err) console.log(err);
-
-            // res.send(result).json({
-            //     success: true,
-            // });
+            res.json(
+                err
+                    ? ToastRes("error", "updating job")
+                    : ToastRes("update", `${order_number}`)
+            );
         }
     );
 }
@@ -81,17 +88,18 @@ function updateJob(req, res, db){
 function deleteJob(req, res, db) {
     //console.log("Delete job in backend");
     const id = req.body.job_id;
+    const order_number = req.body.job_order_number;
     const sqlDelete = "DELETE from job_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting job")
+                : ToastRes("delete", `${order_number}`)
+        );
     });
 }
 
-function getComodity(req, res, db) {
+function getCommodity(req, res, db) {
     var order_number = req.query.order_number;
     const sqlSelect = `SELECT commodity from job_entry where order_number =  '${order_number}'`;
     db.query(sqlSelect, [order_number], (err, result) => {
@@ -101,7 +109,7 @@ function getComodity(req, res, db) {
 
 function fetchOrderNumber(req, res, db) {
     //console.log("fetching order number");
-    const sqlSelect = "SELECT order_number as 'value' from job_entry";
+    const sqlSelect = "SELECT order_number as 'value' from job_entry order by order_number";
     // change the order number to value
     db.query(sqlSelect, (err, result) => {
         res.send(result);
@@ -129,6 +137,6 @@ module.exports.addJob = addJob;
 module.exports.getJob = getJob;
 module.exports.updateJob = updateJob;
 module.exports.deleteJob = deleteJob;
-module.exports.getComodity = getComodity;
+module.exports.getCommodity = getCommodity;
 module.exports.fetchOrderNumber = fetchOrderNumber;
 module.exports.getMvName = getMvName;

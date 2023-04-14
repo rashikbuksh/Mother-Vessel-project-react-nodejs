@@ -15,8 +15,7 @@ import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     { id: 1, name: "Id", accessor: "id", sortable: true, sortByOrder: "asc" },
@@ -369,7 +368,10 @@ const App = () => {
                 total_despatch: editedDam.total_despatch,
                 daily_despatch: editedDam.daily_despatch,
             }
-        );
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
+        });
         // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editDamId);
         tableData[index] = editedDam;
@@ -377,7 +379,7 @@ const App = () => {
         // new end
 
         setEditDamId(null);
-        success("Dam updated successfully");
+        // success("Dam updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -429,9 +431,8 @@ const App = () => {
                 Dam_id: DamId,
             }
         ).then((response) => {
-            if (response.data == "success") {
-                success("Dam deleted successfully");
-            }
+            console.log(response);
+            generatedToast(response);
         });
 
         newDamList.splice(index, 1);
@@ -938,7 +939,7 @@ const App = () => {
             </Suspense> */}
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };

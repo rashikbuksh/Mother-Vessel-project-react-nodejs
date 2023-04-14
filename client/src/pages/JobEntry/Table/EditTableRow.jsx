@@ -10,7 +10,6 @@ const EditTableRow = ({
         "w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
-            <td></td>
             <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
@@ -102,6 +101,10 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onInput={(e) => {
+                        e.target.value.length > 11 &&
+                            (e.target.value = e.target.value.slice(0, 11));
+                    }}
                     required
                     placeholder="Enter stevedore contact number..."
                     name="stevedore_contact_number"
@@ -114,7 +117,7 @@ const EditTableRow = ({
                     Auto generated
                 </span>
             </td>
-            <td className="flex items-center justify-around py-2">
+            <td className="flex flex-row items-center justify-between space-x-2 py-2">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                     type="submit"

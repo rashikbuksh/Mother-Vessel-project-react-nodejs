@@ -14,8 +14,7 @@ import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
 //toast
-import { success, warning } from "../../components/Toast";
-import { ToastContainer } from "react-toastify";
+import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -161,8 +160,14 @@ const App = () => {
         // console.log(order_number_auto)
 
         // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/predefinedship`, {
-            LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/predefinedship`,
+            {
+                LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
+            }
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         //CurrentStatus의 초기값은 data.json 데이터
@@ -176,7 +181,7 @@ const App = () => {
         closeModal();
 
         // toast
-        success("Status added successfully");
+        // success("Status added successfully");
     };
 
     //save modified data (App component)
@@ -196,17 +201,23 @@ const App = () => {
             remark: editFormData.remark,
         };
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatepredefinedship`, {
-            id: editedStatus.id,
-            order_job_number: editedStatus.order_job_number,
-            LV_name: editedStatus.LV_name,
-            date_from_charpotro: editedStatus.date_from_charpotro,
-            commodity: editedStatus.commodity,
-            LA: editedStatus.LA,
-            dest_from: editedStatus.dest_from,
-            dest_to: editedStatus.dest_to,
-            current_location: editedStatus.current_location,
-            remark: editedStatus.remark,
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatepredefinedship`,
+            {
+                id: editedStatus.id,
+                order_job_number: editedStatus.order_job_number,
+                LV_name: editedStatus.LV_name,
+                date_from_charpotro: editedStatus.date_from_charpotro,
+                commodity: editedStatus.commodity,
+                LA: editedStatus.LA,
+                dest_from: editedStatus.dest_from,
+                dest_to: editedStatus.dest_to,
+                current_location: editedStatus.current_location,
+                remark: editedStatus.remark,
+            }
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         // these 3 lines will be replaced // new start
@@ -216,7 +227,7 @@ const App = () => {
         // new end
 
         setEditStatusId(null);
-        success("Status updated successfully");
+        // success("Status updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -250,12 +261,14 @@ const App = () => {
             (Status) => Status.id === StatusId
         );
         //console.log("Deleting Status with id: " + StatusId);
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/deletepredefinedship`, {
-            status_id: StatusId,
-        }).then((response) => {
-            if (response.data == "success") {
-                success("Status deleted successfully");
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/deletepredefinedship`,
+            {
+                status_id: StatusId,
             }
+        ).then((response) => {
+            console.log(response);
+            generatedToast(response);
         });
 
         newCurrentStatus.splice(index, 1);
@@ -498,7 +511,7 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <ToastContainer closeOnClick />
+            <Toast />
         </div>
     );
 };
