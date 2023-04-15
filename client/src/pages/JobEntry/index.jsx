@@ -1,32 +1,20 @@
-import React, {
-    useState,
-    Fragment,
-    useEffect,
-    Suspense,
-    useRef,
-    useCallback,
-} from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import Axios from "axios";
-import { Dialog, Transition } from "@headlessui/react";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
-import TableHead from "../../components/Table/TableHead"; // new
-import Pagination from "../../components/Table/Pagination"; // new
-import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import { fetchData, errorData, errorCheck } from "./Table/api";
+import TableHead from "../../components/Table/TableHead";
 
-import { IoMdPersonAdd } from "react-icons/io";
-import { MdClose } from "react-icons/md";
+import { useSortableTable } from "../../components/Table/useSortableTable";
 
-import Select from "../../components/Select";
+import { errorData, errorCheck } from "./Error";
+import { generatedToast, Toast } from "../../components/Toast";
+import { fetchData } from "../../hooks/fetchData";
+
 import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
-
-//toast
-import { generatedToast, Toast } from "../../components/Toast";
-
 import PingLoader from "../../utils/PingLoader";
-import Loader from "../../utils/Loader";
+
+import { IoMdPersonAdd } from "react-icons/io";
 
 const TableHeader = [
     {
@@ -92,9 +80,11 @@ const TableHeader = [
     { id: 12, name: "Actions" },
 ];
 
+const AddJob = lazy(() => import("./AddJob"));
+
 const App = () => {
     const [JobList, setJobList] = useState([]);
-    const [tableData, handleSorting] = useSortableTable(JobList, TableHeader); // data, columns // new
+    const [tableData, handleSorting] = useSortableTable(JobList, TableHeader);
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(3);
 
@@ -131,7 +121,6 @@ const App = () => {
     }
 
     // add state
-    //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
         order_number: "",
         importer_name: "",
@@ -161,7 +150,6 @@ const App = () => {
     const [editJobId, setEditJobId] = useState(null);
 
     //changeHandler
-    //Update state with input data
     const handleAddFormChange = (event) => {
         event.preventDefault();
 
@@ -169,14 +157,11 @@ const App = () => {
         var fieldValue = event.target.value;
 
         errorCheck(fieldValue, fieldName);
-        console.log(errorData.stevedore_contact_number);
 
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
 
         setAddFormData(newFormData);
-
-        console.log(errorData);
     };
 
     //Update status with correction data
@@ -193,13 +178,11 @@ const App = () => {
     };
 
     //submit handler
-    //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = (event) => {
         event.preventDefault(); // ???
 
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newJob = {
-            order_number: addFormData.order_number, //handleAddFormChange로 받은 새 데이터
+            order_number: addFormData.order_number,
             importer_name: addFormData.importer_name,
             mother_vessel_name: addFormData.mother_vessel_name,
             eta: addFormData.eta,
@@ -223,45 +206,31 @@ const App = () => {
             newJob.mother_vessel_name +
             "-" +
             newJob.mv_location;
-        console.log(order_number_auto);
+
         newJob.order_number = order_number_auto;
 
         // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/jobentry`, {
-            order_number: newJob.order_number, //handleAddFormChange로 받은 새 데이터
-            importer_name: newJob.importer_name,
-            mother_vessel_name: newJob.mother_vessel_name,
-            eta: newJob.eta,
-            commodity: newJob.commodity,
-            mv_location: newJob.mv_location,
-            bl_quantity: newJob.bl_quantity,
-            stevedore_name: newJob.stevedore_name,
-            stevedore_contact_number: newJob.stevedore_contact_number,
-        }).then((response) => {
-            console.log(response);
-            generatedToast(response);
-        });
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/jobentry`,
+            newJob
+        )
+            .then((response) => {
+                generatedToast(response);
+            })
+            .then(() => {
+                closeModal();
+            });
 
-        //jobList의 초기값은 data.json 데이터
-        // new start
         const newTableData = [...tableData, newJob];
-        // new end
-
         setJobList(newTableData);
-
-        // close modal
-        closeModal();
-
-        // toast
-        // success("Job added successfully");
     };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
-        event.preventDefault(); // prevent submit
+        event.preventDefault();
 
         const editedJob = {
-            id: editJobId, //initial value null
+            id: editJobId,
             order_number: editFormData.order_number,
             importer_name: editFormData.importer_name,
             mother_vessel_name: editFormData.mother_vessel_name,
@@ -275,38 +244,24 @@ const App = () => {
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updatejobentry`,
-            {
-                id: editedJob.id,
-                new_order_number: editedJob.order_number,
-                new_importer_name: editedJob.importer_name,
-                new_mother_vessel_name: editedJob.mother_vessel_name,
-                new_eta: editedJob.eta,
-                new_commodity: editedJob.commodity,
-                new_mv_location: editedJob.mv_location,
-                new_bl_quantity: editedJob.bl_quantity,
-                new_stevedore_name: editedJob.stevedore_name,
-                new_stevedore_contact_number:
-                    editedJob.stevedore_contact_number,
-            }
+            editedJob
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
-        // these 3 lines will be replaced // new start
+
         const index = tableData.findIndex((td) => td.id === editJobId);
         tableData[index] = editedJob;
         setJobList(tableData);
-        // new end
 
         setEditJobId(null);
-        // success("Job updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
     const handleEditClick = (event, job) => {
-        event.preventDefault(); // ???
+        event.preventDefault();
 
         setEditJobId(job.id);
+
         const formValues = {
             order_number: job.order_number,
             importer_name: job.importer_name,
@@ -330,12 +285,11 @@ const App = () => {
     const handleDeleteClick = (jobId) => {
         const newJobList = [...JobList];
         const index = JobList.findIndex((job) => job.id === jobId);
-        //console.log("Deleting job with id: " + jobId);
+
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deletejob`, {
             job_id: jobId,
             job_order_number: JobList[index].order_number,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -345,14 +299,8 @@ const App = () => {
 
     // modal for add job
     let [isOpen, setIsOpen] = useState(false);
-
-    function closeModal() {
-        setIsOpen(false);
-    }
-
-    function openModal() {
-        setIsOpen(true);
-    }
+    const closeModal = () => setIsOpen(false);
+    const openModal = () => setIsOpen(true);
 
     // loading and error
     if (loading) {
@@ -362,7 +310,6 @@ const App = () => {
         return <div>{error}</div>;
     }
 
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
             <div className="my-2 mx-auto flex justify-center">
@@ -374,7 +321,6 @@ const App = () => {
                     onChange={(event) => setQuery(event.target.value)}
                 />
                 <button
-                    // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
@@ -389,9 +335,9 @@ const App = () => {
                     />
                     {search(tableData).length > 0 && (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((job, index) => (
+                            {search(tableData).map((_, index) => (
                                 <tr
-                                    key={search(tableData)[index]?.id}
+                                    key={index}
                                     className={`my-auto items-center justify-center ${
                                         index % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
@@ -399,13 +345,11 @@ const App = () => {
                                     {editJobId ===
                                     search(tableData)[index]?.id ? (
                                         <EditableRow
-                                            editFormData={editFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
+                                            {...{
+                                                editFormData,
+                                                handleEditFormChange,
+                                                handleCancelClick,
+                                            }}
                                         />
                                     ) : (
                                         <ReadOnlyRow
@@ -414,6 +358,10 @@ const App = () => {
                                             handleDeleteClick={
                                                 handleDeleteClick
                                             }
+                                            {...{
+                                                handleEditClick,
+                                                handleDeleteClick,
+                                            }}
                                         />
                                     )}
                                 </tr>
@@ -424,6 +372,7 @@ const App = () => {
                 {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
+            {/* new start  */}
             {search(tableData).length < data.length && (
                 <LoadMore
                     onClick={() => {
@@ -436,228 +385,20 @@ const App = () => {
                 />
             )}
 
-            {/* // new end */}
-
-            {/* add item modal */}
-            <Suspense fallback={<Loader />}>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="z-10 overflow-y-auto"
-                        // new start
-                        onClose={() => {}}
-                        // new end
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        {/* // new start */}
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Add Job
-                                            <button
-                                                className="float-right"
-                                                onClick={closeModal}
-                                            >
-                                                <MdClose className="inline text-red-600" />
-                                            </button>
-                                        </Dialog.Title>
-                                        {/* // new end */}
-
-                                        <form
-                                            onSubmit={handleAddFormSubmit}
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Importer Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="importer_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Mother Vessel Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="mother_vessel_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Mother Vessel Location
-                                                </label>
-                                                <Select
-                                                    options={[
-                                                        {
-                                                            value: "Sri Lanka",
-                                                        },
-                                                        {
-                                                            value: "India",
-                                                        },
-                                                        {
-                                                            value: "USA",
-                                                        },
-                                                        {
-                                                            value: "UK",
-                                                        },
-                                                        {
-                                                            value: "Bangladesh",
-                                                        },
-                                                    ]}
-                                                    name="mv_location"
-                                                    addFormData={addFormData}
-                                                    setAddFormData={
-                                                        setAddFormData
-                                                    }
-                                                    isAddFromData={true}
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    BL Quantity in Metric Ton
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="bl_quantity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    onInput={(e) => {
-                                                        e.target.value < 0 &&
-                                                            (e.target.value = 0);
-                                                    }}
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Estimated time of arrival
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="eta"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Stevedore Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="stevedore_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Stevedore Contact Number
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    onInput={(e) => {
-                                                        e.target.value.length >
-                                                            11 &&
-                                                            (e.target.value =
-                                                                e.target.value.slice(
-                                                                    0,
-                                                                    11
-                                                                ));
-                                                    }}
-                                                    name="stevedore_contact_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required={
-                                                        errorData?.stevedore_contact_number !==
-                                                        ""
-                                                            ? false
-                                                            : true
-                                                    }
-                                                    className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out  ${
-                                                        errorData?.stevedore_contact_number !==
-                                                            "" &&
-                                                        "text-red-600 ring-2 ring-red-500"
-                                                    }`}
-                                                />
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                className="inline-flex w-72 justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 md:w-80 lg:w-96"
-                                            >
-                                                Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
+            <Suspense fallback={<PingLoader />}>
+                <AddJob
+                    {...{
+                        isOpen,
+                        closeModal,
+                        handleAddFormSubmit,
+                        handleAddFormChange,
+                        addFormData,
+                        setAddFormData,
+                        errorData,
+                    }}
+                />
             </Suspense>
 
-            {/* toast  */}
             <Toast />
         </div>
     );

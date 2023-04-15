@@ -222,7 +222,6 @@ const App = () => {
                 trip_completed: editedStatus.trip_completed,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -273,7 +272,6 @@ const App = () => {
                 status_id: StatusId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

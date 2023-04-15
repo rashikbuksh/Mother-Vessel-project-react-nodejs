@@ -299,7 +299,6 @@ const App = () => {
                 new_direct_trip: editedChq.direct_trip,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -361,7 +360,6 @@ const App = () => {
                 Chq_id: ChqId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

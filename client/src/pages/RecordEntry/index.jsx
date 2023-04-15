@@ -234,7 +234,6 @@ const App = () => {
             LV_master_name: newRecord.LV_master_name,
             LV_master_contact_number: newRecord.LV_master_contact_number,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -291,7 +290,6 @@ const App = () => {
                 LV_master_contact_number: editedRecord.LV_master_contact_number,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
         // these 3 lines will be replaced // new start
@@ -340,7 +338,6 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deleterecord`, {
             record_id: RecordId,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
         Axios.post(
@@ -349,7 +346,6 @@ const App = () => {
                 record_id: RecordId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

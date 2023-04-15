@@ -3,9 +3,11 @@ import { sha256 } from "js-sha256";
 import { useCookies } from "react-cookie";
 import React, { useEffect, useState } from "react";
 import Loader from "../../utils/Loader";
+import shipLogo from "../../assets/img/shipLogo.svg";
+
 import { useNavigate } from "react-router-dom";
 
-import { warning } from "./../../components/Toast/index";
+import { Toast, warning } from "./../../components/Toast/index";
 
 import { DefineRole } from "../../hooks/routes";
 
@@ -164,11 +166,16 @@ export default function Login() {
                 <div className="absolute inset-0 -skew-y-6 transform animate-pulse bg-gradient-to-r from-green-300 to-green-600 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
                 <div className="relative bg-white px-4 py-10 shadow-lg sm:rounded-3xl sm:p-20">
                     <div className="mx-auto">
-                        <div>
-                            <h1 className="text-center text-4xl font-semibold tracking-wider text-green-700">
-                                Welcome To KEL-BD
-                            </h1>
-                        </div>
+                        <span className="font-heading flex items-center justify-center text-2xl font-bold">
+                            <img
+                                className="mr-1 w-12 text-white"
+                                src={shipLogo}
+                                alt="KEL-BD"
+                            />
+                            <span className="text-4xl text-green-600">
+                                KEL-BD
+                            </span>
+                        </span>
                         <form className="divide-y divide-gray-200">
                             <div className="space-y-4 py-8 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7">
                                 <div className="relative mb-4 flex items-center rounded-2xl border-2 py-2 px-3">

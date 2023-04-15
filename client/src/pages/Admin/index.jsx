@@ -16,7 +16,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
 //toast
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast, Toast, warning } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -198,7 +198,6 @@ const App = () => {
             position: newContact.position,
             department: newContact.department,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -264,7 +263,6 @@ const App = () => {
             new_position: editedContact.position,
             new_department: editedContact.department,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -303,7 +301,6 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/deleteuser/`, {
             user_id: userId,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -338,7 +335,6 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/enableuser/`, {
             user_id: userId,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
     };
@@ -346,7 +342,6 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/disableuser/`, {
             user_id: userId,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
     };
