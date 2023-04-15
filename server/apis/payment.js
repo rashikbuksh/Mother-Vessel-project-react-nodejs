@@ -1,17 +1,20 @@
+const { ToastRes } = require("./util");
+
 function addPayment(req, res, db) {
-    //console.log("submit in backend");
-    const order_job_number = req.body.order_job_number;
-    const LV_name = req.body.LV_name;
-    const LA_name = req.body.LA_name;
-    const commodity = req.body.commodity;
-    const chq_issue_date = req.body.chq_issue_date;
-    const amount = req.body.amount;
-    const part_pay = req.body.part_pay;
-    const payment = req.body.payment;
-    const balance = req.body.balance;
-    const payment_chq_no = req.body.payment_chq_no;
-    const payment_chq_amount = req.body.payment_chq_amount;
-    const payment_chq_date = req.body.payment_chq_date;
+    const {
+        order_job_number,
+        LV_name,
+        LA_name,
+        commodity,
+        chq_issue_date,
+        amount,
+        part_pay,
+        payment,
+        balance,
+        payment_chq_no,
+        payment_chq_amount,
+        payment_chq_date,
+    } = req.body;
 
     const create_chq =
         "INSERT INTO payment (order_job_number, LA_name, LV_name, commodity, chq_issue_date, amount, part_pay, payment, balance, payment_chq_no, payment_chq_amount, payment_chq_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -32,8 +35,11 @@ function addPayment(req, res, db) {
             payment_chq_date,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating payment")
+                    : ToastRes("create", `${order_job_number}`)
+            );
         }
     );
 }
@@ -44,22 +50,24 @@ function getPayment(req, res, db) {
     });
 }
 function updatePayment(req, res, db) {
-    //console.log("update job info in backend");
-    const id = req.body.id;
-    const order_job_number = req.body.order_job_number;
-    const LV_name = req.body.new_LV_name;
-    const date_from_charpotro = req.body.new_date_from_charpotro;
-    const MV_name = req.body.new_MV_name;
-    const commodity = req.body.new_commodity;
-    const chq_no = req.body.new_chq_no;
-    const chq_issue_date = req.body.new_chq_issue_date;
-    const amount = req.body.new_amount;
-    const part_pay = req.body.new_part_pay;
-    const payment_approved = req.body.new_payment_approved;
-    const balance = req.body.new_balance;
-    const payment_chq_no = req.body.new_payment_chq_no;
-    const payment_chq_amount = req.body.new_payment_chq_amount;
-    const payment_chq_date = req.body.new_payment_chq_date;
+    const {
+        id,
+        order_job_number,
+        LV_name,
+        date_from_charpotro,
+        MV_name,
+        commodity,
+        chq_no,
+        chq_issue_date,
+        amount,
+        part_pay,
+        payment_approved,
+        balance,
+        payment_chq_no,
+        payment_chq_amount,
+        payment_chq_date,
+        added_date,
+    } = req.body;
     const sqlUpdate =
         "UPDATE payment SET order_job_number=?, LV_name=?, date_from_charpotro=?, MV_name=?, commodity=?, chq_no=?, chq_issue_date=?, amount=?, part_pay=?, payment_approved=?, balance=?, payment_chq_no=?, payment_chq_amount=?, payment_chq_date=?, added_date=? WHERE id=?";
     db.query(
@@ -83,8 +91,11 @@ function updatePayment(req, res, db) {
             id,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "updating payment")
+                    : ToastRes("update", `${order_job_number}`)
+            );
         }
     );
 }
@@ -93,11 +104,11 @@ function deletePayment(req, res, db) {
     const id = req.body.Pay_id;
     const sqlDelete = "DELETE from payment where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting payment")
+                : ToastRes("delete", `${order_job_number}`)
+        );
     });
 }
 

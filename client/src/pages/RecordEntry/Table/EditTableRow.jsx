@@ -7,17 +7,17 @@ const EditTableRow = ({
     handleCancelClick,
 }) => {
     var clsName =
-        "w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
+        "peer w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
-            <td></td>
             <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    placeholder="Select order job number..."
-                    name="order_job_number"
-                    value={editFormData.order_job_number}
+                    required
+                    placeholder="Enter order number..."
+                    name="order_number"
+                    value={editFormData.order_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
@@ -26,76 +26,54 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="text"
-                    placeholder="LA"
-                    name="LA"
-                    value={editFormData.LA_name}
+                    required
+                    placeholder="Enter Job Number..."
+                    name="job_number"
+                    value={editFormData.job_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
             </td>
             <td>
                 <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    className={`${clsName} cursor-not-allowed select-none border-red-600`}
                     type="text"
-                    placeholder="Enter LV name..."
-                    name="LV_name"
-                    value={editFormData.LV_name}
-                    onChange={handleEditFormChange}
                     disabled
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="date"
-                    name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
-                    onChange={handleEditFormChange}
-                    disabled
-                />
-            </td>
-            <td>
-                <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
                     placeholder="Commodity..."
                     name="commodity"
                     value={editFormData.commodity}
                     onChange={handleEditFormChange}
-                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
-                    placeholder="Destination From..."
-                    name="dest_from"
-                    value={editFormData.dest_from}
+                    className={clsName}
+                    type="date"
+                    required
+                    name="date_from_charpotro"
+                    value={editFormData.date_from_charpotro.slice(0, 10)}
                     onChange={handleEditFormChange}
-                    disabled
                 />
             </td>
             <td>
                 <input
-                    className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="text"
-                    placeholder="Destination To..."
-                    name="dest_to"
-                    value={editFormData.dest_to}
+                    className={clsName}
+                    type="number"
+                    required
+                    placeholder="CP Number From Charpotro..."
+                    name="cp_number_from_charpotro"
+                    value={editFormData.cp_number_from_charpotro}
                     onChange={handleEditFormChange}
-                    disabled
                 />
             </td>
-
             <td>
                 <input
                     className={clsName}
                     type="text"
                     required
-                    placeholder="Current Location..."
-                    name="current_location"
-                    value={editFormData.current_location}
+                    placeholder="LA name..."
+                    name="LA_name"
+                    value={editFormData.LA_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -103,28 +81,87 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="text"
-                    placeholder="Remark..."
-                    name="remark"
-                    value={editFormData.remark}
+                    required
+                    placeholder="LV name..."
+                    name="LV_name"
+                    value={editFormData.LV_name}
                     onChange={handleEditFormChange}
                 />
             </td>
             <td>
-                <select
-                    className={clsName}
-                    name="trip_completed"
-                    value={editFormData.trip_completed}
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="text"
+                    disabled
+                    placeholder="Destination From..."
+                    name="dest_from"
+                    value={editFormData.dest_from}
                     onChange={handleEditFormChange}
-                >
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
+                />
             </td>
+            <td>
+                <input
+                    className={clsName}
+                    type="text"
+                    required
+                    placeholder="Destination To..."
+                    name="dest_to"
+                    value={editFormData.dest_to}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="number"
+                    disabled
+                    placeholder="Capacity..."
+                    name="capacity"
+                    value={editFormData.capacity}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={`${clsName} cursor-not-allowed border-red-600`}
+                    type="number"
+                    disabled
+                    placeholder="Rate..."
+                    name="rate"
+                    value={editFormData.rate}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={clsName}
+                    type="text"
+                    required
+                    placeholder="LV Master Name..."
+                    name="LV_master_name"
+                    value={editFormData.LV_master_name}
+                    onChange={handleEditFormChange}
+                />
+            </td>
+            <td>
+                <input
+                    className={clsName}
+                    type="number"
+                    required
+                    placeholder="LA Master Number..."
+                    name="LV_master_contact_number"
+                    value={editFormData.LV_master_contact_number}
+                    onChange={handleEditFormChange}
+                    pattern="[0-0]{1}[1-1]{1}[3-9]{1}[0-9]{8}"
+                />
+            </td>
+
             <td className="text-center text-sm">
                 <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
                     Auto generated
                 </span>
             </td>
+
             <td className="flex items-center justify-around py-2">
                 <button
                     className="mr-2 rounded-md bg-green-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"

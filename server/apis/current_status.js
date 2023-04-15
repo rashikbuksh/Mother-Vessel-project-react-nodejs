@@ -1,13 +1,16 @@
+const { ToastRes } = require("./util");
+
 function addCurrentStatus(req, res, db) {
-    //console.log("submit in backend");
-    const LV_name = req.body.LV_name;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const LA = req.body.LA;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
+    const {
+        LV_name,
+        date_from_charpotro,
+        commodity,
+        LA,
+        dest_from,
+        dest_to,
+        current_location,
+        remark,
+    } = req.body;
     const create_current_status =
         "INSERT INTO current_status (LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark) VALUES (?,?,?,?,?,?,?,?)";
     db.query(
@@ -23,8 +26,11 @@ function addCurrentStatus(req, res, db) {
             remark,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating current status")
+                    : ToastRes("create", `${order_job_number}`)
+            );
         }
     );
 }
@@ -61,10 +67,7 @@ function getCurrentStatus(req, res, db) {
 }
 
 function updateCurrentStatus(req, res, db) {
-    const id = req.body.id;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
-    const trip_completed = req.body.trip_completed;
+    const { id, current_location, remark, trip_completed } = req.body;
     const time_updated = new Date().toISOString();
     const sqlUpdate =
         "UPDATE current_status SET current_location=?, remark=?, time_updated=?, trip_completed=?  where id= ?";
@@ -72,7 +75,11 @@ function updateCurrentStatus(req, res, db) {
         sqlUpdate,
         [current_location, remark, time_updated, trip_completed, id],
         (err, result) => {
-            if (err) console.log(err);
+            res.json(
+                err
+                    ? ToastRes("error", "updating current status")
+                    : ToastRes("update", `${order_job_number}`)
+            );
         }
     );
 }
@@ -82,11 +89,11 @@ function deleteCurrentStatus(req, res, db) {
     const id = req.body.status_id;
     const sqlDelete = "DELETE from current_status where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting current status")
+                : ToastRes("delete", `${order_job_number}`)
+        );
     });
 }
 
