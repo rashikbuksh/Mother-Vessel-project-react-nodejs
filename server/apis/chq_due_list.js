@@ -1,17 +1,20 @@
+const { ToastRes } = require("./util");
+
 function addChqDue(req, res, db) {
-    //console.log("submit in backend");
-    const order_job_number = req.body.order_job_number;
-    const LA_name = req.body.LA_name;
-    const LV_name = req.body.LV_name;
-    const commodity = req.body.commodity;
-    const mode = req.body.mode;
-    const chq_amount = req.body.chq_amount;
-    const part_pay = req.body.part_pay;
-    const balance = req.body.balance;
-    const chq_issue_date = req.body.chq_issue_date;
-    const init_amount = req.body.init_amount;
-    const payment = req.body.payment;
-    const final_amount = req.body.final_amount;
+    const {
+        order_job_number,
+        LA_name,
+        LV_name,
+        commodity,
+        mode,
+        chq_amount,
+        part_pay,
+        balance,
+        chq_issue_date,
+        init_amount,
+        payment,
+        final_amount,
+    } = req.body;
     const create_chq = `INSERT INTO 
         chq_due_list 
         (
@@ -46,29 +49,22 @@ function addChqDue(req, res, db) {
             final_amount,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating chq due list")
+                    : ToastRes("create", `${order_job_number}`)
+            );
         }
     );
 }
+
+const filterData = {
+    All: "",
+    Own: "join pre_defined_ship pdf on r.LV_name = pdf.LV_name",
+    Other: "join pre_defined_ship pdf on r.LV_name != pdf.LV_name",
+};
 function getChqDue(req, res, db) {
     const filterByShip = req.query.filterByShip;
-    var addedSql = "";
-    switch (filterByShip) {
-        case "All":
-            addedSql = "";
-            break;
-        case "Own":
-            addedSql = "join pre_defined_ship pdf on r.LV_name = pdf.LV_name";
-            break;
-        case "Other":
-            addedSql = "join pre_defined_ship pdf on r.LV_name != pdf.LV_name";
-            break;
-        default:
-            addedSql = "";
-            break;
-    }
-    console.log("status: " + filterByShip);
 
     const sqlSelect =
         `
@@ -97,7 +93,7 @@ FROM
     r.order_number, '-', r.job_number
   ) 
   ` +
-        addedSql +
+        filterData[filterByShip] +
         `
 where 
   ca.sixty_percent_payment_amount > 0 
@@ -128,7 +124,7 @@ FROM
     r.order_number, '-', r.job_number
   ) 
   ` +
-        addedSql +
+        filterData[filterByShip] +
         `
 where 
   ca.forty_percent_payment_amount > 0 
@@ -136,19 +132,12 @@ where
 order by 
   LA_name asc
             `;
-    db.query(sqlSelect, (err, result) => {
+    db.query(sqlSelect, [filterData[filterByShip]], (err, result) => {
         res.send(result);
     });
 }
 function updateChqDue(req, res, db) {
-    //console.log("update job info in backend");
-    const order_job_number = req.body.new_order_job_number;
-    const mode = req.body.new_mode;
-
-    const amount = req.body.new_amount;
-    const payment = req.body.new_payment;
-
-    console.log("updateChqDue: " + order_job_number + " " + mode);
+    const { order_job_number, mode, amount, payment } = req.body;
 
     const sqlUpdate =
         "UPDATE chq_due_list SET payment=?, amount=? WHERE order_job_number=? and mode=?";
@@ -156,20 +145,16 @@ function updateChqDue(req, res, db) {
         sqlUpdate,
         [payment, amount, order_job_number, mode],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "updating chq due list")
+                    : ToastRes("update", `${order_job_number}`)
+            );
         }
     );
 }
 function updateChqDuePartPay(req, res, db) {
-    //console.log("update job info in backend");
-    const order_job_number = req.body.new_order_job_number;
-    const mode = req.body.new_mode;
-    const part_pay = req.body.new_part_pay;
-    const amount = req.body.new_amount;
-    const payment = req.body.new_payment;
-
-    console.log("updateChqDue: " + order_job_number + " " + mode);
+    const { order_job_number, mode, part_pay, amount, payment } = req.body;
 
     const sqlUpdate =
         "UPDATE chq_due_list SET part_pay=?, payment=?, amount=? WHERE order_job_number=? and mode=?";
@@ -177,8 +162,11 @@ function updateChqDuePartPay(req, res, db) {
         sqlUpdate,
         [part_pay, payment, amount, order_job_number, mode],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "updating chq due list")
+                    : ToastRes("update", `${order_job_number}`)
+            );
         }
     );
 }
@@ -187,11 +175,11 @@ function deleteChqDue(req, res, db) {
     const id = req.body.Chq_id;
     const sqlDelete = "DELETE from chq_due_list where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting chq due list")
+                : ToastRes("delete", `${order_job_number}`)
+        );
     });
 }
 //  Splitter

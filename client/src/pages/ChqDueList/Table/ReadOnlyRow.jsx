@@ -3,12 +3,7 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 import DateTime from "../../../utils/DateTime";
-const ReadOnlyRow = ({
-    Chq,
-    handleEditClick,
-    handleDeleteClick,
-    handlePaymentOpenModal,
-}) => {
+const ReadOnlyRow = ({ Chq, handleEditClick, handlePaymentOpenModal }) => {
     var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>

@@ -8,11 +8,6 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
         "rounded-lg bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider";
     return (
         <>
-            <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {status.id}
-                </a>
-            </td>
             <td className={clsName}>{status.order_job_number}</td>
             <td className={clsName}>
                 <span className={`${spanClsName} bg-blue-200 text-blue-800`}>

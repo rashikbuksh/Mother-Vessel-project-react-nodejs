@@ -6,11 +6,6 @@ const ReadOnlyRow = ({ Dam, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {Dam.id}
-                </a>
-            </td>
             <td className={clsName}>{Dam.order_job_number}</td>
             <td className={clsName}>
                 {Dam.date && <DateTime date={Dam.date} isTime={false} />}

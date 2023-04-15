@@ -1,12 +1,15 @@
+const { ToastRes } = require("./util");
+
 function addChqApproval(req, res, db) {
-    //console.log("submit in backend");
-    const order_job_number = req.body.order_job_number;
-    const sixty_percent_payment = req.body.sixty_percent_payment;
-    const forty_percent_payment = req.body.forty_percent_payment;
-    const damarage = req.body.damarage;
-    const second_trip = req.body.second_trip;
-    const third_trip = req.body.third_trip;
-    const direct_trip = req.body.direct_trip;
+    const {
+        order_job_number,
+        sixty_percent_payment,
+        forty_percent_payment,
+        damarage,
+        second_trip,
+        third_trip,
+        direct_trip,
+    } = req.body;
     const create_chq =
         "INSERT INTO chq_approval (order_job_number, sixty_percent_payment, forty_percent_payment, damarage, second_trip, third_trip, direct_trip) VALUES (?,?,?,?,?,?,?)";
     db.query(
@@ -23,28 +26,24 @@ function addChqApproval(req, res, db) {
         (err, result) => {
             if (err) console.log(err);
             res.send(result);
+
+            res.json(
+                err
+                    ? ToastRes("error", "creating checque approval")
+                    : ToastRes("create", `${order_job_number}`)
+            );
         }
     );
 }
+
+const filterData = {
+    All: "",
+    Pending: "WHERE c.sixty_percent_payment_amount is NULL",
+    Current: "WHERE c.sixty_percent_payment_amount is not NULL",
+};
+
 function getChqApproval(req, res, db) {
-    const status = req.query.status;
-    var addedSql = "";
-    switch (status) {
-        case "All":
-            addedSql = "";
-            break;
-        case "Pending":
-            addedSql = "WHERE c.sixty_percent_payment_amount is NULL";
-            break;
-        case "Current":
-            addedSql = "WHERE c.sixty_percent_payment_amount is not NULL";
-            break;
-        default:
-            addedSql = "";
-            break;
-    }
-    console.log("status: " + status);
-    //console.log("Added SQL: " + addedSql);
+    const { status } = req.query;
 
     var sqlSelect =
         `SELECT 
@@ -75,33 +74,29 @@ function getChqApproval(req, res, db) {
         from 
             chq_approval c join record_entry r 
             on c.order_job_number = concat(r.order_number, '-', r.job_number) ` +
-        addedSql +
+        filterData[status] +
         ";";
 
-    //console.log("SQL Select: " + sqlSelect);
-    db.query(sqlSelect, [addedSql], (err, result) => {
+    db.query(sqlSelect, [filterData[status]], (err, result) => {
         res.send(result);
     });
 }
 function updateChqApproval(req, res, db) {
-    //console.log("update job info in backend");
-    const id = req.body.id;
-    const sixty_percent_payment_amount =
-        req.body.new_sixty_percent_payment_amount;
-    const sixty_percent_payment_chq_number =
-        req.body.new_sixty_percent_payment_chq_number;
-    const sixty_percent_payment_chq_date =
-        req.body.new_sixty_percent_payment_chq_date;
-    const forty_percent_payment_amount =
-        req.body.new_forty_percent_payment_amount;
-    const forty_percent_payment_chq_number =
-        req.body.new_forty_percent_payment_chq_number;
-    const forty_percent_payment_chq_date =
-        req.body.new_forty_percent_payment_chq_date;
-    const damarage = req.body.new_damarage;
-    const second_trip = req.body.new_second_trip;
-    const third_trip = req.body.new_third_trip;
-    const direct_trip = req.body.new_direct_trip;
+    const {
+        id,
+        order_job_number,
+        sixty_percent_payment_amount,
+        sixty_percent_payment_chq_number,
+        sixty_percent_payment_chq_date,
+        forty_percent_payment_amount,
+        forty_percent_payment_chq_number,
+        forty_percent_payment_chq_date,
+        damarage,
+        second_trip,
+        third_trip,
+        direct_trip,
+    } = req.body;
+
     const sqlUpdate = `UPDATE chq_approval SET 
             sixty_percent_payment_amount=?, 
             sixty_percent_payment_chq_number=?,
@@ -130,21 +125,25 @@ function updateChqApproval(req, res, db) {
             id,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "updating checque approval")
+                    : ToastRes("update", `${order_job_number}`)
+            );
         }
     );
 }
 function deleteChqApproval(req, res, db) {
     //console.log("Delete status in backend");
     const id = req.body.Chq_id;
+    const order_job_number = req.body.order_job_number;
     const sqlDelete = "DELETE from chq_approval where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting checque approval")
+                : ToastRes("delete", `${order_job_number}`)
+        );
     });
 }
 

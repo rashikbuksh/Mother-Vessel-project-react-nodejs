@@ -8,11 +8,6 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
 
     return (
         <>
-            <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {record.id}
-                </a>
-            </td>
             <td className={clsName}>{record.order_number}</td>
             <td className={`text-center ${clsName}`}>
                 <span className="text-md mx-4 rounded-md bg-red-200 bg-opacity-50 p-1.5 font-medium tracking-wider text-red-800">

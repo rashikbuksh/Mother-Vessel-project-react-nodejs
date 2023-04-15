@@ -1,17 +1,20 @@
+const { ToastRes } = require("./util");
+
 function addRecord(req, res, db) {
-    //console.log("submit in backend");
-    const order_number = req.body.order_number;
-    const job_number = req.body.job_number;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
-    const LA_name = req.body.LA_name;
-    const LV_name = req.body.LV_name;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const capacity = req.body.capacity;
-    const rate = req.body.rate;
-    const LV_master_name = req.body.LV_master_name;
-    const LV_master_contact_number = req.body.LV_master_contact_number;
+    const {
+        order_number,
+        job_number,
+        date_from_charpotro,
+        cp_number_from_charpotro,
+        LA_name,
+        LV_name,
+        dest_from,
+        dest_to,
+        capacity,
+        rate,
+        LV_master_name,
+        LV_master_contact_number,
+    } = req.body;
     const create_record =
         "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
@@ -31,8 +34,11 @@ function addRecord(req, res, db) {
             LV_master_contact_number,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating record")
+                    : ToastRes("create", `${order_number}`)
+            );
         }
     );
 }
@@ -71,21 +77,22 @@ function getRecord(req, res, db) {
 }
 
 function updateRecord(req, res, db) {
-    //console.log("update job info in backend");
-    const id = req.body.id;
-    const order_number = req.body.order_number;
-    const job_number = req.body.job_number;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const cp_number_from_charpotro = req.body.cp_number_from_charpotro;
-    const LA_name = req.body.LA_name;
-    const LV_name = req.body.LV_name;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const capacity = req.body.capacity;
-    const rate = req.body.rate;
-    const LV_master_name = req.body.LV_master_name;
-    const LV_master_contact_number = req.body.LV_master_contact_number;
-    //console.log(id);
+    const {
+        id,
+        order_number,
+        job_number,
+        date_from_charpotro,
+        cp_number_from_charpotro,
+        LA_name,
+        LV_name,
+        dest_from,
+        dest_to,
+        capacity,
+        rate,
+        LV_master_name,
+        LV_master_contact_number,
+    } = req.body;
+
     const sqlUpdate =
         "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
     db.query(
@@ -106,11 +113,11 @@ function updateRecord(req, res, db) {
             id,
         ],
         (err, result) => {
-            if (err) console.log(err);
-
-            // res.send(result).json({
-            //     success: true,
-            // });
+            res.json(
+                err
+                    ? ToastRes("error", "updating record")
+                    : ToastRes("update", `${order_number}`)
+            );
         }
     );
 }
@@ -118,13 +125,14 @@ function updateRecord(req, res, db) {
 function deleteRecord(req, res, db) {
     //console.log("Delete record in backend");
     const id = req.body.record_id;
+    const order_number = req.body.order_number;
     const sqlDelete = "DELETE from record_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting record")
+                : ToastRes("delete", `${order_number}`)
+        );
     });
 }
 
@@ -163,7 +171,6 @@ function getMaxCapacity(req, res, db) {
     `;
 
     db.query(sqlSelect, [order_number], (err, result) => {
-        console.log("max", result);
         res.send(result);
     });
 }

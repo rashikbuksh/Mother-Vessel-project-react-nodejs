@@ -1,18 +1,24 @@
-function ToastRes(status, message) {
+function ToastRes(status, message, onlyMessage = false) {
     this.status = status;
     this.message = message;
     switch (status) {
         case "create":
-            this.message = `${message} created successfully`;
+            this.message = onlyMessage
+                ? `${message}`
+                : `${message} created successfully`;
             break;
         case "update":
-            this.message = `${message} updated successfully`;
+            this.message = onlyMessage
+                ? `${message}`
+                : `${message} updated successfully`;
             break;
         case "delete":
-            this.message = `${message} deleted successfully`;
+            this.message = onlyMessage
+                ? `${message}`
+                : `${message} deleted successfully`;
             break;
         case "error":
-            this.message = `Error in ${message}`;
+            this.message = onlyMessage ? `${message}` : `Error in ${message}`;
             break;
         default:
             this.message = message;

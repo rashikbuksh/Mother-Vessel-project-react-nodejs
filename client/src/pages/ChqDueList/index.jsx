@@ -1,25 +1,24 @@
-import React, { useState, Fragment, useEffect, Suspense } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import ReadOnlyRow from "./TableRows/ReadOnlyRow";
-import EditableRow from "./TableRows/EditTableRow";
-import TableHead from "../../components/Table/TableHead"; // new
-import Pagination from "../../components/Table/Pagination"; // new
-import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import { useAuth } from "../../hooks/auth";
+import { useState, useEffect, Suspense, lazy, Fragment } from "react";
 import Axios from "axios";
-import Loader from "../../utils/Loader";
+import ReadOnlyRow from "./Table/ReadOnlyRow";
+import EditableRow from "./Table/EditTableRow";
+import TableHead from "../../components/Table/TableHead";
 
-import { IoMdPersonAdd } from "react-icons/io";
-import { MdClose } from "react-icons/md";
-import Select from "../../components/Select";
+import { useSortableTable } from "../../components/Table/useSortableTable";
+import { Dialog, Transition } from "@headlessui/react";
+
+import { errorData, errorCheck } from "./Error";
+import { generatedToast, Toast } from "../../components/Toast";
+import { fetchData } from "../../hooks/fetchData";
+
+import NoDataFound from "../../utils/NoDataFound";
+import LoadMore from "../../utils/LoadMore";
+import PingLoader from "../../utils/PingLoader";
 
 import { Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 import Tabs from "./Tabs";
-
-//toast
-import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -53,6 +52,8 @@ const TableHeader = [
 
 const opt = [{ value: "All" }, { value: "Own" }, { value: "Other" }];
 
+const AddPaymentInformation = lazy(() => import("./AddPaymentInformation"));
+
 const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
@@ -66,6 +67,10 @@ const App = () => {
 
     // search filter for all fields
     const [query, setQuery] = useState("");
+
+    // fetch data
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const data = Object.values(tableData);
     function search(items) {
@@ -86,13 +91,12 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                setChqList(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`,
+            setChqList,
+            setLoading,
+            setError
+        );
         // fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
         //     .then((res) => res.json())
         //     .then((data) => {
@@ -298,6 +302,8 @@ const App = () => {
 
         const fieldValue = event.target.value;
 
+        errorCheck(fieldValue, fieldName);
+
         const newFormData = { ...paymentModalData };
         newFormData[fieldName] = fieldValue;
 
@@ -408,17 +414,19 @@ const App = () => {
         setBtnPayClicked(true);
     }
 
+    // loading and error
+    if (loading) {
+        return <PingLoader />;
+    }
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-2">
             {/* {laNames && <Tabs tabHeaders={laNames} />} */}
             <div className="my-2 mx-auto flex justify-between">
-                <Pagination
-                    pageSize={pageSize}
-                    cursorPos={cursorPos}
-                    setCursorPos={setCursorPos}
-                    rowsCount={data.length}
-                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -509,42 +517,35 @@ const App = () => {
                         columns={TableHeader}
                         handleSorting={handleSorting}
                     />
-                    {search(tableData).length === 0 && query !== "" ? (
-                        <div className="py-2 px-4 text-gray-700">
-                            Nothing found.
-                        </div>
-                    ) : (
+                    {search(tableData).length > 0 && (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((Chq, idx) => (
+                            {search(tableData).map((_, index) => (
                                 <tr
-                                    key={idx}
+                                    key={index}
                                     className={`my-auto items-center justify-center ${
-                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                        index % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
                                     {editChqOrderJobNumber ===
-                                        Chq.order_job_number &&
-                                    editChqMode === Chq.mode &&
+                                        search(tableData)[index]
+                                            ?.order_job_number &&
+                                    editChqMode ===
+                                        search(tableData)[index]?.mode &&
                                     !btnPayClicked ? (
                                         <EditableRow
-                                            editFormData={editFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
+                                            {...{
+                                                editFormData,
+                                                handleEditFormChange,
+                                                handleCancelClick,
+                                            }}
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            Chq={Chq}
-                                            handleEditClick={handleEditClick}
-                                            handleDeleteClick={
-                                                handleDeleteClick
-                                            }
-                                            handlePaymentOpenModal={
-                                                handlePaymentOpenModal
-                                            }
+                                            Chq={search(tableData)[index]}
+                                            {...{
+                                                handleEditClick,
+                                                handlePaymentOpenModal,
+                                            }}
                                         />
                                     )}
                                 </tr>
@@ -552,299 +553,35 @@ const App = () => {
                         </tbody>
                     )}
                 </table>
+                {search(tableData).length < 1 && <NoDataFound />}
             </form>
+
+            {/* new start  */}
+            {search(tableData).length < data.length && (
+                <LoadMore
+                    onClick={() => {
+                        setPageSize((prevValue) =>
+                            cursorPos + prevValue > data.length
+                                ? prevValue
+                                : prevValue + 20
+                        );
+                    }}
+                />
+            )}
             {/* // new end */}
             {/* add item modal */}
-            <Suspense fallback={<Loader />}>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="z-10 overflow-y-auto"
-                        // new start
-                        onClose={() => {}}
-                        // new end
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        {/* // new start */}
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Add Payment
-                                            <button
-                                                className="float-right"
-                                                onClick={closeModal}
-                                            >
-                                                <MdClose className="inline text-red-600" />
-                                            </button>
-                                        </Dialog.Title>
-                                        {/* // new end */}
-
-                                        <form
-                                            onSubmit={
-                                                handlePaymentModalFormSubmit
-                                            }
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Job Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="order_job_number"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.order_job_number
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.LV_name
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LA_name"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.LA_name
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.commodity
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    chq_issue_date
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="chq_issue_date"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={paymentModalData.chq_issue_date.slice(
-                                                        0,
-                                                        10
-                                                    )}
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Mode
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="mode"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.mode
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Amount
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="amount"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.amount
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Part payment
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    name="part_pay"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.part_pay
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    payment
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="payment"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.payment
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    balance
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="balance"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.balance
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    payment chq no
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="payment_chq_no"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    required
-                                                    value={
-                                                        paymentModalData.payment_chq_no
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    payment_chq_amount
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="payment_chq_amount"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    disabled
-                                                    value={
-                                                        paymentModalData.payment_chq_amount
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    payment_chq_date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    name="payment_chq_date"
-                                                    onChange={
-                                                        handlePaymentModalFormChange
-                                                    }
-                                                    required
-                                                    value={
-                                                        paymentModalData.payment_chq_date
-                                                    }
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                            >
-                                                Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
+            <Suspense fallback={<PingLoader />}>
+                <AddPaymentInformation
+                    {...{
+                        isOpen,
+                        closeModal,
+                        handlePaymentModalFormSubmit,
+                        handlePaymentModalFormChange,
+                        paymentModalData,
+                        errorData,
+                        paymentModalData,
+                    }}
+                ></AddPaymentInformation>
             </Suspense>
             {/* toast  */}
             <Toast />

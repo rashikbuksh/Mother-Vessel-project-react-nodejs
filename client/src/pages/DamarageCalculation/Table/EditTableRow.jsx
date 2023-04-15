@@ -11,7 +11,6 @@ const EditTableRow = ({
         "peer rounded-md bg-gray-50  text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
     return (
         <>
-            <td></td>
             <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
@@ -177,7 +176,10 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter unloading start time stamp..."
                     name="unloading_start_time_stamp"
-                    value={editFormData.unloading_start_time_stamp && editFormData.unloading_start_time_stamp.slice(0, 10)}
+                    value={
+                        editFormData.unloading_start_time_stamp &&
+                        editFormData.unloading_start_time_stamp.slice(0, 10)
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -187,7 +189,13 @@ const EditTableRow = ({
                     type="date"
                     placeholder="Enter unloading completion time stamp..."
                     name="unloading_completion_time_stamp"
-                    value={editFormData.unloading_completion_time_stamp && editFormData.unloading_completion_time_stamp.slice(0, 10)}
+                    value={
+                        editFormData.unloading_completion_time_stamp &&
+                        editFormData.unloading_completion_time_stamp.slice(
+                            0,
+                            10
+                        )
+                    }
                     onChange={handleEditFormChange}
                 />
             </td>

@@ -1,29 +1,22 @@
-import React, { useState, Fragment, useEffect, Suspense } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import ReadOnlyRow from "./TableRows/ReadOnlyRow";
-import EditableRow from "./TableRows/EditTableRow";
-import TableHead from "../../components/Table/TableHead"; // new
-import Pagination from "../../components/Table/Pagination"; // new
-import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import { useAuth } from "../../hooks/auth";
+import { useState, useEffect, Suspense, lazy } from "react";
 import Axios from "axios";
-import Loader from "../../utils/Loader";
+import ReadOnlyRow from "./Table/ReadOnlyRow";
+import EditableRow from "./Table/EditTableRow";
+import TableHead from "../../components/Table/TableHead";
+
+import { useSortableTable } from "../../components/Table/useSortableTable";
+
+import { errorData, errorCheck } from "./Error";
+import { generatedToast, Toast } from "../../components/Toast";
+import { fetchData } from "../../hooks/fetchData";
+
+import NoDataFound from "../../utils/NoDataFound";
+import LoadMore from "../../utils/LoadMore";
+import PingLoader from "../../utils/PingLoader";
 
 import { IoMdPersonAdd } from "react-icons/io";
-import { MdClose } from "react-icons/md";
-import Select from "../../components/Select";
-
-//toast
-import { generatedToast, Toast } from "../../components/Toast";
 
 const TableHeader = [
-    {
-        id: 1,
-        name: "Id",
-        accessor: "id",
-        sortable: true,
-        sortByOrder: "asc",
-    },
     {
         id: 3,
         name: "Order Job Number",
@@ -48,6 +41,8 @@ const TableHeader = [
     { id: 16, name: "Actions" },
 ];
 
+const AddCurrentStatus = lazy(() => import("./AddCurrentStatus"));
+
 const App = () => {
     // new start
     const [CurrentStatus, setCurrentStatus] = useState([]);
@@ -57,6 +52,10 @@ const App = () => {
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+
+    // fetch data
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -75,11 +74,13 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getcurrentstatus`)
-            .then((res) => res.json())
-            .then((data) => {
-                setCurrentStatus(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getcurrentstatus`,
+            setCurrentStatus,
+            setLoading,
+            setError
+        );
+        console.log(CurrentStatus);
     }, []);
 
     // new end
@@ -123,6 +124,8 @@ const App = () => {
     //     const fieldName = event.target.getAttribute("name");
     //     //각 input 입력값
     //     const fieldValue = event.target.value;
+
+    //     errorCheck(fieldValue, fieldName);
 
     //     const newFormData = { ...addFormData };
     //     newFormData[fieldName] = fieldValue;
@@ -322,16 +325,19 @@ const App = () => {
     // }, [addFormData.order_job_number]);
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
+
+    // loading and error
+    if (loading) {
+        return <PingLoader />;
+    }
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <div className="m-2 mt-4">
             {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
-                <Pagination
-                    pageSize={pageSize}
-                    cursorPos={cursorPos}
-                    setCursorPos={setCursorPos}
-                    rowsCount={data.length}
-                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -353,36 +359,31 @@ const App = () => {
                         columns={TableHeader}
                         handleSorting={handleSorting}
                     />
-                    {search(tableData).length === 0 && query !== "" ? (
-                        <div className="py-2 px-4 text-gray-700">
-                            Nothing found.
-                        </div>
-                    ) : (
+                    {search(tableData).length > 0 && (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((status, idx) => (
+                            {search(tableData).map((_, index) => (
                                 <tr
-                                    status={status.id}
+                                    key={index}
                                     className={`my-auto items-center justify-center ${
-                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                        index % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editStatusId === status.id ? (
+                                    {editStatusId ===
+                                    search(tableData)[index]?.id ? (
                                         <EditableRow
-                                            editFormData={editFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
+                                            {...{
+                                                editFormData,
+                                                handleEditFormChange,
+                                                handleCancelClick,
+                                            }}
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            status={status}
-                                            handleEditClick={handleEditClick}
-                                            handleDeleteClick={
-                                                handleDeleteClick
-                                            }
+                                            status={search(tableData)[index]}
+                                            {...{
+                                                handleEditClick,
+                                                handleDeleteClick,
+                                            }}
                                         />
                                     )}
                                 </tr>
@@ -390,209 +391,37 @@ const App = () => {
                         </tbody>
                     )}
                 </table>
+                {search(tableData).length < 1 && <NoDataFound />}
             </form>
+
+            {/* new start  */}
+            {search(tableData).length < data.length && (
+                <LoadMore
+                    onClick={() => {
+                        setPageSize((prevValue) =>
+                            cursorPos + prevValue > data.length
+                                ? prevValue
+                                : prevValue + 20
+                        );
+                    }}
+                />
+            )}
 
             {/* // new end */}
 
             {/* add item modal */}
             {/* <Suspense fallback={<Loader />}>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="z-10 overflow-y-auto"
-                        onClose={() => {}}
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-bLA_nameck bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Add Status
-                                            <button
-                                                className="float-right"
-                                                onClick={closeModal}
-                                            >
-                                                <MdClose className="inline text-red-600" />
-                                            </button>
-                                        </Dialog.Title>
-                                        <form
-                                            onSubmit={handleAddFormSubmit}
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Order Job Number
-                                                </LA_namebel>
-                                                {orderJobList && (
-                                                    <Select
-                                                        options={orderJobList}
-                                                        name="order_job_number"
-                                                        addFormData={
-                                                            addFormData
-                                                        }
-                                                        setAddFormData={
-                                                            setAddFormData
-                                                        }
-                                                        isAddFromData={true}
-                                                    />
-                                                )}
-                                            </div>
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Name
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="LV Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Date From Charpotro
-                                                </LA_namebel>
-                                                <input
-                                                    type="date"
-                                                    name="date_from_charpotro"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Date From Charpotro"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Commodity
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="commodity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Commodity"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LA_name
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="LA_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="LA_name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Destination From
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="dest_from"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Destination From"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Destination To
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="dest_to"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Destination To"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Current Location
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="current_location"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Current Location"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group reLA_nametive w-72 md:w-80 lg:w-96">
-                                                <LA_namebel className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Remark
-                                                </LA_namebel>
-                                                <input
-                                                    type="text"
-                                                    name="remark"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    pLA_nameceholder="Remark"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <button
-                                                type="submit"
-                                                className="inline-flex w-72 justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 md:w-80 lg:w-96"
-                                            >
-                                                Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
+                <AddCurrentStatus
+                    isOpen,
+                    closeModal,
+                    handleAddFormSubmit,
+                    handleAddFormChange,
+                    addFormData,
+                    setAddFormData,
+                    errorData,
+                    orderJobList,
+                >
+                </AddCurrentStatus>
             </Suspense> */}
 
             {/* toast  */}
