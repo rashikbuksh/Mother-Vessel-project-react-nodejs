@@ -214,7 +214,6 @@ const App = () => {
                 payment_chq_date: editedPay.payment_chq_date,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -274,7 +273,6 @@ const App = () => {
                 payment_chq_date: editedPay.payment_chq_date,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -328,7 +326,6 @@ const App = () => {
                 Pay_id: PayId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

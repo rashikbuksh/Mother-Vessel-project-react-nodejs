@@ -166,7 +166,6 @@ const App = () => {
                 LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -216,7 +215,6 @@ const App = () => {
                 remark: editedStatus.remark,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -267,7 +265,6 @@ const App = () => {
                 status_id: StatusId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

@@ -1,16 +1,19 @@
 const { ToastRes } = require("./util");
 
 function addJob(req, res, db) {
-    const order_number = req.body.order_number;
-    const importer_name = req.body.importer_name;
-    const mother_vessel_name = req.body.mother_vessel_name;
-    const eta = req.body.eta;
-    const commodity = req.body.commodity;
-    const mv_location = req.body.mv_location;
-    const bl_quantity = req.body.bl_quantity;
-    const stevedore_name = req.body.stevedore_name;
-    const stevedore_contact_number = req.body.stevedore_contact_number;
+    const {
+        order_number,
+        importer_name,
+        mother_vessel_name,
+        eta,
+        commodity,
+        mv_location,
+        bl_quantity,
+        stevedore_name,
+        stevedore_contact_number,
+    } = req.body;
     const time_stamp = new Date();
+
     const create_job =
         "INSERT INTO job_entry (order_number, importer_name, mother_vessel_name, eta, commodity, mv_location, bl_quantity, stevedore_name, stevedore_contact_number, time_stamp) VALUES (?,?,?,?,?,?,?,?,?,?)";
     db.query(
@@ -45,19 +48,20 @@ function getJob(req, res, db) {
 }
 
 function updateJob(req, res, db) {
-    //console.log("update job info in backend");
-    const id = req.body.id;
-    const order_number = req.body.new_order_number;
-    const importer_name = req.body.new_importer_name;
-    const mother_vessel_name = req.body.new_mother_vessel_name;
-    const eta = req.body.new_eta;
-    const commodity = req.body.new_commodity;
-    const mv_location = req.body.new_mv_location;
-    const bl_quantity = req.body.new_bl_quantity;
-    const stevedore_name = req.body.new_stevedore_name;
-    const stevedore_contact_number = req.body.new_stevedore_contact_number;
+    const {
+        id,
+        order_number,
+        importer_name,
+        mother_vessel_name,
+        eta,
+        commodity,
+        mv_location,
+        bl_quantity,
+        stevedore_name,
+        stevedore_contact_number,
+    } = req.body;
     const time_stamp = new Date();
-    //console.log(id);
+
     const sqlUpdate =
         "UPDATE job_entry SET order_number=?, importer_name=?, mother_vessel_name=?, eta=?, commodity=?, mv_location=?, bl_quantity=?, stevedore_name=?, stevedore_contact_number=?, time_stamp=? where id= ?";
     db.query(
@@ -89,7 +93,9 @@ function deleteJob(req, res, db) {
     //console.log("Delete job in backend");
     const id = req.body.job_id;
     const order_number = req.body.job_order_number;
+
     const sqlDelete = "DELETE from job_entry where id= ?";
+
     db.query(sqlDelete, [id], (err, result) => {
         res.json(
             err
@@ -109,7 +115,8 @@ function getCommodity(req, res, db) {
 
 function fetchOrderNumber(req, res, db) {
     //console.log("fetching order number");
-    const sqlSelect = "SELECT order_number as 'value' from job_entry order by order_number";
+    const sqlSelect =
+        "SELECT order_number as 'value' from job_entry order by order_number";
     // change the order number to value
     db.query(sqlSelect, (err, result) => {
         res.send(result);

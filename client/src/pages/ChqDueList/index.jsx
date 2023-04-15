@@ -200,7 +200,6 @@ const App = () => {
             new_payment: editedChq.payment,
             new_amount: editedChq.amount,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -257,7 +256,6 @@ const App = () => {
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deletechq`, {
             Chq_id: ChqId,
         }).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
@@ -375,7 +373,6 @@ const App = () => {
                 new_amount: editedChq.amount,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 

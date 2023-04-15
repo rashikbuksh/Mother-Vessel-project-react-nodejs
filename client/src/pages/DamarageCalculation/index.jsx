@@ -369,7 +369,6 @@ const App = () => {
                 daily_despatch: editedDam.daily_despatch,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
         // these 3 lines will be replaced // new start
@@ -431,7 +430,6 @@ const App = () => {
                 Dam_id: DamId,
             }
         ).then((response) => {
-            console.log(response);
             generatedToast(response);
         });
 
