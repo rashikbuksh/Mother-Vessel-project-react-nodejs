@@ -136,6 +136,7 @@ order by
         res.send(result);
     });
 }
+
 function updateChqDue(req, res, db) {
     const { order_job_number, mode, amount, payment } = req.body;
 
@@ -171,8 +172,8 @@ function updateChqDuePartPay(req, res, db) {
     );
 }
 function deleteChqDue(req, res, db) {
-    console.log("Delete status in backend");
     const id = req.body.Chq_id;
+    const order_job_number = req.body.order_job_number;
     const sqlDelete = "DELETE from chq_due_list where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         res.json(
