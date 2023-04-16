@@ -10,6 +10,7 @@ import { Transition } from "@headlessui/react";
 import { errorData, errorCheck } from "./Error";
 import { generatedToast, Toast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
+import Select from "../../components/Select";
 
 import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
@@ -56,7 +57,7 @@ const App = () => {
     // new start
     const [ChqList, setChqList] = useState([]);
     const [laNames, setLaNames] = useState([]);
-    const [filterByShip, setFilterByShip] = useState(opt[0]);
+    const [filterByLA, setFilterByLA] = useState("");
     const [btnPayClicked, setBtnPayClicked] = useState(false);
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader);
     const [cursorPos, setCursorPos] = useState(1);
@@ -69,12 +70,17 @@ const App = () => {
 
     useEffect(() => {
         fetchData(
-            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`,
+            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByLA=${filterByLA}`,
             setChqList,
             setLoading,
             setError
         );
-    }, [filterByShip]);
+        fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
+            .then((res) => res.json())
+            .then((data) => {
+                setLaNames(data);
+            });
+    }, []);
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -86,7 +92,7 @@ const App = () => {
         }
         const res = items.filter(
             (item) =>
-                item.LA_name.includes(laNames) &&
+                item.LA_name.includes(filterByLA) &&
                 Object.keys(Object.assign({}, ...data)).some((parameter) =>
                     item[parameter]
                         ?.toString()
@@ -371,75 +377,13 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                <Listbox
-                    value={filterByShip}
-                    onChange={setFilterByShip}
-                    className=" w-1/6"
-                >
-                    <div className="relative mt-1">
-                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-green-300 sm:text-sm">
-                            <span className="block truncate">
-                                {filterByShip.value}
-                            </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                <ChevronUpDownIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                />
-                            </span>
-                        </Listbox.Button>
-                        <Transition
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full divide-y divide-green-400 overflow-auto rounded-md bg-white py-1 text-base shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {opt.map((val, idx) => (
-                                    <Listbox.Option
-                                        key={idx}
-                                        className={({ active }) =>
-                                            `relative cursor-default select-none rounded-md py-2 pl-10 pr-4 transition duration-100 ease-in-out ${
-                                                active
-                                                    ? "bg-green-600 text-white"
-                                                    : "text-gray-900"
-                                            }`
-                                        }
-                                        value={val}
-                                    >
-                                        {({ selected, active }) => (
-                                            <>
-                                                <span
-                                                    className={`block truncate ${
-                                                        selected
-                                                            ? "font-medium"
-                                                            : "font-normal"
-                                                    }`}
-                                                >
-                                                    {val.value}
-                                                </span>
-                                                {selected ? (
-                                                    <span
-                                                        className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                                            active
-                                                                ? "font-extrabold text-white"
-                                                                : "text-green-600"
-                                                        }`}
-                                                    >
-                                                        <CheckIcon
-                                                            className="h-5 w-5"
-                                                            aria-hidden="true"
-                                                        />
-                                                    </span>
-                                                ) : null}
-                                            </>
-                                        )}
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Transition>
-                    </div>
-                </Listbox>
+                {laNames && (
+                    <Select
+                        options={laNames}
+                        isSetItems={true}
+                        setItems={setFilterByLA}
+                    />
+                )}
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
