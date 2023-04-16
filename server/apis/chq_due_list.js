@@ -58,13 +58,14 @@ function addChqDue(req, res, db) {
     );
 }
 
-const filterData = {
-    All: "",
-    Own: "join pre_defined_ship pdf on r.LV_name = pdf.LV_name",
-    Other: "join pre_defined_ship pdf on r.LV_name != pdf.LV_name",
-};
 function getChqDue(req, res, db) {
-    const filterByShip = req.query.filterByShip;
+    const filterByLA = req.query.filterByLA;
+    var adddedsql = "";
+
+    if (filterByLA === null) {
+    } else {
+        adddedsql = 'and r.LA_name = "' + filterByLA + '"';
+    }
 
     const sqlSelect =
         `
@@ -92,12 +93,12 @@ FROM
   join record_entry r on ca.order_job_number = concat(
     r.order_number, '-', r.job_number
   ) 
-  ` +
-        filterData[filterByShip] +
-        `
 where 
   ca.sixty_percent_payment_amount > 0 
   and ca.sixty_percent_payment_amount is not null and cdl.mode ='60'
+  ` +
+        adddedsql +
+        `
 UNION 
 SELECT 
   cdl.order_job_number as order_job_number, 
@@ -123,16 +124,16 @@ FROM
   join record_entry r on ca.order_job_number = concat(
     r.order_number, '-', r.job_number
   ) 
-  ` +
-        filterData[filterByShip] +
-        `
 where 
   ca.forty_percent_payment_amount > 0 
   and ca.forty_percent_payment_amount is not null and cdl.mode ='40'
+  ` +
+        adddedsql +
+        `
 order by 
   LA_name asc
             `;
-    db.query(sqlSelect, [filterData[filterByShip]], (err, result) => {
+    db.query(sqlSelect, (err, result) => {
         res.send(result);
     });
 }
