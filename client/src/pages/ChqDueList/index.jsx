@@ -3,9 +3,9 @@ import Axios from "axios";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
 import TableHead from "../../components/Table/TableHead";
+import Select from "../../components/Select";
 
 import { useSortableTable } from "../../components/Table/useSortableTable";
-import { Transition } from "@headlessui/react";
 
 import { errorData, errorCheck } from "./Error";
 import { generatedToast, Toast } from "../../components/Toast";
@@ -15,9 +15,6 @@ import Select from "../../components/Select";
 import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
 import PingLoader from "../../utils/PingLoader";
-
-import { Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 const TableHeader = [
     {
@@ -49,8 +46,6 @@ const TableHeader = [
     { id: 14, name: "Actions" },
 ];
 
-const opt = [{ value: "All" }, { value: "Own" }, { value: "Other" }];
-
 const AddPaymentInformation = lazy(() => import("./AddPaymentInformation"));
 
 const App = () => {
@@ -70,16 +65,18 @@ const App = () => {
 
     useEffect(() => {
         fetchData(
-            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByLA=${filterByLA}`,
+            `${process.env.REACT_APP_API_URL}/management/getchqlist`,
+
             setChqList,
             setLoading,
             setError
         );
-        fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
-            .then((res) => res.json())
-            .then((data) => {
-                setLaNames(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getLANames`,
+            setLaNames,
+            setLoading,
+            setError
+        );
     }, []);
 
     // search filter for all fields

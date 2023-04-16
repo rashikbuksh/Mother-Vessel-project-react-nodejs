@@ -303,7 +303,7 @@ const App = () => {
     }
 
     return (
-        <div className="m-2 mt-4">
+        <div className="mt-4">
             <div className="my-2 mx-auto flex justify-center">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
