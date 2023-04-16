@@ -15,7 +15,6 @@ const ReadOnlyRow = ({
     var clsName = "whitespace-nowrap py-3 text-sm text-gray-700";
     return (
         <>
-            <td className={clsName}>{user.id}</td>
             <td className={clsName}>{user.name}</td>
             <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">

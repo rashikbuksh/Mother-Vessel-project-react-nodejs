@@ -1,31 +1,28 @@
-import React, { useState, Fragment, useEffect, Suspense } from "react";
+import React, { useState, Fragment, useEffect, Suspense, lazy } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import ReadOnlyRow from "./TableRows/ReadOnlyRow";
-import EditableRow from "./TableRows/EditTableRow";
+import ReadOnlyRow from "./Table/ReadOnlyRow";
+import EditableRow from "./Table/EditTableRow";
 import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
 import { useAuth } from "../../hooks/auth";
 import TableHead from "../../components/Table/TableHead"; // new
-import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 
-import Select from "../../components/Select"; // new
+import { warning } from "../../components/Toast";
+
+import { errorData, errorCheck } from "./Error";
+import { generatedToast, Toast } from "../../components/Toast";
+import { fetchData } from "../../hooks/fetchData";
+
+import NoDataFound from "../../utils/NoDataFound";
+import LoadMore from "../../utils/LoadMore";
+import PingLoader from "../../utils/PingLoader";
 
 import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
-//toast
-import { generatedToast, Toast, warning } from "../../components/Toast";
-
 const TableHeader = [
-    {
-        id: 1,
-        name: "Id",
-        accessor: "id",
-        sortable: true,
-        width: "w-8",
-    },
     {
         id: 2,
         name: "Name",
@@ -65,6 +62,8 @@ const TableHeader = [
     { id: 8, name: "Actions" },
 ];
 
+const AddUser = lazy(() => import("./AddUser"));
+
 const App = () => {
     const [userList, setUserList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(userList, TableHeader); // data, columns
@@ -74,6 +73,10 @@ const App = () => {
 
     // search filter for all fields
     const [query, setQuery] = useState("");
+
+    // fetch data
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const data = Object.values(tableData);
     function search(items) {
@@ -95,11 +98,12 @@ const App = () => {
     }
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/admin/getusers`)
-            .then((res) => res.json())
-            .then((data) => {
-                setUserList(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/admin/getusers`,
+            setUserList,
+            setLoading,
+            setError
+        );
     }, []);
 
     // add state
@@ -349,18 +353,20 @@ const App = () => {
         });
     };
 
+    // loading and error
+    if (loading) {
+        return <PingLoader />;
+    }
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     // logout
 
     //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
             <div className="my-2 mx-auto flex justify-center">
-                <Pagination
-                    pageSize={pageSize}
-                    cursorPos={cursorPos}
-                    setCursorPos={setCursorPos}
-                    rowsCount={data.length}
-                />
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
                     placeholder="Search for anything..."
@@ -382,20 +388,17 @@ const App = () => {
                         columns={TableHeader}
                         handleSorting={handleSorting}
                     />
-                    {search(tableData).length === 0 && query !== "" ? (
-                        <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                            Nothing found.
-                        </div>
-                    ) : (
+                    {search(tableData).length > 0 && (
                         <tbody className="divide-y divide-gray-100 rounded-md">
-                            {search(tableData).map((user, idx) => (
+                            {search(tableData).map((_, index) => (
                                 <tr
-                                    key={user.id}
-                                    className={`bg-white ${
-                                        idx % 2 === 1 ? "bg-gray-200" : ""
+                                    key={index}
+                                    className={`my-auto items-center justify-center ${
+                                        index % 2 === 1 ? "bg-gray-200" : ""
                                     }`}
                                 >
-                                    {editContactId === user.id ? (
+                                    {editContactId ===
+                                    search(tableData)[index]?.id ? (
                                         <EditableRow
                                             editFormData={editFormData}
                                             setEditFormData={setEditFormData}
@@ -408,7 +411,7 @@ const App = () => {
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            user={user}
+                                            user={userList[index]}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={
                                                 handleDeleteClick
@@ -423,155 +426,35 @@ const App = () => {
                         </tbody>
                     )}
                 </table>
+                {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
+            {/* new start  */}
+            {search(tableData).length < data.length && (
+                <LoadMore
+                    onClick={() => {
+                        setPageSize((prevValue) =>
+                            cursorPos + prevValue > data.length
+                                ? prevValue
+                                : prevValue + 20
+                        );
+                    }}
+                />
+            )}
+
             {/* add item modal */}
-            <Suspense fallback={<Loader />}>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="relative z-10"
-                        onClose={() => {}}
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Add User
-                                            <button
-                                                className="float-right"
-                                                onClick={closeModal}
-                                            >
-                                                <MdClose className="inline text-red-600" />
-                                            </button>
-                                        </Dialog.Title>
-                                        <form
-                                            onSubmit={handleAddFormSubmit}
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Username
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="username"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Password
-                                                </label>
-                                                <input
-                                                    type="password"
-                                                    name="password"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Position
-                                                </label>
-
-                                                <Select
-                                                    options={[
-                                                        {
-                                                            value: "admin",
-                                                        },
-                                                        {
-                                                            value: "operations",
-                                                        },
-                                                        {
-                                                            value: "accounts-manager",
-                                                        },
-                                                        {
-                                                            value: "accounts",
-                                                        },
-                                                    ]}
-                                                    name="position"
-                                                    addFormData={addFormData}
-                                                    setAddFormData={
-                                                        setAddFormData
-                                                    }
-                                                    isAddFromData={true}
-                                                />
-                                            </div>
-
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Department
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="department"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    required
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                            >
-                                                Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
+            <Suspense fallback={<PingLoader />}>
+                <AddUser
+                    {...{
+                        isOpen,
+                        closeModal,
+                        handleAddFormSubmit,
+                        handleAddFormChange,
+                        addFormData,
+                        setAddFormData,
+                        errorData,
+                    }}
+                ></AddUser>
             </Suspense>
 
             {/* Reset Pass modal */}
