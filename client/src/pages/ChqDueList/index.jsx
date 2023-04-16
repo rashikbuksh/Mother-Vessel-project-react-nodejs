@@ -3,7 +3,6 @@ import Axios from "axios";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
 import TableHead from "../../components/Table/TableHead";
-import Select from "../../components/Select";
 
 import { useSortableTable } from "../../components/Table/useSortableTable";
 
@@ -66,7 +65,6 @@ const App = () => {
     useEffect(() => {
         fetchData(
             `${process.env.REACT_APP_API_URL}/management/getchqlist`,
-
             setChqList,
             setLoading,
             setError
@@ -161,7 +159,7 @@ const App = () => {
             LV_name: editFormData.LV_name,
             commodity: editFormData.commodity,
             mode: editFormData.mode,
-            chq_amount: Number(editFormData.part_pay),
+            chq_amount: Number(editFormData.chq_amount),
             chq_issue_date: editFormData.chq_issue_date,
             part_pay: Number(editFormData.part_pay),
             balance:

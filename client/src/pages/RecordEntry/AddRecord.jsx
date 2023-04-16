@@ -2,8 +2,10 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Select from "../../components/Select";
 import Switch from "../../components/Switch";
+import { useEffect } from "react";
 
 import { MdClose } from "react-icons/md";
+import { fetchData } from "../../hooks/fetchData";
 
 export default function AddJob({
     isOpen,
@@ -18,6 +20,14 @@ export default function AddJob({
     enabled,
     setEnabled,
 }) {
+    const [LVlist, setLVlist] = useState(true);
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/management/getLVname`)
+            .then((res) => res.json())
+            .then((data) => {
+                setLVlist(data);
+            });
+    });
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -156,17 +166,7 @@ export default function AddJob({
                                         </label>
                                         {enabled ? (
                                             <Select
-                                                options={[
-                                                    {
-                                                        value: "Rahim",
-                                                    },
-                                                    {
-                                                        value: "Karim",
-                                                    },
-                                                    {
-                                                        value: "Kalihati",
-                                                    },
-                                                ]}
+                                                options={LVlist}
                                                 name="LV_name"
                                                 addFormData={addFormData}
                                                 setAddFormData={setAddFormData}
