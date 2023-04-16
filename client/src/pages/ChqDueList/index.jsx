@@ -5,7 +5,7 @@ import EditableRow from "./Table/EditTableRow";
 import TableHead from "../../components/Table/TableHead";
 
 import { useSortableTable } from "../../components/Table/useSortableTable";
-import { Dialog, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 
 import { errorData, errorCheck } from "./Error";
 import { generatedToast, Toast } from "../../components/Toast";
@@ -148,9 +148,6 @@ const App = () => {
         setEditFormData(newFormData);
     };
 
-    //submit handler
-    //Clicking the Add button adds a new data row to the existing row
-
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
@@ -172,16 +169,13 @@ const App = () => {
         editedChq.payment =
             editedChq.payment == null ? "Part" : editedChq.payment;
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/management/updatechq`, {
-            new_order_job_number: editedChq.order_job_number,
-            new_mode: editedChq.mode,
-            new_payment: editedChq.payment,
-            new_amount: editedChq.amount,
-        }).then((response) => {
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/updatechq`,
+            editedChq
+        ).then((response) => {
             generatedToast(response);
         });
 
-        // these 3 lines will be replaced // new start
         const index = tableData.findIndex(
             (td) =>
                 td.order_job_number === editChqOrderJobNumber &&
@@ -189,11 +183,9 @@ const App = () => {
         );
         tableData[index] = editedChq;
         setChqList(tableData);
-        // new end
 
         setEditChqOrderJobNumber(null);
         setEditChqMode(null);
-        // success("Chq updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -230,9 +222,10 @@ const App = () => {
     const handleDeleteClick = (ChqId) => {
         const newChqList = [...ChqList];
         const index = ChqList.findIndex((Chq) => Chq.id === ChqId);
-        //console.log("Deleting Chq with id: " + ChqId);
+
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deletechq`, {
             Chq_id: ChqId,
+            order_job_number: ChqList[index].order_job_number,
         }).then((response) => {
             generatedToast(response);
         });
@@ -287,9 +280,8 @@ const App = () => {
     const handlePaymentModalFormSubmit = (event) => {
         event.preventDefault(); // ???
 
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newPay = {
-            order_job_number: paymentModalData.order_job_number, //handleAddFormChange로 받은 새 데이터
+            order_job_number: paymentModalData.order_job_number,
             LA_name: paymentModalData.LA_name,
             LV_name: paymentModalData.LV_name,
             commodity: paymentModalData.commodity,
@@ -308,22 +300,7 @@ const App = () => {
         // api call
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/insertpayment`,
-            {
-                order_job_number: newPay.order_job_number, //handleAddFormChange로 받은 새 데이터
-                LA_name: newPay.LA_name,
-                LV_name: newPay.LV_name,
-                commodity: newPay.commodity,
-                mode: newPay.mode,
-                chq_issue_date: newPay.chq_issue_date,
-                chq_amount: newPay.chq_amount,
-                part_pay: newPay.part_pay,
-                balance: newPay.balance,
-                payment: newPay.payment,
-                amount: newPay.amount,
-                payment_chq_no: newPay.payment_chq_no,
-                payment_chq_amount: newPay.payment_chq_amount,
-                payment_chq_date: newPay.payment_chq_date,
-            }
+            newPay
         );
 
         const editedChq = {
@@ -341,22 +318,14 @@ const App = () => {
             payment: null,
             amount: null,
         };
-        console.log("editedChq Part Pay: ", editedChq.part_pay);
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updatechqPartPay`,
-            {
-                new_order_job_number: editedChq.order_job_number,
-                new_mode: editedChq.mode,
-                new_part_pay: editedChq.part_pay,
-                new_payment: editedChq.payment,
-                new_amount: editedChq.amount,
-            }
+            editedChq
         ).then((response) => {
             generatedToast(response);
         });
 
-        // these 3 lines will be replaced // new start
         const index = tableData.findIndex(
             (td) =>
                 td.order_job_number === editChqOrderJobNumber &&
@@ -369,11 +338,7 @@ const App = () => {
         setEditChqOrderJobNumber(null);
         setEditChqMode(null);
 
-        // close modal
         closeModal();
-
-        // toast
-        // success("Pay added successfully");
     };
 
     // modal for add Chq
@@ -396,10 +361,8 @@ const App = () => {
         return <div>{error}</div>;
     }
 
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-2">
-            {/* {laNames && <Tabs tabHeaders={laNames} />} */}
             <div className="my-2 mx-auto flex justify-between">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
