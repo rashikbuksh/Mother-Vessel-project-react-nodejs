@@ -59,13 +59,6 @@ function addChqDue(req, res, db) {
 }
 
 function getChqDue(req, res, db) {
-    const filterByLA = req.query.filterByLA;
-    var adddedsql = "";
-
-    if (filterByLA === null) {
-    } else {
-        adddedsql = 'and r.LA_name = "' + filterByLA + '"';
-    }
 
     const sqlSelect =
         `
@@ -96,9 +89,7 @@ FROM
 where 
   ca.sixty_percent_payment_amount > 0 
   and ca.sixty_percent_payment_amount is not null and cdl.mode ='60'
-  ` +
-        adddedsql +
-        `
+
 UNION 
 SELECT 
   cdl.order_job_number as order_job_number, 
@@ -127,9 +118,7 @@ FROM
 where 
   ca.forty_percent_payment_amount > 0 
   and ca.forty_percent_payment_amount is not null and cdl.mode ='40'
-  ` +
-        adddedsql +
-        `
+
 order by 
   LA_name asc
             `;

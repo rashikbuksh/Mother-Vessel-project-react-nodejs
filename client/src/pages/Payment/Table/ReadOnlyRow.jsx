@@ -7,11 +7,6 @@ const ReadOnlyRow = ({ Pay, handleEditClick, handleDeleteClick }) => {
     return (
         <>
             <td className={clsName}>
-                <a href="#" className="font-bold text-blue-500 hover:underline">
-                    {Pay.id}
-                </a>
-            </td>
-            <td className={clsName}>
                 <span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">
                     {Pay.order_job_number}
                 </span>

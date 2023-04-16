@@ -175,6 +175,18 @@ function getMaxCapacity(req, res, db) {
     });
 }
 
+function getLVname(req, res, db) {
+    const sqlSelect = `
+    select 
+       DISTINCT LV_name as value
+    from pre_defined_ship
+    ORDER BY LV_name ASC
+    `;
+    db.query(sqlSelect, (err, result) => {
+        res.send(result);
+    });
+}
+
 module.exports.addRecord = addRecord;
 module.exports.getRecord = getRecord;
 module.exports.updateRecord = updateRecord;
@@ -182,3 +194,4 @@ module.exports.deleteRecord = deleteRecord;
 module.exports.fetchJobNumber = fetchJobNumber;
 module.exports.getCharpotroCpLaLvRate = getCharpotroCpLaLvRate;
 module.exports.getMaxCapacity = getMaxCapacity;
+module.exports.getLVname = getLVname;

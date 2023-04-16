@@ -21,6 +21,7 @@ const {
     fetchJobNumber,
     getCharpotroCpLaLvRate,
     getMaxCapacity,
+    getLVname,
 } = require("./apis/record_entry");
 const {
     addJob,
@@ -174,6 +175,11 @@ app.get("/management/getcomodity", (req, res) => {
 // fetch get capacity max
 app.get("/management/getcapacitymax", (req, res) => {
     getMaxCapacity(req, res, db);
+});
+
+// fetch lv name
+app.get("/management/getlvname", (req, res) => {
+    getLVname(req, res, db);
 });
 
 //======================= Current Status =======================
