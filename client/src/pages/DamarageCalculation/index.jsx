@@ -14,7 +14,6 @@ import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
 import PingLoader from "../../utils/PingLoader";
 
-
 const TableHeader = [
     {
         id: 2,
@@ -109,34 +108,14 @@ const TableHeader = [
 const AddDamarage = lazy(() => import("./AddDamarage"));
 
 const App = () => {
-    // new start
     const [DamList, setDamList] = useState([]);
     const [tableData, handleSorting] = useSortableTable(DamList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
 
-    // search filter for all fields
-    const [query, setQuery] = useState("");
-
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const data = Object.values(tableData);
-    function search(items) {
-        if (query !== "" && cursorPos !== 1) {
-            setCursorPos(1);
-        }
-        const res = items.filter((item) =>
-            Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
-            )
-        );
-        return res.slice(
-            (cursorPos - 1) * pageSize,
-            (cursorPos - 1) * pageSize + pageSize
-        );
-    }
 
     useEffect(() => {
         fetchData(
@@ -147,34 +126,27 @@ const App = () => {
         );
     }, []);
 
-    // new end
+    // search filter for all fields
+    const [query, setQuery] = useState("");
 
-    // add state
-    //id is randomly generated with nanoid generator
-    // const [addFormData, setAddFormData] = useState({
-    //     order_job_number: "",
-    //     date: "",
-    //     cp_number: "",
-    //     date_from_charpotro: "",
-    //     commodity: "",
-    //     capacity: "",
-    //     LV_name: "",
-    //     MV_name: "",
-    //     loading_location: "",
-    //     unloading_location: "",
-    //     loading_start_time_stamp: "",
-    //     loading_completion_time_stamp: "",
-    //     sailing_time_stamp: "",
-    //     duration_of_travel_time: "",
-    //     unloading_start_time_stamp: "",
-    //     unloading_completion_time_stamp: "",
-    //     others: "",
-    //     total_elapsed_time: "",
-    //     voyage_time: "",
-    //     free_time: "",
-    //     total_despatch: "",
-    //     daily_despatch: "",
-    // });
+    const data = Object.values(tableData);
+    function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
+        const res = items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
+            )
+        );
+        return res.slice(
+            (cursorPos - 1) * pageSize,
+            (cursorPos - 1) * pageSize + pageSize
+        );
+    }
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -206,26 +178,6 @@ const App = () => {
     //modified id status
     const [editDamId, setEditDamId] = useState(null);
 
-    //changeHandler
-    //Update state with input data
-    // const handleAddFormChange = (event) => {
-    //     event.preventDefault();
-
-    //     //fullname, address, phoneNumber, email
-    //     const fieldName = event.target.getAttribute("name");
-    //     //각 input 입력값
-    //     const fieldValue = event.target.value;
-
-    //     errorCheck(fieldValue, fieldName);
-
-    //     const newFormData = { ...addFormData };
-    //     newFormData[fieldName] = fieldValue;
-    //     //addFormData > event.target(input)
-    //     //fullName:"" > name="fullName", value=fullName input 입력값
-
-    //     setAddFormData(newFormData);
-    // };
-
     //Update status with correction data
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -238,84 +190,6 @@ const App = () => {
 
         setEditFormData(newFormData);
     };
-
-    //submit handler
-    //Clicking the Add button adds a new data row to the existing row
-    // const handleAddFormSubmit = (event) => {
-    //     event.preventDefault(); // ???
-
-    //     //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-    //     const newDam = {
-    //         order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
-    //         date: addFormData.date,
-    //         cp_number: addFormData.cp_number,
-    //         date_from_charpotro: addFormData.date_from_charpotro,
-    //         commodity: addFormData.commodity,
-    //         capacity: addFormData.capacity,
-    //         LV_name: addFormData.LV_name,
-    //         MV_name: addFormData.MV_name,
-    //         loading_location: addFormData.loading_location,
-    //         unloading_location: addFormData.unloading_location,
-    //         loading_start_time_stamp: addFormData.loading_start_time_stamp,
-    //         loading_completion_time_stamp:
-    //             addFormData.loading_completion_time_stamp,
-    //         sailing_time_stamp: addFormData.sailing_time_stamp,
-    //         duration_of_travel_time: addFormData.duration_of_travel_time,
-    //         unloading_start_time_stamp: addFormData.unloading_start_time_stamp,
-    //         unloading_completion_time_stamp:
-    //             addFormData.unloading_completion_time_stamp,
-    //         others: addFormData.others,
-    //         total_elapsed_time: addFormData.total_elapsed_time,
-    //         voyage_time: addFormData.voyage_time,
-    //         free_time: addFormData.free_time,
-    //         total_despatch: addFormData.total_despatch,
-    //         daily_despatch: addFormData.daily_despatch,
-    //     };
-    //     console.log("New Dam : " + addFormData.job_number);
-    //     // api call
-    //     Axios.post(
-    //         `${process.env.REACT_APP_API_URL}/management/insertdamarage`,
-    //         {
-    //             order_job_number: newDam.order_job_number, //handleAddFormChange로 받은 새 데이터
-    //             date: newDam.date,
-    //             cp_number: newDam.cp_number,
-    //             date_from_charpotro: newDam.date_from_charpotro,
-    //             commodity: newDam.commodity,
-    //             capacity: newDam.capacity,
-    //             LV_name: newDam.LV_name,
-    //             MV_name: newDam.MV_name,
-    //             loading_location: newDam.loading_location,
-    //             unloading_location: newDam.unloading_location,
-    //             loading_start_time_stamp: newDam.loading_start_time_stamp,
-    //             loading_completion_time_stamp:
-    //                 newDam.loading_completion_time_stamp,
-    //             sailing_time_stamp: newDam.sailing_time_stamp,
-    //             duration_of_travel_time: newDam.duration_of_travel_time,
-    //             unloading_start_time_stamp: newDam.unloading_start_time_stamp,
-    //             unloading_completion_time_stamp:
-    //                 newDam.unloading_completion_time_stamp,
-    //             others: newDam.others,
-    //             total_elapsed_time: newDam.total_elapsed_time,
-    //             voyage_time: newDam.voyage_time,
-    //             free_time: newDam.free_time,
-    //             total_despatch: newDam.total_despatch,
-    //             daily_despatch: newDam.daily_despatch,
-    //         }
-    //     );
-
-    //     //DamList의 초기값은 data.json 데이터
-    //     // new start
-    //     const newTableData = [...tableData, newDam];
-    //     // new end
-
-    //     setDamList(newTableData);
-
-    //     // close modal
-    //     closeModal();
-
-    //     // toast
-    //     success("Dam added successfully");
-    // };
 
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
@@ -348,42 +222,19 @@ const App = () => {
             total_despatch: editFormData.total_despatch,
             daily_despatch: editFormData.daily_despatch,
         };
-        console.log("Edited Dam ID : " + editedDam.id);
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updatedamarage`,
-            {
-                id: editedDam.id, //handleAddFormChange로 받은 새 데이터
-                date: editedDam.date,
-                loading_location: editedDam.loading_location,
-                unloading_location: editedDam.unloading_location,
-                loading_start_time_stamp: editedDam.loading_start_time_stamp,
-                loading_completion_time_stamp:
-                    editedDam.loading_completion_time_stamp,
-                sailing_time_stamp: editedDam.sailing_time_stamp,
-                duration_of_travel_time: editedDam.duration_of_travel_time,
-                unloading_start_time_stamp:
-                    editedDam.unloading_start_time_stamp,
-                unloading_completion_time_stamp:
-                    editedDam.unloading_completion_time_stamp,
-                others: editedDam.others,
-                total_elapsed_time: editedDam.total_elapsed_time,
-                voyage_time: editedDam.voyage_time,
-                free_time: editedDam.free_time,
-                total_despatch: editedDam.total_despatch,
-                daily_despatch: editedDam.daily_despatch,
-            }
+            editedDam
         ).then((response) => {
             generatedToast(response);
         });
-        // these 3 lines will be replaced // new start
+
         const index = tableData.findIndex((td) => td.id === editDamId);
         tableData[index] = editedDam;
         setDamList(tableData);
-        // new end
 
         setEditDamId(null);
-        // success("Dam updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -428,11 +279,12 @@ const App = () => {
     const handleDeleteClick = (DamId) => {
         const newDamList = [...DamList];
         const index = DamList.findIndex((Dam) => Dam.id === DamId);
-        //console.log("Deleting Dam with id: " + DamId);
+
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deletedamarage`,
             {
                 Dam_id: DamId,
+                order_job_number: DamList[index].order_job_number,
             }
         ).then((response) => {
             generatedToast(response);
@@ -441,55 +293,6 @@ const App = () => {
         newDamList.splice(index, 1);
         setDamList(newDamList);
     };
-
-    // modal for add Dam
-    // let [isOpen, setIsOpen] = useState(false);
-
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
-
-    // function openModal() {
-    //     fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setOrderJobList(data);
-    //             console.log(data);
-    //         });
-    //     setIsOpen(true);
-    // }
-    // useEffect(() => {
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.date_from_charpotro = item.date_from_charpotro;
-    //                 addFormData.LV_name = item.LV_name;
-    //             });
-    //         });
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.commodity = item.commodity;
-    //             });
-    //         });
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getMvNameToPayment?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.MV_name = item.MV_name;
-    //             });
-    //         });
-    //     console.log("addFormData", addFormData);
-    // }, [addFormData.order_job_number]);
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
 
     // loading and error
     if (loading) {
@@ -501,7 +304,6 @@ const App = () => {
 
     return (
         <div className="m-2 mt-4">
-            {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -510,13 +312,6 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* <button
-                    // new start // job change copy paste the className
-                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
-                >
-                    Add Job <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> */}
             </div>
             <br />
             <form onSubmit={handleEditFormSubmit}>
@@ -564,7 +359,6 @@ const App = () => {
                 {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
-            {/* new start  */}
             {search(tableData).length < data.length && (
                 <LoadMore
                     onClick={() => {
@@ -577,24 +371,6 @@ const App = () => {
                 />
             )}
 
-            {/* // new end */}
-
-            {/* add item modal */}
-            {/* <Suspense fallback={<Loader />}>
-                <AddDamarage
-                    isOpen,
-                    closeModal,
-                    handleAddFormSubmit,
-                    handleAddFormChange,
-                    addFormData,
-                    setAddFormData,
-                    errorData,
-                    orderJobList,
-                >
-                </AddDamarage>    
-            </Suspense> */}
-
-            {/* toast  */}
             <Toast />
         </div>
     );

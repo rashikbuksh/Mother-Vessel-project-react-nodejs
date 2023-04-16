@@ -18,8 +18,6 @@ import PingLoader from "../../utils/PingLoader";
 import { Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
-import Tabs from "./Tabs";
-
 const TableHeader = [
     {
         id: 2,
@@ -60,17 +58,26 @@ const App = () => {
     const [laNames, setLaNames] = useState([]);
     const [filterByShip, setFilterByShip] = useState(opt[0]);
     const [btnPayClicked, setBtnPayClicked] = useState(false);
-    const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader); // data, columns // new
+    const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader);
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
     const [orderJobList, setOrderJobList] = useState([]);
 
-    // search filter for all fields
-    const [query, setQuery] = useState("");
-
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`,
+            setChqList,
+            setLoading,
+            setError
+        );
+    }, [filterByShip]);
+
+    // search filter for all fields
+    const [query, setQuery] = useState("");
 
     const data = Object.values(tableData);
     function search(items) {
@@ -81,7 +88,10 @@ const App = () => {
             (item) =>
                 item.LA_name.includes(laNames) &&
                 Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                    item[parameter]?.toString().toLowerCase().includes(query)
+                    item[parameter]
+                        ?.toString()
+                        .toLowerCase()
+                        .includes(query.toLowerCase())
                 )
         );
         return res.slice(
@@ -89,39 +99,6 @@ const App = () => {
             (cursorPos - 1) * pageSize + pageSize
         );
     }
-
-    useEffect(() => {
-        fetchData(
-            `${process.env.REACT_APP_API_URL}/management/getchqlist?filterByShip=${filterByShip.value}`,
-            setChqList,
-            setLoading,
-            setError
-        );
-        // fetch(`${process.env.REACT_APP_API_URL}/management/getLANames`)
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         setLaNames(data);
-        //     });
-    }, [filterByShip]);
-
-    // new end
-
-    // add state
-    //id is randomly generated with nanoid generator
-    const [addFormData, setAddFormData] = useState({
-        order_number: "",
-        LA_name: "",
-        LV_name: "",
-        commodity: "",
-        mode: "",
-        chq_amount: "",
-        part_pay: "",
-        balance: "",
-        chq_issue_date: "",
-        init_amount: "",
-        payment: "",
-        final_amount: "",
-    });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -157,9 +134,6 @@ const App = () => {
     //modified id status
     const [editChqOrderJobNumber, setEditChqOrderJobNumber] = useState(null);
     const [editChqMode, setEditChqMode] = useState(null);
-
-    //changeHandler
-    //Update state with input data
 
     //Update status with correction data
     const handleEditFormChange = (event) => {
@@ -434,13 +408,6 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* <button
-                    // new start // Chq change copy paste the className
-                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
-                >
-                    Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> */}
                 <Listbox
                     value={filterByShip}
                     onChange={setFilterByShip}
@@ -556,7 +523,6 @@ const App = () => {
                 {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
-            {/* new start  */}
             {search(tableData).length < data.length && (
                 <LoadMore
                     onClick={() => {
@@ -568,8 +534,7 @@ const App = () => {
                     }}
                 />
             )}
-            {/* // new end */}
-            {/* add item modal */}
+
             <Suspense fallback={<PingLoader />}>
                 <AddPaymentInformation
                     {...{
@@ -583,7 +548,7 @@ const App = () => {
                     }}
                 ></AddPaymentInformation>
             </Suspense>
-            {/* toast  */}
+
             <Toast />
         </div>
     );

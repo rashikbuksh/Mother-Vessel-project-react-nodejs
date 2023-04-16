@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from "react";
+import { useState, useEffect, Suspense, lazy, Fragment } from "react";
 import Axios from "axios";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
@@ -14,7 +14,8 @@ import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
 import PingLoader from "../../utils/PingLoader";
 
-import { IoMdPersonAdd } from "react-icons/io";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 const TableHeader = [
     {
@@ -41,21 +42,33 @@ const TableHeader = [
     { id: 16, name: "Actions" },
 ];
 
+const opt = [{ value: "All" }, { value: "Own" }, { value: "Other" }];
+
 const AddCurrentStatus = lazy(() => import("./AddCurrentStatus"));
 
 const App = () => {
-    // new start
     const [CurrentStatus, setCurrentStatus] = useState([]);
     const [tableData, handleSorting] = useSortableTable(
         CurrentStatus,
         TableHeader
-    ); // data, columns // new
+    );
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
+
+    const [filterByShip, setFilterByShip] = useState(opt[0]);
 
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getcurrentstatus?filterByShip=${filterByShip.value}`,
+            setCurrentStatus,
+            setLoading,
+            setError
+        );
+    }, [filterByShip]);
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -64,7 +77,10 @@ const App = () => {
     function search(items) {
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
+                item[parameter]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
             )
         );
         return res.slice(
@@ -72,31 +88,6 @@ const App = () => {
             (cursorPos - 1) * pageSize + pageSize
         );
     }
-
-    useEffect(() => {
-        fetchData(
-            `${process.env.REACT_APP_API_URL}/management/getcurrentstatus`,
-            setCurrentStatus,
-            setLoading,
-            setError
-        );
-        console.log(CurrentStatus);
-    }, []);
-
-    // new end
-
-    // add state
-    //id is randomly generated with nanoid generator
-    const [addFormData, setAddFormData] = useState({
-        LV_name: "",
-        date_from_charpotro: "",
-        commodity: "",
-        LA_name: "",
-        dest_from: "",
-        dest_to: "",
-        current_location: "",
-        remark: "",
-    });
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -115,26 +106,6 @@ const App = () => {
     //modified id status
     const [editStatusId, setEditStatusId] = useState(null);
 
-    //changeHandler
-    //Update state with input data
-    // const handleAddFormChange = (event) => {
-    //     event.preventDefault();
-
-    //     //fullname, address, phoneNumber, email
-    //     const fieldName = event.target.getAttribute("name");
-    //     //각 input 입력값
-    //     const fieldValue = event.target.value;
-
-    //     errorCheck(fieldValue, fieldName);
-
-    //     const newFormData = { ...addFormData };
-    //     newFormData[fieldName] = fieldValue;
-    //     //addFormData > event.target(input)
-    //     //fullName:"" > name="fullName", value=fullName input 입력값
-
-    //     setAddFormData(newFormData);
-    // };
-
     //Update status with correction data
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -148,62 +119,12 @@ const App = () => {
         setEditFormData(newFormData);
     };
 
-    //submit handler
-    //Clicking the Add button adds a new data row to the existing row
-    // const handleAddFormSubmit = (event) => {
-    //     event.preventDefault(); // ???
-
-    //     //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-    //     const newStatus = {
-    //         LV_name: addFormData.LV_name, //handleAddFormChange로 받은 새 데이터
-    //         date_from_charpotro: addFormData.date_from_charpotro,
-    //         commodity: addFormData.commodity,
-    //         LA_name: addFormData.LA_name,
-    //         dest_from: addFormData.dest_from,
-    //         dest_to: addFormData.dest_to,
-    //         current_location: addFormData.current_location,
-    //         remark: addFormData.remark,
-    //     };
-
-    //     // const current = new Date();
-    //     // const order_number_auto = newStatus.importer_name+'-'+current.getDate().toLocaleString()+'-'+newStatus.mother_vessel_name+'-'+newStatus.mv_location
-    //     // console.log(order_number_auto)
-
-    //     // api call
-    //     Axios.post(
-    //         `${process.env.REACT_APP_API_URL}/management/currentstatus`,
-    //         {
-    //             LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
-    //             date_from_charpotro: newStatus.date_from_charpotro,
-    //             commodity: newStatus.commodity,
-    //             LA_name: newStatus.LA_name,
-    //             dest_from: newStatus.dest_from,
-    //             dest_to: newStatus.dest_to,
-    //             current_location: newStatus.current_location,
-    //             remark: newStatus.remark,
-    //         }
-    //     );
-
-    //     //CurrentStatus의 초기값은 data.json 데이터
-    //     // new start
-    //     const newTableData = [...tableData, newStatus];
-    //     // new end
-
-    //     setCurrentStatus(newTableData);
-
-    //     // close modal
-    //     closeModal();
-
-    //     // toast
-    //     success("Status added successfully");
-    // };
-
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
         event.preventDefault(); // prevent submit
 
         const editedStatus = {
-            id: editStatusId, //initial value null
+            id: editStatusId,
             order_job_number: editFormData.order_job_number,
             LA_name: editFormData.LA_name,
             LV_name: editFormData.LV_name,
@@ -218,23 +139,16 @@ const App = () => {
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updatecurrentstatus`,
-            {
-                id: editedStatus.id,
-                current_location: editedStatus.current_location,
-                remark: editedStatus.remark,
-                trip_completed: editedStatus.trip_completed,
-            }
+            editedStatus
         ).then((response) => {
             generatedToast(response);
         });
 
-        // these 3 lines will be repLA_nameced // new start
         const index = tableData.findIndex((td) => td.id === editStatusId);
         tableData[index] = editedStatus;
         setCurrentStatus(tableData);
-        // new end
+
         setEditStatusId(null);
-        // success("Status updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is dispLA_nameyed
@@ -268,11 +182,12 @@ const App = () => {
         const index = CurrentStatus.findIndex(
             (Status) => Status.id === StatusId
         );
-        //console.log("Deleting Status with id: " + StatusId);
+
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deletecurrentstatus`,
             {
                 status_id: StatusId,
+                order_job_number: CurrentStatus[index].order_job_number,
             }
         ).then((response) => {
             generatedToast(response);
@@ -281,50 +196,6 @@ const App = () => {
         newCurrentStatus.splice(index, 1);
         setCurrentStatus(newCurrentStatus);
     };
-
-    // modal for add Status
-    // let [isOpen, setIsOpen] = useState(false);
-
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
-
-    // function openModal() {
-    //     fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setOrderJobList(data);
-    //             console.log(data);
-    //         });
-    //     setIsOpen(true);
-    // }
-    // useEffect(() => {
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLA_nameLvRate?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.date_from_charpotro = item.date_from_charpotro;
-    //                 addFormData.LA_name = item.LA_name_name;
-    //                 addFormData.LV_name = item.LV_name;
-    //                 addFormData.dest_from = item.dest_from;
-    //                 addFormData.dest_to = item.dest_to;
-    //             });
-    //         });
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getComodityToPayment?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.commodity = item.commodity;
-    //             });
-    //         });
-    //     console.log("addFormData", addFormData);
-    // }, [addFormData.order_job_number]);
-
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
 
     // loading and error
     if (loading) {
@@ -336,7 +207,6 @@ const App = () => {
 
     return (
         <div className="m-2 mt-4">
-            {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -345,13 +215,75 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* <button
-                    // new start // job change copy paste the className
-                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
+                <Listbox
+                    value={filterByShip}
+                    onChange={setFilterByShip}
+                    className=" w-1/6"
                 >
-                    Add Status <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> */}
+                    <div className="relative mt-1">
+                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-green-300 sm:text-sm">
+                            <span className="block truncate">
+                                {filterByShip.value}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <ChevronUpDownIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                            </span>
+                        </Listbox.Button>
+                        <Transition
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full divide-y divide-green-400 overflow-auto rounded-md bg-white py-1 text-base shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                {opt.map((val, idx) => (
+                                    <Listbox.Option
+                                        key={idx}
+                                        className={({ active }) =>
+                                            `relative cursor-default select-none rounded-md py-2 pl-10 pr-4 transition duration-100 ease-in-out ${
+                                                active
+                                                    ? "bg-green-600 text-white"
+                                                    : "text-gray-900"
+                                            }`
+                                        }
+                                        value={val}
+                                    >
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span
+                                                    className={`block truncate ${
+                                                        selected
+                                                            ? "font-medium"
+                                                            : "font-normal"
+                                                    }`}
+                                                >
+                                                    {val.value}
+                                                </span>
+                                                {selected ? (
+                                                    <span
+                                                        className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                                            active
+                                                                ? "font-extrabold text-white"
+                                                                : "text-green-600"
+                                                        }`}
+                                                    >
+                                                        <CheckIcon
+                                                            className="h-5 w-5"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </span>
+                                                ) : null}
+                                            </>
+                                        )}
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </Transition>
+                    </div>
+                </Listbox>
             </div>
             <form onSubmit={handleEditFormSubmit}>
                 <table className="table">
@@ -407,24 +339,6 @@ const App = () => {
                 />
             )}
 
-            {/* // new end */}
-
-            {/* add item modal */}
-            {/* <Suspense fallback={<Loader />}>
-                <AddCurrentStatus
-                    isOpen,
-                    closeModal,
-                    handleAddFormSubmit,
-                    handleAddFormChange,
-                    addFormData,
-                    setAddFormData,
-                    errorData,
-                    orderJobList,
-                >
-                </AddCurrentStatus>
-            </Suspense> */}
-
-            {/* toast  */}
             <Toast />
         </div>
     );
