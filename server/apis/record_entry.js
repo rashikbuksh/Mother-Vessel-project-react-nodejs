@@ -125,14 +125,14 @@ function updateRecord(req, res, db) {
 function deleteRecord(req, res, db) {
     //console.log("Delete record in backend");
     const id = req.body.record_id;
-    const order_number = req.body.order_number;
     const sqlDelete = "DELETE from record_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        res.json(
-            err
-                ? ToastRes("error", "deleting record")
-                : ToastRes("delete", `${order_number}`)
-        );
+        // res.json(
+        //     err
+        //         ? ToastRes("error", "deleting record")
+        //         : ToastRes("delete", `${order_number + "-" + job_number}`)
+        // );
+        res.send(result);
     });
 }
 

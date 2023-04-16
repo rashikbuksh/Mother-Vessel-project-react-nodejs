@@ -127,21 +127,20 @@ function updateChqApproval(req, res, db) {
         (err, result) => {
             res.json(
                 err
-                    ? ToastRes("error", "updating checque approval")
+                    ? ToastRes("error", "updating cheque approval")
                     : ToastRes("update", `${order_job_number}`)
             );
         }
     );
 }
 function deleteChqApproval(req, res, db) {
-    //console.log("Delete status in backend");
     const id = req.body.Chq_id;
     const order_job_number = req.body.order_job_number;
     const sqlDelete = "DELETE from chq_approval where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         res.json(
             err
-                ? ToastRes("error", "deleting checque approval")
+                ? ToastRes("error", "deleting cheque approval")
                 : ToastRes("delete", `${order_job_number}`)
         );
     });

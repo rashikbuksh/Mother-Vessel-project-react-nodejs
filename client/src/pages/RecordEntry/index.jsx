@@ -60,7 +60,6 @@ const TableHeader = [
 const AddRecord = lazy(() => import("./AddRecord"));
 
 const App = () => {
-    // new start
     const [RecordList, setRecordList] = useState([]);
     const [OrderNumber, setOrderNumber] = useState([]);
     const [JobNumberMax, setJobNumberMax] = useState([]);
@@ -68,7 +67,7 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(
         RecordList,
         TableHeader
-    ); 
+    );
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(4);
 
@@ -78,6 +77,14 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    useEffect(() => {
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getrecordentry`,
+            setRecordList,
+            setLoading,
+            setError
+        );
+    }, []);
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -89,7 +96,10 @@ const App = () => {
         }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
+                item[parameter]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
             )
         );
         return res.slice(
@@ -97,16 +107,6 @@ const App = () => {
             (cursorPos - 1) * pageSize + pageSize
         );
     }
-
-    useEffect(() => {
-        fetchData(
-            `${process.env.REACT_APP_API_URL}/management/getrecordentry`,
-            setRecordList,
-            setLoading,
-            setError
-        );
-    }, []);
-
 
     // add state
     const [addFormData, setAddFormData] = useState({
@@ -200,11 +200,13 @@ const App = () => {
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/recordentry`,
             newRecord
-        ).then((response) => {
-            generatedToast(response);
-        }).then(() => {
-            closeModal();
-        });
+        )
+            .then((response) => {
+                generatedToast(response);
+            })
+            .then(() => {
+                closeModal();
+            });
 
         const newTableData = [...tableData, newRecord];
         setRecordList(newTableData);
@@ -243,7 +245,6 @@ const App = () => {
         setRecordList(tableData);
 
         setEditRecordId(null);
-
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -278,17 +279,15 @@ const App = () => {
     const handleDeleteClick = (RecordId) => {
         const newRecordList = [...RecordList];
         const index = RecordList.findIndex((Record) => Record.id === RecordId);
-        //console.log("Deleting Record with id: " + RecordId);
+
         Axios.post(`${process.env.REACT_APP_API_URL}/management/deleterecord`, {
             record_id: RecordId,
-            order_number: RecordList[index].order_number,
-        }).then((response) => {
-            generatedToast(response);
         });
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deleteorderjob`,
             {
-                record_id: RecordId,
+                order_number: RecordList[index].order_number,
+                job_number: RecordList[index].job_number,
             }
         ).then((response) => {
             generatedToast(response);
@@ -306,21 +305,22 @@ const App = () => {
     }
 
     function openModal() {
-        fetch(`${process.env.REACT_APP_API_URL}/management/fetch_order_number`)
-            .then((res) => res.json())
-            .then((data) => {
-                setOrderNumber(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/fetch_order_number`,
+            setOrderNumber,
+            setLoading,
+            setError
+        );
         setIsOpen(true);
     }
     useEffect(() => {
-        fetch(
-            `${process.env.REACT_APP_API_URL}/management/getmaxjobnumber?order_number=${addFormData.order_number}`
-        )
-            .then((res) => res.json())
-            .then((data) => {
-                setJobNumberMax(data);
-            });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getmaxjobnumber?order_number=${addFormData.order_number}`,
+            setJobNumberMax,
+            setLoading,
+            setError
+        );
+
         fetch(
             `${process.env.REACT_APP_API_URL}/management/getcapacitymax?order_number=${addFormData.order_number}`
         )
@@ -334,7 +334,6 @@ const App = () => {
                             : data[0]?.max_capacity
                         : 0
                 );
-                console.log("max capacity", data);
             });
     }, [addFormData.order_number]);
 
@@ -346,10 +345,8 @@ const App = () => {
         return <div>{error}</div>;
     }
 
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-            {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -359,7 +356,6 @@ const App = () => {
                     onChange={(event) => setQuery(event.target.value)}
                 />
                 <button
-                    // new start // job change copy paste the className
                     className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
                     onClick={openModal}
                 >
@@ -437,7 +433,6 @@ const App = () => {
                 />
             </Suspense>
 
-            {/* toast  */}
             <Toast />
         </div>
     );

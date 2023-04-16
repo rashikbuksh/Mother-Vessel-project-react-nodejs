@@ -1,3 +1,4 @@
+const { ToastRes } = require("./util");
 function getMaxJob(req, res, db) {
     var { order_number } = req.query;
     const sqlSelect = `SELECT MAX(job_number) as max_job_number from order_job_table where order_number = '${order_number}'`;
@@ -14,18 +15,17 @@ function getOrderJob(req, res, db) {
 }
 
 function deleteOrderJob(req, res, db) {
-    const idOfRecordEntry = req.body.record_id;
-    console.log("idOfRecordEntry:  ", idOfRecordEntry);
+    const { order_number, job_number } = req.body;
+
     const sqlDelete = `DELETE from order_job_table 
-                        where concat(order_number, '-', job_number) = (
-                                                SELECT CONCAT(order_number, '-', job_number) 
-                                                from record_entry 
-                                                where id = '${idOfRecordEntry}')`;
-    db.query(sqlDelete, [idOfRecordEntry], (err, result) => {
+                        where order_number = '${order_number}' and 
+                        job_number = '${job_number}'`;
+
+    db.query(sqlDelete, [order_number, job_number], (err, result) => {
         res.json(
             err
                 ? ToastRes("error", "deleting order job")
-                : ToastRes("delete", `${idOfRecordEntry}`)
+                : ToastRes("delete", `${order_number + "-" + job_number}`)
         );
     });
 }

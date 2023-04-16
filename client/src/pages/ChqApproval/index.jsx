@@ -14,8 +14,6 @@ import NoDataFound from "../../utils/NoDataFound";
 import LoadMore from "../../utils/LoadMore";
 import PingLoader from "../../utils/PingLoader";
 
-import { IoMdPersonAdd } from "react-icons/io";
-
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
@@ -80,29 +78,10 @@ const App = () => {
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
 
-    // search filter for all fields
-    const [query, setQuery] = useState("");
-
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const data = Object.values(tableData);
-    function search(items) {
-        if (query !== "" && cursorPos !== 1) {
-            setCursorPos(1);
-        }
-        const res = items.filter((item) =>
-            Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
-            )
-        );
-        return res.slice(
-            (cursorPos - 1) * pageSize,
-            (cursorPos - 1) * pageSize + pageSize
-        );
-    }
-
+    
     useEffect(() => {
         fetchData(
             `${process.env.REACT_APP_API_URL}/management/getchqapproval?status=${status.value}`,
@@ -113,28 +92,27 @@ const App = () => {
         console.log(ChqList);
     }, [status]);
 
-    // new end
+    // search filter for all fields
+    const [query, setQuery] = useState("");
 
-    // add state
-    //id is randomly generated with nanoid generator
-    // const [addFormData, setAddFormData] = useState({
-    //     order_job_number: "",
-    //     date_from_charpotro: "",
-    //     cp_number_from_charpotro: "",
-    //     LA_name: "",
-    //     LV_name: "",
-    //     MV_name: "",
-    //     dest_from: "",
-    //     dest_to: "",
-    //     capacity_ton: "",
-    //     rate: "",
-    //     sixty_percent_payment: "",
-    //     forty_percent_payment: "",
-    //     damarage: "",
-    //     second_trip: "",
-    //     third_trip: "",
-    //     direct_trip: "",
-    // });
+    const data = Object.values(tableData);
+    function search(items) {
+        if (query !== "" && cursorPos !== 1) {
+            setCursorPos(1);
+        }
+        const res = items.filter((item) =>
+            Object.keys(Object.assign({}, ...data)).some((parameter) =>
+                item[parameter]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
+            )
+        );
+        return res.slice(
+            (cursorPos - 1) * pageSize,
+            (cursorPos - 1) * pageSize + pageSize
+        );
+    }
 
     //edit status
     const [editFormData, setEditFormData] = useState({
@@ -163,26 +141,6 @@ const App = () => {
     //modified id status
     const [editChqId, setEditChqId] = useState(null);
 
-    //changeHandler
-    //Update state with input data
-    // const handleAddFormChange = (event) => {
-    //     event.preventDefault();
-
-    //     //fullname, address, phoneNumber, email
-    //     const fieldName = event.target.getAttribute("name");
-    //     //각 input 입력값
-    //     const fieldValue = event.target.value;
-
-    //     errorCheck(fieldValue, fieldName);
-
-    //     const newFormData = { ...addFormData };
-    //     newFormData[fieldName] = fieldValue;
-    //     //addFormData > event.target(input)
-    //     //fullName:"" > name="fullName", value=fullName input 입력값
-
-    //     setAddFormData(newFormData);
-    // };
-
     //Update status with correction data
     const handleEditFormChange = (event) => {
         event.preventDefault();
@@ -196,73 +154,12 @@ const App = () => {
         setEditFormData(newFormData);
     };
 
-    //submit handler
-    //Clicking the Add button adds a new data row to the existing row
-    // const handleAddFormSubmit = (event) => {
-    //     event.preventDefault(); // ???
-
-    //     //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
-    //     const newChq = {
-    //         order_job_number: addFormData.order_job_number, //handleAddFormChange로 받은 새 데이터
-    //         date_from_charpotro: addFormData.date_from_charpotro,
-    //         cp_number_from_charpotro: addFormData.cp_number_from_charpotro,
-    //         LA_name: addFormData.LA_name,
-    //         LV_name: addFormData.LV_name,
-    //         MV_name: addFormData.MV_name,
-    //         dest_from: addFormData.dest_from,
-    //         dest_to: addFormData.dest_to,
-    //         capacity_ton: addFormData.capacity_ton,
-    //         rate: addFormData.rate,
-    //         sixty_percent_payment: addFormData.sixty_percent_payment,
-    //         forty_percent_payment: addFormData.forty_percent_payment,
-    //         damarage: addFormData.damarage,
-    //         second_trip: addFormData.second_trip,
-    //         third_trip: addFormData.third_trip,
-    //         direct_trip: addFormData.direct_trip,
-    //     };
-
-    //     // api call
-    //     Axios.post(
-    //         `${process.env.REACT_APP_API_URL}/management/insertchq_approval`,
-    //         {
-    //             order_job_number: newChq.order_job_number, //handleAddFormChange로 받은 새 데이터
-    //             date_from_charpotro: newChq.date_from_charpotro,
-    //             cp_number_from_charpotro: newChq.cp_number_from_charpotro,
-    //             LA_name: newChq.LA_name,
-    //             LV_name: newChq.LV_name,
-    //             MV_name: newChq.MV_name,
-    //             dest_from: newChq.dest_from,
-    //             dest_to: newChq.dest_to,
-    //             capacity_ton: newChq.capacity_ton,
-    //             rate: newChq.rate,
-    //             sixty_percent_payment: newChq.sixty_percent_payment,
-    //             forty_percent_payment: newChq.forty_percent_payment,
-    //             damarage: newChq.damarage,
-    //             second_trip: newChq.second_trip,
-    //             third_trip: newChq.third_trip,
-    //             direct_trip: newChq.direct_trip,
-    //         }
-    //     );
-
-    //     //ChqList의 초기값은 data.json 데이터
-    //     // new start
-    //     const newTableData = [...tableData, newChq];
-    //     // new end
-    //     setChqList(newTableData);
-
-    //     // close modal
-    //     closeModal();
-
-    //     // toast
-    //     success("Chq added successfully");
-    // };
-
     //save modified data (App component)
     const handleEditFormSubmit = (event) => {
-        event.preventDefault(); // prevent submit
+        event.preventDefault();
 
         const editedChq = {
-            id: editChqId, //initial value null
+            id: editChqId,
             order_job_number: editFormData.order_job_number,
             date_from_charpotro: editFormData.date_from_charpotro,
             cp_number_from_charpotro: editFormData.cp_number_from_charpotro,
@@ -298,14 +195,11 @@ const App = () => {
             generatedToast(response);
         });
 
-        // these 3 lines will be replaced // new start
         const index = tableData.findIndex((td) => td.id === editChqId);
         tableData[index] = editedChq;
         setChqList(tableData);
-        // new end
 
         setEditChqId(null);
-        // success("Chq updated successfully");
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -340,7 +234,6 @@ const App = () => {
         setEditFormData(formValues);
     };
 
-    //Cancel button when clicked on edit
     const handleCancelClick = () => {
         setEditChqId(null);
     };
@@ -349,7 +242,6 @@ const App = () => {
     const handleDeleteClick = (ChqId) => {
         const newChqList = [...ChqList];
         const index = ChqList.findIndex((Chq) => Chq.id === ChqId);
-        //console.log("Deleting Chq with id: " + ChqId);
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deletechq_approval`,
             {
@@ -364,52 +256,6 @@ const App = () => {
         setChqList(newChqList);
     };
 
-    // modal for add Chq
-    // let [isOpen, setIsOpen] = useState(false);
-
-    // function closeModal() {
-    //     setIsOpen(false);
-    // }
-
-    // function openModal() {
-    //     fetch(`${process.env.REACT_APP_API_URL}/management/getorderjob`)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setOrderJobList(data);
-    //             console.log(data);
-    //         });
-    //     setIsOpen(true);
-    // }
-    // useEffect(() => {
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getCharpotroCpLaLvRate?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.date_from_charpotro = item.date_from_charpotro;
-    //                 addFormData.cp_number_from_charpotro =
-    //                     item.cp_number_from_charpotro;
-    //                 addFormData.LA_name = item.LA_name;
-    //                 addFormData.LV_name = item.LV_name;
-    //                 addFormData.rate = item.rate;
-    //                 addFormData.dest_from = item.dest_from;
-    //                 addFormData.dest_to = item.dest_to;
-    //             });
-    //         });
-    //     fetch(
-    //         `${process.env.REACT_APP_API_URL}/management/getMvName?order_job_number=${addFormData.order_job_number}`
-    //     )
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             data?.map((item) => {
-    //                 addFormData.MV_name = item.MV_name;
-    //             });
-    //         });
-
-    //     console.log("addFormData", addFormData);
-    // }, [addFormData.order_job_number]);
-
     // loading and error
     if (loading) {
         return <PingLoader />;
@@ -418,10 +264,8 @@ const App = () => {
         return <div>{error}</div>;
     }
 
-    //If save(submit) is pressed after editing is completed, submit > handleEditFormSubmit action
     return (
         <div className="m-2 mt-4">
-            {/* // new start */}
             <div className="my-2 mx-auto flex justify-center">
                 <input
                     className="mx-auto block w-1/2 rounded-md border-2 border-slate-300 bg-white py-2 shadow-lg placeholder:italic placeholder:text-slate-500 focus:border-green-500 focus:ring-0 sm:text-sm"
@@ -430,13 +274,6 @@ const App = () => {
                     name="search"
                     onChange={(event) => setQuery(event.target.value)}
                 />
-                {/* <button
-                    // new start // Chq change copy paste the className
-                    className="flex flex-row items-center justify-center rounded-md bg-green-600 px-3 py-0 text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-400"
-                    onClick={openModal}
-                >
-                    Add Chq <IoMdPersonAdd className="ml-2 inline h-5 w-5" />
-                </button> */}
                 <Listbox value={status} onChange={setStatus} className=" w-1/6">
                     <div className="relative mt-1">
                         <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-green-300 sm:text-sm">
@@ -544,36 +381,19 @@ const App = () => {
                 {search(tableData).length < 1 && <NoDataFound />}
             </form>
 
-            {search(tableData).length < data.length && (
-                <LoadMore
-                    onClick={() => {
-                        setPageSize((prevValue) =>
-                            cursorPos + prevValue > data.length
-                                ? prevValue
-                                : prevValue + 20
-                        );
-                    }}
-                />
-            )}
+            {search(tableData).length < data.length &&
+                search(tableData).length > 20 && (
+                    <LoadMore
+                        onClick={() => {
+                            setPageSize((prevValue) =>
+                                cursorPos + prevValue > data.length
+                                    ? prevValue
+                                    : prevValue + 20
+                            );
+                        }}
+                    />
+                )}
 
-            {/* // new end */}
-
-            {/* add item modal */}
-            {/* <Suspense fallback={<Loader />}>
-            <AddChqApproval
-                isOpen,
-                closeModal,
-                handleAddFormSubmit,
-                handleAddFormChange,
-                addFormData,
-                setAddFormData,
-                errorData,
-                orderJobList,
-                >
-            </AddChqApproval>
-            </Suspense> */}
-
-            {/* toast  */}
             <Toast />
         </div>
     );

@@ -101,6 +101,7 @@ function getDamarage(req, res, db) {
 function updateDamarage(req, res, db) {
     const {
         id,
+        order_job_number,
         date,
         loading_location,
         unloading_location,
@@ -149,9 +150,11 @@ function updateDamarage(req, res, db) {
     );
 }
 function deleteDamarage(req, res, db) {
-    //console.log("Delete status in backend");
     const id = req.body.Dam_id;
+    const order_job_number = req.body.order_job_number;
+
     const sqlDelete = "DELETE from damarage_dispatch where id= ?";
+
     db.query(sqlDelete, [id], (err, result) => {
         res.json(
             err

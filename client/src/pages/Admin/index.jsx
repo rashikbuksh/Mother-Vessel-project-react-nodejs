@@ -82,7 +82,10 @@ const App = () => {
         }
         const res = items.filter((item) =>
             Object.keys(Object.assign({}, ...data)).some((parameter) =>
-                item[parameter]?.toString().toLowerCase().includes(query)
+                item[parameter]
+                    ?.toString()
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
             )
         );
         return res.slice(

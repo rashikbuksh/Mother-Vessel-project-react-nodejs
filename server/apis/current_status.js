@@ -11,8 +11,10 @@ function addCurrentStatus(req, res, db) {
         current_location,
         remark,
     } = req.body;
+
     const create_current_status =
         "INSERT INTO current_status (LV_name, date_from_charpotro, commodity, LA, dest_from, dest_to, current_location, remark) VALUES (?,?,?,?,?,?,?,?)";
+
     db.query(
         create_current_status,
         [
@@ -35,7 +37,14 @@ function addCurrentStatus(req, res, db) {
     );
 }
 
+const filterData = {
+    All: "",
+    Own: "and r.LA_name = 'KEL-BD'",
+    Other: "and r.LA_name != 'KEL-BD'",
+};
+
 function getCurrentStatus(req, res, db) {
+    const filterByShip = req.query.filterByShip;
     const sqlSelect = `SELECT 
             c.id as id,
             c.order_job_number as order_job_number,
@@ -59,7 +68,7 @@ function getCurrentStatus(req, res, db) {
                                 select order_job_number
                                 from chq_approval
                                 where sixty_percent_payment_amount is not NULL 
-        );`;
+        ) ${filterData[filterByShip]}`;
 
     db.query(sqlSelect, (err, result) => {
         res.send(result);
@@ -67,8 +76,10 @@ function getCurrentStatus(req, res, db) {
 }
 
 function updateCurrentStatus(req, res, db) {
-    const { id, current_location, remark, trip_completed } = req.body;
+    const { id, order_job_number, current_location, remark, trip_completed } =
+        req.body;
     const time_updated = new Date().toISOString();
+
     const sqlUpdate =
         "UPDATE current_status SET current_location=?, remark=?, time_updated=?, trip_completed=?  where id= ?";
     db.query(
@@ -85,8 +96,9 @@ function updateCurrentStatus(req, res, db) {
 }
 
 function deleteCurrentStatus(req, res, db) {
-    //console.log("Delete status in backend");
     const id = req.body.status_id;
+    const order_job_number = req.body.order_job_number;
+
     const sqlDelete = "DELETE from current_status where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
         res.json(
