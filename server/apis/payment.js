@@ -100,7 +100,6 @@ function updatePayment(req, res, db) {
     );
 }
 function deletePayment(req, res, db) {
-    //console.log("Delete status in backend");
     const id = req.body.Pay_id;
     const sqlDelete = "DELETE from payment where id= ?";
     db.query(sqlDelete, [id], (err, result) => {

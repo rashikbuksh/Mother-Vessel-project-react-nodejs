@@ -89,7 +89,6 @@ const App = () => {
             setLoading,
             setError
         );
-        console.log(ChqList);
     }, [status]);
 
     // search filter for all fields

@@ -81,9 +81,6 @@ export default function AdminPanel() {
         });
     };
     const resetPassword = (userid) => {
-        console.log(userid);
-        console.log(newPassword);
-        console.log(confirmPassword);
         if (newPassword == confirmPassword) {
             Axios.post("http://localhost:3001/admin/resetpassword/", {
                 user_id: userid,

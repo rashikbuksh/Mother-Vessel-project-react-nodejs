@@ -123,7 +123,6 @@ function updateRecord(req, res, db) {
 }
 
 function deleteRecord(req, res, db) {
-    //console.log("Delete record in backend");
     const id = req.body.record_id;
     const sqlDelete = "DELETE from record_entry where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
@@ -138,7 +137,6 @@ function deleteRecord(req, res, db) {
 
 function fetchJobNumber(req, res, db) {
     var order_number = req.query.order_number;
-    console.log("query job number: ", order_number);
     const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
     db.query(sqlSelect, (err, result) => {
         res.send(result);
@@ -147,7 +145,6 @@ function fetchJobNumber(req, res, db) {
 
 function getCharpotroCpLaLvRate(req, res, db) {
     var order_job_number = req.query.order_job_number;
-    console.log("order_job_number", order_job_number);
     const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
 
     db.query(sqlSelect, [order_job_number], (err, result) => {
@@ -157,7 +154,6 @@ function getCharpotroCpLaLvRate(req, res, db) {
 
 function getMaxCapacity(req, res, db) {
     var order_number = req.query.order_number;
-    console.log("order_job_number", order_number);
     const sqlSelect = `
     select 
         (bl_quantity - (

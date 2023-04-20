@@ -1,7 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Select from "../../components/Select";
-import Switch from "../../components/Switch";
 
 import { MdClose } from "react-icons/md";
 

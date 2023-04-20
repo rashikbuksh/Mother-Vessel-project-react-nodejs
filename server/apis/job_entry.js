@@ -90,7 +90,6 @@ function updateJob(req, res, db) {
 }
 
 function deleteJob(req, res, db) {
-    //console.log("Delete job in backend");
     const id = req.body.job_id;
     const order_number = req.body.job_order_number;
 
@@ -114,7 +113,6 @@ function getCommodity(req, res, db) {
 }
 
 function fetchOrderNumber(req, res, db) {
-    //console.log("fetching order number");
     const sqlSelect =
         "SELECT order_number as 'value' from job_entry order by order_number";
     // change the order number to value
@@ -131,7 +129,6 @@ function getMvName(req, res, db) {
         order_number += order_number_split[i] + "-";
     }
     order_number = order_number.substring(0, order_number.length - 1);
-    console.log("order_number", order_number);
 
     const sqlSelect = `SELECT mother_vessel_name as MV_name from job_entry where order_number = '${order_number}'`;
 

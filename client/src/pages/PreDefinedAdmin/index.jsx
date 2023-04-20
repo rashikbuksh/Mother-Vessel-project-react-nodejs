@@ -125,20 +125,15 @@ const App = () => {
     const handleAddFormSubmit = (event) => {
         event.preventDefault(); // ???
 
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newStatus = {
-            LV_name: addFormData.LV_name, //handleAddFormChange로 받은 새 데이터
+            LV_name: addFormData.LV_name,
         };
-
-        // const current = new Date();
-        // const order_number_auto = newStatus.importer_name+'-'+current.getDate().toLocaleString()+'-'+newStatus.mother_vessel_name+'-'+newStatus.mv_location
-        // console.log(order_number_auto)
 
         // api call
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/predefinedship`,
             {
-                LV_name: newStatus.LV_name, //handleAddFormChange로 받은 새 데이터
+                LV_name: newStatus.LV_name,
             }
         ).then((response) => {
             generatedToast(response);
@@ -230,7 +225,6 @@ const App = () => {
         const index = CurrentStatus.findIndex(
             (Status) => Status.id === StatusId
         );
-        //console.log("Deleting Status with id: " + StatusId);
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/deletepredefinedship`,
             {

@@ -1,28 +1,26 @@
+const { ToastRes } = require("./util");
+
 function verifyLogin(req, res, db) {
-    //console.log("verify login")
-    const username = req.query.username;
-    const password = req.query.password;
-    //console.log(email, password)
+    const { username, password } = req.query;
+
     const get_user =
-        "select id, position, password, enabled from users where username = ?";
+        "select id, position, password, enabled from users where username=?";
+
     db.query(get_user, [username], (err, result) => {
-        if (result.length === 0) {
-            console.log("No user found");
-            res.send("No user found");
-        } else if (result[0].enabled === 0) {
-            console.log("User is disabled");
-            res.send("User is disabled");
-        } else if (password === result[0].password) {
+        if (result[0]?.enabled === 0) {
+            res.json(ToastRes("error", "User is disabled", true));
+        } else if (password === result[0]?.password) {
             res.send({
                 id: result[0].id,
                 position: result[0].position,
             });
         } else {
-            console.log("wrong password");
-            res.send("wrong password");
+            res.json(
+                ToastRes("error", "Email/Password combination is wrong", true)
+            );
         }
-        //res.send(result)
     });
+
     return res;
 }
 
@@ -34,90 +32,88 @@ function getUsers(req, res, db) {
 }
 
 function enableUser(req, res, db) {
-    const id = req.body.user_id;
-    const sqlUpdate = "UPDATE users SET enabled=1 where id= ?";
+    const { id, name } = req.body;
+    const sqlUpdate = "UPDATE users SET enabled=1 where id=?";
     db.query(sqlUpdate, [id], (err, result) => {
-        if (err) console.log(err);
-
-        res.send(result);
+        res.json(
+            err
+                ? ToastRes("error", "enabling user")
+                : ToastRes("create", `User: ${name} enabled`, true)
+        );
     });
 }
 
 function disableUser(req, res, db) {
-    const id = req.body.user_id;
-    const sqlUpdate = "UPDATE users SET enabled=0 where id= ?";
+    const { id, name } = req.body;
+    const sqlUpdate = "UPDATE users SET enabled=0 where id=?";
     db.query(sqlUpdate, [id], (err, result) => {
-        if (err) console.log(err);
-
-        res.send(result);
+        res.json(
+            err
+                ? ToastRes("error", "disabling user")
+                : ToastRes("delete", `User: ${name} disabled`, true)
+        );
     });
 }
 
 function resetPassword(req, res, db) {
-    const id = req.body.user_id;
-    const password = req.body.new_password;
-    console.log(id + " " + password);
-    const sqlUpdate = "UPDATE users SET password=? where id= ?";
-    db.query(sqlUpdate, [password, id], (err, result) => {
-        if (err) console.log(err);
+    const { id, password } = req.body;
 
-        res.send(result);
+    const sqlUpdate = "UPDATE users SET password=? where id=?";
+    db.query(sqlUpdate, [password, id], (err, result) => {
+        res.json(
+            err
+                ? ToastRes("error", "resetting password")
+                : ToastRes("create", "Password has been reset", true)
+        );
     });
 }
 
 function register(req, res, db) {
-    //console.log("submit in backend");
-    const name = req.body.name;
-    const username = req.body.username;
-    const password = req.body.password;
-    const position = req.body.position;
-    const department = req.body.department;
-    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+    const { name, username, password, position, department } = req.body;
+
     const create_user =
         "INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
     db.query(
         create_user,
         [name, username, password, position, department],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
+            res.json(
+                err
+                    ? ToastRes("error", "creating user")
+                    : ToastRes("create", `User: ${username}`)
+            );
         }
     );
 }
 
 function updateInfo(req, res, db) {
-    //console.log("update info in backend");
     const id = req.body.user_id;
-    const name = req.body.new_name;
-    const username = req.body.new_username;
-    const position = req.body.new_position;
-    const department = req.body.new_department;
-    //console.log(name+" "+username+" "+password+" "+position+" "+department);
+
+    const { name, username, position, department } = req.body;
     const sqlUpdate =
         "UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
     db.query(
         sqlUpdate,
         [name, username, position, department, id],
         (err, result) => {
-            if (err) console.log(err);
-
-            // res.send(result).json({
-            //     success: true,
-            // });
+            res.json(
+                err
+                    ? ToastRes("error", "updating user")
+                    : ToastRes("update", `User: ${username}`)
+            );
         }
     );
 }
 
 function deleteUser(req, res, db) {
-    console.log("Delete info in backend");
     const id = req.body.user_id;
     const sqlDelete = "DELETE from users where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting user")
+                : ToastRes("delete", `User: ${id}`)
+        );
     });
 }
 

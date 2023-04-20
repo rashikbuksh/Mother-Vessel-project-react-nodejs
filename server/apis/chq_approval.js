@@ -24,9 +24,6 @@ function addChqApproval(req, res, db) {
             direct_trip,
         ],
         (err, result) => {
-            if (err) console.log(err);
-            res.send(result);
-
             res.json(
                 err
                     ? ToastRes("error", "creating checque approval")

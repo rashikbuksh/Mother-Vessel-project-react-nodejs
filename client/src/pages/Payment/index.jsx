@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy, Fragment } from "react";
+import { useState, useEffect } from "react";
 import Axios from "axios";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
@@ -53,7 +53,6 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(PayList, TableHeader); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const [orderJobList, setOrderJobList] = useState([]);
 
     // fetch data
     const [loading, setLoading] = useState(true);
@@ -135,15 +134,11 @@ const App = () => {
     const handleAddFormChange = (event) => {
         event.preventDefault();
 
-        //fullname, address, phoneNumber, email
         const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
         const fieldValue = event.target.value;
 
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
     };

@@ -1,14 +1,12 @@
 import Axios from "axios";
-import { sha256, sha224 } from "js-sha256";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import { sha256 } from "js-sha256";
+import { useNavigate } from "react-router-dom";
 
 export default function AddUser() {
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("submit in front");
         Axios.post(
             "http://localhost:3001/user/register",
             {

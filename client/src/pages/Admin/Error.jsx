@@ -6,7 +6,7 @@ export const errorData = {
     position: "",
     department: "",
 };
-export function errorCheck(fieldValue, fieldName) {
+export default function errorCheck(fieldValue, fieldName) {
     switch (fieldName) {
         case "username":
             errorData[fieldName] =

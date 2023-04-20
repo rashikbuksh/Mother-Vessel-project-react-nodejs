@@ -6,10 +6,29 @@ import Loader from "../../utils/Loader";
 import shipLogo from "../../assets/img/shipLogo.svg";
 
 import { useNavigate } from "react-router-dom";
-
-import { Toast, warning } from "./../../components/Toast/index";
-
+import { Toast, warning, generatedToast } from "./../../components/Toast/index";
 import { DefineRole } from "../../hooks/routes";
+
+const redirect = {
+    admin: "/adminpanel",
+    operations: "/recordentry",
+    accounts: "/jobentry",
+    "accounts-manager": "/chqduelist",
+};
+
+const generateToken = (length) => {
+    let result = "";
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+        );
+        counter += 1;
+    }
+    return result;
+};
 
 export default function Login() {
     const { original_role } = DefineRole();
@@ -18,45 +37,15 @@ export default function Login() {
     const [isInvalidPassword, setIsInvalidPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [cookies, setCookies, removeCookie] = useCookies();
-    const [token, setToken] = React.useState("");
-    const [substitutions, setSubstitutions] = React.useState(0);
-
-    const generateToken = (length) => {
-        let result = "";
-        const characters =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < length) {
-            result += characters.charAt(
-                Math.floor(Math.random() * charactersLength)
-            );
-            counter += 1;
-        }
-        return result;
-    };
+    const [token, setToken] = useState("");
+    const [substitutions, setSubstitutions] = useState(0);
 
     useEffect(() => {
         if (cookies.token == null) {
             setCookies("token", "undefined");
             navigate("/login");
         } else if (cookies.token != "undefined") {
-            switch (original_role) {
-                case "admin":
-                    navigate("/adminpanel");
-                    break;
-                case "operations":
-                    navigate("/recordentry");
-                    break;
-                case "accounts":
-                    navigate("/jobentry");
-                    break;
-                case "accounts-manager":
-                    navigate("/chqduelist");
-                    break;
-                default:
-                    navigate("/login");
-            }
+            navigate(redirect[original_role]);
         }
         setToken(generateToken(20));
         setSubstitutions(Math.floor(Math.random() * 26));
@@ -67,9 +56,6 @@ export default function Login() {
         password: "",
     });
 
-    const loading = (e) => {
-        setLoading(true);
-    };
     if (isLoading) {
         return <Loader />;
     }
@@ -91,18 +77,11 @@ export default function Login() {
     };
 
     const onSubmit = (e) => {
-        loading();
+        setLoading(true);
         if (isInvalidEmail || isInvalidPassword) {
             e.preventDefault();
-            alert("Please enter valid credentials");
-        }
-        //   else if(generatedcode != verify_code){
-        //     // console.log(generatedcode)
-        //     // console.log(verify_code)
-        //     alert('Wrong verification code')
-        // }
-        else {
-            //console.log(user.email);
+            warning("Please enter valid credentials");
+        } else {
             Axios.get(`${process.env.REACT_APP_API_URL}/user/verify_login/`, {
                 params: {
                     username: user.username,
@@ -110,51 +89,27 @@ export default function Login() {
                 },
             }).then((response) => {
                 setLoading(false);
-                //console.log("Data"+response.data)
-                if (response.data === "No user found") {
-                    warning("No user found");
-                } else if (response.data === "User is disabled") {
-                    warning("User is disabled");
-                } else if (response.data === "wrong password") {
-                    warning("Wrong password");
-                } else {
-                    //console.log(token);
-                    localStorage.setItem("token", token); //  token in local storage
+                generatedToast(response);
 
-                    //console.log(substitutions);
+                const { position } = response?.data;
+                if (position !== "undefined") {
+                    localStorage.setItem("token", token);
+
                     const new_ascii = [];
-                    for (var i = 0; i < response.data.position.length; i++) {
+                    for (var i = 0; i < position?.length; i++) {
                         new_ascii.push(
                             response.data.position.codePointAt(i) -
                                 substitutions
                         );
-                        //console.log(response.data.position.codePointAt(i));
                     }
-                    //console.log(new_ascii);
                     const new_string = String.fromCharCode(...new_ascii);
-                    //console.log(new_string);
 
                     setCookies(
                         "token",
                         token + ":" + new_string + ":" + substitutions
-                    ); //  token
+                    );
 
-                    switch (response.data.position) {
-                        case "admin":
-                            navigate("/adminpanel");
-                            break;
-                        case "operations":
-                            navigate("/recordentry");
-                            break;
-                        case "accounts":
-                            navigate("/jobentry");
-                            break;
-                        case "accounts-manager":
-                            navigate("/chqduelist");
-                            break;
-                        default:
-                            navigate("/login");
-                    }
+                    navigate(redirect[position]);
                 }
             });
         }

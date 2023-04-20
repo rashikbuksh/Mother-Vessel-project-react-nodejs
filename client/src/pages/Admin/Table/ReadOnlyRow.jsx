@@ -47,7 +47,7 @@ const ReadOnlyRow = ({
                         className="rounded-md bg-green-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-green-400"
                         onClick={() => {
                             disable_user(user.id);
-                            window.location.reload();
+                            // window.location.reload();
                         }}
                     >
                         <AiOutlineCheck className="h-5 w-5 text-black" />
@@ -58,7 +58,7 @@ const ReadOnlyRow = ({
                         className="rounded-md bg-red-500 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"
                         onClick={() => {
                             enable_user(user.id);
-                            window.location.reload();
+                            // window.location.reload();
                         }}
                     >
                         <ImCancelCircle className="h-5 w-5 text-black" />
