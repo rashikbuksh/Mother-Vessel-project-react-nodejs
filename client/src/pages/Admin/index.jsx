@@ -5,13 +5,12 @@ import EditableRow from "./Table/EditTableRow";
 import { sha256 } from "js-sha256";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
-import { useAuth } from "../../hooks/auth";
 import TableHead from "../../components/Table/TableHead"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
 
 import { warning } from "../../components/Toast";
 
-import { errorData, errorCheck } from "./Error";
+import { errorData } from "./Error";
 import { generatedToast, Toast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
 
@@ -69,14 +68,21 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(userList, TableHeader); // data, columns
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const { logout } = useAuth();
-
-    // search filter for all fields
-    const [query, setQuery] = useState("");
 
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    useEffect(() => {
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/admin/getusers`,
+            setUserList,
+            setLoading,
+            setError
+        );
+    }, []);
+
+    // search filter for all fields
+    const [query, setQuery] = useState("");
 
     const data = Object.values(tableData);
     function search(items) {
@@ -96,15 +102,6 @@ const App = () => {
             (cursorPos - 1) * pageSize + pageSize
         );
     }
-
-    useEffect(() => {
-        fetchData(
-            `${process.env.REACT_APP_API_URL}/admin/getusers`,
-            setUserList,
-            setLoading,
-            setError
-        );
-    }, []);
 
     // add state
     //id is randomly generated with nanoid generator
@@ -139,15 +136,11 @@ const App = () => {
     const handleAddFormChange = (event) => {
         event.preventDefault();
 
-        //fullname, address, phoneNumber, email
         const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
         const fieldValue = event.target.value;
 
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
 
         setAddFormData(newFormData);
     };
@@ -159,13 +152,10 @@ const App = () => {
 
         //pass, reset pass
         const fieldName = event.target.getAttribute("name");
-        //각 input 입력값
         const fieldValue = event.target.value;
 
         const newFormData = { ...resetPassFormData };
         newFormData[fieldName] = fieldValue;
-        //addFormData > event.target(input)
-        //fullName:"" > name="fullName", value=fullName input 입력값
 
         setResetPassFormData(newFormData);
     };
@@ -188,9 +178,8 @@ const App = () => {
     const handleAddFormSubmit = (event) => {
         event.preventDefault(); // ???
 
-        //data.json으로 이루어진 기존 행에 새로 입력받은 데이터 행 덧붙이기
         const newContact = {
-            name: addFormData.name, //handleAddFormChange로 받은 새 데이터
+            name: addFormData.name,
             username: addFormData.username,
             password: addFormData.password,
             position: addFormData.position,
@@ -198,24 +187,16 @@ const App = () => {
         };
 
         // api call
-        Axios.post(`${process.env.REACT_APP_API_URL}/user/register`, {
-            name: newContact.name,
-            username: newContact.username,
-            password: sha256(newContact.password),
-            position: newContact.position,
-            department: newContact.department,
-        }).then((response) => {
-            generatedToast(response);
-        });
+        Axios.post(`${process.env.REACT_APP_API_URL}/user/register`, newContact)
+            .then((response) => {
+                generatedToast(response);
+            })
+            .then(() => {
+                closeModal();
+            });
 
-        //userList의 초기값은 data.json 데이터
         const newUserList = [...tableData, newContact];
         setUserList(newUserList);
-
-        // close modal
-        closeModal();
-
-        // toast
     };
 
     //submit handler
@@ -238,14 +219,16 @@ const App = () => {
             Axios.post(
                 `${process.env.REACT_APP_API_URL}/admin/resetpassword/`,
                 {
-                    user_id: resetPassUserId,
-                    new_password: sha256(newPass.password),
+                    id: resetPassUserId,
+                    password: sha256(newPass.password),
                 }
-            ).then((response) => {
-                console.log(response);
-                generatedToast(response);
-            });
-            closeResPassModal();
+            )
+                .then((response) => {
+                    generatedToast(response);
+                })
+                .then(() => {
+                    closeResPassModal();
+                });
         } else {
             warning("Password does not match");
         }
@@ -263,13 +246,10 @@ const App = () => {
             department: editFormData.department,
         };
 
-        Axios.post(`${process.env.REACT_APP_API_URL}/admin/updateinfo/`, {
-            user_id: editedContact.id,
-            new_name: editedContact.name,
-            new_username: editedContact.username,
-            new_position: editedContact.position,
-            new_department: editedContact.department,
-        }).then((response) => {
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/admin/updateinfo/`,
+            editedContact
+        ).then((response) => {
             generatedToast(response);
         });
 
@@ -278,8 +258,7 @@ const App = () => {
         setUserList(tableData);
 
         setEditContactId(null);
-        // success("User updated successfully");
-        window.location.reload();
+        // window.location.reload();
     };
 
     //Read-only data If you click the edit button, the existing data is displayed
@@ -318,13 +297,8 @@ const App = () => {
     // modal for add user
     let [isOpen, setIsOpen] = useState(false);
 
-    function closeModal() {
-        setIsOpen(false);
-    }
-
-    function openModal() {
-        setIsOpen(true);
-    }
+    const closeModal = () => setIsOpen(false);
+    const openModal = () => setIsOpen(true);
 
     // modal for reset password
     let [isResPassOpen, setIsResPassOpen] = useState(false);
@@ -339,18 +313,43 @@ const App = () => {
 
     // enable user
     const enable_user = (userId) => {
+        const index = tableData.findIndex((td) => td.id === userId);
+        tableData[index] = {
+            id: userId,
+            name: tableData[index].name,
+            username: tableData[index].username,
+            position: tableData[index].position,
+            department: tableData[index].department,
+            enabled: 1,
+        };
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/enableuser/`, {
-            user_id: userId,
+            id: userId,
+            name: tableData[index].name,
         }).then((response) => {
             generatedToast(response);
         });
+
+        setUserList(() => [...tableData]);
     };
+
     const disable_user = (userId) => {
+        const index = tableData.findIndex((td) => td.id === userId);
+        tableData[index] = {
+            id: userId,
+            name: tableData[index].name,
+            username: tableData[index].username,
+            position: tableData[index].position,
+            department: tableData[index].department,
+            enabled: 0,
+        };
         Axios.post(`${process.env.REACT_APP_API_URL}/admin/disableuser/`, {
-            user_id: userId,
+            id: userId,
+            name: tableData[index].name,
         }).then((response) => {
             generatedToast(response);
         });
+
+        setUserList(() => [...tableData]);
     };
 
     // loading and error
@@ -400,25 +399,23 @@ const App = () => {
                                     {editContactId ===
                                     search(tableData)[index]?.id ? (
                                         <EditableRow
-                                            editFormData={editFormData}
-                                            setEditFormData={setEditFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
+                                            {...{
+                                                editFormData,
+                                                setEditFormData,
+                                                handleEditFormChange,
+                                                handleCancelClick,
+                                            }}
                                         />
                                     ) : (
                                         <ReadOnlyRow
                                             user={userList[index]}
-                                            handleEditClick={handleEditClick}
-                                            handleDeleteClick={
-                                                handleDeleteClick
-                                            }
-                                            enable_user={enable_user}
-                                            disable_user={disable_user}
-                                            reset_pass={reset_pass}
+                                            {...{
+                                                handleEditClick,
+                                                handleDeleteClick,
+                                                enable_user,
+                                                disable_user,
+                                                reset_pass,
+                                            }}
                                         />
                                     )}
                                 </tr>
@@ -454,7 +451,7 @@ const App = () => {
                         setAddFormData,
                         errorData,
                     }}
-                ></AddUser>
+                />
             </Suspense>
 
             {/* Reset Pass modal */}

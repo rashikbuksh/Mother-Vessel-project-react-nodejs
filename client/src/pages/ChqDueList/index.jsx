@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy, Fragment } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import Axios from "axios";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
 import EditableRow from "./Table/EditTableRow";
@@ -56,7 +56,6 @@ const App = () => {
     const [tableData, handleSorting] = useSortableTable(ChqList, TableHeader);
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(20);
-    const [orderJobList, setOrderJobList] = useState([]);
 
     // fetch data
     const [loading, setLoading] = useState(true);
@@ -446,7 +445,6 @@ const App = () => {
                         handlePaymentModalFormChange,
                         paymentModalData,
                         errorData,
-                        paymentModalData,
                     }}
                 ></AddPaymentInformation>
             </Suspense>

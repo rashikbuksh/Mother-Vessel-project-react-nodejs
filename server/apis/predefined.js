@@ -1,18 +1,14 @@
+const { ToastRes } = require("./util");
+
 function addPredefined(req, res, db) {
-    //console.log("submit in backend");
     const LV_name = req.body.LV_name;
-    //const date_from_charpotro = req.body.date_from_charpotro;
-    //const commodity = req.body.commodity;
-    // const LA = req.body.LA;
-    // const dest_from = req.body.dest_from;
-    // const dest_to = req.body.dest_to;
-    // const current_location = req.body.current_location;
-    // const remark = req.body.remark;
-    const create_predefinedship =
-        "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
-    db.query(create_predefinedship, [LV_name], (err, result) => {
-        if (err) console.log(err);
-        res.send(result);
+    const sqlCreate = "INSERT INTO pre_defined_ship (LV_name) VALUES (?)";
+    db.query(sqlCreate, [LV_name], (err, result) => {
+        res.json(
+            err
+                ? ToastRes("error", "creating ship")
+                : ToastRes("create", `${LV_name}`)
+        );
     });
 }
 function getPredefined(req, res, db) {
@@ -22,16 +18,17 @@ function getPredefined(req, res, db) {
     });
 }
 function updatePredefined(req, res, db) {
-    //console.log("update job info in backend");
-    const id = req.body.id;
-    const date_from_charpotro = req.body.date_from_charpotro;
-    const commodity = req.body.commodity;
-    const LA = req.body.LA;
-    const dest_from = req.body.dest_from;
-    const dest_to = req.body.dest_to;
-    const current_location = req.body.current_location;
-    const remark = req.body.remark;
-    //console.log(id);
+    const {
+        id,
+        date_from_charpotro,
+        commodity,
+        LA,
+        dest_from,
+        dest_to,
+        current_location,
+        remark,
+    } = req.body;
+
     const sqlUpdate =
         "UPDATE pre_defined_ship SET date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
     db.query(
@@ -47,24 +44,23 @@ function updatePredefined(req, res, db) {
             id,
         ],
         (err, result) => {
-            if (err) console.log(err);
-
-            // res.send(result).json({
-            //     success: true,
-            // });
+            res.json(
+                err
+                    ? ToastRes("error", "updating ship")
+                    : ToastRes("update", `${id}`)
+            );
         }
     );
 }
 function deletePredefined(req, res, db) {
-    //console.log("Delete status in backend");
     const id = req.body.status_id;
     const sqlDelete = "DELETE from pre_defined_ship where id= ?";
     db.query(sqlDelete, [id], (err, result) => {
-        if (err) console.log(err);
-
-        if (!err) {
-            res.send("success");
-        }
+        res.json(
+            err
+                ? ToastRes("error", "deleting ship")
+                : ToastRes("delete", `${id}`)
+        );
     });
 }
 function getLV(req, res, db) {

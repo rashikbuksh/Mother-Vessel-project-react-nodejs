@@ -3,9 +3,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import Select from "../../components/Select";
 import Switch from "../../components/Switch";
 import { useEffect } from "react";
+import { fetchData } from "../../hooks/fetchData";
 
 import { MdClose } from "react-icons/md";
-import { fetchData } from "../../hooks/fetchData";
 
 export default function AddJob({
     isOpen,
@@ -20,14 +20,21 @@ export default function AddJob({
     enabled,
     setEnabled,
 }) {
-    const [LVlist, setLVlist] = useState(true);
+    const [LVlist, setLVlist] = useState([]);
+
+    // fetch data
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/management/getLVname`)
-            .then((res) => res.json())
-            .then((data) => {
-                setLVlist(data);
-            });
-    });
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/management/getLVname`,
+            setLVlist,
+            setLoading,
+            setError
+        );
+    }, []);
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
