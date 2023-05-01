@@ -11,7 +11,7 @@ import { useSortableTable } from "../../components/Table/useSortableTable"; // n
 import { warning } from "../../components/Toast";
 
 import { errorData } from "./Error";
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
 
 import NoDataFound from "../../utils/NoDataFound";
@@ -539,7 +539,6 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <Toast />
         </div>
     );
 };

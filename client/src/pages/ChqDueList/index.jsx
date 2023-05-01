@@ -7,7 +7,7 @@ import TableHead from "../../components/Table/TableHead";
 import { useSortableTable } from "../../components/Table/useSortableTable";
 
 import { errorData, errorCheck } from "./Error";
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
 import Select from "../../components/Select";
 
@@ -448,8 +448,6 @@ const App = () => {
                     }}
                 ></AddPaymentInformation>
             </Suspense>
-
-            <Toast />
         </div>
     );
 };

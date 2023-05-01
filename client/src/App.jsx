@@ -9,6 +9,8 @@ import {
 } from "./hooks/routes";
 
 import Loader from "./utils/Loader";
+import { Toast } from "./components/Toast";
+
 const NotFound = lazy(() => import("./layout/NotFound"));
 const NoAccess = lazy(() => import("./utils/NoAccess"));
 
@@ -17,8 +19,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Admin = lazy(() => import("./pages/Admin"));
 // Login
 const Login = lazy(() => import("./pages/Login"));
-const ForgotPassword = lazy(() => import("./pages/Login/Forgot_Password"));
-const ResetPassword = lazy(() => import("./pages/Login/Reset_password"));
+
 //admin panel
 const AdminPanel = lazy(() => import("./pages/Admin"));
 const JobEntry = lazy(() => import("./pages/JobEntry"));
@@ -154,6 +155,7 @@ const AdminRoutesList = [
 function App() {
     return (
         <>
+            <Navbar />
             <Routes>
                 {OperationRoutesList.map((route, index) => (
                     <Route
@@ -162,7 +164,6 @@ function App() {
                         element={
                             <OperationRoutes>
                                 <Suspense fallback={<Loader />}>
-                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </OperationRoutes>
@@ -176,7 +177,6 @@ function App() {
                         element={
                             <AccountsRoutes>
                                 <Suspense fallback={<Loader />}>
-                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsRoutes>
@@ -190,7 +190,6 @@ function App() {
                         element={
                             <AccountsManagerRoutes>
                                 <Suspense fallback={<Loader />}>
-                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AccountsManagerRoutes>
@@ -204,7 +203,6 @@ function App() {
                         element={
                             <AdminRoutes>
                                 <Suspense fallback={<Loader />}>
-                                    <Navbar />
                                     <route.component />
                                 </Suspense>
                             </AdminRoutes>
@@ -234,6 +232,7 @@ function App() {
                     }
                 />
             </Routes>
+            <Toast />
         </>
     );
 }

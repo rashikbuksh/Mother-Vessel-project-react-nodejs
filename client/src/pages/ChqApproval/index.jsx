@@ -7,7 +7,7 @@ import TableHead from "../../components/Table/TableHead";
 import { useSortableTable } from "../../components/Table/useSortableTable";
 
 import { errorData, errorCheck } from "./Error";
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
 
 import NoDataFound from "../../utils/NoDataFound";
@@ -81,7 +81,7 @@ const App = () => {
     // fetch data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
     useEffect(() => {
         fetchData(
             `${process.env.REACT_APP_API_URL}/management/getchqapproval?status=${status.value}`,
@@ -392,8 +392,6 @@ const App = () => {
                         }}
                     />
                 )}
-
-            <Toast />
         </div>
     );
 };

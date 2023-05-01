@@ -14,7 +14,7 @@ import { MdClose } from "react-icons/md";
 import Select from "../../components/Select";
 
 //toast
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -502,7 +502,6 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <Toast />
         </div>
     );
 };
