@@ -7,7 +7,7 @@ import TableHead from "../../components/Table/TableHead";
 import { useSortableTable } from "../../components/Table/useSortableTable";
 
 import { errorData, errorCheck } from "./Error";
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 import { fetchData } from "../../hooks/fetchData";
 
 import NoDataFound from "../../utils/NoDataFound";
@@ -370,8 +370,6 @@ const App = () => {
                     }}
                 />
             )}
-
-            <Toast />
         </div>
     );
 };

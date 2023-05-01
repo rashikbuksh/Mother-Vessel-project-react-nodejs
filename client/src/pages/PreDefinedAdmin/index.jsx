@@ -13,7 +13,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { MdClose } from "react-icons/md";
 
 //toast
-import { generatedToast, Toast } from "../../components/Toast";
+import { generatedToast } from "../../components/Toast";
 
 const TableHeader = [
     {
@@ -414,7 +414,6 @@ const App = () => {
             </Suspense>
 
             {/* toast  */}
-            <Toast />
         </div>
     );
 };
