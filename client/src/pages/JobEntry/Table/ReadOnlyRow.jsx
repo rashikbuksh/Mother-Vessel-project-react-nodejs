@@ -2,7 +2,7 @@ import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 import FormateNumber from "../../../utils/FormateNumber";
-import CommaFormatted from "../../../utils/CommaFormatted";
+import ColorMvLocation from "../../../utils/ColorMvLocation";
 
 const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-2 text-sm text-gray-700 text-center";
@@ -31,7 +31,9 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
                     {job.commodity}
                 </span>
             </td>
-            <td className={clsName}>{job.mv_location}</td>
+            <td className={clsName}>
+                <ColorMvLocation location={job.mv_location} />
+            </td>
             <td className={clsName}>{job.bl_quantity.toLocaleString()}</td>
             <td className={clsName}>{job.stevedore_name}</td>
             <td className={clsName}>

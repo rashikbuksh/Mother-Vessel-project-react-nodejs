@@ -174,7 +174,6 @@ const App = () => {
     };
 
     //submit handler
-    //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = (event) => {
         event.preventDefault(); // ???
 
@@ -232,6 +231,11 @@ const App = () => {
             LV_master_name: editFormData.LV_master_name,
             LV_master_contact_number: editFormData.LV_master_contact_number,
         };
+
+        console.log(
+            "editFormData.date_from_charpotro: " +
+                editFormData.date_from_charpotro
+        );
 
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/updaterecordentry`,

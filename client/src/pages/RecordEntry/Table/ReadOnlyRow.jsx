@@ -20,7 +20,18 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
                 </span>
             </td>
             <td className={clsName}>
-                <DateTime date={record.date_from_charpotro} />
+                {/* <DateTime date={record.date_from_charpotro} /> */}
+                <span className="rounded-lg bg-red-200 bg-opacity-50 text-xs font-medium uppercase tracking-wider text-red-800">
+                    {new Date(record.date_from_charpotro).toLocaleString(
+                        "en-GB",
+                        {
+                            timeZone: "Asia/Dhaka",
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                        }
+                    )}
+                </span>
             </td>
             <td className={`text-center ${clsName}`}>
                 {record.cp_number_from_charpotro}
