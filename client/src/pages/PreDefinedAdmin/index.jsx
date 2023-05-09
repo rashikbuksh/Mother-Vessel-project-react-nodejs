@@ -24,7 +24,77 @@ const TableHeader = [
         sortByOrder: "asc",
     },
     { id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
-    { id: 3, name: "Actions" },
+    { id: 3, name: "Capacity", accessor: "capacity", sortable: true },
+    { id: 4, name: "M. No. (Reg No.)", accessor: "reg_number", sortable: true },
+    { id: 5, name: "Master's Name", accessor: "masters_name", sortable: true },
+    {
+        id: 6,
+        name: "Master's Contact Number",
+        accessor: "masters_contact_number",
+        sortable: true,
+    },
+    {
+        id: 7,
+        name: "Master's NID Image Attachment",
+        accessor: "masters_nid_image_attachment",
+        sortable: true,
+    },
+    { id: 8, name: "Staff Name", accessor: "staff_name", sortable: true },
+    {
+        id: 9,
+        name: "Staff NID Number",
+        accessor: "staff_nid_number",
+        sortable: true,
+    },
+    {
+        id: 10,
+        name: "Leased (Yes/No)",
+        accessor: "leased",
+        sortable: true,
+    },
+    {
+        id: 11,
+        name: "Company Name",
+        accessor: "company_name",
+        sortable: true,
+    },
+    {
+        id: 12,
+        name: "Proprieter's Name",
+        accessor: "proprietors_name",
+        sortable: true,
+    },
+    {
+        id: 13,
+        name: "Office Address",
+        accessor: "office_address",
+        sortable: true,
+    },
+    {
+        id: 14,
+        name: "AC Number",
+        accessor: "ac_number",
+        sortable: true,
+    },
+    {
+        id: 15,
+        name: "Contact Details",
+        accessor: "contact_details",
+        sortable: true,
+    },
+    {
+        id: 16,
+        name: "L/V Documents Attachement",
+        accessor: "lv_documents_attachement",
+        sortable: true,
+    },
+    {
+        id: 17,
+        name: "Status",
+        accessor: "status",
+        sortable: true,
+    },
+    { id: 18, name: "Actions" },
 ];
 
 const App = () => {
@@ -35,7 +105,7 @@ const App = () => {
         TableHeader
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(2);
+    const [pageSize, setPageSize] = useState(5);
 
     const { logout } = useAuth();
 
@@ -72,6 +142,21 @@ const App = () => {
     //id is randomly generated with nanoid generator
     const [addFormData, setAddFormData] = useState({
         LV_name: "",
+        capacity: "",
+        reg_number: "",
+        masters_name: "",
+        masters_contact_number: "",
+        masters_nid_image_attachment: "",
+        staff_name: "",
+        staff_nid_number: "",
+        leased: "",
+        company_name: "",
+        proprietors_name: "",
+        office_address: "",
+        ac_number: "",
+        contact_details: "",
+        lv_documents_attachement: "",
+        status: "",
     });
 
     //edit status
@@ -127,6 +212,22 @@ const App = () => {
 
         const newStatus = {
             LV_name: addFormData.LV_name,
+            capacity: addFormData.capacity,
+            reg_number: addFormData.reg_number,
+            masters_name: addFormData.masters_name,
+            masters_contact_number: addFormData.masters_contact_number,
+            masters_nid_image_attachment:
+                addFormData.masters_nid_image_attachment,
+            staff_name: addFormData.staff_name,
+            staff_nid_number: addFormData.staff_nid_number,
+            leased: addFormData.leased,
+            company_name: addFormData.company_name,
+            proprietors_name: addFormData.proprietors_name,
+            office_address: addFormData.office_address,
+            ac_number: addFormData.ac_number,
+            contact_details: addFormData.contact_details,
+            lv_documents_attachement: addFormData.lv_documents_attachement,
+            status: addFormData.status,
         };
 
         // api call
@@ -134,6 +235,22 @@ const App = () => {
             `${process.env.REACT_APP_API_URL}/management/predefinedship`,
             {
                 LV_name: newStatus.LV_name,
+                capacity: newStatus.capacity,
+                reg_number: newStatus.reg_number,
+                masters_name: newStatus.masters_name,
+                masters_contact_number: newStatus.masters_contact_number,
+                masters_nid_image_attachment:
+                    newStatus.masters_nid_image_attachment,
+                staff_name: newStatus.staff_name,
+                staff_nid_number: newStatus.staff_nid_number,
+                leased: newStatus.leased,
+                company_name: newStatus.company_name,
+                proprietors_name: newStatus.proprietors_name,
+                office_address: newStatus.office_address,
+                ac_number: newStatus.ac_number,
+                contact_details: newStatus.contact_details,
+                lv_documents_attachement: newStatus.lv_documents_attachement,
+                status: newStatus.status,
             }
         ).then((response) => {
             generatedToast(response);
@@ -394,6 +511,216 @@ const App = () => {
                                                         handleAddFormChange
                                                     }
                                                     placeholder="LV Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Capacity
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="capacity"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Capacity"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    M. No. (Reg No.)
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="reg_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="M. No. (Reg No.)"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Master's Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="masters_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Master's Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Master's Contact Number
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="masters_contact_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Master's Contact Number"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Master's NID Image
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="masters_nid_image_attachment"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Master's NID Image"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Staff Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="staff_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Staff Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Staff NID Number
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="staff_nid_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Staff NID Number"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Leased (Yes/No)
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="leased"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Leased (Yes/No)"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Company Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="company_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Company Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Proprieter's Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="proprietors_name"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Proprieter's Name"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Office Address
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="office_address"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Office Address"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    AC Number
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="ac_number"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="AC Number"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Contact Details
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="contact_details"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Contact Details"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    L/V Documents Attachement
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="lv_documents_attachement"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="L/V Documents Attachement"
+                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                                />
+                                            </div>
+                                            <div className="group relative w-72 md:w-80 lg:w-96">
+                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                    Status
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="status"
+                                                    onChange={
+                                                        handleAddFormChange
+                                                    }
+                                                    placeholder="Status"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
