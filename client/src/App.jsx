@@ -76,7 +76,7 @@ const OperationRoutesList = [
     },
     {
         link: "/own-ship",
-        component: PreDefinedShip,
+        component: PreDefinedAdmin,
     },
 ];
 
@@ -117,7 +117,7 @@ const AdminRoutesList = [
     },
     {
         link: "/own-ship",
-        component: PreDefinedShip,
+        component: PreDefinedAdmin,
     },
     {
         link: "/damarage-calculation",

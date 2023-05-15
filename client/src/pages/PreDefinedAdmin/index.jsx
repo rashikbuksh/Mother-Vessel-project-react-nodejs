@@ -1,7 +1,7 @@
-import React, { useState, Fragment, useEffect, Suspense } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import React, { useState, useEffect, Suspense } from "react";
 import ReadOnlyRow from "./TableRows/ReadOnlyRow";
 import EditableRow from "./TableRows/EditTableRow";
+import AddModal from "./AddModal";
 import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
@@ -10,7 +10,6 @@ import Axios from "axios";
 import Loader from "../../utils/Loader";
 
 import { IoMdPersonAdd } from "react-icons/io";
-import { MdClose } from "react-icons/md";
 
 //toast
 import { generatedToast } from "../../components/Toast";
@@ -112,6 +111,10 @@ const App = () => {
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(5);
 
+    //Image upload
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState("");
+
     const { logout } = useAuth();
 
     // search filter for all fields
@@ -210,6 +213,14 @@ const App = () => {
         setEditFormData(newFormData);
     };
 
+    //Saving File
+    const saveFile = (e) => {
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+
+        console.log(e.target.files[0].name);
+    };
+
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = (event) => {
@@ -221,8 +232,6 @@ const App = () => {
             master_reg_number: addFormData.master_reg_number,
             masters_name: addFormData.masters_name,
             masters_contact_number: addFormData.masters_contact_number,
-            masters_nid_image_attachment:
-                addFormData.masters_nid_image_attachment,
             staff_name: addFormData.staff_name,
             staff_nid_number: addFormData.staff_nid_number,
             leased: addFormData.leased,
@@ -234,8 +243,37 @@ const App = () => {
             lv_documents_attachement: addFormData.lv_documents_attachement,
             status: addFormData.status,
         };
+        const formData = new FormData();
+        // formData.append("LV_name", addFormData.LV_name);
+        // formData.append("capacity", newStatus.capacity);
+        // formData.append("master_reg_number", newStatus.master_reg_number);
+        // formData.append("masters_name", newStatus.masters_name);
+        // formData.append(
+        //     "masters_contact_number",
+        //     newStatus.masters_contact_number
+        // );
+        formData.append("masters_nid_image_attachment", file);
+        formData.append("masters_nid_image_attachment_name", fileName);
+        // formData.append("staff_name", newStatus.staff_name);
+        // formData.append("staff_nid_number", newStatus.staff_nid_number);
+        // formData.append("leased", newStatus.leased);
+        // formData.append("company_name", newStatus.company_name);
+        // formData.append("proprietors_name", newStatus.proprietors_name);
+        // formData.append("office_address", newStatus.office_address);
+        // formData.append("ac_number", newStatus.ac_number);
+        // formData.append("contact_details", newStatus.contact_details);
+        // formData.append(
+        //     "lv_documents_attachement",
+        //     newStatus.lv_documents_attachement
+        // );
+        // formData.append("status", newStatus.status);
 
-        // api call
+        const config = {
+            body: newStatus,
+        };
+
+        console.log(formData.values());
+
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/predefinedship`,
             {
@@ -244,8 +282,6 @@ const App = () => {
                 master_reg_number: newStatus.master_reg_number,
                 masters_name: newStatus.masters_name,
                 masters_contact_number: newStatus.masters_contact_number,
-                masters_nid_image_attachment:
-                    newStatus.masters_nid_image_attachment,
                 staff_name: newStatus.staff_name,
                 staff_nid_number: newStatus.staff_nid_number,
                 leased: newStatus.leased,
@@ -256,8 +292,9 @@ const App = () => {
                 contact_details: newStatus.contact_details,
                 lv_documents_attachement: newStatus.lv_documents_attachement,
                 status: newStatus.status,
-            },
-            { header: { "Content-Type": "multipart/form-data" } }
+                file,
+                fileName,
+            }
         ).then((response) => {
             generatedToast(response);
         });
@@ -428,21 +465,19 @@ const App = () => {
                                 >
                                     {editStatusId === status.id ? (
                                         <EditableRow
-                                            editFormData={editFormData}
-                                            handleEditFormChange={
-                                                handleEditFormChange
-                                            }
-                                            handleCancelClick={
-                                                handleCancelClick
-                                            }
+                                            {...{
+                                                editFormData,
+                                                handleEditFormChange,
+                                                handleCancelClick,
+                                            }}
                                         />
                                     ) : (
                                         <ReadOnlyRow
-                                            status={status}
-                                            handleEditClick={handleEditClick}
-                                            handleDeleteClick={
-                                                handleDeleteClick
-                                            }
+                                            {...{
+                                                status,
+                                                handleEditClick,
+                                                handleDeleteClick,
+                                            }}
                                         />
                                     )}
                                 </tr>
@@ -456,295 +491,15 @@ const App = () => {
 
             {/* add item modal */}
             <Suspense fallback={<Loader />}>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="z-10 overflow-y-auto"
-                        // new start
-                        onClose={() => {}}
-                        // new end
-                    >
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <div className="fixed inset-0 bg-black bg-opacity-25" />
-                        </Transition.Child>
-
-                        <div className="fixed inset-0 overflow-y-auto">
-                            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 scale-95"
-                                    enterTo="opacity-100 scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 scale-100"
-                                    leaveTo="opacity-0 scale-95"
-                                >
-                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                        {/* // new start */}
-                                        <Dialog.Title
-                                            as="h3"
-                                            className="mb-4 text-left text-3xl font-medium text-gray-900"
-                                        >
-                                            Add Ship
-                                            <button
-                                                className="float-right"
-                                                onClick={closeModal}
-                                            >
-                                                <MdClose className="inline text-red-600" />
-                                            </button>
-                                        </Dialog.Title>
-                                        {/* // new end */}
-                                        <form
-                                            onSubmit={handleAddFormSubmit}
-                                            className="flex flex-col gap-4"
-                                        >
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    LV Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="LV_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="LV Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Capacity
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="capacity"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Capacity"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Master Registration Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="master_reg_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Master Registration Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Master's Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="masters_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Master's Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Master's Contact Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="masters_contact_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Master's Contact Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Master's NID Image
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="masters_nid_image_attachment"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Master's NID Image"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Staff Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="staff_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Staff Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Staff NID Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="staff_nid_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Staff NID Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <button>add staff</button>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Leased (Yes/No)
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="leased"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Leased (Yes/No)"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Company Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="company_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Company Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Proprieter's Name
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="proprietors_name"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Proprieter's Name"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Office Address
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="office_address"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Office Address"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    AC Number
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="ac_number"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="AC Number"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Contact Details
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="contact_details"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Contact Details"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    L/V Documents Attachement
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    name="lv_documents_attachement"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="L/V Documents Attachement"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-                                            <div className="group relative w-72 md:w-80 lg:w-96">
-                                                <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    Status
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    name="status"
-                                                    onChange={
-                                                        handleAddFormChange
-                                                    }
-                                                    placeholder="Status"
-                                                    className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                                />
-                                            </div>
-
-                                            <button
-                                                type="submit"
-                                                className="inline-flex justify-center rounded-md border border-transparent bg-green-300 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                            >
-                                                Add
-                                            </button>
-                                        </form>
-                                    </Dialog.Panel>
-                                </Transition.Child>
-                            </div>
-                        </div>
-                    </Dialog>
-                </Transition>
+                <AddModal
+                    {...{
+                        isOpen,
+                        closeModal,
+                        handleAddFormChange,
+                        handleAddFormSubmit,
+                        saveFile,
+                    }}
+                />
             </Suspense>
         </div>
     );
