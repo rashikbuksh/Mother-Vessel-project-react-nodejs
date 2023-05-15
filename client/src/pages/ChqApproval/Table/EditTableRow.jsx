@@ -40,6 +40,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter cp number from charpotro..."
                     name="cp_number_from_charpotro"
@@ -106,6 +107,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter capacity in ton..."
                     name="capacity_ton"
                     value={editFormData.capacity_ton}
@@ -117,6 +119,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter rate..."
                     name="rate"
                     disabled
@@ -128,6 +131,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Amount..."
                     name="sixty_percent_payment_amount"
                     value={editFormData.sixty_percent_payment_amount}
@@ -142,6 +146,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Chq Number..."
                     name="sixty_percent_payment_chq_number"
                     value={editFormData.sixty_percent_payment_chq_number}
@@ -175,6 +180,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Amount..."
                     name="forty_percent_payment_amount"
                     value={editFormData.forty_percent_payment_amount}
@@ -183,6 +189,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Chq Number..."
                     name="forty_percent_payment_chq_number"
                     value={editFormData.forty_percent_payment_chq_number}

@@ -75,6 +75,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="CP Number From Charpotro..."
                     name="cp_number_from_charpotro"
@@ -130,6 +131,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Capacity..."
                     name="capacity"
@@ -141,6 +143,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Rate..."
                     name="rate"
@@ -163,6 +166,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="LA Master Number..."
                     name="LV_master_contact_number"

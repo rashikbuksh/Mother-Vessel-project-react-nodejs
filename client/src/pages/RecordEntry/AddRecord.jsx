@@ -119,6 +119,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="cp_number_from_charpotro"
                                             onChange={handleAddFormChange}
                                             placeholder="CP Number From Charpotro"
@@ -137,7 +138,7 @@ export default function AddJob({
                                             >
                                                 Local Agency Name
                                             </label>
-                                            <>
+                                            <span className="flex items-center">
                                                 <Switch
                                                     enabled={enabled}
                                                     setEnabled={setEnabled}
@@ -151,7 +152,7 @@ export default function AddJob({
                                                 >
                                                     Own
                                                 </label>
-                                            </>
+                                            </span>
                                         </div>
                                         <input
                                             type="text"
@@ -238,6 +239,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="capacity"
                                             onChange={handleAddFormChange}
                                             min={0}
@@ -261,6 +263,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="rate"
                                             onChange={handleAddFormChange}
                                             placeholder="Rate"
@@ -292,6 +295,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             onInput={(e) => {
                                                 e.target.value.length > 11 &&
                                                     (e.target.value =

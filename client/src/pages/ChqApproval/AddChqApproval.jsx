@@ -84,6 +84,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="capacity_ton"
                                             onChange={handleAddFormChange}
                                             required

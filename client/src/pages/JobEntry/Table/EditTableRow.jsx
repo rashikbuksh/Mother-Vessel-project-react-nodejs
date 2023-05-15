@@ -79,6 +79,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter bl quantity..."
                     name="bl_quantity"
@@ -101,6 +102,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     onInput={(e) => {
                         e.target.value.length > 11 &&
                             (e.target.value = e.target.value.slice(0, 11));

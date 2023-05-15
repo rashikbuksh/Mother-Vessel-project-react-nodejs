@@ -37,6 +37,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     name="cp_number"
                     value={editFormData.cp_number}
@@ -72,6 +73,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter volume..."
                     name="volume"
@@ -164,6 +166,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter duration of travel time..."
                     name="duration_of_travel_time"
                     value={editFormData.duration_of_travel_time}
@@ -213,6 +216,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter total elapsed time..."
                     name="total_elapsed_time"
                     value={editFormData.total_elapsed_time}
@@ -223,6 +227,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter voyage time..."
                     name="voyage_time"
                     value={editFormData.voyage_time}
@@ -233,6 +238,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter free time..."
                     name="free_time"
                     value={editFormData.free_time}
@@ -243,6 +249,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter total dispatch..."
                     name="total_despatch"
                     value={editFormData.total_despatch}
@@ -253,6 +260,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Enter daily dispatch..."
                     name="daily_despatch"
                     value={editFormData.daily_despatch}

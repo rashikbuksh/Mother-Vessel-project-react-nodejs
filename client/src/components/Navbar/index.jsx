@@ -2,47 +2,48 @@ import { useAuth } from "../../hooks/auth";
 import { DefineRole } from "../../hooks/routes";
 import { useTitle } from "../../hooks/useTitle";
 import shipLogo from "../../assets/img/shipLogo.svg";
+import { useEffect } from "react";
 
 const NavLinks = [
     {
         id: 1,
-        link: "/adminpanel",
+        link: "/admin-panel",
         name: "Admin Panel",
         role: ["admin"],
     },
     {
         id: 11,
-        link: "/jobentry",
+        link: "/job-entry",
         name: "Job Entry",
         role: ["admin", "accounts"],
     },
     {
         id: 2,
-        link: "/recordentry",
+        link: "/record-entry",
         name: "Record Entry",
         role: ["admin", "operations"],
     },
     {
         id: 9,
-        link: "/chqapproval",
+        link: "/chq-approval",
         name: "Chq Approval",
         role: ["admin", "accounts-manager"],
     },
     {
         id: 3,
-        link: "/currentstatus",
+        link: "/current-status",
         name: "Current Status",
         role: ["admin", "operations"],
     },
     {
         id: 5,
-        link: "/damaragecalculation",
+        link: "/damarage-calculation",
         name: "Damarage Calculation",
         role: ["admin", "operations"],
     },
     {
         id: 8,
-        link: "/chqduelist",
+        link: "/chq-duelist",
         name: "Chq Due List",
         role: ["admin", "accounts-manager"],
     },
@@ -54,7 +55,7 @@ const NavLinks = [
     // },
     {
         id: 7,
-        link: "/predefinedadmin",
+        link: "/own-ship",
         name: "Add LV",
         role: ["admin"],
     },
@@ -70,6 +71,18 @@ function Nav() {
     const { logout } = useAuth();
     const { original_role } = DefineRole();
 
+    let hiddenNav = false;
+
+    useEffect(() => {
+        hiddenNav =
+            window.location.pathname === "/login" ||
+            window.location.pathname === "/"
+                ? true
+                : false;
+    }, [window.location]);
+
+    console.log("hide nav: " + hiddenNav);
+
     const pageName = NavLinks.filter((nav) => {
         return nav.link.includes(window.location.pathname);
     });
@@ -77,13 +90,7 @@ function Nav() {
     useTitle(`KEL-BD | ${pageName[0]?.name}`);
 
     return (
-        <div
-            className={`flex w-full ${
-                (window.location.pathname === "/login" ||
-                    window.location.pathname === "/") &&
-                "hidden"
-            } `}
-        >
+        <div className={`flex w-full ${hiddenNav && "hidden"} `}>
             <nav className="flex min-w-full justify-between rounded-b-md bg-green-700 text-white">
                 <div className="flex w-full items-center px-5 py-2 xl:px-8">
                     <a

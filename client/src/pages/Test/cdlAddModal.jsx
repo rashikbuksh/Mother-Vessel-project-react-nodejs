@@ -120,7 +120,7 @@ export default function cdlAddModal() {
                                                     Balance
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                     type="number" onWheel={(e) => e.target.blur()}
                                                     name="balance"
                                                     onChange={
                                                         handleAddFormChange
@@ -148,7 +148,7 @@ export default function cdlAddModal() {
                                                     Iniial Amount
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                     type="number" onWheel={(e) => e.target.blur()}
                                                     name="init_amount"
                                                     onChange={
                                                         handleAddFormChange
@@ -176,7 +176,7 @@ export default function cdlAddModal() {
                                                     Final Amount
                                                 </label>
                                                 <input
-                                                    type="number"
+                                                     type="number" onWheel={(e) => e.target.blur()}
                                                     name="final_amount"
                                                     onChange={
                                                         handleAddFormChange

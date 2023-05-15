@@ -500,8 +500,6 @@ const App = () => {
                     </Dialog>
                 </Transition>
             </Suspense>
-
-            {/* toast  */}
         </div>
     );
 };

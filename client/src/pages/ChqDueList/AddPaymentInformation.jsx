@@ -168,6 +168,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="amount"
                                             onChange={
                                                 handlePaymentModalFormChange
@@ -183,6 +184,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="part_pay"
                                             onChange={
                                                 handlePaymentModalFormChange

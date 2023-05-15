@@ -131,6 +131,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="bl_quantity"
                                             onChange={handleAddFormChange}
                                             onInput={(e) => {
@@ -171,6 +172,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             onInput={(e) => {
                                                 e.target.value.length > 11 &&
                                                     (e.target.value =
