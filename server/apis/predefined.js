@@ -3,7 +3,7 @@ const { ToastRes } = require("./util");
 function addPredefined(req, res, db) {
     const LV_name = req.body.LV_name;
     const capacity = req.body.capacity;
-    const reg_number = req.body.reg_number;
+    const master_reg_number = req.body.master_reg_number;
     const masters_name = req.body.masters_name;
     const masters_contact_number = req.body.masters_contact_number;
     const masters_nid_image_attachment = req.body.masters_nid_image_attachment;
@@ -17,13 +17,14 @@ function addPredefined(req, res, db) {
     const contact_details = req.body.contact_details;
     const lv_documents_attachement = req.body.lv_documents_attachement;
     const status = req.body.status;
-    const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staff_name, staff_nid_number, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, master_reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staff_name, staff_nid_number, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     db.query(
         sqlCreate,
         [
             LV_name,
             capacity,
-            reg_number,
+            master_reg_number,
             masters_name,
             masters_contact_number,
             masters_nid_image_attachment,

@@ -25,7 +25,12 @@ const TableHeader = [
     },
     { id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
     { id: 3, name: "Capacity", accessor: "capacity", sortable: true },
-    { id: 4, name: "M. No. (Reg No.)", accessor: "reg_number", sortable: true },
+    {
+        id: 4,
+        name: "M. No. (Reg No.)",
+        accessor: "master_reg_number",
+        sortable: true,
+    },
     { id: 5, name: "Master's Name", accessor: "masters_name", sortable: true },
     {
         id: 6,
@@ -143,7 +148,7 @@ const App = () => {
     const [addFormData, setAddFormData] = useState({
         LV_name: "",
         capacity: "",
-        reg_number: "",
+        master_reg_number: "",
         masters_name: "",
         masters_contact_number: "",
         masters_nid_image_attachment: "",
@@ -213,7 +218,7 @@ const App = () => {
         const newStatus = {
             LV_name: addFormData.LV_name,
             capacity: addFormData.capacity,
-            reg_number: addFormData.reg_number,
+            master_reg_number: addFormData.master_reg_number,
             masters_name: addFormData.masters_name,
             masters_contact_number: addFormData.masters_contact_number,
             masters_nid_image_attachment:
@@ -236,7 +241,7 @@ const App = () => {
             {
                 LV_name: newStatus.LV_name,
                 capacity: newStatus.capacity,
-                reg_number: newStatus.reg_number,
+                master_reg_number: newStatus.master_reg_number,
                 masters_name: newStatus.masters_name,
                 masters_contact_number: newStatus.masters_contact_number,
                 masters_nid_image_attachment:
@@ -251,7 +256,8 @@ const App = () => {
                 contact_details: newStatus.contact_details,
                 lv_documents_attachement: newStatus.lv_documents_attachement,
                 status: newStatus.status,
-            }
+            },
+            { header: { "Content-Type": "multipart/form-data" } }
         ).then((response) => {
             generatedToast(response);
         });
@@ -530,15 +536,15 @@ const App = () => {
                                             </div>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                                    M. No. (Reg No.)
+                                                    Master Registration Number
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    name="reg_number"
+                                                    name="master_reg_number"
                                                     onChange={
                                                         handleAddFormChange
                                                     }
-                                                    placeholder="M. No. (Reg No.)"
+                                                    placeholder="Master Registration Number"
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
@@ -575,7 +581,7 @@ const App = () => {
                                                     Master's NID Image
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="file"
                                                     name="masters_nid_image_attachment"
                                                     onChange={
                                                         handleAddFormChange
@@ -612,6 +618,7 @@ const App = () => {
                                                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                                 />
                                             </div>
+                                            <button>add staff</button>
                                             <div className="group relative w-72 md:w-80 lg:w-96">
                                                 <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                                     Leased (Yes/No)
@@ -701,7 +708,7 @@ const App = () => {
                                                     L/V Documents Attachement
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="file"
                                                     name="lv_documents_attachement"
                                                     onChange={
                                                         handleAddFormChange
