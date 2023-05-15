@@ -15,7 +15,7 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
             </td>
             <td className={clsName}>{status.LV_name}</td>
             <td className={clsName}>{status.capacity}</td>
-            <td className={clsName}>{status.reg_number}</td>
+            <td className={clsName}>{status.master_reg_number}</td>
             <td className={clsName}>{status.masters_name}</td>
             <td className={clsName}>{status.masters_contact_number}</td>
             <td className={clsName}>{status.masters_nid_image_attachment}</td>
