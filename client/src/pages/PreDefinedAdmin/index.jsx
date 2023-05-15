@@ -581,7 +581,7 @@ const App = () => {
                                                     Master's NID Image
                                                 </label>
                                                 <input
-                                                    type="file"
+                                                    type="text"
                                                     name="masters_nid_image_attachment"
                                                     onChange={
                                                         handleAddFormChange
