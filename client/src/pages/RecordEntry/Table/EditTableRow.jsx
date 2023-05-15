@@ -8,6 +8,22 @@ const EditTableRow = ({
 }) => {
     var clsName =
         "peer w-full rounded-md bg-gray-50 text-sm outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400";
+    const {
+        order_number,
+        job_number,
+        commodity,
+        date_from_charpotro,
+        cp_number_from_charpotro,
+        LA_name,
+        LV_name,
+        dest_from,
+        dest_to,
+        capacity,
+        rate,
+        LV_master_name,
+        LV_master_contact_number,
+    } = editFormData;
+    console.log(date_from_charpotro);
     return (
         <>
             <td>
@@ -17,7 +33,7 @@ const EditTableRow = ({
                     required
                     placeholder="Enter order number..."
                     name="order_number"
-                    value={editFormData.order_number}
+                    value={order_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
@@ -29,7 +45,7 @@ const EditTableRow = ({
                     required
                     placeholder="Enter Job Number..."
                     name="job_number"
-                    value={editFormData.job_number}
+                    value={job_number}
                     onChange={handleEditFormChange}
                     disabled
                 />
@@ -41,7 +57,7 @@ const EditTableRow = ({
                     disabled
                     placeholder="Commodity..."
                     name="commodity"
-                    value={editFormData.commodity}
+                    value={commodity}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -51,7 +67,7 @@ const EditTableRow = ({
                     type="date"
                     required
                     name="date_from_charpotro"
-                    value={editFormData.date_from_charpotro.slice(0, 10)}
+                    value={date_from_charpotro.slice(0, 10)}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -59,10 +75,11 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="CP Number From Charpotro..."
                     name="cp_number_from_charpotro"
-                    value={editFormData.cp_number_from_charpotro}
+                    value={cp_number_from_charpotro}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -73,7 +90,7 @@ const EditTableRow = ({
                     required
                     placeholder="LA name..."
                     name="LA_name"
-                    value={editFormData.LA_name}
+                    value={LA_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -84,7 +101,7 @@ const EditTableRow = ({
                     required
                     placeholder="LV name..."
                     name="LV_name"
-                    value={editFormData.LV_name}
+                    value={LV_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -95,7 +112,7 @@ const EditTableRow = ({
                     disabled
                     placeholder="Destination From..."
                     name="dest_from"
-                    value={editFormData.dest_from}
+                    value={dest_from}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -106,7 +123,7 @@ const EditTableRow = ({
                     required
                     placeholder="Destination To..."
                     name="dest_to"
-                    value={editFormData.dest_to}
+                    value={dest_to}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -114,10 +131,11 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Capacity..."
                     name="capacity"
-                    value={editFormData.capacity}
+                    value={capacity}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -125,10 +143,11 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Rate..."
                     name="rate"
-                    value={editFormData.rate}
+                    value={rate}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -139,7 +158,7 @@ const EditTableRow = ({
                     required
                     placeholder="LV Master Name..."
                     name="LV_master_name"
-                    value={editFormData.LV_master_name}
+                    value={LV_master_name}
                     onChange={handleEditFormChange}
                 />
             </td>
@@ -147,10 +166,11 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="LA Master Number..."
                     name="LV_master_contact_number"
-                    value={editFormData.LV_master_contact_number}
+                    value={LV_master_contact_number}
                     onChange={handleEditFormChange}
                     pattern="[0-0]{1}[1-1]{1}[3-9]{1}[0-9]{8}"
                 />

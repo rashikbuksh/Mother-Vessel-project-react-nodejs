@@ -69,6 +69,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="Enter part pay..."
                     name="part_pay"
@@ -80,6 +81,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter balance..."
                     name="balance"
@@ -91,6 +93,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="Enter payment..."
                     name="payment"
@@ -102,6 +105,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter balance..."
                     name="balance"
@@ -113,6 +117,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="Enter payment chq no..."
                     name="payment_chq_no"
@@ -124,6 +129,7 @@ const EditTableRow = ({
                 <input
                     className={clsName}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     placeholder="Enter payment chq amount..."
                     name="payment_chq_amount"

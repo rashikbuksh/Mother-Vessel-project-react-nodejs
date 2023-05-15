@@ -94,6 +94,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="cp_number"
                                             onChange={handleAddFormChange}
                                             required
@@ -131,6 +132,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="capacity"
                                             onChange={handleAddFormChange}
                                             required
@@ -311,6 +313,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="total_despatch"
                                             onChange={handleAddFormChange}
                                             required
@@ -323,6 +326,7 @@ export default function AddJob({
                                         </label>
                                         <input
                                             type="number"
+                                            onWheel={(e) => e.target.blur()}
                                             name="daily_despatch"
                                             onChange={handleAddFormChange}
                                             required

@@ -2,6 +2,26 @@ import React from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import DateTime from "../../../utils/DateTime";
 
+const Tooltip = ({ text }) => {
+    return (
+        <>
+            {text && text.length > 10 ? (
+                <div class="group relative flex flex-col items-center ">
+                    {text.substring(0, 10)}...
+                    <div className="absolute bottom-0 mb-6 hidden flex-col items-center group-hover:flex">
+                        <span className="z-10 break-all rounded-md bg-white p-2 text-xs text-black shadow-lg group-hover:relative">
+                            {text}
+                        </span>
+                        <div className="-mt-2 h-3 w-3 rotate-45 bg-green-500"></div>
+                    </div>
+                </div>
+            ) : (
+                <>{text}</>
+            )}
+        </>
+    );
+};
+
 const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
     var clsName = "whitespace-nowrap py-2 text-center text-sm text-gray-700";
     var spanClsName =
@@ -40,10 +60,8 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                 </span>
             </td>
             <td className={clsName}>
-                <span
-                    className={`${spanClsName} bg-purple-200 text-purple-800`}
-                >
-                    {status.remark}
+                <span className={`${spanClsName}`}>
+                    <Tooltip text={status.remark} />
                 </span>
             </td>
             <td className={clsName}>

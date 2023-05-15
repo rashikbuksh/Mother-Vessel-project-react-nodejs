@@ -93,6 +93,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter part pay..."
                     name="part_pay"
@@ -104,6 +105,7 @@ const EditTableRow = ({
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter balance..."
                     name="balance"
@@ -114,7 +116,7 @@ const EditTableRow = ({
             {/* <td>
                 <input
                     className={`${clsName} cursor-not-allowed border-red-600`}
-                    type="number"
+                     type="number" onWheel={(e) => e.target.blur()}
                     disabled
                     placeholder="Enter initial amount..."
                     name="init_amount"
@@ -148,6 +150,7 @@ const EditTableRow = ({
                             : "cursor-not-allowed border-red-600"
                     }`}
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     required
                     disabled={original_role === "admin" ? false : true}
                     placeholder="Enter final amount..."

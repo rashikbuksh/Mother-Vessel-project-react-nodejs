@@ -31,6 +31,7 @@ const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
 const ChqApproval = lazy(() => import("./pages/ChqApproval"));
 const Payment = lazy(() => import("./pages/Payment"));
+const Profile = lazy(() => import("./pages/PreDefinedShip/Profile"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
@@ -47,7 +48,7 @@ const PublicRoutesList = [
         component: Login,
     },
     {
-        link: "/noaccess",
+        link: "/no-access",
         component: NoAccess,
     },
     {
@@ -62,37 +63,37 @@ const PublicRoutesList = [
 
 const OperationRoutesList = [
     {
-        link: "/recordentry",
+        link: "/record-entry",
         component: RecordEntry,
     },
     {
-        link: "/currentstatus",
+        link: "/current-status",
         component: CurrentStatus,
     },
     {
-        link: "/damaragecalculation",
+        link: "/damarage-calculation",
         component: DamarageCalculation,
     },
     {
-        link: "/predefinedship",
+        link: "/own-ship",
         component: PreDefinedShip,
     },
 ];
 
 const AccountsRoutesList = [
     {
-        link: "/jobentry",
+        link: "/job-entry",
         component: JobEntry,
     },
 ];
 
 const AccountsManagerRoutesList = [
     {
-        link: "/chqduelist",
+        link: "/chq-due-list",
         component: ChqDueList,
     },
     {
-        link: "/chqapproval",
+        link: "/chq-approval",
         component: ChqApproval,
     },
     {
@@ -103,43 +104,31 @@ const AccountsManagerRoutesList = [
 
 const AdminRoutesList = [
     {
-        link: "/adminpanel",
+        link: "/admin-panel",
         component: AdminPanel,
     },
     {
-        link: "/recordentry",
+        link: "/record-entry",
         component: RecordEntry,
     },
     {
-        link: "/currentstatus",
+        link: "/current-status",
         component: CurrentStatus,
     },
     {
-        link: "/predefinedship",
+        link: "/own-ship",
         component: PreDefinedShip,
     },
     {
-        link: "/predefinedadmin",
-        component: PreDefinedAdmin,
-    },
-    {
-        link: "/damaragecalculation",
+        link: "/damarage-calculation",
         component: DamarageCalculation,
     },
     {
-        link: "/predefinedship",
-        component: PreDefinedShip,
-    },
-    {
-        link: "/predefinedadmin",
-        component: PreDefinedAdmin,
-    },
-    {
-        link: "/chqduelist",
+        link: "/chq-duelist",
         component: ChqDueList,
     },
     {
-        link: "/chqapproval",
+        link: "/chq-approval",
         component: ChqApproval,
     },
     {
@@ -147,7 +136,7 @@ const AdminRoutesList = [
         component: Payment,
     },
     {
-        link: "/jobentry",
+        link: "/job-entry",
         component: JobEntry,
     },
 ];
@@ -226,8 +215,7 @@ function App() {
                     path="/test"
                     element={
                         <Suspense fallback={<Loader />}>
-                            <Navbar />
-                            <Loader />
+                            <Profile />
                         </Suspense>
                     }
                 />

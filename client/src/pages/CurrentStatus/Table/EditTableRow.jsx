@@ -98,9 +98,9 @@ const EditTableRow = ({
                     onChange={handleEditFormChange}
                 />
             </td>
-            <td>
-                <input
-                    className={clsName}
+            <td className="text-center">
+                <textarea
+                    className={`${clsName} h-10 resize-y rounded-md`}
                     type="text"
                     placeholder="Remark..."
                     name="remark"
