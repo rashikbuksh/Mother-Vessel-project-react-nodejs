@@ -1,6 +1,8 @@
 const multer = require("multer");
 const { ToastRes } = require("./util");
 var upload = multer({ dest: "uploads/" });
+const express = require("express");
+const app = express();
 
 //! Use of Multer
 var storage = multer.diskStorage({
@@ -24,7 +26,7 @@ function addPredefined(req, res, db) {
     const masters_contact_number = req.body.masters_contact_number;
     const masters_nid_image_attachment_name = req.body.fileName;
     // get files from multer
-    const masters_nid_image_attachment = req.body.file;
+    const masters_nid_image_attachment = req.file;
 
     const staff_name = req.body.staff_name;
     const staff_nid_number = req.body.staff_nid_number;
@@ -38,17 +40,23 @@ function addPredefined(req, res, db) {
     const lv_documents_attachement = "null";
     const status = req.body.status;
 
+    if (req.file == undefined) {
+        console.log("File Found");
+    } else {
+        console.log("File Not Found");
+    }
+
     var upload = multer({ storage: storage });
-    // getting file name and file but file not uploading 
-    if (masters_nid_image_attachment != null) {
+    // getting file name and file but file not uploading
+    if (masters_nid_image_attachment == undefined) {
         console.log("Success");
-        try {
-            console.log("File Uploading");
-            upload.single(masters_nid_image_attachment);
-            res.send(masters_nid_image_attachment);
-        } catch (error) {
-            console.log("File Not Uploaded");
-        }
+        app.post(
+            "/upload",
+            upload.single(`${masters_nid_image_attachment}`),
+            (req, res) => {
+                console.log("File Uploaded");
+            }
+        );
     } else {
         console.log("Failed");
     }
