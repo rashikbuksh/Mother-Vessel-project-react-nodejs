@@ -4,6 +4,18 @@ const cors = require("cors");
 const app = express();
 const multer = require("multer");
 
+//! Use of Multer
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, "./uploads"); // './public/images/' directory name where save the file
+    },
+    filename: (req, file, callBack) => {
+        console.log("File Name : " + file.fieldname);
+        callBack(null, file.originalname);
+    },
+});
+const upload = multer({ storage: storage });
+
 const {
     verifyLogin,
     getUsers,
@@ -347,6 +359,14 @@ app.post("/management/deletepredefinedship", (req, res) => {
 app.get("/management/getLV", (req, res) => {
     getLV(req, res, db);
 });
+app.post(
+    "/management/upload",
+    upload.single("masters_nid_image_attachment"),
+    (req, res) => {
+        console.log(req.file);
+        res.send("File uploaded successfully");
+    }
+);
 
 //======================= order job =======================
 
