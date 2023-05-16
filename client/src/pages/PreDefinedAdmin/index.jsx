@@ -115,6 +115,13 @@ const App = () => {
     const [file, setFile] = useState();
     const [fileName, setFileName] = useState("");
 
+    const [lv_documents_attachementFile, setlv_documents_attachementFile] =
+        useState();
+    const [
+        lv_documents_attachementFileName,
+        setlv_documents_attachementFileName,
+    ] = useState("");
+
     const { logout } = useAuth();
 
     // search filter for all fields
@@ -221,6 +228,12 @@ const App = () => {
         console.log(e.target.files[0].name);
     };
 
+    // Saving lv_documents_attachementFile
+    const saveLv_documents_attachementFile = (e) => {
+        setlv_documents_attachementFile(e.target.files[0]);
+        setlv_documents_attachementFileName(e.target.files[0].name);
+    };
+
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = (event) => {
@@ -253,7 +266,7 @@ const App = () => {
         //     newStatus.masters_contact_number
         // );
         formData.append("masters_nid_image_attachment", file);
-        formData.append("masters_nid_image_attachment_name", fileName);
+        // formData.append("masters_nid_image_attachment_name", fileName);
         // formData.append("staff_name", newStatus.staff_name);
         // formData.append("staff_nid_number", newStatus.staff_nid_number);
         // formData.append("leased", newStatus.leased);
@@ -264,7 +277,7 @@ const App = () => {
         // formData.append("contact_details", newStatus.contact_details);
         // formData.append(
         //     "lv_documents_attachement",
-        //     newStatus.lv_documents_attachement
+        //     lv_documents_attachementFile
         // );
         // formData.append("status", newStatus.status);
 
@@ -290,10 +303,21 @@ const App = () => {
                 office_address: newStatus.office_address,
                 ac_number: newStatus.ac_number,
                 contact_details: newStatus.contact_details,
-                lv_documents_attachement: newStatus.lv_documents_attachement,
+                lv_documents_attachement: lv_documents_attachementFileName,
                 status: newStatus.status,
-                file,
                 fileName,
+            }
+        ).then((response) => {
+            generatedToast(response);
+        });
+
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/upload`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data;",
+                },
             }
         ).then((response) => {
             generatedToast(response);
@@ -498,6 +522,7 @@ const App = () => {
                         handleAddFormChange,
                         handleAddFormSubmit,
                         saveFile,
+                        saveLv_documents_attachementFile,
                     }}
                 />
             </Suspense>

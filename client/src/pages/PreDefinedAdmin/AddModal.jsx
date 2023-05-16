@@ -8,6 +8,7 @@ export default function AddModal({
     handleAddFormChange,
     handleAddFormSubmit,
     saveFile,
+    saveLv_documents_attachementFile,
 }) {
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -233,7 +234,9 @@ export default function AddModal({
                                         <input
                                             type="file"
                                             name="lv_documents_attachement"
-                                            onChange={handleAddFormChange}
+                                            onChange={
+                                                saveLv_documents_attachementFile
+                                            }
                                             placeholder="L/V Documents Attachement"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
