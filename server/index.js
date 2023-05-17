@@ -7,11 +7,11 @@ const multer = require("multer");
 //! Use of Multer
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
-        callBack(null, "./uploads"); // './public/images/' directory name where save the file
+        callBack(null, "./uploads");
     },
     filename: (req, file, callBack) => {
         console.log("File Name : " + file.fieldname);
-        callBack(null, file.originalname);
+        callBack(null, Date.now() + "__" + file.originalname);
     },
 });
 const upload = multer({ storage: storage });
@@ -106,6 +106,7 @@ const db = mysql.createPool({
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extender: true }));
+app.use("/uploads", express.static("uploads"));
 
 app.get("/user/verify_login/", (req, res) => {
     verifyLogin(req, res, db);
@@ -359,6 +360,8 @@ app.post("/management/deletepredefinedship", (req, res) => {
 app.get("/management/getLV", (req, res) => {
     getLV(req, res, db);
 });
+
+// Get predefined ships image
 app.post(
     "/management/upload",
     upload.single("masters_nid_image_attachment"),

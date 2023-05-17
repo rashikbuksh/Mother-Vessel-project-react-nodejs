@@ -17,11 +17,10 @@ export default function AddModal({
     active,
     setActive,
     saveLv_documents_attachementFile,
-
 }) {
     const onClickAddStaffButton = (event) => {
         event.preventDefault();
-        setAddStaff([...addStaff, ""]);
+        setAddStaff([...addStaff, "#"]);
     };
 
     return (
@@ -81,6 +80,7 @@ export default function AddModal({
                                             type="text"
                                             name="LV_name"
                                             onChange={handleAddFormChange}
+                                            required
                                             placeholder="LV Name"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -93,6 +93,7 @@ export default function AddModal({
                                             type="text"
                                             name="capacity"
                                             onChange={handleAddFormChange}
+                                            required
                                             placeholder="Capacity"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -105,6 +106,7 @@ export default function AddModal({
                                             type="text"
                                             name="master_reg_number"
                                             onChange={handleAddFormChange}
+                                            required
                                             placeholder="Master Registration Number"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -117,6 +119,7 @@ export default function AddModal({
                                             type="text"
                                             name="masters_name"
                                             onChange={handleAddFormChange}
+                                            required
                                             placeholder="Master's Name"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -129,6 +132,7 @@ export default function AddModal({
                                             type="text"
                                             name="masters_contact_number"
                                             onChange={handleAddFormChange}
+                                            required
                                             placeholder="Master's Contact Number"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -141,6 +145,7 @@ export default function AddModal({
                                             type="file"
                                             name="masters_nid_image_attachment"
                                             onChange={saveFile}
+                                            required
                                             placeholder="Master's NID Image"
                                             className="peer block h-10 w-full rounded-md border border-black/50 bg-gray-50 px-4 text-sm text-slate-500 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
@@ -188,6 +193,7 @@ export default function AddModal({
                                             type="text"
                                             name="company_name"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="Company Name"
                                             className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
@@ -211,6 +217,7 @@ export default function AddModal({
                                             type="text"
                                             name="proprietors_name"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="Proprieter's Name"
                                             className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
@@ -234,6 +241,7 @@ export default function AddModal({
                                             type="text"
                                             name="office_address"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="Office Address"
                                             className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
@@ -257,6 +265,7 @@ export default function AddModal({
                                             type="text"
                                             name="ac_number"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="AC Number"
                                             className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
@@ -280,6 +289,7 @@ export default function AddModal({
                                             type="text"
                                             name="contact_details"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="Contact Details"
                                             className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
@@ -323,6 +333,7 @@ export default function AddModal({
                                             type="text"
                                             name="status"
                                             onChange={handleAddFormChange}
+                                            required={leased}
                                             disabled={!leased}
                                             placeholder="Status"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"

@@ -43,12 +43,12 @@ const TableHeader = [
         accessor: "masters_nid_image_attachment",
         sortable: true,
     },
-    { id: 8, name: "Staff Name", accessor: "staff_name", sortable: true },
     {
-        id: 9,
-        name: "Staff NID Number",
-        accessor: "staff_nid_number",
+        id: 8,
+        name: "Staffs Info",
+        accessor: "staffs_info",
         sortable: true,
+        width: "w-4",
     },
     {
         id: 10,
@@ -116,7 +116,8 @@ const App = () => {
     const [fileName, setFileName] = useState("");
 
     // dynamic add staff
-    const [addStaff, setAddStaff] = useState([""]);
+    const [addStaff, setAddStaff] = useState(["#"]);
+    console.log(addStaff);
 
     // leased ship
     const [leased, setLeased] = useState(false);
@@ -129,7 +130,6 @@ const App = () => {
         lv_documents_attachementFileName,
         setlv_documents_attachementFileName,
     ] = useState("");
-
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -245,6 +245,17 @@ const App = () => {
     //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = async (event) => {
         event.preventDefault(); // ???
+        let staffVAl = "";
+        for (let i = 0; i < addStaff.length; i++) {
+            if (addStaff[i] !== "#") {
+                if (i === addStaff.length - 1) {
+                    staffVAl += addStaff[i];
+                } else {
+                    staffVAl += addStaff[i] + ",";
+                }
+            }
+        }
+        console.log(staffVAl);
 
         const newStatus = {
             LV_name: addFormData.LV_name,
@@ -252,71 +263,30 @@ const App = () => {
             master_reg_number: addFormData.master_reg_number,
             masters_name: addFormData.masters_name,
             masters_contact_number: addFormData.masters_contact_number,
-            staff_name: addFormData.staff_name,
-            staff_nid_number: addFormData.staff_nid_number,
-            leased: addFormData.leased,
+            staffs_info: staffVAl,
+            leased: leased ? 1 : 0,
             company_name: addFormData.company_name,
             proprietors_name: addFormData.proprietors_name,
             office_address: addFormData.office_address,
             ac_number: addFormData.ac_number,
             contact_details: addFormData.contact_details,
             lv_documents_attachement: addFormData.lv_documents_attachement,
-            status: addFormData.status,
+            status: active ? 1 : 0,
         };
-
-        // let formData = new FormData();
-
-        // formData.append("LV_name", newStatus.LV_name);
-        // formData.append("capacity", newStatus.capacity);
-        // formData.append("master_reg_number", newStatus.master_reg_number);
-        // formData.append("masters_name", newStatus.masters_name);
-        // formData.append(
-        //     "masters_contact_number",
-        //     newStatus.masters_contact_number
-        // );
-        formData.append("masters_nid_image_attachment", file);
-        // formData.append("masters_nid_image_attachment_name", fileName);
-        // formData.append("staff_name", newStatus.staff_name);
-        // formData.append("staff_nid_number", newStatus.staff_nid_number);
-        // formData.append("leased", newStatus.leased);
-        // formData.append("company_name", newStatus.company_name);
-        // formData.append("proprietors_name", newStatus.proprietors_name);
-        // formData.append("office_address", newStatus.office_address);
-        // formData.append("ac_number", newStatus.ac_number);
-        // formData.append("contact_details", newStatus.contact_details);
-        // formData.append(
-        //     "lv_documents_attachement",
-        //     lv_documents_attachementFile
-        // );
-        // formData.append("status", newStatus.status);
 
         let formData = new FormData();
         formData.append("masters_nid_image_attachment", file);
-        Axios.post(
+        await Axios.post(
             `${process.env.REACT_APP_API_URL}/management/predefinedship`,
             {
-                LV_name: newStatus.LV_name,
-                capacity: newStatus.capacity,
-                master_reg_number: newStatus.master_reg_number,
-                masters_name: newStatus.masters_name,
-                masters_contact_number: newStatus.masters_contact_number,
-                staff_name: newStatus.staff_name,
-                staff_nid_number: newStatus.staff_nid_number,
-                leased: newStatus.leased,
-                company_name: newStatus.company_name,
-                proprietors_name: newStatus.proprietors_name,
-                office_address: newStatus.office_address,
-                ac_number: newStatus.ac_number,
-                contact_details: newStatus.contact_details,
-                lv_documents_attachement: lv_documents_attachementFileName,
-                status: newStatus.status,
+                ...newStatus,
                 fileName,
             }
         ).then((response) => {
             generatedToast(response);
         });
 
-        Axios.post(
+        await Axios.post(
             `${process.env.REACT_APP_API_URL}/management/upload`,
             formData,
             {
@@ -324,9 +294,13 @@ const App = () => {
                     "Content-Type": "multipart/form-data;",
                 },
             }
-        ).then((response) => {
-            generatedToast(response);
-        });
+        )
+            .then((response) => {
+                generatedToast(response);
+            })
+            .then(() => {
+                closeModal();
+            });
 
         //CurrentStatus의 초기값은 data.json 데이터
         // new start
@@ -417,16 +391,6 @@ const App = () => {
         newCurrentStatus.splice(index, 1);
         setCurrentStatus(newCurrentStatus);
     };
-
-    const filteredStatus =
-        query === ""
-            ? CurrentStatus
-            : CurrentStatus.filter((Status) =>
-                  Status.order_number
-                      .toLowerCase()
-                      .replace(/\s+/g, "")
-                      .includes(query.toLowerCase().replace(/\s+/g, ""))
-              );
 
     // modal for add Status
     let [isOpen, setIsOpen] = useState(false);
