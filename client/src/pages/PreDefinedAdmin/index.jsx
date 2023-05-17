@@ -109,7 +109,7 @@ const App = () => {
         TableHeader
     ); // data, columns // new
     const [cursorPos, setCursorPos] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(10);
 
     //Image upload
     const [file, setFile] = useState(null);
@@ -123,6 +123,13 @@ const App = () => {
 
     // active status
     const [active, setActive] = useState(false);
+    const [lv_documents_attachementFile, setlv_documents_attachementFile] =
+        useState();
+    const [
+        lv_documents_attachementFileName,
+        setlv_documents_attachementFileName,
+    ] = useState("");
+
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -228,6 +235,12 @@ const App = () => {
         console.log(e.target.files[0].name);
     };
 
+    // Saving lv_documents_attachementFile
+    const saveLv_documents_attachementFile = (e) => {
+        setlv_documents_attachementFile(e.target.files[0]);
+        setlv_documents_attachementFileName(e.target.files[0].name);
+    };
+
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
     const handleAddFormSubmit = async (event) => {
@@ -261,7 +274,7 @@ const App = () => {
         //     "masters_contact_number",
         //     newStatus.masters_contact_number
         // );
-        // formData.append("masters_nid_image_attachment", file);
+        formData.append("masters_nid_image_attachment", file);
         // formData.append("masters_nid_image_attachment_name", fileName);
         // formData.append("staff_name", newStatus.staff_name);
         // formData.append("staff_nid_number", newStatus.staff_nid_number);
@@ -273,45 +286,50 @@ const App = () => {
         // formData.append("contact_details", newStatus.contact_details);
         // formData.append(
         //     "lv_documents_attachement",
-        //     newStatus.lv_documents_attachement
+        //     lv_documents_attachementFile
         // );
         // formData.append("status", newStatus.status);
 
         let formData = new FormData();
         formData.append("masters_nid_image_attachment", file);
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/predefinedship`,
+            {
+                LV_name: newStatus.LV_name,
+                capacity: newStatus.capacity,
+                master_reg_number: newStatus.master_reg_number,
+                masters_name: newStatus.masters_name,
+                masters_contact_number: newStatus.masters_contact_number,
+                staff_name: newStatus.staff_name,
+                staff_nid_number: newStatus.staff_nid_number,
+                leased: newStatus.leased,
+                company_name: newStatus.company_name,
+                proprietors_name: newStatus.proprietors_name,
+                office_address: newStatus.office_address,
+                ac_number: newStatus.ac_number,
+                contact_details: newStatus.contact_details,
+                lv_documents_attachement: lv_documents_attachementFileName,
+                status: newStatus.status,
+                fileName,
+            }
+        ).then((response) => {
+            generatedToast(response);
+        });
 
-        try {
-            let result = await Axios.post(
-                // any call like get
-                `${process.env.REACT_APP_API_URL}/management/predefinedship`,
-                {
-                    body: formData,
+        Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/upload`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data;",
                 },
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-            console.log(result.response.data);
-        } catch (error) {
-            console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
-        }
+            }
+        ).then((response) => {
+            generatedToast(response);
+        });
 
-        // Axios.post(
-        //     `${process.env.REACT_APP_API_URL}/management/predefinedship`,
-        //     formData,
-        //     {
-        //         headers: {
-        //             "Content-Type": "multipart/form-data",
-        //         },
-        //     }
-        // )
-        //     .then((response) => {
-        //         generatedToast(response);
-        //     })
-        //     .then(() => closeModal());
-
+        //CurrentStatus의 초기값은 data.json 데이터
+        // new start
         const newTableData = [...tableData, newStatus];
         setCurrentStatus(newTableData);
     };
@@ -507,6 +525,7 @@ const App = () => {
                         setLeased,
                         active,
                         setActive,
+                        saveLv_documents_attachementFile,
                     }}
                 />
             </Suspense>

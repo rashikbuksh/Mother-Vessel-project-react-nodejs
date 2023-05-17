@@ -16,6 +16,8 @@ export default function AddModal({
     setLeased,
     active,
     setActive,
+    saveLv_documents_attachementFile,
+
 }) {
     const onClickAddStaffButton = (event) => {
         event.preventDefault();
@@ -300,8 +302,10 @@ export default function AddModal({
                                         <input
                                             type="file"
                                             name="lv_documents_attachement"
-                                            onChange={handleAddFormChange}
                                             disabled={!leased}
+                                            onChange={
+                                                saveLv_documents_attachementFile
+                                            }
                                             placeholder="L/V Documents Attachement"
                                             // className="peer block h-10 w-full rounded-md border border-black/50 bg-gray-50 px-4 text-sm text-slate-500 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400"
                                             className={`file:border-1 peer h-10 w-full rounded-md  bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm  file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400 ${
