@@ -71,6 +71,7 @@ const App = () => {
     const [cursorPos, setCursorPos] = useState(1);
     const [pageSize, setPageSize] = useState(4);
 
+    // own ship 
     const [enabled, setEnabled] = useState(false);
 
     // fetch data

@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MdClose } from "react-icons/md";
+import DynamicStaffInfo from "./DynamicStaffInfo";
+import Switch from "../../components/Switch";
 
 export default function AddModal({
     isOpen,
@@ -8,7 +10,18 @@ export default function AddModal({
     handleAddFormChange,
     handleAddFormSubmit,
     saveFile,
+    addStaff,
+    setAddStaff,
+    leased,
+    setLeased,
+    active,
+    setActive,
 }) {
+    const onClickAddStaffButton = (event) => {
+        event.preventDefault();
+        setAddStaff([...addStaff, ""]);
+    };
+
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -124,121 +137,181 @@ export default function AddModal({
                                         </label>
                                         <input
                                             type="file"
+                                            name="masters_nid_image_attachment"
                                             onChange={saveFile}
                                             placeholder="Master's NID Image"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className="peer block h-10 w-full rounded-md border border-black/50 bg-gray-50 px-4 text-sm text-slate-500 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
                                     </div>
+                                    <DynamicStaffInfo
+                                        {...{
+                                            handleAddFormChange,
+                                            addStaff,
+                                            setAddStaff,
+                                        }}
+                                    />
+                                    <button
+                                        className=" w-full rounded-md bg-blue-400 py-2 font-medium text-white transition-all duration-200 ease-in-out hover:bg-blue-500 md:w-80 lg:w-96"
+                                        onClick={onClickAddStaffButton}
+                                    >
+                                        Add Another Staff
+                                    </button>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                            Staff Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="staff_name"
-                                            onChange={handleAddFormChange}
-                                            placeholder="Staff Name"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                        />
+                                        <div className="flex space-x-2">
+                                            <label className="block w-full pb-1 text-lg font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                                Leased
+                                            </label>
+                                            <div className="flex items-center space-x-2">
+                                                <span>No</span>
+                                                <Switch
+                                                    enabled={leased}
+                                                    setEnabled={setLeased}
+                                                />
+                                                <span>Yes</span>
+                                            </div>
+                                        </div>
                                     </div>
+                                    {/* a divder needed  */}
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                            Staff NID Number
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="staff_nid_number"
-                                            onChange={handleAddFormChange}
-                                            placeholder="Staff NID Number"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                        />
-                                    </div>
-                                    <button>add staff</button>
-                                    <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
-                                            Leased (Yes/No)
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="leased"
-                                            onChange={handleAddFormChange}
-                                            placeholder="Leased (Yes/No)"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
-                                        />
-                                    </div>
-                                    <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             Company Name
                                         </label>
                                         <input
                                             type="text"
                                             name="company_name"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="Company Name"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border-red-600"
+                                                    : ""
+                                            } `}
                                         />
                                     </div>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             Proprieter's Name
                                         </label>
                                         <input
                                             type="text"
                                             name="proprietors_name"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="Proprieter's Name"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border-red-600"
+                                                    : ""
+                                            } `}
                                         />
                                     </div>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             Office Address
                                         </label>
                                         <input
                                             type="text"
                                             name="office_address"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="Office Address"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border-red-600"
+                                                    : ""
+                                            } `}
                                         />
                                     </div>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             AC Number
                                         </label>
                                         <input
                                             type="text"
                                             name="ac_number"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="AC Number"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border-red-600"
+                                                    : ""
+                                            } `}
                                         />
                                     </div>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             Contact Details
                                         </label>
                                         <input
                                             type="text"
                                             name="contact_details"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="Contact Details"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border-red-600"
+                                                    : ""
+                                            } `}
                                         />
                                     </div>
                                     <div className="group relative w-72 md:w-80 lg:w-96">
-                                        <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
+                                        <label
+                                            className={`block w-full pb-1 text-sm font-medium  transition-all duration-200 ease-in-out  ${
+                                                !leased
+                                                    ? " text-red-500 "
+                                                    : "text-gray-500 group-focus-within:text-blue-400"
+                                            } `}
+                                        >
                                             L/V Documents Attachement
                                         </label>
                                         <input
                                             type="file"
                                             name="lv_documents_attachement"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="L/V Documents Attachement"
-                                            className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            // className="peer block h-10 w-full rounded-md border border-black/50 bg-gray-50 px-4 text-sm text-slate-500 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400"
+                                            className={`file:border-1 peer h-10 w-full rounded-md  bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:py-2 file:px-4 file:text-sm  file:font-semibold file:text-blue-700 hover:file:bg-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-400 ${
+                                                !leased
+                                                    ? "cursor-not-allowed border border-red-600"
+                                                    : "border border-black/50"
+                                            } `}
                                         />
                                     </div>
-                                    <div className="group relative w-72 md:w-80 lg:w-96">
+                                    {/* <div className="group relative w-72 md:w-80 lg:w-96">
                                         <label className="block w-full pb-1 text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-blue-400">
                                             Status
                                         </label>
@@ -246,9 +319,31 @@ export default function AddModal({
                                             type="text"
                                             name="status"
                                             onChange={handleAddFormChange}
+                                            disabled={!leased}
                                             placeholder="Status"
                                             className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                                         />
+                                    </div> */}
+                                    <div className="group relative w-72 md:w-80 lg:w-96">
+                                        <div className="flex space-x-2">
+                                            <label
+                                                className={`block w-full pb-1 text-lg font-medium  transition-all duration-200 ease-in-out  ${
+                                                    !leased
+                                                        ? " text-red-500 "
+                                                        : "text-gray-500 group-focus-within:text-blue-400"
+                                                } `}
+                                            >
+                                                Status
+                                            </label>
+                                            <div className="flex items-center space-x-2">
+                                                <span>Disable</span>
+                                                <Switch
+                                                    enabled={active}
+                                                    setEnabled={setActive}
+                                                />
+                                                <span>Active</span>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <button
