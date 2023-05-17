@@ -37,7 +37,14 @@ const ReadOnlyRow = ({ record, handleEditClick, handleDeleteClick }) => {
                 {record.cp_number_from_charpotro}
             </td>
             <td className={clsName}>{record.LA_name}</td>
-            <td className={clsName}>{record.LV_name}</td>
+            <td className={clsName}>
+                <a
+                    href={`/own-ship/${record.LV_name}`}
+                    className="font-bold text-blue-500 hover:underline"
+                >
+                    {record.LV_name}
+                </a>
+            </td>
             <td className={clsName}>{record.dest_from}</td>
             <td className={clsName}>{record.dest_to}</td>
             <td className={`text-center ${clsName}`}>{record.capacity}</td>

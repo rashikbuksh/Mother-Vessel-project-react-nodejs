@@ -13,14 +13,20 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
                     {status.id}
                 </a>
             </td>
-            <td className={clsName}>{status.LV_name}</td>
+            <td className={clsName}>
+                <a
+                    href={`/own-ship/${status.LV_name}`}
+                    className="font-bold text-blue-500 hover:underline"
+                >
+                    {status.LV_name}
+                </a>
+            </td>
             <td className={clsName}>{status.capacity}</td>
             <td className={clsName}>{status.master_reg_number}</td>
             <td className={clsName}>{status.masters_name}</td>
             <td className={clsName}>{status.masters_contact_number}</td>
             <td className={clsName}>{status.masters_nid_image_attachment}</td>
-            <td className={clsName}>{status.staff_name}</td>
-            <td className={clsName}>{status.staff_nid_number}</td>
+            <td className={clsName}>{status.staffs_info}</td>
             <td className={clsName}>{status.leased}</td>
             <td className={clsName}>{status.company_name}</td>
             <td className={clsName}>{status.proprietors_name}</td>

@@ -9,9 +9,31 @@ function DynamicForm({ handleAddFormChange, addStaff, setAddStaff }) {
     };
 
     const onChangeFormGroupInput = (index, event) => {
+        event.preventDefault();
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+
         let updatedFields = [...addStaff];
-        updatedFields[index] = event.target.value;
+        let prev = updatedFields[index];
+        let name = prev.split("#")[0];
+        let nid = prev.split("#")[1];
+
+        if (fieldName === "staff_name") {
+            updatedFields[index] = `${fieldValue}#${nid}`;
+        }
+        if (fieldName === "staff_nid_number") {
+            updatedFields[index] = `${name}#${fieldValue}`;
+        }
+        // updatedFields[index] = fieldValue;
+
+        // console.log(fieldName, fieldValue);
+
         setAddStaff(updatedFields);
+
+        // const newFormData = { ...addFormData };
+        // newFormData[fieldName] = fieldValue;
+
+        // setAddFormData(newFormData);
     };
 
     const onClickButtonSubmit = (event) => {
@@ -40,29 +62,10 @@ function DynamicForm({ handleAddFormChange, addStaff, setAddStaff }) {
                     value={value}
                     key={index}
                     index={index + 1}
-                    handleAddFormChange={handleAddFormChange}
+                    // handleAddFormChange={handleAddFormChange}
                 />
             ))}
         </form>
-    );
-}
-
-function FormButton(props) {
-    let buttonType = props.type;
-    let buttonModifierClassName = "";
-
-    if (buttonType) {
-        buttonType = `${buttonType[0].toUpperCase()}${buttonType.slice(1)}`; // capitalize
-        buttonModifierClassName = `dynamicForm__button--is${buttonType}`;
-    }
-
-    return (
-        <button
-            className={`dynamicForm__button ${buttonModifierClassName}`}
-            onClick={props.click}
-        >
-            {props.innerHtml}
-        </button>
     );
 }
 
@@ -92,8 +95,10 @@ function FormGroup(props) {
                 </div>
                 <input
                     type="text"
-                    name="staff_name"
-                    onChange={props.handleAddFormChange}
+                    name={`staff_name`}
+                    required
+                    // onChange={props.handleAddFormChange}
+                    onChange={props.inputChange}
                     placeholder="Staff Name"
                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                 />
@@ -104,8 +109,10 @@ function FormGroup(props) {
                 </label>
                 <input
                     type="text"
-                    name="staff_nid_number"
-                    onChange={props.handleAddFormChange}
+                    name={`staff_nid_number`}
+                    required
+                    // onChange={props.handleAddFormChange}
+                    onChange={props.inputChange}
                     placeholder="Staff NID Number"
                     className="peer h-10 w-full rounded-md bg-gray-50 px-4 outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
                 />

@@ -31,7 +31,7 @@ const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
 const ChqApproval = lazy(() => import("./pages/ChqApproval"));
 const Payment = lazy(() => import("./pages/Payment"));
-const Profile = lazy(() => import("./pages/PreDefinedShip/Profile"));
+const Profile = lazy(() => import("./pages/PreDefinedAdmin/Profile"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
@@ -78,6 +78,10 @@ const OperationRoutesList = [
         link: "/own-ship",
         component: PreDefinedAdmin,
     },
+    {
+        link: "/own-ship/:shipName",
+        component: Profile,
+    },
 ];
 
 const AccountsRoutesList = [
@@ -118,6 +122,10 @@ const AdminRoutesList = [
     {
         link: "/own-ship",
         component: PreDefinedAdmin,
+    },
+    {
+        link: "/own-ship/:shipName",
+        component: Profile,
     },
     {
         link: "/damarage-calculation",
@@ -212,7 +220,7 @@ function App() {
                 ))}
 
                 <Route
-                    path="/test"
+                    path="/own-ship/:shipName"
                     element={
                         <Suspense fallback={<Loader />}>
                             <Profile />
