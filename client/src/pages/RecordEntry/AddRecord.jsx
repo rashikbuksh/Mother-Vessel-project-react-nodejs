@@ -140,8 +140,7 @@ export default function AddJob({
                                             </label>
                                             <span className="flex items-center">
                                                 <Switch
-                                                    enabled={enabled}
-                                                    setEnabled={setEnabled}
+                                                    {...{ enabled, setEnabled }}
                                                 />
                                                 <label
                                                     className={`ml-1 block text-sm font-medium transition-all duration-200 ease-in-out  ${

@@ -5,9 +5,9 @@ import AddModal from "./AddModal";
 import TableHead from "../../components/Table/TableHead"; // new
 import Pagination from "../../components/Table/Pagination"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
-import { useAuth } from "../../hooks/auth";
 import Axios from "axios";
 import Loader from "../../utils/Loader";
+import FormData from "form-data";
 
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -112,9 +112,17 @@ const App = () => {
     const [pageSize, setPageSize] = useState(10);
 
     //Image upload
-    const [file, setFile] = useState();
+    const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState("");
 
+    // dynamic add staff
+    const [addStaff, setAddStaff] = useState([""]);
+
+    // leased ship
+    const [leased, setLeased] = useState(false);
+
+    // active status
+    const [active, setActive] = useState(false);
     const [lv_documents_attachementFile, setlv_documents_attachementFile] =
         useState();
     const [
@@ -122,7 +130,6 @@ const App = () => {
         setlv_documents_attachementFileName,
     ] = useState("");
 
-    const { logout } = useAuth();
 
     // search filter for all fields
     const [query, setQuery] = useState("");
@@ -236,7 +243,7 @@ const App = () => {
 
     //submit handler
     //Clicking the Add button adds a new data row to the existing row
-    const handleAddFormSubmit = (event) => {
+    const handleAddFormSubmit = async (event) => {
         event.preventDefault(); // ???
 
         const newStatus = {
@@ -256,8 +263,10 @@ const App = () => {
             lv_documents_attachement: addFormData.lv_documents_attachement,
             status: addFormData.status,
         };
-        const formData = new FormData();
-        // formData.append("LV_name", addFormData.LV_name);
+
+        // let formData = new FormData();
+
+        // formData.append("LV_name", newStatus.LV_name);
         // formData.append("capacity", newStatus.capacity);
         // formData.append("master_reg_number", newStatus.master_reg_number);
         // formData.append("masters_name", newStatus.masters_name);
@@ -281,12 +290,8 @@ const App = () => {
         // );
         // formData.append("status", newStatus.status);
 
-        const config = {
-            body: newStatus,
-        };
-
-        console.log(formData.values());
-
+        let formData = new FormData();
+        formData.append("masters_nid_image_attachment", file);
         Axios.post(
             `${process.env.REACT_APP_API_URL}/management/predefinedship`,
             {
@@ -326,15 +331,7 @@ const App = () => {
         //CurrentStatus의 초기값은 data.json 데이터
         // new start
         const newTableData = [...tableData, newStatus];
-        // new end
-
         setCurrentStatus(newTableData);
-
-        // close modal
-        closeModal();
-
-        // toast
-        // success("Status added successfully");
     };
 
     //save modified data (App component)
@@ -522,6 +519,12 @@ const App = () => {
                         handleAddFormChange,
                         handleAddFormSubmit,
                         saveFile,
+                        addStaff,
+                        setAddStaff,
+                        leased,
+                        setLeased,
+                        active,
+                        setActive,
                         saveLv_documents_attachementFile,
                     }}
                 />

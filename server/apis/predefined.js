@@ -49,6 +49,7 @@ function addPredefined(req, res, db) {
         }
     );
 }
+
 function getPredefined(req, res, db) {
     const sqlSelect = "SELECT * from pre_defined_ship";
     db.query(sqlSelect, (err, result) => {
