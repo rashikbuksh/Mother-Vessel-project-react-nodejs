@@ -4,14 +4,28 @@ const cors = require("cors");
 const app = express();
 const multer = require("multer");
 
+// two const fileName lv_documents_attachementFileName
+var masternidName = null;
+var lv_documents_attachementFileName = null;
+
 //! Use of Multer
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
-        callBack(null, "./uploads");
+        if (file.mimetype.substring(0, 5) == "image") {
+            callBack(null, "./uploads/images");
+        } else {
+            callBack(null, "./uploads/pdf");
+        }
     },
     filename: (req, file, callBack) => {
-        console.log("File Name : " + file.fieldname);
-        callBack(null, Date.now() + "__" + file.originalname);
+        if (file.mimetype.substring(0, 5) == "image") {
+            masternidName = Date.now() + "__" + file.originalname;
+            callBack(null, masternidName);
+        } else {
+            lv_documents_attachementFileName =
+                Date.now() + "__" + file.originalname;
+            callBack(null, lv_documents_attachementFileName);
+        }
     },
 });
 const upload = multer({ storage: storage });
@@ -341,6 +355,9 @@ app.get("/management/getChqissuePartpayBalanceToPayment", (req, res) => {
 
 //Insert Current Status predefined
 app.post("/management/predefinedship", (req, res) => {
+    req.body.fileName = masternidName;
+    req.body.lv_documents_attachementFileName =
+        lv_documents_attachementFileName;
     addPredefined(req, res, db);
 });
 //Get Current Status predefined
@@ -362,14 +379,10 @@ app.get("/management/getLV", (req, res) => {
 });
 
 // Get predefined ships image
-app.post(
-    "/management/upload",
-    upload.single("masters_nid_image_attachment"),
-    (req, res) => {
-        console.log(req.file);
-        res.send("File uploaded successfully");
-    }
-);
+app.post("/management/upload", upload.array("uploadFiles"), (req, res) => {
+    console.log(req.files);
+    res.send("File uploaded successfully");
+});
 
 //======================= order job =======================
 

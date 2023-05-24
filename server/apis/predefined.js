@@ -14,41 +14,43 @@ function addPredefined(req, res, db) {
         office_address,
         ac_number,
         contact_details,
-        lv_documents_attachement,
         status,
     } = req.body;
 
     const masters_nid_image_attachment_name = req.body.fileName;
+    const lv_documents_attachement = req.body.lv_documents_attachementFileName;
 
-    const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, master_reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staffs_info, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    db.query(
-        sqlCreate,
-        [
-            LV_name,
-            capacity,
-            master_reg_number,
-            masters_name,
-            masters_contact_number,
-            masters_nid_image_attachment_name,
-            staffs_info,
-            leased,
-            company_name,
-            proprietors_name,
-            office_address,
-            ac_number,
-            contact_details,
-            lv_documents_attachement,
-            status,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "creating ship")
-                    : ToastRes("create", `${LV_name}`)
-            );
-            console.log(err);
-        }
-    );
+    if (masters_nid_image_attachment_name != null) {
+        const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, master_reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staffs_info, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        db.query(
+            sqlCreate,
+            [
+                LV_name,
+                capacity,
+                master_reg_number,
+                masters_name,
+                masters_contact_number,
+                masters_nid_image_attachment_name,
+                staffs_info,
+                leased,
+                company_name,
+                proprietors_name,
+                office_address,
+                ac_number,
+                contact_details,
+                lv_documents_attachement,
+                status,
+            ],
+            (err, result) => {
+                res.json(
+                    err
+                        ? ToastRes("error", "creating ship")
+                        : ToastRes("create", `${LV_name}`)
+                );
+                console.log(err);
+            }
+        );
+    }
 }
 
 function getPredefined(req, res, db) {
