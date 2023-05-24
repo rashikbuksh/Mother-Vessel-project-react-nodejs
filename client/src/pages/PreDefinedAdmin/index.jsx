@@ -13,6 +13,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 
 //toast
 import { generatedToast } from "../../components/Toast";
+import { lv } from "date-fns/locale";
 
 const TableHeader = [
     {
@@ -117,7 +118,7 @@ const App = () => {
 
     // dynamic add staff
     const [addStaff, setAddStaff] = useState(["#"]);
-    console.log(addStaff);
+    //console.log(addStaff);
 
     // leased ship
     const [leased, setLeased] = useState(false);
@@ -270,21 +271,12 @@ const App = () => {
             office_address: addFormData.office_address,
             ac_number: addFormData.ac_number,
             contact_details: addFormData.contact_details,
-            lv_documents_attachement: addFormData.lv_documents_attachement,
             status: active ? 1 : 0,
         };
 
         let formData = new FormData();
-        formData.append("masters_nid_image_attachment", file);
-        await Axios.post(
-            `${process.env.REACT_APP_API_URL}/management/predefinedship`,
-            {
-                ...newStatus,
-                fileName,
-            }
-        ).then((response) => {
-            generatedToast(response);
-        });
+        formData.append("uploadFiles", file);
+        formData.append("uploadFiles", lv_documents_attachementFile);
 
         await Axios.post(
             `${process.env.REACT_APP_API_URL}/management/upload`,
@@ -301,6 +293,18 @@ const App = () => {
             .then(() => {
                 closeModal();
             });
+
+        console.log(formData);
+        await Axios.post(
+            `${process.env.REACT_APP_API_URL}/management/predefinedship`,
+            {
+                ...newStatus,
+                fileName,
+                lv_documents_attachementFileName,
+            }
+        ).then((response) => {
+            generatedToast(response);
+        });
 
         //CurrentStatus의 초기값은 data.json 데이터
         // new start
