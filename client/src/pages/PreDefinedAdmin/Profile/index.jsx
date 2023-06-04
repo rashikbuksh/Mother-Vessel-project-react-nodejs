@@ -199,7 +199,7 @@ export default function Profile() {
                                 Documents Attachment
                             </div>
                             <PdfView
-                                pdf={`${process.env.REACT_APP_IMG_URL}/2.pdf`}
+                                pdf={`${process.env.REACT_APP_PDF_URL}/${lv_documents_attachement}`}
                             />
                         </div>
                     </div>
