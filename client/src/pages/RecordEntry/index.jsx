@@ -212,7 +212,7 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-
+		window.location.reload();
 		const newTableData = [...tableData, newRecord];
 		setRecordList(newTableData);
 	};
