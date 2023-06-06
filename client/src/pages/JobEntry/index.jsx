@@ -224,7 +224,7 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-
+		window.location.reload();
 		const newTableData = [...tableData, newJob];
 		setJobList(newTableData);
 	};
