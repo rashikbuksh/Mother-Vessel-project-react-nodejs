@@ -205,7 +205,7 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-
+    
 		const newTableData = [...tableData, newRecord];
 		setRecordList(newTableData);
 	};
