@@ -51,43 +51,39 @@ const TableHeader = [
 		id: 7,
 		name: "MV Location",
 		accessor: "mv_location",
-		sortable: true,
 	},
 	{
 		id: 8,
 		name: "BL Quantity",
 		accessor: "bl_quantity",
-		sortable: true,
 	},
 	{
 		id: 9,
 		name: "Stevedore Name",
 		accessor: "stevedore_name",
-		sortable: true,
 	},
 	{
 		id: 10,
 		name: "Stevedore Number",
 		accessor: "stevedore_contact_number",
-		sortable: true,
 	},
 	{
 		id: 11,
 		name: "Entry Time",
-		accessor: "time_stamp",
+		accessor: "entry_time",
 		sortable: true,
-		sortByOrder: "desc",
 	},
 	{ id: 12, name: "Actions" },
 ];
 
 const AddJob = lazy(() => import("./AddJob"));
+const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
 	const [JobList, setJobList] = useState([]);
 	const [tableData, handleSorting] = useSortableTable(JobList, TableHeader);
 	const [cursorPos, setCursorPos] = useState(1);
-	const [pageSize, setPageSize] = useState(3);
+	const [pageSize, setPageSize] = useState(10);
 
 	// fetch data
 	const [loading, setLoading] = useState(true);
@@ -224,7 +220,7 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-		window.location.reload();
+
 		const newTableData = [...tableData, newJob];
 		setJobList(newTableData);
 	};
@@ -286,17 +282,33 @@ const App = () => {
 	};
 
 	// delete
+	// modal for delete job
+	let [isOpenDelete, setIsOpenDelete] = useState(false);
+	const closeModalDelete = () => {
+		setDeleteID(null);
+		setIsOpenDelete(false);
+	};
+	const openModalDelete = () => setIsOpenDelete(true);
+
+	const [deleteID, setDeleteID] = useState(null);
 	const handleDeleteClick = (jobId) => {
+		setDeleteID(jobId);
+		openModalDelete();
+	};
+
+	const handleDeleteModal = () => {
 		const newJobList = [...JobList];
-		const index = JobList.findIndex((job) => job.id === jobId);
-
+		const index = JobList.findIndex((job) => job.id === deleteID);
 		Axios.post(`${process.env.REACT_APP_API_URL}/management/deletejob`, {
-			job_id: jobId,
+			job_id: deleteID,
 			job_order_number: JobList[index].order_number,
-		}).then((response) => {
-			generatedToast(response);
-		});
-
+		})
+			.then((response) => {
+				generatedToast(response);
+			})
+			.finally(() => {
+				closeModalDelete();
+			});
 		newJobList.splice(index, 1);
 		setJobList(newJobList);
 	};
@@ -343,7 +355,7 @@ const App = () => {
 								<tr
 									key={index}
 									className={`my-auto items-center justify-center ${
-										index % 2 === 1 ? "bg-gray-200" : ""
+										index % 2 === 1 && "bg-gray-200"
 									}`}
 								>
 									{editJobId ===
@@ -358,10 +370,6 @@ const App = () => {
 									) : (
 										<ReadOnlyRow
 											job={search(tableData)[index]}
-											handleEditClick={handleEditClick}
-											handleDeleteClick={
-												handleDeleteClick
-											}
 											{...{
 												handleEditClick,
 												handleDeleteClick,
@@ -399,6 +407,19 @@ const App = () => {
 						addFormData,
 						setAddFormData,
 						errorData,
+					}}
+				/>
+			</Suspense>
+			<Suspense fallback={<PingLoader />}>
+				<DeleteRecord
+					{...{
+						isOpenDelete,
+						closeModalDelete,
+						handleDeleteModal,
+					}}
+					deleteInfo={{
+						title: "Delete Job",
+						body: "Are you sure you want to delete this job entry?",
 					}}
 				/>
 			</Suspense>

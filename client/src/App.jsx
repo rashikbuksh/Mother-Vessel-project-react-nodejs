@@ -1,15 +1,15 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import {
-    AccountsManagerRoutes,
-    AccountsRoutes,
-    AdminRoutes,
-    OperationRoutes,
+	AccountsManagerRoutes,
+	AccountsRoutes,
+	AdminRoutes,
+	OperationRoutes,
 } from "./hooks/routes";
 
-import Loader from "./utils/Loader";
 import { Toast } from "./components/Toast";
+import Loader from "./utils/Loader";
 
 const NotFound = lazy(() => import("./layout/NotFound"));
 const NoAccess = lazy(() => import("./utils/NoAccess"));
@@ -35,202 +35,211 @@ const Profile = lazy(() => import("./pages/PreDefinedAdmin/Profile"));
 
 // table
 const Table = lazy(() => import("./components/Tables"));
+const DeletePopup = lazy(() => import("./components/DeletePopup"));
 const Navbar = lazy(() => import("./components/Navbar"));
 const PingLoader = lazy(() => import("./utils/PingLoader"));
 
 const PublicRoutesList = [
-    {
-        link: "/",
-        component: Login,
-    },
-    {
-        link: "/login",
-        component: Login,
-    },
-    {
-        link: "/no-access",
-        component: NoAccess,
-    },
-    {
-        link: "/*",
-        component: NotFound,
-    },
-    // {
-    //     link: "/test",
-    //     component: Navbar,
-    // },
+	{
+		link: "/",
+		component: Login,
+	},
+	{
+		link: "/login",
+		component: Login,
+	},
+	{
+		link: "/no-access",
+		component: NoAccess,
+	},
+	{
+		link: "/*",
+		component: NotFound,
+	},
+	// {
+	//     link: "/test",
+	//     component: Navbar,
+	// },
 ];
 
 const OperationRoutesList = [
-    {
-        link: "/record-entry",
-        component: RecordEntry,
-    },
-    {
-        link: "/current-status",
-        component: CurrentStatus,
-    },
-    {
-        link: "/damarage-calculation",
-        component: DamarageCalculation,
-    },
-    {
-        link: "/own-ship",
-        component: PreDefinedAdmin,
-    },
-    {
-        link: "/own-ship/:shipName",
-        component: Profile,
-    },
+	{
+		link: "/record-entry",
+		component: RecordEntry,
+	},
+	{
+		link: "/current-status",
+		component: CurrentStatus,
+	},
+	{
+		link: "/damarage-calculation",
+		component: DamarageCalculation,
+	},
+	{
+		link: "/own-ship",
+		component: PreDefinedAdmin,
+	},
+	{
+		link: "/own-ship/:shipName",
+		component: Profile,
+	},
 ];
 
 const AccountsRoutesList = [
-    {
-        link: "/job-entry",
-        component: JobEntry,
-    },
+	{
+		link: "/job-entry",
+		component: JobEntry,
+	},
 ];
 
 const AccountsManagerRoutesList = [
-    {
-        link: "/chq-due-list",
-        component: ChqDueList,
-    },
-    {
-        link: "/chq-approval",
-        component: ChqApproval,
-    },
-    {
-        link: "/payment",
-        component: Payment,
-    },
+	{
+		link: "/chq-due-list",
+		component: ChqDueList,
+	},
+	{
+		link: "/chq-approval",
+		component: ChqApproval,
+	},
+	{
+		link: "/payment",
+		component: Payment,
+	},
 ];
 
 const AdminRoutesList = [
-    {
-        link: "/admin-panel",
-        component: AdminPanel,
-    },
-    {
-        link: "/record-entry",
-        component: RecordEntry,
-    },
-    {
-        link: "/current-status",
-        component: CurrentStatus,
-    },
-    {
-        link: "/own-ship",
-        component: PreDefinedAdmin,
-    },
-    {
-        link: "/own-ship/:shipName",
-        component: Profile,
-    },
-    {
-        link: "/damarage-calculation",
-        component: DamarageCalculation,
-    },
-    {
-        link: "/chq-duelist",
-        component: ChqDueList,
-    },
-    {
-        link: "/chq-approval",
-        component: ChqApproval,
-    },
-    {
-        link: "/payment",
-        component: Payment,
-    },
-    {
-        link: "/job-entry",
-        component: JobEntry,
-    },
+	{
+		link: "/admin-panel",
+		component: AdminPanel,
+	},
+	{
+		link: "/record-entry",
+		component: RecordEntry,
+	},
+	{
+		link: "/current-status",
+		component: CurrentStatus,
+	},
+	{
+		link: "/own-ship",
+		component: PreDefinedAdmin,
+	},
+	{
+		link: "/own-ship/:shipName",
+		component: Profile,
+	},
+	{
+		link: "/damarage-calculation",
+		component: DamarageCalculation,
+	},
+	{
+		link: "/chq-duelist",
+		component: ChqDueList,
+	},
+	{
+		link: "/chq-approval",
+		component: ChqApproval,
+	},
+	{
+		link: "/payment",
+		component: Payment,
+	},
+	{
+		link: "/job-entry",
+		component: JobEntry,
+	},
 ];
 
 function App() {
-    return (
-        <>
-            <Navbar />
-            <Routes>
-                {OperationRoutesList.map((route, index) => (
-                    <Route
-                        key={index}
-                        path={route.link}
-                        element={
-                            <OperationRoutes>
-                                <Suspense fallback={<Loader />}>
-                                    <route.component />
-                                </Suspense>
-                            </OperationRoutes>
-                        }
-                    />
-                ))}
-                {AccountsRoutesList.map((route, index) => (
-                    <Route
-                        key={index}
-                        path={route.link}
-                        element={
-                            <AccountsRoutes>
-                                <Suspense fallback={<Loader />}>
-                                    <route.component />
-                                </Suspense>
-                            </AccountsRoutes>
-                        }
-                    />
-                ))}
-                {AccountsManagerRoutesList.map((route, index) => (
-                    <Route
-                        key={index}
-                        path={route.link}
-                        element={
-                            <AccountsManagerRoutes>
-                                <Suspense fallback={<Loader />}>
-                                    <route.component />
-                                </Suspense>
-                            </AccountsManagerRoutes>
-                        }
-                    />
-                ))}
-                {AdminRoutesList.map((route, index) => (
-                    <Route
-                        key={index}
-                        path={route.link}
-                        element={
-                            <AdminRoutes>
-                                <Suspense fallback={<Loader />}>
-                                    <route.component />
-                                </Suspense>
-                            </AdminRoutes>
-                        }
-                    />
-                ))}
+	return (
+		<>
+			<Navbar />
+			<Routes>
+				{OperationRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<OperationRoutes>
+								<Suspense fallback={<Loader />}>
+									<route.component />
+								</Suspense>
+							</OperationRoutes>
+						}
+					/>
+				))}
+				{AccountsRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<AccountsRoutes>
+								<Suspense fallback={<Loader />}>
+									<route.component />
+								</Suspense>
+							</AccountsRoutes>
+						}
+					/>
+				))}
+				{AccountsManagerRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<AccountsManagerRoutes>
+								<Suspense fallback={<Loader />}>
+									<route.component />
+								</Suspense>
+							</AccountsManagerRoutes>
+						}
+					/>
+				))}
+				{AdminRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<AdminRoutes>
+								<Suspense fallback={<Loader />}>
+									<route.component />
+								</Suspense>
+							</AdminRoutes>
+						}
+					/>
+				))}
 
-                {PublicRoutesList.map((route, index) => (
-                    <Route
-                        key={index}
-                        path={route.link}
-                        element={
-                            <Suspense fallback={<Loader />}>
-                                <route.component />
-                            </Suspense>
-                        }
-                    />
-                ))}
+				{PublicRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<Suspense fallback={<Loader />}>
+								<route.component />
+							</Suspense>
+						}
+					/>
+				))}
 
-                <Route
-                    path="/own-ship/:shipName"
-                    element={
-                        <Suspense fallback={<Loader />}>
-                            <Profile />
-                        </Suspense>
-                    }
-                />
-            </Routes>
-            <Toast />
-        </>
-    );
+				<Route
+					path="/own-ship/:shipName"
+					element={
+						<Suspense fallback={<Loader />}>
+							<Profile />
+						</Suspense>
+					}
+				/>
+				<Route
+					path="/test"
+					element={
+						<Suspense fallback={<Loader />}>
+							<DeletePopup />
+						</Suspense>
+					}
+				/>
+			</Routes>
+			<Toast />
+		</>
+	);
 }
 
 export default App;

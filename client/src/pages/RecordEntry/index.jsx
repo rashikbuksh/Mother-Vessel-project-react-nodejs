@@ -21,15 +21,13 @@ const TableHeader = [
 		id: 2,
 		name: "Order Number",
 		accessor: "order_number",
-		sortable: true,
 	},
 	{
 		id: 3,
 		name: "Job Number",
 		accessor: "job_number",
-		sortable: true,
 	},
-	{ id: 10, name: "Commodity", accessor: "commodity" },
+	{ id: 10, name: "Commodity", accessor: "commodity", sortable: true },
 	{
 		id: 4,
 		name: "Date From Charpotro",
@@ -42,9 +40,9 @@ const TableHeader = [
 		accessor: "cp_number_from_charpotro",
 	},
 	{ id: 6, name: "LA Name", accessor: "LA_name" },
-	{ id: 7, name: "LV Name", accessor: "LV_name", sortable: true },
-	{ id: 8, name: "Destination From", accessor: "dest_from" },
-	{ id: 9, name: "Destination To", accessor: "dest_to" },
+	{ id: 7, name: "LV Name", accessor: "LV_name" },
+	{ id: 8, name: "Destination From", accessor: "dest_from", sortable: true },
+	{ id: 9, name: "Destination To", accessor: "dest_to", sortable: true },
 	{ id: 11, name: "Capacity", accessor: "capacity" },
 	{ id: 12, name: "Rate", accessor: "rate" },
 	{ id: 13, name: "LV Master Name", accessor: "LV_master_name" },
@@ -53,12 +51,7 @@ const TableHeader = [
 		name: "LV Master Contact Number",
 		accessor: "LV_master_contact_number",
 	},
-	{
-		id: 15,
-		name: "Created Date",
-		accessor: "date_created",
-		sortByOrder: "desc",
-	},
+	{ id: 15, name: "Created Date", accessor: "created_date", sortable: true },
 	{ id: 16, name: "Actions" },
 ];
 
@@ -212,7 +205,7 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-		window.location.reload();
+    
 		const newTableData = [...tableData, newRecord];
 		setRecordList(newTableData);
 	};
@@ -384,7 +377,7 @@ const App = () => {
 								<tr
 									key={index}
 									className={`my-auto items-center justify-center ${
-										index % 2 === 1 ? "bg-gray-200" : ""
+										index % 2 === 1 && "bg-gray-200"
 									}`}
 								>
 									{editRecordId ===

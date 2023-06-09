@@ -22,7 +22,6 @@ const TableHeader = [
 		id: 3,
 		name: "Order Job Number",
 		accessor: "order_job_number",
-		sortable: true,
 	},
 	{ id: 5, name: "Local Agency", accessor: "LA_name", sortable: true },
 	{ id: 2, name: "LV Name", accessor: "LV_name" },
@@ -32,19 +31,18 @@ const TableHeader = [
 		accessor: "date_from_charpotro",
 		sortable: true,
 	},
-	{ id: 10, name: "Commodity", accessor: "commodity" },
-	{ id: 8, name: "Destination From", accessor: "dest_from" },
-	{ id: 9, name: "Destination To", accessor: "dest_to" },
+	{ id: 10, name: "Commodity", accessor: "commodity", sortable: true },
+	{ id: 8, name: "Destination From", accessor: "dest_from", sortable: true },
+	{ id: 9, name: "Destination To", accessor: "dest_to", sortable: true },
 	{ id: 11, name: "Current Location", accessor: "current_location" },
 	{ id: 12, name: "Remark", accessor: "current_location" },
-	{ id: 13, name: "Trip Completed", accessor: "trip_completed" },
 	{
-		id: 15,
-		name: "Updated Date",
-		accessor: "updated_date",
+		id: 13,
+		name: "Trip Completed",
+		accessor: "trip_completed",
 		sortable: true,
-		sortByOrder: "desc",
 	},
+	{ id: 15, name: "Updated Date", accessor: "updated_date", sortable: true },
 	{ id: 16, name: "Actions" },
 ];
 
@@ -303,7 +301,7 @@ const App = () => {
 								<tr
 									key={index}
 									className={`my-auto items-center justify-center ${
-										index % 2 === 1 ? "bg-gray-200" : ""
+										index % 2 === 1 && "bg-gray-200"
 									}`}
 								>
 									{editStatusId ===

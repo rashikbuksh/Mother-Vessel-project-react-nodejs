@@ -3,13 +3,13 @@
 1. Clone the repo.
 
 2. Install node modules.
-   ```sh
-   npm i
-   ```
+    ```sh
+    npm i
+    ```
 3. Run the project.
-   ```sh
-   npm run start
-   ```
+    ```sh
+    npm run start
+    ```
 
 ## Show your support
 

@@ -19,10 +19,9 @@ const TableHeader = [
 		id: 2,
 		name: "Order job Number",
 		accessor: "order_job_number",
-		sortable: true,
 	},
 	{ id: 4, name: "Date", accessor: "date", sortable: true },
-	{ id: 5, name: "CP Number", accessor: "cp_number", sortable: true },
+	{ id: 5, name: "CP Number", accessor: "cp_number" },
 	{
 		id: 6,
 		name: "Date From Charpotro",
@@ -30,8 +29,8 @@ const TableHeader = [
 		sortable: true,
 	},
 	{ id: 7, name: "Commodity", accessor: "commodity", sortable: true },
-	{ id: 8, name: "Capacity", accessor: "capacity", sortable: true },
-	{ id: 9, name: "LV Name", accessor: "LV_name", sortable: true },
+	{ id: 8, name: "Capacity", accessor: "capacity" },
+	{ id: 9, name: "LV Name", accessor: "LV_name" },
 	{ id: 10, name: "MV Name", accessor: "MV_name", sortable: true },
 	{
 		id: 11,
@@ -49,31 +48,26 @@ const TableHeader = [
 		id: 13,
 		name: "Loading Started",
 		accessor: "loading_started",
-		sortable: true,
 	},
 	{
 		id: 14,
 		name: "Loading Completed",
 		accessor: "loading_completed",
-		sortable: true,
 	},
 	{
 		id: 15,
 		name: "Sailing",
 		accessor: "sailing",
-		sortable: true,
 	},
 	{
 		id: 16,
 		name: "Duration of Travel",
 		accessor: "duration_of_travel",
-		sortable: true,
 	},
 	{
 		id: 17,
 		name: "Unloading Started",
 		accessor: "unloading_started",
-		sortable: true,
 	},
 	{
 		id: 18,
@@ -81,26 +75,24 @@ const TableHeader = [
 		accessor: "unloading_completed",
 		sortable: true,
 	},
-	{ id: 19, name: "Others", accessor: "others", sortable: true },
+	{ id: 19, name: "Others", accessor: "others" },
 	{
 		id: 20,
 		name: "Total Elapsed Time",
 		accessor: "total_elapsed_time",
 		sortable: true,
 	},
-	{ id: 21, name: "Voyage Time", accessor: "voyage_time", sortable: true },
-	{ id: 22, name: "Free Time", accessor: "free_time", sortable: true },
+	{ id: 21, name: "Voyage Time", accessor: "voyage_time" },
+	{ id: 22, name: "Free Time", accessor: "free_time" },
 	{
 		id: 23,
 		name: "Total Despatch",
 		accessor: "total_despatch",
-		sortable: true,
 	},
 	{
 		id: 24,
 		name: "Daily Despatch",
 		accessor: "daily_despatch",
-		sortable: true,
 	},
 	{ id: 25, name: "Action" },
 ];
@@ -326,7 +318,7 @@ const App = () => {
 								<tr
 									key={index}
 									className={`my-auto items-center justify-center ${
-										index % 2 === 1 ? "bg-gray-200" : ""
+										index % 2 === 1 && "bg-gray-200"
 									}`}
 								>
 									{editDamId ===
