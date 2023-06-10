@@ -49,6 +49,7 @@ const TableHeader = [
 const opt = [{ value: "All" }, { value: "Own" }, { value: "Other" }];
 
 const AddCurrentStatus = lazy(() => import("./AddCurrentStatus"));
+const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
 	const [CurrentStatus, setCurrentStatus] = useState([]);
@@ -181,16 +182,30 @@ const App = () => {
 	};
 
 	// delete
-	const handleDeleteClick = (StatusId) => {
+	// modal for delete job
+	let [isOpenDelete, setIsOpenDelete] = useState(false);
+	const closeModalDelete = () => {
+		setDeleteID(null);
+		setIsOpenDelete(false);
+	};
+	const openModalDelete = () => setIsOpenDelete(true);
+
+	const [deleteID, setDeleteID] = useState(null);
+	const handleDeleteClick = (jobId) => {
+		setDeleteID(jobId);
+		openModalDelete();
+	};
+
+	const handleDeleteModal = () => {
 		const newCurrentStatus = [...CurrentStatus];
 		const index = CurrentStatus.findIndex(
-			(Status) => Status.id === StatusId
+			(Status) => Status.id === deleteID
 		);
 
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/deletecurrentstatus`,
 			{
-				status_id: StatusId,
+				status_id: deleteID,
 				order_job_number: CurrentStatus[index].order_job_number,
 			}
 		).then((response) => {
@@ -342,6 +357,19 @@ const App = () => {
 					}}
 				/>
 			)}
+			<Suspense fallback={<PingLoader />}>
+				<DeleteRecord
+					{...{
+						isOpenDelete,
+						closeModalDelete,
+						handleDeleteModal,
+					}}
+					deleteInfo={{
+						title: "Delete Cheque Record",
+						body: "Are you sure you want to delete this Cheque Record?",
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 };

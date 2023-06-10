@@ -98,6 +98,7 @@ const TableHeader = [
 ];
 
 const AddDamarage = lazy(() => import("./AddDamarage"));
+const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
 	const [DamList, setDamList] = useState([]);
@@ -268,14 +269,28 @@ const App = () => {
 	};
 
 	// delete
-	const handleDeleteClick = (DamId) => {
+	// modal for delete job
+	let [isOpenDelete, setIsOpenDelete] = useState(false);
+	const closeModalDelete = () => {
+		setDeleteID(null);
+		setIsOpenDelete(false);
+	};
+	const openModalDelete = () => setIsOpenDelete(true);
+
+	const [deleteID, setDeleteID] = useState(null);
+	const handleDeleteClick = (jobId) => {
+		setDeleteID(jobId);
+		openModalDelete();
+	};
+
+	const handleDeleteModal = () => {
 		const newDamList = [...DamList];
-		const index = DamList.findIndex((Dam) => Dam.id === DamId);
+		const index = DamList.findIndex((Dam) => Dam.id === deleteID);
 
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/deletedamarage`,
 			{
-				Dam_id: DamId,
+				Dam_id: deleteID,
 				order_job_number: DamList[index].order_job_number,
 			}
 		).then((response) => {
@@ -362,6 +377,19 @@ const App = () => {
 					}}
 				/>
 			)}
+			<Suspense fallback={<PingLoader />}>
+				<DeleteRecord
+					{...{
+						isOpenDelete,
+						closeModalDelete,
+						handleDeleteModal,
+					}}
+					deleteInfo={{
+						title: "Delete Damarage Record",
+						body: "Are you sure you want to delete this Damarage entry?",
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 };

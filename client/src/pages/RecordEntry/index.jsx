@@ -51,11 +51,18 @@ const TableHeader = [
 		name: "LV Master Contact Number",
 		accessor: "LV_master_contact_number",
 	},
-	{ id: 15, name: "Created Date", accessor: "created_date", sortable: true },
+	{
+		id: 15,
+		name: "Created Date",
+		accessor: "date_created",
+		sortable: true,
+		sortByOrder: "desc",
+	},
 	{ id: 16, name: "Actions" },
 ];
 
 const AddRecord = lazy(() => import("./AddRecord"));
+const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
 	const [RecordList, setRecordList] = useState([]);
@@ -205,8 +212,8 @@ const App = () => {
 			.then(() => {
 				closeModal();
 			});
-    
-		const newTableData = [...tableData, newRecord];
+
+		const newTableData = [newRecord, ...tableData];
 		setRecordList(newTableData);
 	};
 
@@ -279,12 +286,26 @@ const App = () => {
 	};
 
 	// delete
-	const handleDeleteClick = (RecordId) => {
+	// modal for delete job
+	let [isOpenDelete, setIsOpenDelete] = useState(false);
+	const closeModalDelete = () => {
+		setDeleteID(null);
+		setIsOpenDelete(false);
+	};
+	const openModalDelete = () => setIsOpenDelete(true);
+
+	const [deleteID, setDeleteID] = useState(null);
+	const handleDeleteClick = (jobId) => {
+		setDeleteID(jobId);
+		openModalDelete();
+	};
+
+	const handleDeleteModal = () => {
 		const newRecordList = [...RecordList];
-		const index = RecordList.findIndex((Record) => Record.id === RecordId);
+		const index = RecordList.findIndex((Record) => Record.id === deleteID);
 
 		Axios.post(`${process.env.REACT_APP_API_URL}/management/deleterecord`, {
-			record_id: RecordId,
+			record_id: deleteID,
 		});
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/deleteorderjob`,
@@ -432,6 +453,19 @@ const App = () => {
 						maxCapacity,
 						enabled,
 						setEnabled,
+					}}
+				/>
+			</Suspense>
+			<Suspense fallback={<PingLoader />}>
+				<DeleteRecord
+					{...{
+						isOpenDelete,
+						closeModalDelete,
+						handleDeleteModal,
+					}}
+					deleteInfo={{
+						title: "Delete Record",
+						body: "Are you sure you want to delete this record entry?",
 					}}
 				/>
 			</Suspense>
