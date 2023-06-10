@@ -1,6 +1,6 @@
 import Axios from "axios";
 import FormData from "form-data";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import Pagination from "../../components/Table/Pagination"; // new
 import TableHead from "../../components/Table/TableHead"; // new
 import { useSortableTable } from "../../components/Table/useSortableTable"; // new
@@ -13,6 +13,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 
 //toast
 import { generatedToast } from "../../components/Toast";
+import PingLoader from "../../utils/PingLoader";
 
 const TableHeader = [
 	{ id: 2, name: "LV Name", accessor: "LV_name", sortable: true },
@@ -94,6 +95,8 @@ const TableHeader = [
 	},
 	{ id: 18, name: "Actions" },
 ];
+
+const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
 	// new start
@@ -301,7 +304,7 @@ const App = () => {
 
 		//CurrentStatus의 초기값은 data.json 데이터
 		// new start
-		const newTableData = [...tableData, newStatus];
+		const newTableData = [newStatus, ...tableData];
 		setCurrentStatus(newTableData);
 	};
 
@@ -372,15 +375,29 @@ const App = () => {
 	};
 
 	// delete
-	const handleDeleteClick = (StatusId) => {
+	// modal for delete job
+	let [isOpenDelete, setIsOpenDelete] = useState(false);
+	const closeModalDelete = () => {
+		setDeleteID(null);
+		setIsOpenDelete(false);
+	};
+	const openModalDelete = () => setIsOpenDelete(true);
+
+	const [deleteID, setDeleteID] = useState(null);
+	const handleDeleteClick = (jobId) => {
+		setDeleteID(jobId);
+		openModalDelete();
+	};
+
+	const handleDeleteModal = () => {
 		const newCurrentStatus = [...CurrentStatus];
 		const index = CurrentStatus.findIndex(
-			(Status) => Status.id === StatusId
+			(Status) => Status.id === deleteID
 		);
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/deletepredefinedship`,
 			{
-				status_id: StatusId,
+				status_id: deleteID,
 			}
 		).then((response) => {
 			generatedToast(response);
@@ -487,6 +504,19 @@ const App = () => {
 						active,
 						setActive,
 						saveLv_documents_attachementFile,
+					}}
+				/>
+			</Suspense>
+			<Suspense fallback={<PingLoader />}>
+				<DeleteRecord
+					{...{
+						isOpenDelete,
+						closeModalDelete,
+						handleDeleteModal,
+					}}
+					deleteInfo={{
+						title: "Delete Cheque Due Record",
+						body: "Are you sure you want to delete this Cheque Due Record?",
 					}}
 				/>
 			</Suspense>

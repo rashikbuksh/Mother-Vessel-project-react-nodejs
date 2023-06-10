@@ -70,8 +70,9 @@ const TableHeader = [
 	{
 		id: 11,
 		name: "Entry Time",
-		accessor: "entry_time",
+		accessor: "time_stamp",
 		sortable: true,
+		sortByOrder: "desc",
 	},
 	{ id: 12, name: "Actions" },
 ];
@@ -221,7 +222,7 @@ const App = () => {
 				closeModal();
 			});
 
-		const newTableData = [...tableData, newJob];
+		const newTableData = [newJob, ...tableData];
 		setJobList(newTableData);
 	};
 
