@@ -15,7 +15,7 @@ export const useSortableTable = (data, columns) => {
         if (a[accessor] === null) return 1;
         if (b[accessor] === null) return -1;
         if (a[accessor] === null && b[accessor] === null) return 0;
-
+            // to string error not fixed
         const ascending = a[accessor]
             ?.toString()
             .localeCompare(b[accessor].toString(), "en", {
