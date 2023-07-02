@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import shipLogo from "../../assets/img/shipLogo.svg";
 import { useAuth } from "../../hooks/auth";
 import { DefineRole } from "../../hooks/routes";
@@ -63,7 +64,7 @@ const NavLinks = [
 function Nav() {
 	const { logout } = useAuth();
 	const { original_role } = DefineRole();
-	console.log(window.location);
+	const location = useLocation();
 
 	const pageName = NavLinks.filter((nav) => {
 		return nav.link.includes(window.location.pathname);
@@ -74,8 +75,8 @@ function Nav() {
 	return (
 		<div
 			className={`flex w-full ${
-				(window.location?.pathname === "/login" ||
-					window.location?.pathname === "/") &&
+				(location?.pathname === "/login" ||
+					location?.pathname === "/") &&
 				"hidden"
 			} `}
 		>
@@ -99,12 +100,12 @@ function Nav() {
 							return (
 								<li key={id}>
 									<a
-										className={`rounded-md border-b-4 py-2 text-center transition duration-500 ease-in-out hover:rounded-md hover:border-b-4 hover:border-gray-200 hover:text-gray-200
+										className={`rounded-md py-2 text-center transition duration-500 ease-in-out hover:rounded-md hover:text-yellow-400 
                                             ${
-												window.location?.pathname ===
-												link
-													? "border-white"
-													: "border-green-700"
+												// glow effect on active link (not working)
+												window.location.pathname ===
+													link &&
+												"font-extrabold text-yellow-400"
 											}`}
 										href={link}
 									>

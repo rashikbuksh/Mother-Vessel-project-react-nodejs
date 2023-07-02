@@ -6,7 +6,7 @@ const Tooltip = ({ text }) => {
     return (
         <>
             {text && text.length > 10 ? (
-                <div class="group relative flex flex-col items-center ">
+                <div className="group relative flex flex-col items-center ">
                     {text.substring(0, 10)}...
                     <div className="absolute bottom-0 mb-6 hidden flex-col items-center group-hover:flex">
                         <span className="z-10 break-all rounded-md bg-white p-2 text-xs text-black shadow-lg group-hover:relative">
