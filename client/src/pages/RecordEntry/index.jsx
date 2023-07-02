@@ -32,7 +32,7 @@ const TableHeader = [
 		id: 4,
 		name: "Date From Charpotro",
 		accessor: "date_from_charpotro",
-		sortable: true,
+		// sortable: true,
 	},
 	{
 		id: 5,
@@ -55,7 +55,7 @@ const TableHeader = [
 		id: 15,
 		name: "Created Date",
 		accessor: "date_created",
-		sortable: true,
+		// sortable: true,
 		sortByOrder: "desc",
 	},
 	{ id: 16, name: "Actions" },
@@ -74,7 +74,7 @@ const App = () => {
 		TableHeader
 	);
 	const [cursorPos, setCursorPos] = useState(1);
-	const [pageSize, setPageSize] = useState(4);
+	const [pageSize, setPageSize] = useState(20);
 
 	// own ship
 	const [enabled, setEnabled] = useState(false);
