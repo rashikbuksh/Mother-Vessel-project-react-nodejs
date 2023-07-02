@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2023 at 07:04 PM
+-- Generation Time: Jun 25, 2023 at 07:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,26 +47,7 @@ CREATE TABLE `chq_approval` (
 --
 
 INSERT INTO `chq_approval` (`id`, `order_job_number`, `sixty_percent_payment_amount`, `forty_percent_payment_amount`, `damarage`, `second_trip`, `third_trip`, `direct_trip`, `sixty_percent_payment_chq_number`, `sixty_percent_payment_chq_date`, `forty_percent_payment_chq_number`, `forty_percent_payment_chq_date`) VALUES
-(14, 'Anik-13/3/2023-Paharika-Srilanka-1', '5000', '0', NULL, NULL, NULL, NULL, '123456', '2023-04-14', '0', '2023-04-20'),
-(15, 'Anik-13/3/2023-Paharika-Srilanka-2', '500', '400', NULL, NULL, NULL, NULL, '456456', '2023-04-26', '123321', '2023-04-27'),
-(16, 'Prime-21/3/2023-Uddoyon-Srilanka-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(17, 'Prime-21/3/2023-Uddoyon-Srilanka-2', '400', '600', NULL, NULL, NULL, NULL, '56789', '2023-04-24', '123456', '2023-04-30'),
-(18, 'Prime-21/3/2023-Uddoyon-Srilanka-3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 'Anik-13/3/2023-Paharika-Srilanka-3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 'Prime-21/3/2023-Uddoyon-Srilanka-4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(21, 'Anik-13/3/2023-Paharika-Srilanka-4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(22, 'Anik-13/3/2023-Paharika-Srilanka-5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'Rashik-19/3/2023-Yogurt-USA-1', '6000', '4000', NULL, NULL, NULL, NULL, '123456789', '2023-04-16', '987654321', '2023-04-20'),
-(24, 'Rashik-16/3/2023-MV1-India-1', '3500', '2500', NULL, NULL, NULL, NULL, '123456789', '2023-04-15', '987654321', '2023-04-16'),
-(25, 'Rashik-16/3/2023-MV1-India-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(26, 'Rashik-16/3/2023-MV1-India-3', '500', NULL, NULL, NULL, NULL, NULL, '123456789', '2023-04-16', NULL, NULL),
-(28, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(29, 'Rashik-16/3/2023-MV1-Sri Lanka-3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(31, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '6000', NULL, NULL, NULL, NULL, NULL, '123456789', '2023-04-16', NULL, NULL),
-(33, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '6000', NULL, NULL, NULL, NULL, NULL, '123456789', '2023-04-16', NULL, NULL),
-(34, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(35, 'Prime-4/5/2023-MV-India-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(42, 'Rashik-25/5/2023-MV1-USA-1', '5000', NULL, NULL, NULL, NULL, NULL, '123456', '2023-06-25', NULL, NULL);
 
 --
 -- Triggers `chq_approval`
@@ -126,17 +107,7 @@ CREATE TABLE `chq_due_list` (
 --
 
 INSERT INTO `chq_due_list` (`id`, `order_job_number`, `part_pay`, `payment`, `mode`, `amount`) VALUES
-(9, 'Anik-13/3/2023-Paharika-Srilanka-1', 3000, 'Part', '60', 1000),
-(10, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 300, NULL, '60', NULL),
-(11, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 500, NULL, '40', NULL),
-(12, 'Anik-13/3/2023-Paharika-Srilanka-2', 400, NULL, '60', NULL),
-(13, 'Anik-13/3/2023-Paharika-Srilanka-2', 300, NULL, '40', NULL),
-(14, 'Rashik-19/3/2023-Yogurt-USA-1', NULL, NULL, '40', NULL),
-(15, 'Rashik-19/3/2023-Yogurt-USA-1', NULL, NULL, '60', NULL),
-(16, 'Rashik-16/3/2023-MV1-India-1', NULL, NULL, '60', NULL),
-(17, 'Rashik-16/3/2023-MV1-India-1', NULL, NULL, '40', NULL),
-(18, 'Rashik-16/3/2023-MV1-India-3', NULL, NULL, '60', NULL),
-(19, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 4000, NULL, '60', NULL);
+(21, 'Rashik-25/5/2023-MV1-USA-1', 2000, NULL, '60', NULL);
 
 -- --------------------------------------------------------
 
@@ -158,28 +129,7 @@ CREATE TABLE `current_status` (
 --
 
 INSERT INTO `current_status` (`id`, `order_job_number`, `current_location`, `remark`, `time_updated`, `trip_completed`) VALUES
-(11, 'Anik-13/3/2023-Paharika-Srilanka-1', 'Ctg', 'gg', '2023-06-05 15:51:23', 1),
-(12, 'Anik-13/3/2023-Paharika-Srilanka-2', NULL, NULL, '2023-04-07 23:03:55', 0),
-(13, 'Prime-21/3/2023-Uddoyon-Srilanka-1', NULL, NULL, '2023-04-08 00:02:23', 0),
-(14, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 'Mawa', NULL, '2023-04-08 10:43:13', 1),
-(15, 'Prime-21/3/2023-Uddoyon-Srilanka-3', NULL, NULL, '2023-04-08 16:52:54', 0),
-(16, 'Anik-13/3/2023-Paharika-Srilanka-3', NULL, NULL, '2023-04-08 16:56:27', 0),
-(17, 'Prime-21/3/2023-Uddoyon-Srilanka-4', NULL, NULL, '2023-04-08 23:03:40', 0),
-(18, 'Anik-13/3/2023-Paharika-Srilanka-4', NULL, NULL, '2023-04-08 23:05:31', 0),
-(19, 'Anik-13/3/2023-Paharika-Srilanka-5', NULL, NULL, '2023-04-15 20:35:39', 0),
-(20, 'Rashik-19/3/2023-Yogurt-USA-1', 'Dhaka', 'Reached', '2023-04-15 18:15:01', 1),
-(21, 'Rashik-16/3/2023-MV1-India-1', NULL, NULL, '2023-04-16 00:40:33', 0),
-(22, 'Rashik-16/3/2023-MV1-India-2', NULL, NULL, '2023-04-16 00:49:38', 0),
-(23, 'Rashik-16/3/2023-MV1-India-3', NULL, NULL, '2023-04-16 01:15:22', 0),
-(24, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 'Dhaka', 'asdasdasdsdasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '2023-06-04 17:52:10', 0),
-(25, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, '2023-04-16 01:17:25', 0),
-(26, 'Rashik-16/3/2023-MV1-Sri Lanka-3', NULL, NULL, '2023-04-16 01:20:09', 0),
-(27, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 'Dhaka', 'okay', '2023-06-05 16:00:39', 0),
-(28, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, '2023-04-16 19:21:59', 0),
-(29, 'Rashik-16/3/2023-MV1-Sri Lanka-1', NULL, NULL, '2023-04-16 19:24:41', 0),
-(30, 'Rashik-16/3/2023-MV1-Sri Lanka-1', NULL, NULL, '2023-04-16 20:04:39', 0),
-(31, 'Rashik-16/3/2023-MV1-Sri Lanka-2', NULL, NULL, '2023-04-16 20:33:26', 0),
-(32, 'Prime-4/5/2023-MV-India-1', NULL, NULL, '2023-06-04 23:31:07', 0);
+(39, 'Rashik-25/5/2023-MV1-USA-1', 'Dhaka', 'gg', '2023-06-25 17:14:21', 1);
 
 -- --------------------------------------------------------
 
@@ -212,28 +162,7 @@ CREATE TABLE `damarage_dispatch` (
 --
 
 INSERT INTO `damarage_dispatch` (`id`, `order_job_number`, `date`, `loading_location`, `unloading_location`, `loading_start_time_stamp`, `loading_completion_time_stamp`, `sailing_time_stamp`, `duration_of_travel_time`, `unloading_start_time_stamp`, `unloading_completion_time_stamp`, `others`, `total_elapsed_time`, `voyage_time`, `free_time`, `total_despatch`, `daily_despatch`) VALUES
-(18, 'Anik-13/3/2023-Paharika-Srilanka-1', '2023-04-07 01:17:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 'Anik-13/3/2023-Paharika-Srilanka-2', '2023-04-07 23:03:55', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(20, 'Prime-21/3/2023-Uddoyon-Srilanka-1', '2023-04-08 00:02:23', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(21, 'Prime-21/3/2023-Uddoyon-Srilanka-2', '2023-04-08 00:03:23', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(22, 'Prime-21/3/2023-Uddoyon-Srilanka-3', '2023-04-08 16:52:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'Anik-13/3/2023-Paharika-Srilanka-3', '2023-04-08 16:56:27', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(24, 'Prime-21/3/2023-Uddoyon-Srilanka-4', '2023-04-08 23:03:40', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 'Anik-13/3/2023-Paharika-Srilanka-4', '2023-04-08 23:05:31', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(26, 'Anik-13/3/2023-Paharika-Srilanka-5', '2023-04-15 20:35:39', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 'Rashik-19/3/2023-Yogurt-USA-1', '2023-04-16 00:03:56', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 'Rashik-16/3/2023-MV1-India-1', '2023-04-16 00:40:33', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(29, 'Rashik-16/3/2023-MV1-India-2', '2023-04-16 00:49:38', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(30, 'Rashik-16/3/2023-MV1-India-3', '2023-04-16 01:15:22', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(31, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '2023-04-16 01:16:56', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 'Rashik-16/3/2023-MV1-Sri Lanka-2', '2023-04-16 01:17:25', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 'Rashik-16/3/2023-MV1-Sri Lanka-3', '2023-04-16 01:20:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(34, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '2023-04-16 01:26:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(35, 'Rashik-16/3/2023-MV1-Sri Lanka-2', '2023-04-16 19:21:59', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(36, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '2023-04-16 19:24:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'Rashik-16/3/2023-MV1-Sri Lanka-1', '2023-04-16 20:04:39', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(38, 'Rashik-16/3/2023-MV1-Sri Lanka-2', '2023-04-16 20:33:26', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(39, 'Prime-4/5/2023-MV-India-1', '2023-06-04 23:31:07', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(46, 'Rashik-25/5/2023-MV1-USA-1', '2023-06-25 17:12:57', 'CTG', 'DHK', '2023-06-30 00:00:00', '2023-07-01 00:00:00', '2023-07-01 00:00:00', '10', '2023-07-04 00:00:00', '2023-07-05 00:00:00', 'asdasdasd', '00:00:00', '12:31:23', '12:31:23', 12312, 123123);
 
 -- --------------------------------------------------------
 
@@ -260,10 +189,7 @@ CREATE TABLE `job_entry` (
 --
 
 INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_name`, `eta`, `commodity`, `mv_location`, `bl_quantity`, `stevedore_name`, `stevedore_contact_number`, `time_stamp`) VALUES
-(25, 'Anik-13/3/2023-Paharika-Srilanka', 'Anik', 'Paharika', '2023-04-13', 'Suger', 'Srilanka', 5000, 'Fahim', '01521533595', '2023-04-07 01:17:01'),
-(29, 'Rashik-16/3/2023-MV1-Sri Lanka', 'Rashik', 'MV1', '2023-04-16', 'Sugar', 'Sri Lanka', 10000, 'Anik', '01684545111', '2023-04-16 01:16:31'),
-(30, 'Prime-4/5/2023-MV-India', 'Prime', 'MV', '2023-06-04', 'Mobile', 'India', 15, 'Anik', '01684545111', '2023-06-04 23:27:39'),
-(31, 'asdasd123-5/5/2023-MV1-Bangladesh', 'asdasd123', 'MV1', '2023-06-05', 'asdasd', 'Bangladesh', 100, 'Anik', '01684545111', '2023-06-05 16:59:27');
+(40, 'Rashik-25/5/2023-MV1-USA', 'Rashik', 'MV1', '2023-06-25', 'Sugar', 'USA', 1500, 'Anik', '01684545111', '2023-06-25 23:12:23');
 
 --
 -- Triggers `job_entry`
@@ -303,16 +229,8 @@ CREATE TABLE `order_job_table` (
 --
 
 INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `order_number_done`, `sixty_percent_done`, `job_completed`) VALUES
-(37, 'Anik-13/3/2023-Paharika-Srilanka', 0, 0, 0, 0),
-(38, 'Anik-13/3/2023-Paharika-Srilanka', 1, 0, 0, 0),
-(39, 'Anik-13/3/2023-Paharika-Srilanka', 2, 0, 0, 0),
-(44, 'Anik-13/3/2023-Paharika-Srilanka', 3, 0, 0, 0),
-(46, 'Anik-13/3/2023-Paharika-Srilanka', 4, 0, 0, 0),
-(47, 'Anik-13/3/2023-Paharika-Srilanka', 5, 0, 0, 0),
-(61, 'Rashik-16/3/2023-MV1-Sri Lanka', 1, 0, 0, 0),
-(62, 'Rashik-16/3/2023-MV1-Sri Lanka', 2, 0, 0, 0),
-(63, 'Prime-4/5/2023-MV-India', 0, 0, 0, 0),
-(65, 'asdasd123-5/5/2023-MV1-Bangladesh', 0, 0, 0, 0);
+(80, 'Rashik-25/5/2023-MV1-USA', 0, 0, 0, 0),
+(81, 'Rashik-25/5/2023-MV1-USA', 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -341,20 +259,8 @@ CREATE TABLE `payment` (
 --
 
 INSERT INTO `payment` (`id`, `order_job_number`, `payment_chq_no`, `payment_chq_amount`, `payment_chq_date`, `LV_name`, `LA_name`, `commodity`, `chq_issue_date`, `amount`, `part_pay`, `payment`, `balance`) VALUES
-(3, 'Prime-21/3/2023-Uddoyon-Srilanka-2', 222, 2222, '2023-04-29 00:00:00', 'Mayer Dua', 'Amar Dua', 'Suger', '2023-04-23T18:00:00.000Z', '200', '100', 'Part', '300'),
-(4, 'Anik-13/3/2023-Paharika-Srilanka-1', 111, 490, '2023-04-26 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '490', '100', 'Part', '4900'),
-(5, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-26T18:00:00.000Z', '100', '100', 'Part', '400'),
-(6, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-26T18:00:00.000Z', '100', '200', 'Part', '200'),
-(7, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456, 100, '2023-04-09 00:00:00', 'Mayer Dua 111', 'Amar Dua 2', 'Suger', '2023-04-25T18:00:00.000Z', '100', '200', 'Part', '300'),
-(8, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 10, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '10', '590', 'Part', '4410'),
-(9, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 400, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '400', '600', 'Part', '4400'),
-(10, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 500, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '500', '1000', 'Part', '4000'),
-(11, 'Anik-13/3/2023-Paharika-Srilanka-1', 123456, 500, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '500', '1500', 'Part', '3500'),
-(12, 'Anik-13/3/2023-Paharika-Srilanka-1', 321654, 1000, '2023-04-09 00:00:00', 'Mayer Dua', 'Amar Dua 1', 'Suger', '2023-04-13T18:00:00.000Z', '1000', '2000', 'Part', '3000'),
-(13, 'Anik-13/3/2023-Paharika-Srilanka-2', 123456789, 100, '2023-04-16 00:00:00', 'Amar Dua', 'Amar Dua 2', 'Suger', '2023-04-25T18:00:00.000Z', '100', '300', 'Part', '200'),
-(14, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 123456, 2000, '2023-04-16 00:00:00', 'Kalihati', 'KEL-BD', 'Sugar', '2023-04-15T18:00:00.000Z', '2000', '0', 'Part', '6000'),
-(15, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 321654, 1000, '2023-04-16 00:00:00', 'Kalihati', 'KEL-BD', 'Sugar', '2023-04-15T18:00:00.000Z', '1000', '2000', 'Part', '4000'),
-(16, 'Rashik-16/3/2023-MV1-Sri Lanka-1', 321654, 1000, '2023-04-16 00:00:00', 'Kalihati', 'KEL-BD', 'Sugar', '2023-04-15T18:00:00.000Z', '1000', '3000', 'Part', '3000');
+(17, 'Rashik-25/5/2023-MV1-USA-1', 123456, 2000, '2023-06-25 00:00:00', 'Amader Dua', 'KEL-BD', 'Sugar', '2023-06-24T18:00:00.000Z', '2000', '0', 'Part', '5000'),
+(18, 'Rashik-25/5/2023-MV1-USA-2', 123456789, 5000, '2023-06-25 00:00:00', 'LV-1', 'LA', 'Sugar', '2023-06-24T18:00:00.000Z', '5000', '0', 'Full', '5000');
 
 -- --------------------------------------------------------
 
@@ -386,15 +292,7 @@ CREATE TABLE `pre_defined_ship` (
 --
 
 INSERT INTO `pre_defined_ship` (`id`, `LV_name`, `capacity`, `master_reg_number`, `masters_name`, `masters_contact_number`, `masters_nid_image_attachment`, `leased`, `company_name`, `proprietors_name`, `office_address`, `ac_number`, `contact_details`, `lv_documents_attachement`, `status`, `staffs_info`) VALUES
-(10, 'Amar Dua', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, '0'),
-(11, 'Mayer Dua', NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0, '0'),
-(26, 'Amader Dua', '1000', '123456', 'Rafsan', '01684545111', 'Welcome Scan.jpg', 0, 'RBR', 'Anik & Co', '730/5/1, Block-C, Khilgaon, Dhaka', '9876543201', '01684545111', 'null', 0, '0'),
-(27, 'LV-1', '729', '123456', 'Rafsan', '01979867621', '1.jpg', 1, 'RBR', 'Anik & Co', 'asdasd', '9876543201', '01684545111', 'null', 1, '0'),
-(55, 'LV', '729', '123456', 'Rafsantbb', '01979867621', 'Welcome Scan.jpg', 0, '', '', 'MARQUIS ST, FIRE BRIGADE HEAD QUARTER, NEW MARKET ARE, DHARMATALA, TALTOLA', '', '', 'null', 0, '0'),
-(56, 'LV-3', '10000', '123456', 'Rafsantbb', '01684545111', '2.pdf', 0, '', '', '730/5/1, Block-C, Khilgaon, Dhaka', '', '', 'null', 0, '0'),
-(66, 'LV', '729', '123456', 'Rafsantbb', '01979867621', '1684889922902__Welcome Scan.jpg', 0, '', '', '', '', '', NULL, 0, ''),
-(67, 'Amader Dua 111', '65465', '654654', '65465465', '646464', '1685858475102__Welcome Scan.jpg', 1, 'sdfsd', 'sdfsdf', 'fdsfsdf sdfsd sf ', 'sdfsd dsfsd sd ', 'dsf sd sdf sd', '1685858475109__madhobi pouroshobha.pdf', 1, 'dfgdfg#asnmdb'),
-(68, 'asdf123', '123456', '123456', 'Rafsan', '01684545111', '1685899047080__Welcome Scan.jpg', 1, 'RBR', 'Anik & Co', '730/5/1, Block-C, Khilgaon, Dhaka', '9876543201', '01684545111', '1685899047089__jul22_elec.pdf', 0, 'Anik#123456,Anik1#1234567');
+(70, 'Amader Dua', '50', '123456', 'Rafsan', '01684545111', '1687712029992__Welcome Scan.jpg', 1, 'RBR', 'Anik & Co', '730/5/1, Block-C, Khilgaon, Dhaka', '9876543201', '01684545111', '1687712029999__madhobi pouroshobha.pdf', 1, 'Anik#123456,Anikk#1234567');
 
 -- --------------------------------------------------------
 
@@ -424,15 +322,33 @@ CREATE TABLE `record_entry` (
 --
 
 INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
-(29, 'Anik-13/3/2023-Paharika-Srilanka', '1', '2023-04-21', 123, 'Amar Dua 1', 'Mayer Dua', 'Chittagong', 'Dhaka', 100, 500, 'Anik', '01521533595', '2023-04-07'),
-(48, 'Rashik-16/3/2023-MV1-Sri Lanka', '1', '2023-04-16', 123456789, 'KEL-BD', 'Kalihati', 'Chittagong', 'Dhaka', 1000, 10000, 'Raf', '01684545111', '2023-04-16'),
-(49, 'Rashik-16/3/2023-MV1-Sri Lanka', '2', '2023-04-16', 123456789, 'KEL-BD', 'Amar Dua', 'Chittagong', 'Dhaka', 1000, 100000, 'Raf', '01684545111', '2023-04-16');
+(57, 'Rashik-25/5/2023-MV1-USA', '1', '2023-06-25', 123456, 'KEL-BD', 'Amader Dua', 'Chittagong', 'Dhaka', 500, 10000, 'Raf', '01684545111', '2023-06-25');
 
 --
 -- Triggers `record_entry`
 --
 DELIMITER $$
 CREATE TRIGGER `add_record_job` AFTER INSERT ON `record_entry` FOR EACH ROW INSERT INTO order_job_table (order_number, job_number) VALUES (new.order_number, new.job_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_from_chq_approval` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM chq_approval
+where order_job_number = CONCAT(old.order_number, '-', old.job_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_from_chq_due_list` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM chq_due_list 
+where order_job_number = CONCAT(old.order_number, '-', old.job_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_from_current_status` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM current_status 
+where order_job_number = CONCAT(old.order_number, '-', old.job_number)
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `delete_from_damarage` AFTER DELETE ON `record_entry` FOR EACH ROW DELETE FROM damarage_dispatch 
+where order_job_number = CONCAT(old.order_number, '-', old.job_number)
 $$
 DELIMITER ;
 DELIMITER $$
@@ -554,55 +470,55 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `chq_approval`
 --
 ALTER TABLE `chq_approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `chq_due_list`
 --
 ALTER TABLE `chq_due_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `current_status`
 --
 ALTER TABLE `current_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `damarage_dispatch`
 --
 ALTER TABLE `damarage_dispatch`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `pre_defined_ship`
 --
 ALTER TABLE `pre_defined_ship`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `users`
