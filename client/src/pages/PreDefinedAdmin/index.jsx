@@ -181,13 +181,21 @@ const App = () => {
 	//edit status
 	const [editFormData, setEditFormData] = useState({
 		LV_name: "",
-		date_from_charpotro: "",
-		commodity: "",
-		LA: "",
-		dest_from: "",
-		dest_to: "",
-		current_location: "",
-		remark: "",
+		capacity: "",
+		master_reg_number: "",
+		masters_name: "",
+		masters_contact_number: "",
+		masters_nid_image_attachment: "",
+		staff_name: "",
+		staff_nid_number: "",
+		leased: "",
+		company_name: "",
+		proprietors_name: "",
+		office_address: "",
+		ac_number: "",
+		contact_details: "",
+		lv_documents_attachement: "",
+		status: "",
 	});
 
 	//modified id status
@@ -315,27 +323,27 @@ const App = () => {
 		const editedStatus = {
 			id: editStatusId, //initial value null
 			LV_name: editFormData.LV_name,
-			date_from_charpotro: editFormData.date_from_charpotro,
-			commodity: editFormData.commodity,
-			LA: editFormData.LA,
-			dest_from: editFormData.dest_from,
-			dest_to: editFormData.dest_to,
-			current_location: editFormData.current_location,
-			remark: editFormData.remark,
+			capacity: editFormData.capacity,
+			master_reg_number: editFormData.master_reg_number,
+			masters_name: editFormData.masters_name,
+			masters_contact_number: editFormData.masters_contact_number,
+			staffs_info: editFormData.staffs_info,
+			leased: editFormData.leased,
+			company_name: editFormData.company_name,
+			proprietors_name: editFormData.proprietors_name,
+			office_address: editFormData.office_address,
+			ac_number: editFormData.ac_number,
+			contact_details: editFormData.contact_details,
+			status: editFormData.status,
 		};
+
+		console.log(editedStatus);
 
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/updatepredefinedship`,
 			{
+				status: editedStatus.status,
 				id: editedStatus.id,
-				LV_name: editedStatus.LV_name,
-				date_from_charpotro: editedStatus.date_from_charpotro,
-				commodity: editedStatus.commodity,
-				LA: editedStatus.LA,
-				dest_from: editedStatus.dest_from,
-				dest_to: editedStatus.dest_to,
-				current_location: editedStatus.current_location,
-				remark: editedStatus.remark,
 			}
 		).then((response) => {
 			generatedToast(response);
@@ -357,14 +365,7 @@ const App = () => {
 
 		setEditStatusId(Status.id);
 		const formValues = {
-			LV_name: Status.LV_name,
-			date_from_charpotro: Status.date_from_charpotro,
-			commodity: Status.commodity,
-			LA: Status.LA,
-			dest_from: Status.dest_from,
-			dest_to: Status.dest_to,
-			current_location: Status.current_location,
-			remark: Status.remark,
+			status: Status.status,
 		};
 		setEditFormData(formValues);
 	};
