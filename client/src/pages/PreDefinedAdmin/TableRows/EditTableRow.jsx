@@ -20,7 +20,16 @@ const EditTableRow = ({
 					onChange={handleEditFormChange}
 				/>
 			</td>
-			<td>Generated</td>
+			<td>
+				<input
+					className={`${clsName} cursor-not-allowed border-red-600`}
+					type="text"
+					disabled
+					name="capacity"
+					value={editFormData.capacity}
+					onChange={handleEditFormChange}
+				/>
+			</td>
 			<td>
 				<input
 					className={`${clsName} cursor-not-allowed border-red-600`}

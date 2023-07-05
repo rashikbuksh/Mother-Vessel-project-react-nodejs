@@ -15,8 +15,8 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
 		ac_number,
 		contact_details,
 	} = status;
-	let staffs_info_cnt = staffs_info.split(",").length;
-	let status_show = status.status ? "Active" : "Inactive";
+	let staffs_info_cnt = staffs_info?.split(",").length;
+	let status_show = status?.status ? "Active" : "Inactive";
 	var clsName = "whitespace-nowrap py-4 text-sm text-gray-700 break-words";
 	return (
 		<>

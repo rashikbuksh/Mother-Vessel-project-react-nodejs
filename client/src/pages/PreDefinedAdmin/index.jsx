@@ -186,7 +186,7 @@ const App = () => {
 		masters_name: "",
 		masters_contact_number: "",
 		masters_nid_image_attachment: "",
-		staff_name: "",
+		staff_info: "",
 		staff_nid_number: "",
 		leased: "",
 		company_name: "",
@@ -327,7 +327,7 @@ const App = () => {
 			master_reg_number: editFormData.master_reg_number,
 			masters_name: editFormData.masters_name,
 			masters_contact_number: editFormData.masters_contact_number,
-			staffs_info: editFormData.staffs_info,
+			staffs_info: editFormData?.staffs_info,
 			leased: editFormData.leased,
 			company_name: editFormData.company_name,
 			proprietors_name: editFormData.proprietors_name,
@@ -365,6 +365,18 @@ const App = () => {
 
 		setEditStatusId(Status.id);
 		const formValues = {
+			LV_name: Status.LV_name,
+			capacity: Status.capacity,
+			master_reg_number: Status.master_reg_number,
+			masters_name: Status.masters_name,
+			masters_contact_number: Status.masters_contact_number,
+			staffs_info: Status.staffs_info,
+			leased: Status.leased,
+			company_name: Status.company_name,
+			proprietors_name: Status.proprietors_name,
+			office_address: Status.office_address,
+			ac_number: Status.ac_number,
+			contact_details: Status.contact_details,
 			status: Status.status,
 		};
 		setEditFormData(formValues);
