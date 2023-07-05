@@ -10,7 +10,12 @@ const ReadOnlyRow = ({ job, handleEditClick, handleDeleteClick }) => {
 	return (
 		<React.Fragment>
 			<td className={`whitespace-nowrap py-2 text-sm text-gray-700`}>
-				{job.order_number}
+				<a
+					href={`/record-entry/${job.order_number}`}
+					className="font-bold text-blue-500 hover:underline"
+				>
+					{job.order_number}
+				</a>
 			</td>
 			<td className={clsName}>
 				<span className="rounded-lg bg-green-200 bg-opacity-50 p-1.5 text-xs font-medium uppercase tracking-wider text-green-800">

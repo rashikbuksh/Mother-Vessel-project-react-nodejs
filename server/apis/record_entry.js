@@ -14,7 +14,7 @@ function addRecord(req, res, db) {
 		rate,
 		LV_master_name,
 		LV_master_contact_number,
-	} = req.body;
+	} = req?.body;
 	const create_record =
 		"INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	db.query(
@@ -44,7 +44,9 @@ function addRecord(req, res, db) {
 }
 
 function getRecord(req, res, db) {
-	const sqlSelect = `SELECT 
+	const order_number = req?.query.order_number;
+
+	var sqlSelect = `SELECT 
                             id,
                             order_number, 
                             job_number, 
@@ -69,7 +71,12 @@ function getRecord(req, res, db) {
 
                             ) as commodity 
                         from 
-                            record_entry`;
+                            record_entry 
+								`;
+
+	console.log(order_number);
+	if (order_number !== "undefined")
+		sqlSelect += `where order_number = '${order_number}'`;
 
 	db.query(sqlSelect, (err, result) => {
 		res.send(result);
@@ -91,7 +98,7 @@ function updateRecord(req, res, db) {
 		rate,
 		LV_master_name,
 		LV_master_contact_number,
-	} = req.body;
+	} = req?.body;
 
 	const sqlUpdate =
 		"UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
@@ -123,7 +130,7 @@ function updateRecord(req, res, db) {
 }
 
 function deleteRecord(req, res, db) {
-	const id = req.body.record_id;
+	const id = req?.body.record_id;
 	const sqlDelete = "DELETE from record_entry where id= ?";
 	db.query(sqlDelete, [id], (err, result) => {
 		// res.json(
@@ -136,7 +143,7 @@ function deleteRecord(req, res, db) {
 }
 
 function fetchJobNumber(req, res, db) {
-	var order_number = req.query.order_number;
+	var order_number = req?.query.order_number;
 	const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
 	db.query(sqlSelect, (err, result) => {
 		res.send(result);
@@ -144,7 +151,7 @@ function fetchJobNumber(req, res, db) {
 }
 
 function getCharpotroCpLaLvRate(req, res, db) {
-	var order_job_number = req.query.order_job_number;
+	var order_job_number = req?.query.order_job_number;
 	const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
 
 	db.query(sqlSelect, [order_job_number], (err, result) => {
@@ -153,7 +160,7 @@ function getCharpotroCpLaLvRate(req, res, db) {
 }
 
 function getMaxCapacity(req, res, db) {
-	var order_number = req.query.order_number;
+	var order_number = req?.query.order_number;
 	const sqlSelect = `
     select 
         (bl_quantity - (

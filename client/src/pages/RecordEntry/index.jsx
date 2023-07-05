@@ -1,5 +1,7 @@
 import Axios from "axios";
 import { Suspense, lazy, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
 import TableHead from "../../components/Table/TableHead";
 import EditableRow from "./Table/EditTableRow";
 import ReadOnlyRow from "./Table/ReadOnlyRow";
@@ -65,6 +67,8 @@ const AddRecord = lazy(() => import("./AddRecord"));
 const DeleteRecord = lazy(() => import("../../components/DeletePopup"));
 
 const App = () => {
+	const { jobOrderNumber } = useParams();
+
 	const [RecordList, setRecordList] = useState([]);
 	const [OrderNumber, setOrderNumber] = useState([]);
 	const [JobNumberMax, setJobNumberMax] = useState([]);
@@ -85,7 +89,7 @@ const App = () => {
 
 	useEffect(() => {
 		fetchData(
-			`${process.env.REACT_APP_API_URL}/management/getrecordentry`,
+			`${process.env.REACT_APP_API_URL}/management/getrecordentry?order_number=${jobOrderNumber}`,
 			setRecordList,
 			setLoading,
 			setError
@@ -237,11 +241,6 @@ const App = () => {
 			LV_master_name: editFormData.LV_master_name,
 			LV_master_contact_number: editFormData.LV_master_contact_number,
 		};
-
-		console.log(
-			"editFormData.date_from_charpotro: " +
-				editFormData.date_from_charpotro
-		);
 
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/updaterecordentry`,

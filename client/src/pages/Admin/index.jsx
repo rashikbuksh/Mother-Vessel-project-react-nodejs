@@ -175,7 +175,7 @@ const App = () => {
 		const newContact = {
 			name: addFormData.name,
 			username: addFormData.username,
-			password: addFormData.password,
+			password: sha256(addFormData.password),
 			position: addFormData.position,
 			department: addFormData.department,
 		};

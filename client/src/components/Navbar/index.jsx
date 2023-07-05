@@ -70,7 +70,7 @@ function Nav() {
 		return nav.link.includes(window.location.pathname);
 	});
 
-	useTitle(`${pageName[0]?.name} | KEL-BD`);
+	useTitle(`${pageName[0]?.name || ""} | KEL-BD`);
 
 	return (
 		<div

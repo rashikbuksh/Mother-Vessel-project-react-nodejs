@@ -15,10 +15,11 @@ function addPredefined(req, res, db) {
 		ac_number,
 		contact_details,
 		status,
-	} = req.body;
+	} = req?.body;
 
-	const masters_nid_image_attachment_name = req.body.fileName;
-	const lv_documents_attachement = req.body.lv_documents_attachementFileName;
+	const masters_nid_image_attachment_name = req?.body.fileName;
+	const lv_documents_attachement = req?.body.lv_documents_attachementFileName;
+
 
 	if (masters_nid_image_attachment_name != null) {
 		const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, master_reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staffs_info, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -54,7 +55,7 @@ function addPredefined(req, res, db) {
 }
 
 function getPredefined(req, res, db) {
-	const shipName = req.query.shipName;
+	const shipName = req?.query.shipName;
 
 	if (shipName) {
 		const sqlSelect = "SELECT * from pre_defined_ship where LV_name = ?";
