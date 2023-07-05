@@ -1,4 +1,4 @@
-import { BiTrash } from "react-icons/bi";
+import { BiEdit, BiTrash } from "react-icons/bi";
 
 const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
 	let {
@@ -15,7 +15,8 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
 		ac_number,
 		contact_details,
 	} = status;
-	let staffs_info_cnt = staffs_info.split(",").length;
+	let staffs_info_cnt = staffs_info?.split(",").length;
+	let status_show = status?.status ? "Active" : "Inactive";
 	var clsName = "whitespace-nowrap py-4 text-sm text-gray-700 break-words";
 	return (
 		<>
@@ -38,8 +39,15 @@ const ReadOnlyRow = ({ status, handleEditClick, handleDeleteClick }) => {
 			<td className={`${clsName} break-all`}>{office_address}</td>
 			<td className={clsName}>{ac_number}</td>
 			<td className={clsName}>{contact_details}</td>
-			<td className={clsName}>{status.status}</td>
+			<td className={clsName}>{status_show}</td>
 			<td className={clsName}>
+				<button
+					type="button"
+					className="mr-2 rounded-md bg-blue-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-blue-400"
+					onClick={(event) => handleEditClick(event, status)}
+				>
+					<BiEdit className="h-5 w-5 text-black" />
+				</button>
 				<button
 					type="button"
 					className="rounded-md bg-red-300 p-2 font-semibold text-gray-700 transition duration-500 ease-in-out hover:bg-red-400"

@@ -183,6 +183,7 @@ function getLVname(req, res, db) {
     select 
        DISTINCT LV_name as value
     from pre_defined_ship
+    WHERE status = 1
     ORDER BY LV_name ASC
     `;
 	db.query(sqlSelect, (err, result) => {

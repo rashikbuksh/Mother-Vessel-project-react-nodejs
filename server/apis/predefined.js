@@ -20,6 +20,7 @@ function addPredefined(req, res, db) {
 	const masters_nid_image_attachment_name = req?.body.fileName;
 	const lv_documents_attachement = req?.body.lv_documents_attachementFileName;
 
+
 	if (masters_nid_image_attachment_name != null) {
 		const sqlCreate = `INSERT INTO pre_defined_ship (LV_name, capacity, master_reg_number, masters_name, masters_contact_number, masters_nid_image_attachment, staffs_info, leased, company_name, proprietors_name, office_address, ac_number, contact_details, lv_documents_attachement, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 		db.query(
@@ -71,42 +72,19 @@ function getPredefined(req, res, db) {
 }
 
 function updatePredefined(req, res, db) {
-	const {
-		id,
-		date_from_charpotro,
-		commodity,
-		LA,
-		dest_from,
-		dest_to,
-		current_location,
-		remark,
-	} = req?.body;
+	const { id, status } = req.body;
 
-	const sqlUpdate =
-		"UPDATE pre_defined_ship SET date_from_charpotro=?, commodity=?, LA=?, dest_from=?, dest_to=?, current_location=?, remark=?  where id= ?";
-	db.query(
-		sqlUpdate,
-		[
-			date_from_charpotro,
-			commodity,
-			LA,
-			dest_from,
-			dest_to,
-			current_location,
-			remark,
-			id,
-		],
-		(err, result) => {
-			res.json(
-				err
-					? ToastRes("error", "updating ship")
-					: ToastRes("update", `${id}`)
-			);
-		}
-	);
+	const sqlUpdate = "UPDATE pre_defined_ship SET status=? where id= ?";
+	db.query(sqlUpdate, [status, id], (err, result) => {
+		res.json(
+			err
+				? ToastRes("error", "updating ship")
+				: ToastRes("update", `${id}`)
+		);
+	});
 }
 function deletePredefined(req, res, db) {
-	const id = req?.body.status_id;
+	const id = req.body.status_id;
 	const sqlDelete = "DELETE from pre_defined_ship where id= ?";
 	db.query(sqlDelete, [id], (err, result) => {
 		res.json(
