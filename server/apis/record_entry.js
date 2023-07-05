@@ -74,7 +74,6 @@ function getRecord(req, res, db) {
                             record_entry 
 								`;
 
-	console.log(order_number);
 	if (order_number !== "undefined")
 		sqlSelect += `where order_number = '${order_number}'`;
 

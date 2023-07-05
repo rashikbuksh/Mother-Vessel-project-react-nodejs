@@ -114,7 +114,6 @@ const App = () => {
 
 	// dynamic add staff
 	const [addStaff, setAddStaff] = useState(["#"]);
-	//console.log(addStaff);
 
 	// leased ship
 	const [leased, setLeased] = useState(false);
@@ -236,8 +235,6 @@ const App = () => {
 	const saveFile = (e) => {
 		setFile(e.target.files[0]);
 		setFileName(e.target.files[0].name);
-
-		console.log(e.target.files[0].name);
 	};
 
 	// Saving lv_documents_attachementFile
@@ -260,7 +257,6 @@ const App = () => {
 				}
 			}
 		}
-		console.log(staffVAl);
 
 		const newStatus = {
 			LV_name: addFormData.LV_name,
@@ -298,7 +294,6 @@ const App = () => {
 				closeModal();
 			});
 
-		console.log(formData);
 		await Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/predefinedship`,
 			{
@@ -336,8 +331,6 @@ const App = () => {
 			contact_details: editFormData.contact_details,
 			status: editFormData.status,
 		};
-
-		console.log(editedStatus);
 
 		Axios.post(
 			`${process.env.REACT_APP_API_URL}/management/updatepredefinedship`,

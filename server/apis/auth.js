@@ -69,13 +69,13 @@ function resetPassword(req, res, db) {
 }
 
 function register(req, res, db) {
-	const { name, username, password, position, department } = req?.body;
+	const { name, username, password, position } = req?.body;
 
 	const create_user =
-		"INSERT INTO users (name, username, password, position, department, enabled) VALUES (?,?,?,?,?,0)";
+		"INSERT INTO users (name, username, password, position, enabled) VALUES (?,?,?,?,?,0)";
 	db.query(
 		create_user,
-		[name, username, password, position, department],
+		[name, username, password, position],
 		(err, result) => {
 			res.json(
 				err
@@ -89,20 +89,16 @@ function register(req, res, db) {
 function updateInfo(req, res, db) {
 	const id = req?.body.user_id;
 
-	const { name, username, position, department } = req?.body;
+	const { name, username, position } = req?.body;
 	const sqlUpdate =
-		"UPDATE users SET name=?, username=?, position=?, department=? where id= ?";
-	db.query(
-		sqlUpdate,
-		[name, username, position, department, id],
-		(err, result) => {
-			res.json(
-				err
-					? ToastRes("error", "updating user")
-					: ToastRes("update", `User: ${username}`)
-			);
-		}
-	);
+		"UPDATE users SET name=?, username=?, position=? where id= ?";
+	db.query(sqlUpdate, [name, username, position, id], (err, result) => {
+		res.json(
+			err
+				? ToastRes("error", "updating user")
+				: ToastRes("update", `User: ${username}`)
+		);
+	});
 }
 
 function deleteUser(req, res, db) {

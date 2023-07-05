@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import {
@@ -14,9 +14,6 @@ import Loader from "./utils/Loader";
 const NotFound = lazy(() => import("./layout/NotFound"));
 const NoAccess = lazy(() => import("./utils/NoAccess"));
 
-const Home = lazy(() => import("./pages/Home/Shared/Layout"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Admin = lazy(() => import("./pages/Admin"));
 // Login
 const Login = lazy(() => import("./pages/Login"));
 
@@ -25,7 +22,6 @@ const AdminPanel = lazy(() => import("./pages/Admin"));
 const JobEntry = lazy(() => import("./pages/JobEntry"));
 const RecordEntry = lazy(() => import("./pages/RecordEntry"));
 const CurrentStatus = lazy(() => import("./pages/CurrentStatus"));
-const PreDefinedShip = lazy(() => import("./pages/PreDefinedShip"));
 const PreDefinedAdmin = lazy(() => import("./pages/PreDefinedAdmin"));
 const DamarageCalculation = lazy(() => import("./pages/DamarageCalculation"));
 const ChqDueList = lazy(() => import("./pages/ChqDueList"));
@@ -34,10 +30,8 @@ const Payment = lazy(() => import("./pages/Payment"));
 const Profile = lazy(() => import("./pages/PreDefinedAdmin/Profile"));
 
 // table
-const Table = lazy(() => import("./components/Tables"));
 const DeletePopup = lazy(() => import("./components/DeletePopup"));
 const Navbar = lazy(() => import("./components/Navbar"));
-const PingLoader = lazy(() => import("./utils/PingLoader"));
 
 const PublicRoutesList = [
 	{
@@ -68,6 +62,10 @@ const OperationRoutesList = [
 		component: RecordEntry,
 	},
 	{
+		link: "/record-entry/:jobOrderNumber",
+		component: RecordEntry,
+	},
+	{
 		link: "/current-status",
 		component: CurrentStatus,
 	},
@@ -90,6 +88,10 @@ const AccountsRoutesList = [
 		link: "/job-entry",
 		component: JobEntry,
 	},
+	{
+		link: "/own-ship/:shipName",
+		component: Profile,
+	},
 ];
 
 const AccountsManagerRoutesList = [
@@ -98,12 +100,16 @@ const AccountsManagerRoutesList = [
 		component: ChqDueList,
 	},
 	{
+		link: "/payment",
+		component: Payment,
+	},
+	{
 		link: "/chq-approval",
 		component: ChqApproval,
 	},
 	{
-		link: "/payment",
-		component: Payment,
+		link: "/own-ship/:shipName",
+		component: Profile,
 	},
 ];
 
@@ -172,19 +178,6 @@ function App() {
 						}
 					/>
 				))}
-				{AccountsRoutesList.map((route, index) => (
-					<Route
-						key={index}
-						path={route.link}
-						element={
-							<AccountsRoutes>
-								<Suspense fallback={<Loader />}>
-									<route.component />
-								</Suspense>
-							</AccountsRoutes>
-						}
-					/>
-				))}
 				{AccountsManagerRoutesList.map((route, index) => (
 					<Route
 						key={index}
@@ -198,6 +191,20 @@ function App() {
 						}
 					/>
 				))}
+				{AccountsRoutesList.map((route, index) => (
+					<Route
+						key={index}
+						path={route.link}
+						element={
+							<AccountsRoutes>
+								<Suspense fallback={<Loader />}>
+									<route.component />
+								</Suspense>
+							</AccountsRoutes>
+						}
+					/>
+				))}
+
 				{AdminRoutesList.map((route, index) => (
 					<Route
 						key={index}

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2023 at 07:20 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Jul 05, 2023 at 03:52 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -47,7 +47,8 @@ CREATE TABLE `chq_approval` (
 --
 
 INSERT INTO `chq_approval` (`id`, `order_job_number`, `sixty_percent_payment_amount`, `forty_percent_payment_amount`, `damarage`, `second_trip`, `third_trip`, `direct_trip`, `sixty_percent_payment_chq_number`, `sixty_percent_payment_chq_date`, `forty_percent_payment_chq_number`, `forty_percent_payment_chq_date`) VALUES
-(42, 'Rashik-25/5/2023-MV1-USA-1', '5000', NULL, NULL, NULL, NULL, NULL, '123456', '2023-06-25', NULL, NULL);
+(46, 'Hasib-13-6-2023-Uddoyon-India-1', '5000', NULL, NULL, NULL, NULL, NULL, '123456', '2023-02-26', NULL, NULL),
+(47, 'Anik-26-6-2023-Paharika-USA-1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Triggers `chq_approval`
@@ -107,7 +108,7 @@ CREATE TABLE `chq_due_list` (
 --
 
 INSERT INTO `chq_due_list` (`id`, `order_job_number`, `part_pay`, `payment`, `mode`, `amount`) VALUES
-(21, 'Rashik-25/5/2023-MV1-USA-1', 2000, NULL, '60', NULL);
+(23, 'Hasib-13-6-2023-Uddoyon-India-1', NULL, NULL, '60', NULL);
 
 -- --------------------------------------------------------
 
@@ -129,7 +130,8 @@ CREATE TABLE `current_status` (
 --
 
 INSERT INTO `current_status` (`id`, `order_job_number`, `current_location`, `remark`, `time_updated`, `trip_completed`) VALUES
-(39, 'Rashik-25/5/2023-MV1-USA-1', 'Dhaka', 'gg', '2023-06-25 17:14:21', 1);
+(43, 'Hasib-13-6-2023-Uddoyon-India-1', 'Pirojpur', NULL, '2023-07-05 07:57:19', 1),
+(44, 'Anik-26-6-2023-Paharika-USA-1', NULL, NULL, '2023-07-05 13:48:24', 0);
 
 -- --------------------------------------------------------
 
@@ -162,7 +164,8 @@ CREATE TABLE `damarage_dispatch` (
 --
 
 INSERT INTO `damarage_dispatch` (`id`, `order_job_number`, `date`, `loading_location`, `unloading_location`, `loading_start_time_stamp`, `loading_completion_time_stamp`, `sailing_time_stamp`, `duration_of_travel_time`, `unloading_start_time_stamp`, `unloading_completion_time_stamp`, `others`, `total_elapsed_time`, `voyage_time`, `free_time`, `total_despatch`, `daily_despatch`) VALUES
-(46, 'Rashik-25/5/2023-MV1-USA-1', '2023-06-25 17:12:57', 'CTG', 'DHK', '2023-06-30 00:00:00', '2023-07-01 00:00:00', '2023-07-01 00:00:00', '10', '2023-07-04 00:00:00', '2023-07-05 00:00:00', 'asdasdasd', '00:00:00', '12:31:23', '12:31:23', 12312, 123123);
+(50, 'Hasib-13-6-2023-Uddoyon-India-1', '2023-07-05 13:47:49', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 'Anik-26-6-2023-Paharika-USA-1', '2023-07-05 13:48:24', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -189,7 +192,8 @@ CREATE TABLE `job_entry` (
 --
 
 INSERT INTO `job_entry` (`id`, `order_number`, `importer_name`, `mother_vessel_name`, `eta`, `commodity`, `mv_location`, `bl_quantity`, `stevedore_name`, `stevedore_contact_number`, `time_stamp`) VALUES
-(40, 'Rashik-25/5/2023-MV1-USA', 'Rashik', 'MV1', '2023-06-25', 'Sugar', 'USA', 1500, 'Anik', '01684545111', '2023-06-25 23:12:23');
+(42, 'Hasib-13-6-2023-Uddoyon-India', 'Hasib', 'Uddoyon', '2023-07-13', 'Water', 'India', 1550, 'Fahim', '01521533595', '2023-07-05 13:43:13'),
+(43, 'Anik-26-6-2023-Paharika-USA', 'Anik', 'Paharika', '2023-07-26', 'Milk', 'USA', 15522, 'Fahim', '01856212168', '2023-07-05 13:47:12');
 
 --
 -- Triggers `job_entry`
@@ -229,8 +233,10 @@ CREATE TABLE `order_job_table` (
 --
 
 INSERT INTO `order_job_table` (`order_job_id`, `order_number`, `job_number`, `order_number_done`, `sixty_percent_done`, `job_completed`) VALUES
-(80, 'Rashik-25/5/2023-MV1-USA', 0, 0, 0, 0),
-(81, 'Rashik-25/5/2023-MV1-USA', 1, 0, 0, 0);
+(86, 'Hasib-13-6-2023-Uddoyon-India', 0, 0, 0, 0),
+(87, 'Anik-26-6-2023-Paharika-USA', 0, 0, 0, 0),
+(88, 'Hasib-13-6-2023-Uddoyon-India', 1, 0, 0, 0),
+(89, 'Anik-26-6-2023-Paharika-USA', 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -253,14 +259,6 @@ CREATE TABLE `payment` (
   `payment` varchar(255) NOT NULL,
   `balance` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `payment`
---
-
-INSERT INTO `payment` (`id`, `order_job_number`, `payment_chq_no`, `payment_chq_amount`, `payment_chq_date`, `LV_name`, `LA_name`, `commodity`, `chq_issue_date`, `amount`, `part_pay`, `payment`, `balance`) VALUES
-(17, 'Rashik-25/5/2023-MV1-USA-1', 123456, 2000, '2023-06-25 00:00:00', 'Amader Dua', 'KEL-BD', 'Sugar', '2023-06-24T18:00:00.000Z', '2000', '0', 'Part', '5000'),
-(18, 'Rashik-25/5/2023-MV1-USA-2', 123456789, 5000, '2023-06-25 00:00:00', 'LV-1', 'LA', 'Sugar', '2023-06-24T18:00:00.000Z', '5000', '0', 'Full', '5000');
 
 -- --------------------------------------------------------
 
@@ -322,7 +320,8 @@ CREATE TABLE `record_entry` (
 --
 
 INSERT INTO `record_entry` (`id`, `order_number`, `job_number`, `date_from_charpotro`, `cp_number_from_charpotro`, `LA_name`, `LV_name`, `dest_from`, `dest_to`, `capacity`, `rate`, `LV_master_name`, `LV_master_contact_number`, `date_created`) VALUES
-(57, 'Rashik-25/5/2023-MV1-USA', '1', '2023-06-25', 123456, 'KEL-BD', 'Amader Dua', 'Chittagong', 'Dhaka', 500, 10000, 'Raf', '01684545111', '2023-06-25');
+(61, 'Hasib-13-6-2023-Uddoyon-India', '1', '2023-07-14', 13456, 'KEL-BD', 'Amader Dua', 'Kapashia', 'Dhaka', 155, 200, 'Rashik', '01856212168', '2023-07-05'),
+(62, 'Anik-26-6-2023-Paharika-USA', '1', '2023-07-20', 56475, 'KEL-BD', 'Amader Dua', 'Khulna', 'DHK', 400, 52, 'Fahim', '01521533595', '2023-07-05');
 
 --
 -- Triggers `record_entry`
@@ -470,37 +469,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `chq_approval`
 --
 ALTER TABLE `chq_approval`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `chq_due_list`
 --
 ALTER TABLE `chq_due_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `current_status`
 --
 ALTER TABLE `current_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `damarage_dispatch`
 --
 ALTER TABLE `damarage_dispatch`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `job_entry`
 --
 ALTER TABLE `job_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `order_job_table`
 --
 ALTER TABLE `order_job_table`
-  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `order_job_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `payment`
@@ -518,7 +517,7 @@ ALTER TABLE `pre_defined_ship`
 -- AUTO_INCREMENT for table `record_entry`
 --
 ALTER TABLE `record_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `users`

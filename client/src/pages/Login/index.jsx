@@ -10,10 +10,10 @@ import { warning, generatedToast } from "./../../components/Toast/index";
 import { DefineRole } from "../../hooks/routes";
 
 const redirect = {
-    admin: "/admin-panel",
-    operations: "/record-entry",
-    accounts: "/job-entry",
-    "accounts-manager": "/chq-duelist",
+	admin: "/admin-panel",
+	operations: "/record-entry",
+	accounts: "/job-entry",
+	"accounts-manager": "/chq-due-list",
 };
 
 const generateToken = (length) => {

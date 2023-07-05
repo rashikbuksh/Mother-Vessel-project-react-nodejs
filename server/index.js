@@ -117,7 +117,12 @@ const db = mysql.createPool({
 	database: process.env.DB_NAME,
 });
 
-app.use(cors());
+const corsOrigin = {
+	origin: "http://localhost:3000", //or whatever port your frontend is using
+	credentials: true,
+	optionSuccessStatus: 200,
+};
+app.use(cors(corsOrigin));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extender: true }));
 app.use("/uploads", express.static("uploads"));
@@ -380,7 +385,6 @@ app.get("/management/getLV", (req, res) => {
 
 // Get predefined ships image
 app.post("/management/upload", upload.array("uploadFiles"), (req, res) => {
-	console.log(req?.files);
 	res.send("File uploaded successfully");
 });
 
