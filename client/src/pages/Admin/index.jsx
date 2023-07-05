@@ -177,7 +177,7 @@ const App = () => {
 			username: addFormData.username,
 			password: sha256(addFormData.password),
 			position: addFormData.position,
-			department: addFormData.department,
+			// department: addFormData.department,
 		};
 
 		// api call
@@ -237,7 +237,7 @@ const App = () => {
 			name: editFormData.name,
 			username: editFormData.username,
 			position: editFormData.position,
-			department: editFormData.department,
+			// department: editFormData.department,
 		};
 
 		Axios.post(

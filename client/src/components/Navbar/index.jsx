@@ -43,7 +43,7 @@ const NavLinks = [
 	},
 	{
 		id: 8,
-		link: "/chq-duelist",
+		link: "/chq-due-list",
 		name: "Chq Due List",
 		role: ["admin", "accounts-manager"],
 	},
@@ -51,7 +51,7 @@ const NavLinks = [
 		id: 7,
 		link: "/own-ship",
 		name: "Add LV",
-		role: ["admin"],
+		role: ["admin", "operations"],
 	},
 	{
 		id: 10,

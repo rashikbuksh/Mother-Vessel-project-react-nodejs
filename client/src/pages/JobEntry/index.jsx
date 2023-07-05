@@ -99,8 +99,6 @@ const App = () => {
 		);
 	}, []);
 
-	console.log(JobList);
-
 	// search filter for all fields
 	const [query, setQuery] = useState("");
 
