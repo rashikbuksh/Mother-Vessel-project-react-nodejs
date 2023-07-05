@@ -99,6 +99,8 @@ const App = () => {
 		);
 	}, []);
 
+	console.log(JobList);
+
 	// search filter for all fields
 	const [query, setQuery] = useState("");
 
@@ -199,9 +201,9 @@ const App = () => {
 			newJob.importer_name +
 			"-" +
 			current.getDate() +
-			"/" +
+			"-" +
 			current.getMonth() +
-			"/" +
+			"-" +
 			current.getFullYear() +
 			"-" +
 			newJob.mother_vessel_name +

@@ -1,71 +1,71 @@
 const { ToastRes } = require("./util");
 
 function addDamarage(req, res, db) {
-    const {
-        order_number,
-        job_number,
-        date,
-        cp_number,
-        date_from_charpotro,
-        commodity,
-        volume,
-        LV_name,
-        MV_name,
-        loading_location,
-        unloading_location,
-        loading_start_time_stamp,
-        loading_completion_time_stamp,
-        sailing_time_stamp,
-        duration_of_travel_time,
-        unloading_start_time_stamp,
-        unloading_completion_time_stamp,
-        others,
-        total_elapsed_time,
-        voyage_time,
-        free_time,
-        total_despatch,
-        daily_despatch,
-    } = req.body;
-    const create_damarage =
-        "INSERT INTO damarage_dispatch(order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    db.query(
-        create_damarage,
-        [
-            order_number,
-            job_number,
-            date,
-            cp_number,
-            date_from_charpotro,
-            commodity,
-            volume,
-            LV_name,
-            MV_name,
-            loading_location,
-            unloading_location,
-            loading_start_time_stamp,
-            loading_completion_time_stamp,
-            sailing_time_stamp,
-            duration_of_travel_time,
-            unloading_start_time_stamp,
-            unloading_completion_time_stamp,
-            others,
-            total_elapsed_time,
-            voyage_time,
-            free_time,
-            total_despatch,
-            daily_despatch,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "creating job")
-                    : ToastRes("create", `${order_number}`)
-            );
-        }
-    );
+	const {
+		order_number,
+		job_number,
+		date,
+		cp_number,
+		date_from_charpotro,
+		commodity,
+		volume,
+		LV_name,
+		MV_name,
+		loading_location,
+		unloading_location,
+		loading_start_time_stamp,
+		loading_completion_time_stamp,
+		sailing_time_stamp,
+		duration_of_travel_time,
+		unloading_start_time_stamp,
+		unloading_completion_time_stamp,
+		others,
+		total_elapsed_time,
+		voyage_time,
+		free_time,
+		total_despatch,
+		daily_despatch,
+	} = req?.body;
+	const create_damarage =
+		"INSERT INTO damarage_dispatch(order_number, job_number, date, cp_number, date_from_charpotro, commodity, volume, LV_name, MV_name, loading_location, unloading_location, loading_start_time_stamp, loading_completion_time_stamp, sailing_time_stamp, duration_of_travel_time, unloading_start_time_stamp, unloading_completion_time_stamp, others, total_elapsed_time, voyage_time, free_time, total_despatch, daily_despatch) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	db.query(
+		create_damarage,
+		[
+			order_number,
+			job_number,
+			date,
+			cp_number,
+			date_from_charpotro,
+			commodity,
+			volume,
+			LV_name,
+			MV_name,
+			loading_location,
+			unloading_location,
+			loading_start_time_stamp,
+			loading_completion_time_stamp,
+			sailing_time_stamp,
+			duration_of_travel_time,
+			unloading_start_time_stamp,
+			unloading_completion_time_stamp,
+			others,
+			total_elapsed_time,
+			voyage_time,
+			free_time,
+			total_despatch,
+			daily_despatch,
+		],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "creating job")
+					: ToastRes("create", `${order_number}`)
+			);
+		}
+	);
 }
 function getDamarage(req, res, db) {
-    const sqlSelect = `SELECT
+	const sqlSelect = `SELECT
         d.id as id,
         d.order_job_number as order_job_number,
         d.date as date, 
@@ -94,74 +94,74 @@ function getDamarage(req, res, db) {
             on d.order_job_number = concat(r.order_number, '-', r.job_number)
         WHERE d.order_job_number in (SELECT order_job_number From current_status where trip_completed = 1 )
     `;
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 function updateDamarage(req, res, db) {
-    const {
-        id,
-        order_job_number,
-        date,
-        loading_location,
-        unloading_location,
-        loading_start_time_stamp,
-        loading_completion_time_stamp,
-        sailing_time_stamp,
-        duration_of_travel_time,
-        unloading_start_time_stamp,
-        unloading_completion_time_stamp,
-        others,
-        total_elapsed_time,
-        voyage_time,
-        free_time,
-        total_despatch,
-        daily_despatch,
-    } = req.body;
-    const sqlUpdate =
-        "UPDATE damarage_dispatch SET date=?, loading_location=?, unloading_location=?, loading_start_time_stamp=?, loading_completion_time_stamp=?, sailing_time_stamp=?, duration_of_travel_time=?, unloading_start_time_stamp=?, unloading_completion_time_stamp=?, others=?, total_elapsed_time=?, voyage_time=?, free_time=?, total_despatch=?, daily_despatch=? WHERE id=?";
-    db.query(
-        sqlUpdate,
-        [
-            date,
-            loading_location,
-            unloading_location,
-            loading_start_time_stamp,
-            loading_completion_time_stamp,
-            sailing_time_stamp,
-            duration_of_travel_time,
-            unloading_start_time_stamp,
-            unloading_completion_time_stamp,
-            others,
-            total_elapsed_time,
-            voyage_time,
-            free_time,
-            total_despatch,
-            daily_despatch,
-            id,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "updating damarage")
-                    : ToastRes("update", `${order_job_number}`)
-            );
-        }
-    );
+	const {
+		id,
+		order_job_number,
+		date,
+		loading_location,
+		unloading_location,
+		loading_start_time_stamp,
+		loading_completion_time_stamp,
+		sailing_time_stamp,
+		duration_of_travel_time,
+		unloading_start_time_stamp,
+		unloading_completion_time_stamp,
+		others,
+		total_elapsed_time,
+		voyage_time,
+		free_time,
+		total_despatch,
+		daily_despatch,
+	} = req?.body;
+	const sqlUpdate =
+		"UPDATE damarage_dispatch SET date=?, loading_location=?, unloading_location=?, loading_start_time_stamp=?, loading_completion_time_stamp=?, sailing_time_stamp=?, duration_of_travel_time=?, unloading_start_time_stamp=?, unloading_completion_time_stamp=?, others=?, total_elapsed_time=?, voyage_time=?, free_time=?, total_despatch=?, daily_despatch=? WHERE id=?";
+	db.query(
+		sqlUpdate,
+		[
+			date,
+			loading_location,
+			unloading_location,
+			loading_start_time_stamp,
+			loading_completion_time_stamp,
+			sailing_time_stamp,
+			duration_of_travel_time,
+			unloading_start_time_stamp,
+			unloading_completion_time_stamp,
+			others,
+			total_elapsed_time,
+			voyage_time,
+			free_time,
+			total_despatch,
+			daily_despatch,
+			id,
+		],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "updating damarage")
+					: ToastRes("update", `${order_job_number}`)
+			);
+		}
+	);
 }
 function deleteDamarage(req, res, db) {
-    const id = req.body.Dam_id;
-    const order_job_number = req.body.order_job_number;
+	const id = req?.body.Dam_id;
+	const order_job_number = req?.body.order_job_number;
 
-    const sqlDelete = "DELETE from damarage_dispatch where id= ?";
+	const sqlDelete = "DELETE from damarage_dispatch where id= ?";
 
-    db.query(sqlDelete, [id], (err, result) => {
-        res.json(
-            err
-                ? ToastRes("error", "deleting job")
-                : ToastRes("delete", `${order_job_number}`)
-        );
-    });
+	db.query(sqlDelete, [id], (err, result) => {
+		res.json(
+			err
+				? ToastRes("error", "deleting job")
+				: ToastRes("delete", `${order_job_number}`)
+		);
+	});
 }
 
 module.exports.addDamarage = addDamarage;

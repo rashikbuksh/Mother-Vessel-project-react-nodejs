@@ -117,6 +117,10 @@ const AdminRoutesList = [
 		component: RecordEntry,
 	},
 	{
+		link: "/record-entry/:jobOrderNumber",
+		component: RecordEntry,
+	},
+	{
 		link: "/current-status",
 		component: CurrentStatus,
 	},

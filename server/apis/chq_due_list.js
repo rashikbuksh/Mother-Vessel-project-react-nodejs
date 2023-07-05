@@ -1,21 +1,21 @@
 const { ToastRes } = require("./util");
 
 function addChqDue(req, res, db) {
-    const {
-        order_job_number,
-        LA_name,
-        LV_name,
-        commodity,
-        mode,
-        chq_amount,
-        part_pay,
-        balance,
-        chq_issue_date,
-        init_amount,
-        payment,
-        final_amount,
-    } = req.body;
-    const create_chq = `INSERT INTO 
+	const {
+		order_job_number,
+		LA_name,
+		LV_name,
+		commodity,
+		mode,
+		chq_amount,
+		part_pay,
+		balance,
+		chq_issue_date,
+		init_amount,
+		payment,
+		final_amount,
+	} = req?.body;
+	const create_chq = `INSERT INTO 
         chq_due_list 
         (
             order_number, 
@@ -32,36 +32,34 @@ function addChqDue(req, res, db) {
             final_amount
         ) 
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
-    db.query(
-        create_chq,
-        [
-            order_job_number,
-            LA_name,
-            LV_name,
-            commodity,
-            mode,
-            chq_amount,
-            part_pay,
-            balance,
-            chq_issue_date,
-            init_amount,
-            payment,
-            final_amount,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "creating chq due list")
-                    : ToastRes("create", `${order_job_number}`)
-            );
-        }
-    );
+	db.query(
+		create_chq,
+		[
+			order_job_number,
+			LA_name,
+			LV_name,
+			commodity,
+			mode,
+			chq_amount,
+			part_pay,
+			balance,
+			chq_issue_date,
+			init_amount,
+			payment,
+			final_amount,
+		],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "creating chq due list")
+					: ToastRes("create", `${order_job_number}`)
+			);
+		}
+	);
 }
 
 function getChqDue(req, res, db) {
-
-    const sqlSelect =
-        `
+	const sqlSelect = `
  SELECT 
   cdl.order_job_number as order_job_number, 
   r.LA_name as LA_name, 
@@ -122,86 +120,86 @@ where
 order by 
   LA_name asc
             `;
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 
 function updateChqDue(req, res, db) {
-    const { order_job_number, mode, amount, payment } = req.body;
+	const { order_job_number, mode, amount, payment } = req?.body;
 
-    const sqlUpdate =
-        "UPDATE chq_due_list SET payment=?, amount=? WHERE order_job_number=? and mode=?";
-    db.query(
-        sqlUpdate,
-        [payment, amount, order_job_number, mode],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "updating chq due list")
-                    : ToastRes("update", `${order_job_number}`)
-            );
-        }
-    );
+	const sqlUpdate =
+		"UPDATE chq_due_list SET payment=?, amount=? WHERE order_job_number=? and mode=?";
+	db.query(
+		sqlUpdate,
+		[payment, amount, order_job_number, mode],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "updating chq due list")
+					: ToastRes("update", `${order_job_number}`)
+			);
+		}
+	);
 }
 function updateChqDuePartPay(req, res, db) {
-    const { order_job_number, mode, part_pay, amount, payment } = req.body;
+	const { order_job_number, mode, part_pay, amount, payment } = req?.body;
 
-    const sqlUpdate =
-        "UPDATE chq_due_list SET part_pay=?, payment=?, amount=? WHERE order_job_number=? and mode=?";
-    db.query(
-        sqlUpdate,
-        [part_pay, payment, amount, order_job_number, mode],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "updating chq due list")
-                    : ToastRes("update", `${order_job_number}`)
-            );
-        }
-    );
+	const sqlUpdate =
+		"UPDATE chq_due_list SET part_pay=?, payment=?, amount=? WHERE order_job_number=? and mode=?";
+	db.query(
+		sqlUpdate,
+		[part_pay, payment, amount, order_job_number, mode],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "updating chq due list")
+					: ToastRes("update", `${order_job_number}`)
+			);
+		}
+	);
 }
 function deleteChqDue(req, res, db) {
-    const id = req.body.Chq_id;
-    const order_job_number = req.body.order_job_number;
-    const sqlDelete = "DELETE from chq_due_list where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        res.json(
-            err
-                ? ToastRes("error", "deleting chq due list")
-                : ToastRes("delete", `${order_job_number}`)
-        );
-    });
+	const id = req?.body.Chq_id;
+	const order_job_number = req?.body.order_job_number;
+	const sqlDelete = "DELETE from chq_due_list where id= ?";
+	db.query(sqlDelete, [id], (err, result) => {
+		res.json(
+			err
+				? ToastRes("error", "deleting chq due list")
+				: ToastRes("delete", `${order_job_number}`)
+		);
+	});
 }
 //  Splitter
 function getOrderNumFromOrderJobNum(order_job_number) {
-    var order_number_split = order_job_number?.split("-");
-    var order_number = "";
-    for (var i = 0; i < order_number_split?.length - 1; i++) {
-        order_number += order_number_split[i] + "-";
-    }
-    order_number = order_number.substring(0, order_number?.length - 1);
-    return order_number;
+	var order_number_split = order_job_number?.split("-");
+	var order_number = "";
+	for (var i = 0; i < order_number_split?.length - 1; i++) {
+		order_number += order_number_split[i] + "-";
+	}
+	order_number = order_number.substring(0, order_number?.length - 1);
+	return order_number;
 }
 
 function getLvToChqDue(req, res, db) {
-    var order_job_number = req.query?.order_job_number;
-    const sqlSelect = `SELECT LA_name,LV_name from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
-    db.query(sqlSelect, [order_job_number], (err, result) => {
-        res.send(result);
-    });
+	var order_job_number = req?.query?.order_job_number;
+	const sqlSelect = `SELECT LA_name,LV_name from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
+	db.query(sqlSelect, [order_job_number], (err, result) => {
+		res.send(result);
+	});
 }
 function getComodityToChqDue(req, res, db) {
-    var order_job_number = req.query?.order_job_number;
-    var order_number = getOrderNumFromOrderJobNum(order_job_number);
-    const sqlSelect = `SELECT commodity from job_entry where order_number = '${order_number}'`;
-    db.query(sqlSelect, [order_number], (err, result) => {
-        res.send(result);
-    });
+	var order_job_number = req?.query?.order_job_number;
+	var order_number = getOrderNumFromOrderJobNum(order_job_number);
+	const sqlSelect = `SELECT commodity from job_entry where order_number = '${order_number}'`;
+	db.query(sqlSelect, [order_number], (err, result) => {
+		res.send(result);
+	});
 }
 
 function getLANameToChqDue(req, res, db) {
-    const sqlSelect = ` 
+	const sqlSelect = ` 
 select 
   distinct LA_name as value 
 from 
@@ -223,9 +221,9 @@ where
 order by 
   value asc
 `;
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 
 module.exports.addChqDue = addChqDue;
