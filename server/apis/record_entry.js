@@ -1,50 +1,50 @@
 const { ToastRes } = require("./util");
 
 function addRecord(req, res, db) {
-    const {
-        order_number,
-        job_number,
-        date_from_charpotro,
-        cp_number_from_charpotro,
-        LA_name,
-        LV_name,
-        dest_from,
-        dest_to,
-        capacity,
-        rate,
-        LV_master_name,
-        LV_master_contact_number,
-    } = req.body;
-    const create_record =
-        "INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-    db.query(
-        create_record,
-        [
-            order_number,
-            job_number,
-            date_from_charpotro,
-            cp_number_from_charpotro,
-            LA_name,
-            LV_name,
-            dest_from,
-            dest_to,
-            capacity,
-            rate,
-            LV_master_name,
-            LV_master_contact_number,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "creating record")
-                    : ToastRes("create", `${order_number}`)
-            );
-        }
-    );
+	const {
+		order_number,
+		job_number,
+		date_from_charpotro,
+		cp_number_from_charpotro,
+		LA_name,
+		LV_name,
+		dest_from,
+		dest_to,
+		capacity,
+		rate,
+		LV_master_name,
+		LV_master_contact_number,
+	} = req.body;
+	const create_record =
+		"INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	db.query(
+		create_record,
+		[
+			order_number,
+			job_number,
+			date_from_charpotro,
+			cp_number_from_charpotro,
+			LA_name,
+			LV_name,
+			dest_from,
+			dest_to,
+			capacity,
+			rate,
+			LV_master_name,
+			LV_master_contact_number,
+		],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "creating record")
+					: ToastRes("create", `${order_number}`)
+			);
+		}
+	);
 }
 
 function getRecord(req, res, db) {
-    const sqlSelect = `SELECT 
+	const sqlSelect = `SELECT 
                             id,
                             order_number, 
                             job_number, 
@@ -71,90 +71,90 @@ function getRecord(req, res, db) {
                         from 
                             record_entry`;
 
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 
 function updateRecord(req, res, db) {
-    const {
-        id,
-        order_number,
-        job_number,
-        date_from_charpotro,
-        cp_number_from_charpotro,
-        LA_name,
-        LV_name,
-        dest_from,
-        dest_to,
-        capacity,
-        rate,
-        LV_master_name,
-        LV_master_contact_number,
-    } = req.body;
+	const {
+		id,
+		order_number,
+		job_number,
+		date_from_charpotro,
+		cp_number_from_charpotro,
+		LA_name,
+		LV_name,
+		dest_from,
+		dest_to,
+		capacity,
+		rate,
+		LV_master_name,
+		LV_master_contact_number,
+	} = req.body;
 
-    const sqlUpdate =
-        "UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
-    db.query(
-        sqlUpdate,
-        [
-            order_number,
-            job_number,
-            date_from_charpotro,
-            cp_number_from_charpotro,
-            LA_name,
-            LV_name,
-            dest_from,
-            dest_to,
-            capacity,
-            rate,
-            LV_master_name,
-            LV_master_contact_number,
-            id,
-        ],
-        (err, result) => {
-            res.json(
-                err
-                    ? ToastRes("error", "updating record")
-                    : ToastRes("update", `${order_number}`)
-            );
-        }
-    );
+	const sqlUpdate =
+		"UPDATE record_entry SET order_number=?, job_number=?, date_from_charpotro=?, cp_number_from_charpotro=?, LA_name=?, LV_name=?, dest_from=?, dest_to=?, capacity=?, rate=?, LV_master_name=?, LV_master_contact_number=? where id= ?";
+	db.query(
+		sqlUpdate,
+		[
+			order_number,
+			job_number,
+			date_from_charpotro,
+			cp_number_from_charpotro,
+			LA_name,
+			LV_name,
+			dest_from,
+			dest_to,
+			capacity,
+			rate,
+			LV_master_name,
+			LV_master_contact_number,
+			id,
+		],
+		(err, result) => {
+			res.json(
+				err
+					? ToastRes("error", "updating record")
+					: ToastRes("update", `${order_number}`)
+			);
+		}
+	);
 }
 
 function deleteRecord(req, res, db) {
-    const id = req.body.record_id;
-    const sqlDelete = "DELETE from record_entry where id= ?";
-    db.query(sqlDelete, [id], (err, result) => {
-        // res.json(
-        //     err
-        //         ? ToastRes("error", "deleting record")
-        //         : ToastRes("delete", `${order_number + "-" + job_number}`)
-        // );
-        res.send(result);
-    });
+	const id = req.body.record_id;
+	const sqlDelete = "DELETE from record_entry where id= ?";
+	db.query(sqlDelete, [id], (err, result) => {
+		// res.json(
+		//     err
+		//         ? ToastRes("error", "deleting record")
+		//         : ToastRes("delete", `${order_number + "-" + job_number}`)
+		// );
+		res.send(result);
+	});
 }
 
 function fetchJobNumber(req, res, db) {
-    var order_number = req.query.order_number;
-    const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	var order_number = req.query.order_number;
+	const sqlSelect = `SELECT job_number as 'value' from record_entry where order_number = '${order_number}'`;
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 
 function getCharpotroCpLaLvRate(req, res, db) {
-    var order_job_number = req.query.order_job_number;
-    const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
+	var order_job_number = req.query.order_job_number;
+	const sqlSelect = `SELECT date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, rate, dest_from, dest_to from record_entry where CONCAT(order_number, '-', job_number) = '${order_job_number}'`;
 
-    db.query(sqlSelect, [order_job_number], (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, [order_job_number], (err, result) => {
+		res.send(result);
+	});
 }
 
 function getMaxCapacity(req, res, db) {
-    var order_number = req.query.order_number;
-    const sqlSelect = `
+	var order_number = req.query.order_number;
+	const sqlSelect = `
     select 
         (bl_quantity - (
             Select 
@@ -166,21 +166,22 @@ function getMaxCapacity(req, res, db) {
     where order_number = '${order_number}'
     `;
 
-    db.query(sqlSelect, [order_number], (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, [order_number], (err, result) => {
+		res.send(result);
+	});
 }
 
 function getLVname(req, res, db) {
-    const sqlSelect = `
+	const sqlSelect = `
     select 
        DISTINCT LV_name as value
     from pre_defined_ship
+    WHERE status = 1
     ORDER BY LV_name ASC
     `;
-    db.query(sqlSelect, (err, result) => {
-        res.send(result);
-    });
+	db.query(sqlSelect, (err, result) => {
+		res.send(result);
+	});
 }
 
 module.exports.addRecord = addRecord;
