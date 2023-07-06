@@ -386,7 +386,7 @@ const App = () => {
 				</button>
 			</div>
 			<form onSubmit={handleEditFormSubmit}>
-				<table className="table">
+				<table className="table border-separate border-slate-500">
 					<TableHead
 						columns={TableHeader}
 						handleSorting={handleSorting}
