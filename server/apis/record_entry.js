@@ -15,8 +15,9 @@ function addRecord(req, res, db) {
 		LV_master_name,
 		LV_master_contact_number,
 	} = req?.body;
+	const date_created = new Date();
 	const create_record =
-		"INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		"INSERT INTO record_entry (order_number, job_number, date_from_charpotro, cp_number_from_charpotro, LA_name, LV_name, dest_from, dest_to, capacity, rate, LV_master_name, LV_master_contact_number, date_created) VALUES (?,?,?,?,?,?,?,?,?,?,?,?, ?)";
 	db.query(
 		create_record,
 		[
@@ -32,6 +33,7 @@ function addRecord(req, res, db) {
 			rate,
 			LV_master_name,
 			LV_master_contact_number,
+			date_created,
 		],
 		(err, result) => {
 			res.json(
